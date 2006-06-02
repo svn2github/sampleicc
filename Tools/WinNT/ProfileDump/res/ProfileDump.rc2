@@ -1,0 +1,21 @@
+//
+// PROFILEDUMP.RC2 - resources Microsoft Visual C++ does not edit directly
+//
+
+#ifdef APSTUDIO_INVOKED
+	#error this file is not editable by Microsoft Visual C++
+#endif //APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Add manually edited resources here...
+#ifndef RT_MANIFEST
+#define RT_MANIFEST 24
+#endif
+
+IDR_MANIFEST RT_MANIFEST MOVEABLE PURE "res\\ProfileDump.manifest"
+
+/////////////////////////////////////////////////////////////////////////////
+#define NUM_REVISION 0
+#define NUM_BUILD 1
+

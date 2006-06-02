@@ -1,0 +1,212 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "All"=".\BuildAll.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name ApplyProfiles
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name CmdApplyProfiles
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name CmdDumpProfile
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ProfileDump
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name SampleICCcmm
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ApplyNamedCmm
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name CmdIccProfLibTest
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name iccApplyNamedCmm
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name iccApplyProfiles
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name iccDumpProfile
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name iccProflibTest
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "ApplyProfiles"=".\ApplyProfiles\ApplyProfiles.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name IccProfLib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name libtiff
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "IccCreateCLUTInputProfile"="..\CmdLine\IccCreateCLUTInputProfile\IccCreateCLUTInputProfile.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name IccProfLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "IccProfLib"="..\..\IccProfLib\IccProfLib.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "ProfileDump"=".\ProfileDump\ProfileDump.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name IccProfLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "SampleICCcmm"=".\ApplyDLL\SampleICCcmm.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name IccProfLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "iccApplyNamedCmm"="..\CmdLine\IccApplyNamedCmm\iccApplyNamedCmm.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name IccProfLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "iccApplyProfiles"="..\CmdLine\IccApplyProfiles\iccApplyProfiles.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name IccProfLib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name libtiff
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "iccDumpProfile"="..\CmdLine\IccDumpProfile\iccDumpProfile.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name IccProfLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "iccProflibTest"="..\CmdLine\IccProfLibTest\iccProfLibTest.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name IccProfLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "libtiff"=".\BuildLibTiff\libtiff.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

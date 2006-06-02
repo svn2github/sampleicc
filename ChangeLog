@@ -1,0 +1,26 @@
+2006-05-09  Max Derhak
+
+    * Cleanup to get things to work with VC6.
+	
+	* Reformated text replacing tabs with spaces.
+
+2006-03-24  Joseph Goldstone  <joseph@Cloudbase.local>
+
+	* Add a cut-and-paste of ab_lib_id3.m4 from Oskar Liljeblad
+	  (oskar@osk.mine.nu) as published in the autoconf archive,
+	  downloadable at http://autoconf-archive.cryp.to/ac_lib_id3.m4,
+	  to produce AC_LIB_TIFF.  Use the resulting TIFF_CPPFLAGS,
+	  TIFF_LDFLAGS and TIFF_LIBS in the Makefile.am file in the
+	  Tools/CmdLine/IccApplyProfile subdir.
+
+	* Add a dist-hook target in the top-level Makefile.am that gets
+	  rid of any .DS_Store files.
+
+	* Correct capitalization of SUBDIRS in Tools/CmdLine/Makefile.am
+	  so that we have a chance of running on Red Hat et al.
+
+2006-02-18  Joseph Goldstone  <joseph@Cloudbase.local>
+
+	* Initial attempt at using GNU suite (automake, autoconf,
+	  [g]libtool) to build IccProfLib and command-line tools.
+	

@@ -1,0 +1,26 @@
+The rest of the SampleICC archive will work with LibTiff version v3.6.1.
+
+Unzip the contents of the v3.6.1 LibTiff Archive into this folder.
+
+This folder should then contain the following:
+bin\
+config.guess
+config.site
+config.sub
+configure
+Contents.txt
+contrib\
+COPYRIGHT
+dist\
+html\
+IccLib.dsp
+libtiff\
+Makefile.in
+man\
+port\
+README
+RELEASE-DATE
+test_pics.sh
+TODO
+tools\
+VERSION
