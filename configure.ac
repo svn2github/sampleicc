@@ -6,7 +6,7 @@ AC_CANONICAL_TARGET
 
 SAMPLEICC_MAJOR_VERSION=1
 SAMPLEICC_MINOR_VERSION=2
-SAMPLEICC_MICRO_VERSION=6
+SAMPLEICC_MICRO_VERSION=7
 
 SAMPLEICC_VERSION=$SAMPLEICC_MAJOR_VERSION.$SAMPLEICC_MINOR_VERSION.${SAMPLEICC_MICRO_VERSION}
 AC_SUBST(SAMPLEICC_VERSION)
@@ -70,16 +70,16 @@ dnl with AC_DEFINE if libtiff is available.
 AC_DEFUN([AC_LIB_TIFF], [
   AH_TEMPLATE([HAVE_TIFFLIB], [Define if libtiff is available])
   AC_ARG_WITH(tifflib, [  --with-tifflib=DIR       prefix for TIFF library files and headers], [
-    if test "$withval" = "no"; then
+    if test x"$withval" = "xno"; then
       ac_tiff_path=
       $2
-    elif test "$withval" = "yes"; then
+    elif test x"$withval" = x"yes"; then
       ac_tiff_path=/opt/local
     else
       ac_tiff_path="$withval"
     fi
   ],[ac_tiff_path=/opt/local])
-  if test "$ac_tiff_path" != ""; then
+  if test x"$ac_tiff_path" != "x"; then
     saved_CPPFLAGS="$CPPFLAGS"
     CPPFLAGS="$CPPFLAGS -I$ac_tiff_path/include"
     AC_CHECK_HEADER([tiff.h], [
@@ -89,23 +89,56 @@ AC_DEFUN([AC_LIB_TIFF], [
         AC_SUBST(TIFF_CPPFLAGS, [-I$ac_tiff_path/include])
         AC_SUBST(TIFF_LDFLAGS, [-L$ac_tiff_path/lib])
         AC_SUBST(TIFF_LIBS, [-ltiff])
+        AC_SUBST(SICC_ICC_APPLY_PROFILES, [IccApplyProfiles])
 	AC_DEFINE([HAVE_TIFFLIB])
         $1
-      ], [AC_MSG_ERROR([
+      ], [AC_MSG_WARN([
 *** SampleICC requires a recent version of libtiff (3.6.1 or newer), which
-*** you don't appear to have.
+*** you don't appear to have, if it is to create the iccApplyProfiles
+*** command-line executable.
 ***
-*** This could be because the run-time linker is not finding libtiff, or it
-*** is finding the wrong version.  In this case, you'll need to set your
-*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point
-*** to the proper version.  Also, make sure you have run ldconfig if
+*** Interestingly, you have a tiff.h header, but the run-time linker is not
+*** finding libtiff, or it is finding the wrong version, or there is some other
+*** problem trying a test link against libtiff.
+***
+*** If you believe you have the TIFF headers and libraries, but they are not
+*** in the standard locations (e.g. /usr/include or /opt/local/include) then
+*** supply the root of this hierarchy to configure with --with-tifflib.  For
+*** example if you keep the headers in /usr/people/fred/include and the libraries
+*** in /usr/people/fred/lib, then specify --with-tifflib=/usr/people/fred.
+***
+*** On some systems, you'll need
+*** to set your LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf
+*** to point to the proper version.  Also, make sure you have run ldconfig if
 *** that is required on your system.
-			   ])],
+***
+*** In the meantime, the generated hierarchy of Makefiles will not attempt to
+*** build an iccApplyProfiles command-line executable, but everything else
+*** (the SampleICC library and the other command-line executables) will be built.
+			   ])
+          AC_SUBST(SICC_ICC_APPLY_PROFILES, [])],
 	-lm)
       LDFLAGS="$saved_LDFLAGS"
     ], [
-      AC_MSG_RESULT([not found])
-      $2
+      AC_MSG_WARN([
+*** SampleICC requires the header files and libraries for a recent version of
+*** the TIFF libraries (libtiff 3.6.1 or newer), if it is to create the
+*** iccApplyProfiles command-line executable after it compiles the SampleICC
+*** library and the other command-line executables.
+***
+*** You don't have the expected tiff.h header, so the link-time check for
+*** a static or dynamic TIFF library was skipped.
+***
+*** If you believe you have the TIFF headers and libraries, but they are not
+*** in the standard locations (e.g. /usr/include or /opt/local/include) then
+*** supply the root of this hierarchy to configure with --with-tifflib.  For
+*** example if you keep the headers in /usr/people/fred/include and the libraries
+*** in /usr/people/fred/lib, then specify --with-tifflib=/usr/people/fred.
+***
+*** In the meantime, the generated hierarchy of Makefiles will not attempt to
+*** build an iccApplyProfiles executable, but everything else will be built.
+			   ])
+      AC_SUBST(SICC_ICC_APPLY_PROFILES, [])
     ])
     CPPFLAGS="$saved_CPPFLAGS"
   fi
