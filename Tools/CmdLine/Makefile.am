@@ -1,3 +1,3 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = IccApplyNamedCmm IccApplyProfiles IccDumpProfile IccProfLibTest IccCreateCLUTInputProfile
+SUBDIRS = IccApplyNamedCmm IccDumpProfile IccProfLibTest IccCreateCLUTInputProfile @SICC_ICC_APPLY_PROFILES@
