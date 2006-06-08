@@ -91,6 +91,7 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 RC = @RC@
 SAMPLEICC_VERSION = @SAMPLEICC_VERSION@
+SICC_ICC_APPLY_PROFILES = @SICC_ICC_APPLY_PROFILES@
 STRIP = @STRIP@
 TIFF_CPPFLAGS = @TIFF_CPPFLAGS@
 TIFF_LDFLAGS = @TIFF_LDFLAGS@
@@ -100,7 +101,7 @@ am__include = @am__include@
 am__quote = @am__quote@
 install_sh = @install_sh@
 
-SUBDIRS = IccApplyNamedCmm IccApplyProfiles IccDumpProfile IccProfLibTest IccCreateCLUTInputProfile
+SUBDIRS = IccApplyNamedCmm IccDumpProfile IccProfLibTest IccCreateCLUTInputProfile @SICC_ICC_APPLY_PROFILES@
 subdir = Tools/CmdLine
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =

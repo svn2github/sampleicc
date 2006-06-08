@@ -91,6 +91,7 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 RC = @RC@
 SAMPLEICC_VERSION = @SAMPLEICC_VERSION@
+SICC_ICC_APPLY_PROFILES = @SICC_ICC_APPLY_PROFILES@
 STRIP = @STRIP@
 TIFF_CPPFLAGS = @TIFF_CPPFLAGS@
 TIFF_LDFLAGS = @TIFF_LDFLAGS@
@@ -106,7 +107,7 @@ INCLUDES = -I$(top_builddir) -I$(top_srcdir)/IccProfLib -I/opt/local/include
 
 LDADD = -L$(top_builddir)/IccProfLib -lSampleICC -L/opt/local/lib -ltiff
 
-iccApplyProfiles_SOURCES = iccApplyProfiles.cpp TiffImg.cpp
+iccApplyProfiles_SOURCES = iccApplyProfiles.cpp TiffImg.cpp TiffImg.h
 subdir = Tools/CmdLine/IccApplyProfiles
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =
@@ -138,6 +139,14 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CXXFLAGS = @CXXFLAGS@
+CFLAGS = @CFLAGS@
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
+	$(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 DIST_SOURCES = $(iccApplyProfiles_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
 SOURCES = $(iccApplyProfiles_SOURCES)

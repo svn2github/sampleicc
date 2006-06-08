@@ -463,7 +463,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os SAMPLEICC_VERSION LIBTOOL_VERSION INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CXXDEPMODE CC CFLAGS ac_ct_CC CCDEPMODE LN_S EGREP ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL TIFF_CPPFLAGS TIFF_LDFLAGS TIFF_LIBS AM_CFLAGS AM_CXXFLAGS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os SAMPLEICC_VERSION LIBTOOL_VERSION INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CXXDEPMODE CC CFLAGS ac_ct_CC CCDEPMODE LN_S EGREP ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL TIFF_CPPFLAGS TIFF_LDFLAGS TIFF_LIBS SICC_ICC_APPLY_PROFILES AM_CFLAGS AM_CXXFLAGS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1609,7 +1609,7 @@ test -n "$target_alias" &&
 
 SAMPLEICC_MAJOR_VERSION=1
 SAMPLEICC_MINOR_VERSION=2
-SAMPLEICC_MICRO_VERSION=6
+SAMPLEICC_MICRO_VERSION=7
 
 SAMPLEICC_VERSION=$SAMPLEICC_MAJOR_VERSION.$SAMPLEICC_MINOR_VERSION.${SAMPLEICC_MICRO_VERSION}
 
@@ -19612,10 +19612,10 @@ done
 if test "${with_tifflib+set}" = set; then
   withval="$with_tifflib"
 
-    if test "$withval" = "no"; then
+    if test x"$withval" = "xno"; then
       ac_tiff_path=
 
-    elif test "$withval" = "yes"; then
+    elif test x"$withval" = x"yes"; then
       ac_tiff_path=/opt/local
     else
       ac_tiff_path="$withval"
@@ -19624,7 +19624,7 @@ if test "${with_tifflib+set}" = set; then
 else
   ac_tiff_path=/opt/local
 fi;
-  if test "$ac_tiff_path" != ""; then
+  if test x"$ac_tiff_path" != "x"; then
     saved_CPPFLAGS="$CPPFLAGS"
     CPPFLAGS="$CPPFLAGS -I$ac_tiff_path/include"
     if test "${ac_cv_header_tiff_h+set}" = set; then
@@ -19840,6 +19840,8 @@ if test $ac_cv_lib_tiff_TIFFOpen = yes; then
 
         TIFF_LIBS=-ltiff
 
+        SICC_ICC_APPLY_PROFILES=IccApplyProfiles
+
 	cat >>confdefs.h <<\_ACEOF
 #define HAVE_TIFFLIB 1
 _ACEOF
@@ -19847,35 +19849,97 @@ _ACEOF
 
 
 else
-  { { echo "$as_me:$LINENO: error:
+  { echo "$as_me:$LINENO: WARNING:
 *** SampleICC requires a recent version of libtiff (3.6.1 or newer), which
-*** you don't appear to have.
+*** you don't appear to have, if it is to create the iccApplyProfiles
+*** command-line executable.
 ***
-*** This could be because the run-time linker is not finding libtiff, or it
-*** is finding the wrong version.  In this case, you'll need to set your
-*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point
-*** to the proper version.  Also, make sure you have run ldconfig if
+*** Interestingly, you have a tiff.h header, but the run-time linker is not
+*** finding libtiff, or it is finding the wrong version, or there is some other
+*** problem trying a test link against libtiff.
+***
+*** If you believe you have the TIFF headers and libraries, but they are not
+*** in the standard locations (e.g. /usr/include or /opt/local/include) then
+*** supply the root of this hierarchy to configure with --with-tifflib.  For
+*** example if you keep the headers in /usr/people/fred/include and the libraries
+*** in /usr/people/fred/lib, then specify --with-tifflib=/usr/people/fred.
+***
+*** On some systems, you'll need
+*** to set your LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf
+*** to point to the proper version.  Also, make sure you have run ldconfig if
 *** that is required on your system.
+***
+*** In the meantime, the generated hierarchy of Makefiles will not attempt to
+*** build an iccApplyProfiles command-line executable, but everything else
+*** (the SampleICC library and the other command-line executables) will be built.
 			   " >&5
-echo "$as_me: error:
+echo "$as_me: WARNING:
 *** SampleICC requires a recent version of libtiff (3.6.1 or newer), which
-*** you don't appear to have.
+*** you don't appear to have, if it is to create the iccApplyProfiles
+*** command-line executable.
 ***
-*** This could be because the run-time linker is not finding libtiff, or it
-*** is finding the wrong version.  In this case, you'll need to set your
-*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point
-*** to the proper version.  Also, make sure you have run ldconfig if
+*** Interestingly, you have a tiff.h header, but the run-time linker is not
+*** finding libtiff, or it is finding the wrong version, or there is some other
+*** problem trying a test link against libtiff.
+***
+*** If you believe you have the TIFF headers and libraries, but they are not
+*** in the standard locations (e.g. /usr/include or /opt/local/include) then
+*** supply the root of this hierarchy to configure with --with-tifflib.  For
+*** example if you keep the headers in /usr/people/fred/include and the libraries
+*** in /usr/people/fred/lib, then specify --with-tifflib=/usr/people/fred.
+***
+*** On some systems, you'll need
+*** to set your LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf
+*** to point to the proper version.  Also, make sure you have run ldconfig if
 *** that is required on your system.
+***
+*** In the meantime, the generated hierarchy of Makefiles will not attempt to
+*** build an iccApplyProfiles command-line executable, but everything else
+*** (the SampleICC library and the other command-line executables) will be built.
 			   " >&2;}
-   { (exit 1); exit 1; }; }
+
 fi
 
       LDFLAGS="$saved_LDFLAGS"
 
 else
 
-      echo "$as_me:$LINENO: result: not found" >&5
-echo "${ECHO_T}not found" >&6
+      { echo "$as_me:$LINENO: WARNING:
+*** SampleICC requires the header files and libraries for a recent version of
+*** the TIFF libraries (libtiff 3.6.1 or newer), if it is to create the
+*** iccApplyProfiles command-line executable after it compiles the SampleICC
+*** library and the other command-line executables.
+***
+*** You don't have the expected tiff.h header, so the link-time check for
+*** a static or dynamic TIFF library was skipped.
+***
+*** If you believe you have the TIFF headers and libraries, but they are not
+*** in the standard locations (e.g. /usr/include or /opt/local/include) then
+*** supply the root of this hierarchy to configure with --with-tifflib.  For
+*** example if you keep the headers in /usr/people/fred/include and the libraries
+*** in /usr/people/fred/lib, then specify --with-tifflib=/usr/people/fred.
+***
+*** In the meantime, the generated hierarchy of Makefiles will not attempt to
+*** build an iccApplyProfiles executable, but everything else will be built.
+			   " >&5
+echo "$as_me: WARNING:
+*** SampleICC requires the header files and libraries for a recent version of
+*** the TIFF libraries (libtiff 3.6.1 or newer), if it is to create the
+*** iccApplyProfiles command-line executable after it compiles the SampleICC
+*** library and the other command-line executables.
+***
+*** You don't have the expected tiff.h header, so the link-time check for
+*** a static or dynamic TIFF library was skipped.
+***
+*** If you believe you have the TIFF headers and libraries, but they are not
+*** in the standard locations (e.g. /usr/include or /opt/local/include) then
+*** supply the root of this hierarchy to configure with --with-tifflib.  For
+*** example if you keep the headers in /usr/people/fred/include and the libraries
+*** in /usr/people/fred/lib, then specify --with-tifflib=/usr/people/fred.
+***
+*** In the meantime, the generated hierarchy of Makefiles will not attempt to
+*** build an iccApplyProfiles executable, but everything else will be built.
+			   " >&2;}
 
 
 fi
@@ -20665,6 +20729,7 @@ s,@LIBTOOL@,$LIBTOOL,;t t
 s,@TIFF_CPPFLAGS@,$TIFF_CPPFLAGS,;t t
 s,@TIFF_LDFLAGS@,$TIFF_LDFLAGS,;t t
 s,@TIFF_LIBS@,$TIFF_LIBS,;t t
+s,@SICC_ICC_APPLY_PROFILES@,$SICC_ICC_APPLY_PROFILES,;t t
 s,@AM_CFLAGS@,$AM_CFLAGS,;t t
 s,@AM_CXXFLAGS@,$AM_CXXFLAGS,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t

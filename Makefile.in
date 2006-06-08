@@ -91,6 +91,7 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 RC = @RC@
 SAMPLEICC_VERSION = @SAMPLEICC_VERSION@
+SICC_ICC_APPLY_PROFILES = @SICC_ICC_APPLY_PROFILES@
 STRIP = @STRIP@
 TIFF_CPPFLAGS = @TIFF_CPPFLAGS@
 TIFF_LDFLAGS = @TIFF_LDFLAGS@
@@ -435,7 +436,7 @@ uninstall-info: uninstall-info-recursive
 
 
 dist-hook:
-	rm -fr `find $(distdir) -name .DS_Store .svn`
+	rm -fr `find $(distdir) -name .DS_Store -or -name .svn`
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
