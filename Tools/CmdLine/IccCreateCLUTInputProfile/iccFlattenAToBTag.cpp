@@ -99,13 +99,13 @@ using std::ofstream;
 #include <vector>
 using std::vector;
 
-#include "SampleICC/IccProfile.h"
+#include "IccProfile.h"
 // OpenICCProfile
 
-#include "SampleICC/IccUtil.h"
+#include "IccUtil.h"
 // icLabFromPCS
 
-#include "SampleICC/IccCmm.h"
+#include "IccCmm.h"
 // CIccCmm
 
 typedef vector<icFloatNumber> ResultTuple;
