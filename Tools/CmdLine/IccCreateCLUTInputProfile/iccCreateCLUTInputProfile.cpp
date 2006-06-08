@@ -102,6 +102,13 @@ using std::istringstream;
 
 #include "getopt.h" // for getopt_long
 
+// At the moment this is a hack; later we will figure out how to set HAS_GETOPT_LONG
+// in the configure script.  Feel free to extend this to support your favorite platform.
+#if defined(__APPLE__)
+#define HAS_GETOPT_LONG
+#endif
+// (told you it was a hack)
+
 #include "IccProfLibConf.h"
 #include "IccProfile.h"
 #include "IccIO.h"
@@ -265,35 +272,41 @@ usage(ostream& oS, const string& myName)
      << "    3D lookup table being loaded into the profile"                                           << endl
                                                                                                       << endl
      << "and where the OPTION values are as follows:"                                                 << endl
-     << "   -h, --help"                                                                               << endl
+     << "   -h"
+#if defined(HAS_GETOPT_LONG)
+     << ", --help"
+#endif
+                                                                                                      << endl
      << " (prints this help text and exits)"                                                          << endl
                                                                                                       << endl
-     << "   -f, --flare \"Xf Yf Zf\" (default \"0 0 0\")"                                             << endl
+     << "   -f"
+#if defined(HAS_GETOPT_LONG)
+     << ", --flare"
+#endif
+     << " \"Xf Yf Zf\" (default \"0 0 0\")"                                                           << endl
      << " (indicates flare to be subtracted from measurements as a first stage in converting raw"     << endl
      << "  XYZ measurements to the ICC PCS)"                                                          << endl
                                                                                                       << endl
-     << "   -i, --illuminant \"Xi Yi Zi\" (default same as mediaWhite)"                               << endl
+     << "   -i"
+#if defined(HAS_GETOPT_LONG)
+     << ", --illuminant"
+#endif
+     << "  \"Xi Yi Zi\" (default same as mediaWhite)"                                                 << endl
      << " (indicates illuminant used in converting raw XYZ measurements to the ICC PCS -- for"        << endl
      << "  projection displays, this usually has a value identical to that of the mandatory"          << endl
      << "  MEDIA_WHITE argument)"                                                                     << endl
                                                                                                       << endl
-     << "   -c, --copyright copyright (default \"\")"                                                 << endl
+     << "   -c"
+#if defined(HAS_GETOPT_LONG)
+     << ", --copyright"
+#endif
+     << " copyright (default \"\")"                                                                   << endl
      << " (indicates owner, for purposes of legal copyright, of this profile)"                        << endl;
 }
 
 int
-main(const int argc, char * const argv[])
+main(int argc, char * const argv[])
 {
-  static struct option longopts[] = {
-    { "flare",       optional_argument, NULL, 'f' },
-    { "illuminant",  optional_argument, NULL, 'i' },
-    { "copyright",   optional_argument, NULL, 'c' },
-    { "description", required_argument, NULL, 'd' },
-    { "mediaWhite",  required_argument, NULL, 'w' },
-    { "size",        required_argument, NULL, 's' },
-    { NULL,          0,                 NULL,  0  }
-  };
-
   icFloatNumber flare[3] = { 0, 0, 0 };
   bool sawExplicitFlare = false;
 
@@ -312,42 +325,62 @@ main(const int argc, char * const argv[])
 
   string outFilename("");
   
-  int shortOpt;
-  while ((shortOpt = getopt_long(argc, argv, "hf:i:c:", longopts, NULL)) != -1)
-    switch (shortOpt) {
-    case 'h':
-      usage(cout, argv[0]);
-      return EXIT_SUCCESS;
-    case 'f':
-      readXYZFromString(flare, argv[optind]);
-      ++optind;
-      sawExplicitFlare = true;
+#if defined(HAS_GETOPT_LONG)
+  static struct option longopts[] = {
+    { "flare",       optional_argument, NULL, 'f' },
+    { "illuminant",  optional_argument, NULL, 'i' },
+    { "copyright",   optional_argument, NULL, 'c' },
+    { "description", required_argument, NULL, 'd' },
+    { "mediaWhite",  required_argument, NULL, 'w' },
+    { "size",        required_argument, NULL, 's' },
+    { NULL,          0,                 NULL,  0  }
+  };
+#endif
+
+  while (true) {
+#if defined(HAS_GETOPT_LONG)
+    int shortOpt = getopt_long(argc, argv, "hf:i:c:", longopts, NULL);
+#else
+    int shortOpt = getopt(argc, argv, "hf:i:c:");
+#endif
+    if (shortOpt == -1)
       break;
-    case 'i':
-      readXYZFromString(illuminant, optarg);
-      ++optind;
-      sawExplicitIlluminant = true;
-      break;
-    case 'c':
-      copyright = argv[optind];
-      ++optind;
-      break;
-    default:
-      usage(cout, argv[0]);
-      return EXIT_FAILURE;
+    switch (shortOpt) 
+      {
+      case 'h':
+	usage(cout, argv[0]);
+	return EXIT_SUCCESS;
+      case 'f':
+	readXYZFromString(flare, optarg);
+	sawExplicitFlare = true;
+	break;
+      case 'i':
+	readXYZFromString(illuminant, optarg);
+	sawExplicitIlluminant = true;
+	break;
+      case 'c':
+	copyright = optarg;
+	break;
+      default:
+	usage(cout, argv[0]);
+	return EXIT_FAILURE;
+      }
     }
 
-  if (argc - optind != 5)
+  argc -= optind;
+  argv += optind;
+
+  if (argc != 5)
   {
     usage(cout, argv[0]);
     return EXIT_FAILURE;
   }
   
-  description                 = argv[optind++];
-  readXYZFromString(mediaWhite, argv[optind++]);
-  size                   = atoi(argv[optind++]);
-  inFilename                  = argv[optind++];
-  outFilename                 = argv[optind++];
+  description                 = argv[0];
+  readXYZFromString(mediaWhite, argv[1]);
+  size                   = atoi(argv[2]);
+  inFilename                  = argv[3];
+  outFilename                 = argv[4];
 
   if (! sawExplicitIlluminant)
     for (unsigned int i = 0; i < 3; ++i)
