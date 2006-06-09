@@ -167,11 +167,10 @@ public:
   virtual void Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)=0;
 
   ///Returns the source color space of the transform
-  virtual icColorSpaceSignature GetSrcSpace() const { return m_bInput ? m_pProfile->m_Header.colorSpace :
-                                                          m_pProfile->m_Header.pcs; }
+  virtual icColorSpaceSignature GetSrcSpace() const;
+
   ///Returns the destination color space of the transform
-  virtual icColorSpaceSignature GetDstSpace() const { return m_bInput ? m_pProfile->m_Header.pcs :
-                                                          m_pProfile->m_Header.colorSpace; }
+  virtual icColorSpaceSignature GetDstSpace() const;
 
   ///Checks if version 2 PCS is to be used
   virtual bool UseLegacyPCS() const { return false; }

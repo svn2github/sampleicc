@@ -813,7 +813,80 @@ void CIccXform::CheckDstAbs(icFloatNumber *Pixel)
     }    
   }
 }
-      
+
+
+/**
+**************************************************************************
+* Name: CIccXformMatrixTRC::GetSrcSpace
+* 
+* Purpose: 
+*  Return the color space that is input to the transform.  
+*  If a device space is either XYZ/Lab it is changed to dXYZ/dLab to avoid
+*  confusion with PCS encoding of these spaces.  Device encoding of XYZ
+*  and Lab spaces left to the device.
+**************************************************************************
+*/
+icColorSpaceSignature CIccXform::GetSrcSpace() const
+{
+  icColorSpaceSignature rv;
+  icProfileClassSignature deviceClass = m_pProfile->m_Header.deviceClass;
+
+  if (m_bInput) {
+    rv = m_pProfile->m_Header.colorSpace;
+
+    if (deviceClass != icSigAbstractClass) {
+      //convert signature to device colorspace signature (avoid confusion about encoding).
+      if (rv==icSigXYZData) {
+        rv = icSigDevXYZData;
+      }
+      else if (rv==icSigLabData) {
+        rv = icSigDevLabData;
+      }
+    }
+  }
+  else {
+    rv = m_pProfile->m_Header.pcs;
+  }
+
+  return rv;
+}
+
+/**
+**************************************************************************
+* Name: CIccXformMatrixTRC::GetDstSpace
+* 
+* Purpose: 
+*  Return the color space that is output by the transform.  
+*  If a device space is either XYZ/Lab it is changed to dXYZ/dLab to avoid
+*  confusion with PCS encoding of these spaces.  Device encoding of XYZ
+*  and Lab spaces left to the device.
+**************************************************************************
+*/
+icColorSpaceSignature CIccXform::GetDstSpace() const
+{
+  icColorSpaceSignature rv;
+  icProfileClassSignature deviceClass = m_pProfile->m_Header.deviceClass;
+
+  if (m_bInput) {
+    rv = m_pProfile->m_Header.pcs;
+  }
+  else {
+    rv = m_pProfile->m_Header.colorSpace;
+
+    //convert signature to device colorspace signature (avoid confusion about encoding).
+    if (deviceClass != icSigAbstractClass) {
+      if (rv==icSigXYZData) {
+        rv = icSigDevXYZData;
+      }
+      else if (rv==icSigLabData) {
+        rv = icSigDevLabData;
+      }
+    }
+  }
+
+  return rv;
+}
+
 
 /**
  **************************************************************************

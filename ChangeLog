@@ -1,6 +1,11 @@
+2006-06-09  Max Derhak
+  * Added concept of Device Lab and XYZ separate from PCS Lab
+    and XYZ.  Encoding for these color spaces by devices is not
+    defined by the ICC specification.
+
 2006-05-09  Max Derhak
 
-    * Cleanup to get things to work with VC6.
+  * Cleanup to get things to work with VC6.
 	
 	* Reformated text replacing tabs with spaces.
 

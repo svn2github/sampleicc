@@ -93,6 +93,17 @@ namespace sampleICC {
 typedef icUInt16Number icU1Fixed15Number;
 typedef icUInt16Number icU8Fixed8Number;
 
+
+/**
+* Additional convenience color space signatures to distinguish between device
+* encoding and PCS encoding.
+*
+* Device encoding of these color spaces is left to the device to define.
+*/
+#define icSigDevLabData     ((icColorSpaceSignature) 0x644C6162)  /* 'dLab' */
+#define icSigDevXYZData     ((icColorSpaceSignature) 0x6458595A)  /* 'dXYZ' */
+
+
 /**
 * All floating point operations/variables in IccProfLib use the icFloatNumber data type.
 * It was found that using float instead of double increased performance.  Changing

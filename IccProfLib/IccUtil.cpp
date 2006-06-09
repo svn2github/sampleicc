@@ -703,6 +703,8 @@ icUInt32Number icGetSpaceSamples(icColorSpaceSignature sig)
   case icSigHlsData:
   case icSigCmyData:
   case icSig3colorData:
+  case icSigDevLabData:
+  case icSigDevXYZData:
     return 3;
 
   case icSigCmykData:
@@ -901,9 +903,11 @@ const icChar *CIccInfo::GetColorSpaceSigName(icColorSpaceSignature sig)
 {
   switch (sig) {
   case icSigXYZData:
+  case icSigDevXYZData:
     return "XYZData";
 
   case icSigLabData:
+  case icSigDevLabData:
     return "LabData";
 
   case icSigLuvData:
@@ -1100,7 +1104,7 @@ const icChar *CIccInfo::GetMeasurementFlareName(icMeasurementFlare val)
     return "Max Flare";
 
   default:
-    sprintf(m_szStr, "Unknown Flare '%d", (int)val);
+    sprintf(m_szStr, "Unknown Flare '%d'", (int)val);
     return m_szStr;
   }
 }
@@ -1121,7 +1125,7 @@ const icChar *CIccInfo::GetMeasurementGeometryName(icMeasurementGeometry val)
     return "Max Geometry";
 
   default:
-    sprintf(m_szStr, "Unknown Geometry '%d", (int)val);
+    sprintf(m_szStr, "Unknown Geometry '%d'", (int)val);
     return m_szStr;
   }
 }

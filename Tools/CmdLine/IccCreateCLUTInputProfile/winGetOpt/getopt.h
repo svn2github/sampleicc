@@ -20,6 +20,9 @@ extern char *optarg;
 
 int getopt_long(int argc, char * const argv[], const char *argIntrest, struct option *opts, void *unknown);
 
+
+#define HAS_GETOPT_LONG
+
 #endif
 
 
