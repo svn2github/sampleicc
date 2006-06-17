@@ -105,7 +105,7 @@ namespace sampleICC {
     #define ICCPROFLIB_EXTERN
   #endif
 
-#else //mac, metrowerks codewarrior
+#else // non-PC, perhaps Mac or Linux
 
   #define ICCUINT64 unsigned long long
   #define ICCINT64  long long
@@ -118,6 +118,8 @@ namespace sampleICC {
     #else
       #define ICC_BYTE_ORDER_BIG_ENDIAN
     #endif
+  #else
+    #define ICC_BYTE_ORDER_LITTLE_ENDIAN
   #endif
 
   #define ICCPROFLIB_API
