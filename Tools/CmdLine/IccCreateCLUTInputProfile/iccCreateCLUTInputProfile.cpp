@@ -251,7 +251,7 @@ usage(ostream& oS, const string& myName)
   string::size_type lastSlash = myName.rfind('/');
   if (lastSlash != string::npos)
   {
-    assert(lastSlash != myName.size() - 1); // not likely, but you never know
+    // assert(lastSlash != myName.size() - 1); // not likely, but you never know
     myShortName = myName.substr(lastSlash + 1);
   }
   oS << "Usage: " << myShortName
