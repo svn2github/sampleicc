@@ -302,6 +302,46 @@ void icMatrixMultiply3x3(icFloatNumber* result,
   result[e33] = l[e31] * r[e13] + l[e32] * r[e23] + l[e33] * r[e33];
 }
 
+/**
+**************************************************************************
+* Name: icVectorApplyMatrix3x3
+* 
+* Purpose: 
+*  Applies a 3x3 matrix to a 3 element column vector. 
+*
+*  Note: Matrix index positions:
+*     0 1 2
+*     3 4 5
+*     6 7 8
+* 
+*  Note: result = m x v
+*
+* Args: 
+*  result = vector to receive result.
+*  m = matrix to multiply
+*  v = vector to apply matrix to
+*
+**************************************************************************
+*/
+void icVectorApplyMatrix3x3(icFloatNumber* result,
+                            const icFloatNumber* m,
+                            const icFloatNumber* v)
+{
+  const unsigned int e11 = 0;
+  const unsigned int e12 = 1;
+  const unsigned int e13 = 2;
+  const unsigned int e21 = 3;
+  const unsigned int e22 = 4;
+  const unsigned int e23 = 5;
+  const unsigned int e31 = 6;
+  const unsigned int e32 = 7;
+  const unsigned int e33 = 8;
+  result[0] = m[e11] * v[0] + m[e12] * v[0] + m[e13] * v[0];
+  result[1] = m[e21] * v[1] + m[e22] * v[1] + m[e23] * v[1];
+  result[2] = m[e31] * v[2] + m[e32] * v[2] + m[e23] * v[2];
+}
+
+
 icS15Fixed16Number icDtoF(icFloatNumber num)
 {
   icS15Fixed16Number rv;
@@ -544,6 +584,27 @@ void icLab2Lch(icFloatNumber *Lch, icFloatNumber *Lab /*=NULL*/)
   Lch[1] = c;
   Lch[2] = h;
 }
+
+icFloatNumber icMin(icFloatNumber v1, icFloatNumber v2)
+{
+  return( v1 < v2 ? v1 : v2 );
+}
+
+icFloatNumber icMax(icFloatNumber v1, icFloatNumber v2)
+{
+  return( v1 > v2 ? v1 : v2 );
+}
+
+icUInt32Number icIntMin(icUInt32Number v1, icUInt32Number v2)
+{
+  return( v1 < v2 ? v1 : v2 );
+}
+
+icUInt32Number icIntMax(icUInt32Number v1, icUInt32Number v2)
+{
+  return( v1 > v2 ? v1 : v2 );
+}
+
 
 void icLabFromPcs(icFloatNumber *Lab)
 {

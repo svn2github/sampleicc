@@ -1420,6 +1420,7 @@ CIccCLUT::~CIccCLUT()
  */
 void CIccCLUT::Init(icUInt8Number nGridPoints)
 {
+  memset(&m_GridPoints, 0, sizeof(m_GridPoints));
   memset(m_GridPoints, nGridPoints, m_nInput);
   memset(m_nReserved2, 0, sizeof(m_nReserved2));
   Init(&m_GridPoints[0]);
@@ -1737,7 +1738,7 @@ void CIccCLUT::SubIterate(IIccCLUTExec* pExec, icUInt8Number nIndex, icUInt32Num
 void CIccCLUT::DumpLut(std::string  &sDescription, const icChar *szName,
                        icColorSpaceSignature csInput, icColorSpaceSignature csOutput)
 {
-  icChar szOutText[256], szColor[40];
+  icChar szOutText[2048], szColor[40];
   int i, len;
 
   sprintf(szOutText, "BEGIN_LUT %s %d %d\r\n", szName, m_nInput, m_nOutput);

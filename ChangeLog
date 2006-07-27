@@ -1,3 +1,8 @@
+2006-07-13  Max Derhak
+  * Fixed bug with displaying icSigPerceptualRenderingIntentGamutTag
+    tag's name correctly
+  * Added icVectorApplyMatrix3x3() to IccUtil
+
 2006-06-09  Max Derhak
   * Added concept of Device Lab and XYZ separate from PCS Lab
     and XYZ.  Encoding for these color spaces by devices is not

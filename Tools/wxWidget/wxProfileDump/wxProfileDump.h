@@ -11,12 +11,17 @@
 
 #include <wx/toolbar.h>
 #include <wx/listctrl.h>
+#include <wx/docview.h>
+#include <wx/dnd.h>
 
 // Define a new application
 class MyApp : public wxApp
 {
 public:
     bool OnInit();
+    int OnExit();
+
+    wxFileHistory m_history;
 };
 
 class MyCanvas : public wxScrolledWindow
@@ -49,7 +54,28 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnClose(wxCloseEvent& event);
 
+    void OpenFile(wxString path);
+
     DECLARE_EVENT_TABLE()
+};
+
+class MyDnDFile : public wxFileDropTarget
+{
+public:
+  MyDnDFile(MyFrame *owner) { m_owner = owner; }
+
+  virtual bool OnDropFiles(wxCoord x, wxCoord y,
+                           const wxArrayString& filenames)
+  {
+     size_t nFiles = filenames.GetCount();
+     wxString str;
+     for (size_t n=0; n<nFiles; n++) {
+       m_owner->OpenFile(filenames[n]);
+     }
+     return true;
+  }
+private:
+  MyFrame *m_owner;
 };
 
 class MyChild: public wxMDIChildFrame
@@ -67,7 +93,11 @@ public:
     void OnValidate(wxCommandEvent& event);
     void OnTagClicked(wxListEvent& event);
 
+    void SetFileMenu(wxMenu *menu);
+
 protected:
+    wxMenu *m_fileMenu;
+
     CIccProfile *m_pIcc;
     wxString m_profilePath;
 
@@ -97,21 +127,21 @@ protected:
 class MyDialog : public wxDialog
 {
 public:
-    MyDialog(wxWindow *pParent, const wxString& title, wxString &profilePath);
+  MyDialog(wxWindow *pParent, const wxString& title, wxString &profilePath);
 
-    wxString m_profilePath;
+  wxString m_profilePath;
 };
 
 class MyTagDialog : public wxDialog
 {
 public:
-    MyTagDialog(wxWindow *pParent, CIccProfile *pIcc /*=NULL*/, icTagSignature sig/*=icMaxEnumTag*/, CIccTag *pTag /*=NULL*/);
+  MyTagDialog(wxWindow *pParent, CIccProfile *pIcc /*=NULL*/, icTagSignature sig/*=icMaxEnumTag*/, CIccTag *pTag /*=NULL*/);
 
-    CIccProfile *m_pIcc;
-    icTagSignature m_sigTag;
-    CIccTag *m_pTag;
+  CIccProfile *m_pIcc;
+  icTagSignature m_sigTag;
+  CIccTag *m_pTag;
 
-    wxFont m_FixedFont;
+  wxFont m_FixedFont;
 
 };
 // menu items ids

@@ -48,7 +48,7 @@
  *   at a time for each profile in a profile transformation chain.  Various techniques
  *   can possibly be used to improve performance. An intial thought would be to create a
  *   CMM that uses the basic CIccCmm to generate a single link transform (concatenating
- *   the profiles).  Such a transform could employ integer math.
+ *   the profiles).  Such a transform could employ integer math if needed.
  *  -# The IccProfLib can be used to open, generate, manipulate (by adding, removing, or
  *   modifying tags), and/or save profiles without needing to use the pixel transformations
  *   provided by the CMM classes.
@@ -59,6 +59,20 @@
  *   the configuration paramaters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
+ * - July 2006
+ *  - Fixed bug with displaying the icSigPerceptualRenderingIntentGamutTag tag's name correctly
+ *  - Added icVectorApplyMatrix3x3() to IccUtil
+ *
+ * - June 2006
+ *  - Added concept of device Lab and XYZ separate from PCS Lab and XYZ.  The encoding for
+ *    device Lab and XYZ can be different than that used by the PCS.
+ *    Both CIccXform::GetSrcSpace() and CIccXform::GetDstSpace() now return icSigDevLabData
+ *    (rather than icSigLabData) or icSigDevXYZData (rather than icSigXYZData) if the connection
+ *    is to a device (rather than PCS).  
+ *  - The macros icSigDevLabData and icSigDevXYZData were added to IccDefs.h.
+ *  - icGetSpaceSamples() and CIccInfo::GetColorSpaceSigName() were modified to recognize
+ *    icSigDevLabData and icSigDevXYZData.
+ *
  * - May 2006
  *  - Added icSigSampleICC to IccDefs.h and CIccProfile.cpp now uses this to initialize
  *    default values for creator and cmm in header fields.

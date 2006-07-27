@@ -331,7 +331,7 @@ const icChar* CIccSpecTagFactory::GetTagSigName(icTagSignature tagSig)
   case icSigOutputResponseTag:
     return "outputResponseTag";
 
-  case icSigPerceptualReferenceMediumGamut:
+  case icSigPerceptualRenderingIntentGamutTag:
     return "perceptualRenderingIntentGamutTag";
 
   case icSigSaturationRenderingIntentGamutTag:

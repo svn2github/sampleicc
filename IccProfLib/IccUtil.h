@@ -98,6 +98,9 @@ bool ICCPROFLIB_API icMatrixInvert3x3(icFloatNumber *matrix);
 void ICCPROFLIB_API icMatrixMultiply3x3(icFloatNumber *result,
                                         const icFloatNumber *l,
                                         const icFloatNumber *r);
+void ICCPROFLIB_API icVectorApplyMatrix3x3(icFloatNumber *result,
+                                           const icFloatNumber *m,
+                                           const icFloatNumber *v);
 
 icS15Fixed16Number ICCPROFLIB_API icDtoF(icFloatNumber num);
 icFloatNumber ICCPROFLIB_API icFtoD(icS15Fixed16Number num);
@@ -139,6 +142,11 @@ void ICCPROFLIB_API icLabtoXYZ(icFloatNumber *XYZ, icFloatNumber *Lab=NULL, icFl
 void ICCPROFLIB_API icLab2Lch(icFloatNumber *Lch, icFloatNumber *Lab=NULL);
 void ICCPROFLIB_API icLch2Lab(icFloatNumber *Lab, icFloatNumber *Lch=NULL);
 
+icFloatNumber ICCPROFLIB_API icMin(icFloatNumber v1, icFloatNumber v2);
+icFloatNumber ICCPROFLIB_API icMax(icFloatNumber v1, icFloatNumber v2);
+
+icUInt32Number ICCPROFLIB_API icIntMin(icUInt32Number v1, icUInt32Number v2);
+icUInt32Number ICCPROFLIB_API icIntMax(icUInt32Number v1, icUInt32Number v2);
 
 /**Floating point encoding of Lab in PCS is in range 0.0 to 1.0 */
 ///Here are some conversion routines to convert to regular Lab encoding

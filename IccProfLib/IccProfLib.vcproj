@@ -306,6 +306,9 @@
 			</File>
 		</Filter>
 		<File
+			RelativePath="..\ChangeLog">
+		</File>
+		<File
 			RelativePath="Readme.txt">
 		</File>
 	</Files>
