@@ -2602,9 +2602,9 @@ icValidateStatus CIccTagChromaticity::Validate(icTagSignature sig, std::string &
     switch(m_nColorantType) {
       case icColorantITU:
         {
-          if ( (icUFtoD(m_xy[0].x) != 0.640) || (icUFtoD(m_xy[0].y) != 0.330) ||
-              (icUFtoD(m_xy[1].x) != 0.300) || (icUFtoD(m_xy[1].y) != 0.600) ||
-              (icUFtoD(m_xy[2].x) != 0.150) || (icUFtoD(m_xy[2].y) != 0.060) ) {
+          if ( (m_xy[0].x != icDtoUF(0.640)) || (m_xy[0].y != icDtoUF(0.330)) ||
+               (m_xy[1].x != icDtoUF(0.300)) || (m_xy[1].y != icDtoUF(0.600)) ||
+               (m_xy[2].x != icDtoUF(0.150)) || (m_xy[2].y != icDtoUF(0.060)) ) {
                 sReport += icValidateNonCompliantMsg;
                 sReport += sSigName;
                 sReport += " - Chromaticity data does not match specification.\r\n";
@@ -2615,9 +2615,9 @@ icValidateStatus CIccTagChromaticity::Validate(icTagSignature sig, std::string &
 
       case icColorantSMPTE:
         {
-          if ( (icUFtoD(m_xy[0].x) != 0.630) || (icUFtoD(m_xy[0].y) != 0.340) ||
-              (icUFtoD(m_xy[1].x) != 0.310) || (icUFtoD(m_xy[1].y) != 0.595) ||
-              (icUFtoD(m_xy[2].x) != 0.155) || (icUFtoD(m_xy[2].y) != 0.070) ) {
+          if ( (m_xy[0].x != icDtoUF(0.630)) || (m_xy[0].y != icDtoUF(0.340)) ||
+               (m_xy[1].x != icDtoUF(0.310)) || (m_xy[1].y != icDtoUF(0.595)) ||
+               (m_xy[2].x != icDtoUF(0.155)) || (m_xy[2].y != icDtoUF(0.070)) ) {
               sReport += icValidateNonCompliantMsg;
               sReport += sSigName;
               sReport += " - Chromaticity data does not match specification.\r\n";
@@ -2628,9 +2628,9 @@ icValidateStatus CIccTagChromaticity::Validate(icTagSignature sig, std::string &
 
       case icColorantEBU:
         {
-          if ( (icUFtoD(m_xy[0].x) != 0.64) || (icUFtoD(m_xy[0].y) != 0.33) ||
-              (icUFtoD(m_xy[1].x) != 0.29) || (icUFtoD(m_xy[1].y) != 0.60) ||
-              (icUFtoD(m_xy[2].x) != 0.15) || (icUFtoD(m_xy[2].y) != 0.06) ) {
+          if ( (m_xy[0].x != icDtoUF(0.64)) || (m_xy[0].y != icDtoUF(0.33)) ||
+               (m_xy[1].x != icDtoUF(0.29)) || (m_xy[1].y != icDtoUF(0.60)) ||
+               (m_xy[2].x != icDtoUF(0.15)) || (m_xy[2].y != icDtoUF(0.06)) ) {
               sReport += icValidateNonCompliantMsg;
               sReport += sSigName;
               sReport += " - Chromaticity data does not match specification.\r\n";
@@ -2641,9 +2641,9 @@ icValidateStatus CIccTagChromaticity::Validate(icTagSignature sig, std::string &
 
       case icColorantP22:
         {
-          if ( (icUFtoD(m_xy[0].x) != 0.625) || (icUFtoD(m_xy[0].y) != 0.340) ||
-              (icUFtoD(m_xy[1].x) != 0.280) || (icUFtoD(m_xy[1].y) != 0.605) ||
-              (icUFtoD(m_xy[2].x) != 0.155) || (icUFtoD(m_xy[2].y) != 0.070) ) {
+          if ( (m_xy[0].x != icDtoUF(0.625)) || (m_xy[0].y != icDtoUF(0.340)) ||
+               (m_xy[1].x != icDtoUF(0.280)) || (m_xy[1].y != icDtoUF(0.605)) ||
+               (m_xy[2].x != icDtoUF(0.155)) || (m_xy[2].y != icDtoUF(0.070)) ) {
               sReport += icValidateNonCompliantMsg;
               sReport += sSigName;
               sReport += " - Chromaticity data does not match specification.\r\n";

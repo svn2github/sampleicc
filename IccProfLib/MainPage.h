@@ -62,6 +62,8 @@
  * - July 2006
  *  - Fixed bug with displaying the icSigPerceptualRenderingIntentGamutTag tag's name correctly
  *  - Added icVectorApplyMatrix3x3() to IccUtil
+ *  - Fixed bug in CIccTagChromaticity::Validate() to use fixed floating point encoding in
+ *    comparisons rather than IEEE encoding
  *
  * - June 2006
  *  - Added concept of device Lab and XYZ separate from PCS Lab and XYZ.  The encoding for
