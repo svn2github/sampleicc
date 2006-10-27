@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="libtiff"
+  Name="libtiff"
+  ProjectGUID="{89DB7595-5325-45B1-9414-2CAF18A9C57C}"
 	SccProjectName=""
 	SccAuxPath=""
 	SccLocalPath="..\.."

@@ -39,6 +39,9 @@ Package=<4>
     Project_Dep_Name iccApplyProfiles
     End Project Dependency
     Begin Project Dependency
+    Project_Dep_Name iccStripUnknownTags
+    End Project Dependency
+    Begin Project Dependency
     Project_Dep_Name iccDumpProfile
     End Project Dependency
     Begin Project Dependency
@@ -157,6 +160,21 @@ Package=<4>
 ###############################################################################
 
 Project: "iccDumpProfile"="..\CmdLine\IccDumpProfile\iccDumpProfile.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name IccProfLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "iccStripUnknownTags"="..\CmdLine\IccStripUnknownTags\iccStripUnknownTags.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{

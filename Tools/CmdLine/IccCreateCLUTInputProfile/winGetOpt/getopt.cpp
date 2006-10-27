@@ -10,8 +10,10 @@ int getopt_long(int argc, char * const argv[], const char *argIntrest, struct op
   int i;
   int shortOpt = -1;
 
-  if (optind>=argc)
+  if (optind>=argc) {
+    optind = 0;
     return -1;
+  }
 
   for (i=0; opts[i].fullOption; i++) {
     if (argv[optind][0]=='-') {

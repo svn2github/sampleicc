@@ -1,3 +1,14 @@
+2006-10-10 Rohit Patil
+  * Added IsIdentity() function to the CIccCurve and CIccMatrix classes which returns true
+    if they are identity
+  * Modified the Xform objects in the CMM to use the IsIdentity() function. 
+    Now CIccXform::Apply() will not apply the curves or the matrix if 
+    they are identity, to improve the CMM performance
+
+2006-10-06 Max Derhak
+  * Added CmdLine tool iccStripUnkownTags to remove tags not defined
+    in the Icc Specification from a profile.
+
 2006-07-31  Max Derhak
   * Fixed bug in CIccTagChromaticity::Validate() to make comparisons
 	  with fixed floating point encoding rather than IEEE encoding

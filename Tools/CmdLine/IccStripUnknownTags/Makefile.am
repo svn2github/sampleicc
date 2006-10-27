@@ -1,9 +1,9 @@
 ## Process this file with automake to produce Makefile.in
 
-bin_PROGRAMS = iccProfLibTest
+bin_PROGRAMS = iccStripUnknownTags
 
 INCLUDES = -I$(top_builddir) -I$(top_srcdir)/IccProfLib
 
 LDADD = -L$(top_builddir)/IccProfLib -lSampleICC
 
-iccProfLibTest_SOURCES = iccProfLibTest.cpp WriteFunctions.cpp WriteFunctions.h
+iccStripUnknownTags_SOURCES = iccStripUnknownTags.cpp

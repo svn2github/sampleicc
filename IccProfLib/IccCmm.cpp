@@ -899,6 +899,7 @@ icColorSpaceSignature CIccXform::GetDstSpace() const
 CIccXformMatrixTRC::CIccXformMatrixTRC()
 {
   m_Curve[0] = m_Curve[1] = m_Curve[2] = NULL;
+	m_ApplyCurvePtr = NULL;
   m_bFreeCurve = false;
 }
 
@@ -964,6 +965,8 @@ icStatusCMM CIccXformMatrixTRC::Begin()
   m_e[5] = icFtoD((*pXYZ)[0].Y);
   m_e[8] = icFtoD((*pXYZ)[0].Z);
 
+	m_ApplyCurvePtr[0] = m_ApplyCurvePtr[1] = m_ApplyCurvePtr[2] = NULL;
+
   if (m_bInput) {
     m_Curve[0] = GetCurve(icSigRedTRCTag);
     m_Curve[1] = GetCurve(icSigGreenTRCTag);
@@ -972,6 +975,7 @@ icStatusCMM CIccXformMatrixTRC::Begin()
     if (!m_Curve[0] || !m_Curve[1] || !m_Curve[2]) {
       return icCmmStatProfileMissingTag;
     }
+
   }
   else {
     if (m_pProfile->m_Header.pcs!=icSigXYZData)
@@ -987,7 +991,7 @@ icStatusCMM CIccXformMatrixTRC::Begin()
       return icCmmStatProfileMissingTag;
     }
 
-    if (!icMatrixInvert3x3(m_e)) {
+		if (!icMatrixInvert3x3(m_e)) {
       return icCmmStatInvalidProfile;
     }
   }
@@ -995,6 +999,10 @@ icStatusCMM CIccXformMatrixTRC::Begin()
   m_Curve[0]->Begin();
   m_Curve[1]->Begin();
   m_Curve[2]->Begin();
+
+	if (!m_Curve[0]->IsIdentity() || !m_Curve[1]->IsIdentity() || !m_Curve[2]->IsIdentity()) {
+		m_ApplyCurvePtr = m_Curve;
+	}
 
   return icCmmStatOk;
 }
@@ -1037,15 +1045,24 @@ void CIccXformMatrixTRC::Apply(icFloatNumber *DstPixel, const icFloatNumber *Src
 {
   icFloatNumber Pixel[3];
 
-  SrcPixel = CheckSrcAbs(SrcPixel);
+	SrcPixel = CheckSrcAbs(SrcPixel);
   Pixel[0] = SrcPixel[0];
   Pixel[1] = SrcPixel[1];
   Pixel[2] = SrcPixel[2];
 
   if (m_bInput) {
-    double LinR = m_Curve[0]->Apply(Pixel[0]);
-    double LinG = m_Curve[1]->Apply(Pixel[1]);
-    double LinB = m_Curve[2]->Apply(Pixel[2]);
+
+		double LinR, LinG, LinB;
+		if (m_ApplyCurvePtr) {
+			LinR = m_ApplyCurvePtr[0]->Apply(Pixel[0]);
+			LinG = m_ApplyCurvePtr[1]->Apply(Pixel[1]);
+			LinB = m_ApplyCurvePtr[2]->Apply(Pixel[2]);
+		}
+		else {
+			LinR = Pixel[0];
+			LinG = Pixel[1];
+			LinB = Pixel[2];
+		}
 
     DstPixel[0] = XYZScale((icFloatNumber)(m_e[0] * LinR + m_e[1] * LinG + m_e[2] * LinB));
     DstPixel[1] = XYZScale((icFloatNumber)(m_e[3] * LinR + m_e[4] * LinG + m_e[5] * LinB));
@@ -1056,10 +1073,18 @@ void CIccXformMatrixTRC::Apply(icFloatNumber *DstPixel, const icFloatNumber *Src
     double Y = XYZDescale(Pixel[1]);
     double Z = XYZDescale(Pixel[2]);
 
-    DstPixel[0] = RGBClip((icFloatNumber)(m_e[0] * X + m_e[1] * Y + m_e[2] * Z), m_Curve[0]);
-    DstPixel[1] = RGBClip((icFloatNumber)(m_e[3] * X + m_e[4] * Y + m_e[5] * Z), m_Curve[1]);
-    DstPixel[2] = RGBClip((icFloatNumber)(m_e[6] * X + m_e[7] * Y + m_e[8] * Z), m_Curve[2]);
+		if (m_ApplyCurvePtr) {
+			DstPixel[0] = RGBClip((icFloatNumber)(m_e[0] * X + m_e[1] * Y + m_e[2] * Z), m_ApplyCurvePtr[0]);
+			DstPixel[1] = RGBClip((icFloatNumber)(m_e[3] * X + m_e[4] * Y + m_e[5] * Z), m_ApplyCurvePtr[1]);
+			DstPixel[2] = RGBClip((icFloatNumber)(m_e[6] * X + m_e[7] * Y + m_e[8] * Z), m_ApplyCurvePtr[2]);
+		}
+		else {
+			DstPixel[0] = (icFloatNumber)(m_e[0] * X + m_e[1] * Y + m_e[2] * Z);
+			DstPixel[1] = (icFloatNumber)(m_e[3] * X + m_e[4] * Y + m_e[5] * Z);
+			DstPixel[2] = (icFloatNumber)(m_e[6] * X + m_e[7] * Y + m_e[8] * Z);
+		}
   }
+
   CheckDstAbs(DstPixel);
 }
 
@@ -1152,6 +1177,63 @@ CIccCurve *CIccXformMatrixTRC::GetInvCurve(icSignature sig) const
   return pInvCurve;
 }
 
+/**
+**************************************************************************
+* Name: CIccXformMatrixTRC::ExtractInputCurves
+* 
+* Purpose: 
+*  Gets the input curves. Should be called only after Begin() 
+*  has been called. Once the curves are extracted, they will 
+*  not be used by the Apply() function.
+*  WARNING:  caller owns the curves and must be deleted by the caller.
+*  
+* Return:
+*  Pointer to the input curves.
+**************************************************************************
+*/
+LPIccCurve* CIccXformMatrixTRC::ExtractInputCurves()
+{
+	if (m_bInput) {
+		if (m_Curve[0]) {
+			LPIccCurve* Curve = m_Curve;
+			m_Curve[0] = m_Curve[1] = m_Curve[2] = NULL;
+			m_ApplyCurvePtr = NULL;
+			m_bFreeCurve = false;
+			return Curve;
+		}
+	}
+
+	return NULL;
+}
+
+/**
+**************************************************************************
+* Name: CIccXformMatrixTRC::ExtractOutputCurves
+* 
+* Purpose: 
+*  Gets the output curves. Should be called only after Begin() 
+*  has been called. Once the curves are extracted, they will 
+*  not be used by the Apply() function.
+*  WARNING:  caller owns the curves and must be deleted by the caller.
+*  
+* Return:
+*  Pointer to the output curves.
+**************************************************************************
+*/
+LPIccCurve* CIccXformMatrixTRC::ExtractOutputCurves()
+{
+	if (!m_bInput) {
+		if (m_Curve[0]) {
+			LPIccCurve* Curve = m_Curve;
+			m_Curve[0] = m_Curve[1] = m_Curve[2] = NULL;
+			m_ApplyCurvePtr = NULL;
+			m_bFreeCurve = false;
+			return Curve;
+		}
+	}
+
+	return NULL;
+}
 
 /**
  **************************************************************************
@@ -1171,6 +1253,9 @@ CIccXform3DLut::CIccXform3DLut(CIccTag *pTag)
   }
   else
     m_pTag = NULL;
+
+	m_ApplyCurvePtrA = m_ApplyCurvePtrB = m_ApplyCurvePtrM = NULL;
+	m_ApplyMatrixPtr = NULL;
 }
 
 /**
@@ -1208,13 +1293,21 @@ icStatusCMM CIccXform3DLut::Begin()
       m_pTag->InputChannels()!=3)
     return icCmmStatInvalidLut;
 
-  if (m_pTag->m_bInputMatrix) {
+	m_ApplyCurvePtrA = NULL;
+	m_ApplyCurvePtrB = NULL;
+	m_ApplyCurvePtrM = NULL;
+
+	if (m_pTag->m_bInputMatrix) {
     if (m_pTag->m_CurvesB) {
       Curve = m_pTag->m_CurvesB;
 
       Curve[0]->Begin();
       Curve[1]->Begin();
       Curve[2]->Begin();
+
+			if (!Curve[0]->IsIdentity() || !Curve[1]->IsIdentity() || !Curve[2]->IsIdentity()) {
+				m_ApplyCurvePtrB = Curve;
+			}
     }
 
     if (m_pTag->m_CurvesM) {
@@ -1223,6 +1316,10 @@ icStatusCMM CIccXform3DLut::Begin()
       Curve[0]->Begin();
       Curve[1]->Begin();
       Curve[2]->Begin();
+			
+			if (!Curve[0]->IsIdentity() || !Curve[1]->IsIdentity() || !Curve[2]->IsIdentity()) {
+				m_ApplyCurvePtrM = Curve;
+			}
     }
 
     if (m_pTag->m_CLUT) {
@@ -1235,6 +1332,13 @@ icStatusCMM CIccXform3DLut::Begin()
       for (i=0; i<m_pTag->m_nOutput; i++) {
         Curve[i]->Begin();
       }
+
+			for (i=0; i<m_pTag->m_nOutput; i++) {
+				if (!Curve[i]->IsIdentity()) {
+					m_ApplyCurvePtrA = Curve;
+					break;
+				}
+			}
     }
 
   }
@@ -1245,6 +1349,10 @@ icStatusCMM CIccXform3DLut::Begin()
       Curve[0]->Begin();
       Curve[1]->Begin();
       Curve[2]->Begin();
+
+			if (!Curve[0]->IsIdentity() || !Curve[1]->IsIdentity() || !Curve[2]->IsIdentity()) {
+				m_ApplyCurvePtrA = Curve;
+			}
     }
 
     if (m_pTag->m_CLUT) {
@@ -1257,6 +1365,13 @@ icStatusCMM CIccXform3DLut::Begin()
       for (i=0; i<m_pTag->m_nOutput; i++) {
         Curve[i]->Begin();
       }
+
+			for (i=0; i<m_pTag->m_nOutput; i++) {
+				if (!Curve[i]->IsIdentity()) {
+					m_ApplyCurvePtrM = Curve;
+					break;
+				}
+			}
     }
 
     if (m_pTag->m_CurvesB) {
@@ -1265,9 +1380,17 @@ icStatusCMM CIccXform3DLut::Begin()
       for (i=0; i<m_pTag->m_nOutput; i++) {
         Curve[i]->Begin();
       }
+
+			for (i=0; i<m_pTag->m_nOutput; i++) {
+				if (!Curve[i]->IsIdentity()) {
+					m_ApplyCurvePtrB = Curve;
+					break;
+				}
+			}
     }
   }
 
+	m_ApplyMatrixPtr = NULL;
   if (m_pTag->m_Matrix) {
     if (m_pTag->m_bInputMatrix) {
       if (m_pTag->m_nInput!=3) {
@@ -1279,6 +1402,10 @@ icStatusCMM CIccXform3DLut::Begin()
         return icCmmStatInvalidProfile;
       }
     }
+
+		if (!m_pTag->m_Matrix->IsIdentity()) {
+			m_ApplyMatrixPtr = m_pTag->m_Matrix;
+		}
   }
 
   return icCmmStatOk;
@@ -1300,32 +1427,27 @@ void CIccXform3DLut::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixe
 {
   icFloatNumber Pixel[16];
   int i;
-  CIccCurve **Curve;
 
-  SrcPixel = CheckSrcAbs(SrcPixel);
+	SrcPixel = CheckSrcAbs(SrcPixel);
   Pixel[0] = SrcPixel[0];
   Pixel[1] = SrcPixel[1];
   Pixel[2] = SrcPixel[2];
 
   if (m_pTag->m_bInputMatrix) {
-    if (m_pTag->m_CurvesB) {
-      Curve = m_pTag->m_CurvesB;
-
-      Pixel[0] = Curve[0]->Apply(Pixel[0]);
-      Pixel[1] = Curve[1]->Apply(Pixel[1]);
-      Pixel[2] = Curve[2]->Apply(Pixel[2]);
+    if (m_ApplyCurvePtrB) {
+      Pixel[0] = m_ApplyCurvePtrB[0]->Apply(Pixel[0]);
+      Pixel[1] = m_ApplyCurvePtrB[1]->Apply(Pixel[1]);
+      Pixel[2] = m_ApplyCurvePtrB[2]->Apply(Pixel[2]);
     }
 
-    if (m_pTag->m_Matrix) {
-      m_pTag->m_Matrix->Apply(Pixel);
+    if (m_ApplyMatrixPtr) {
+			m_ApplyMatrixPtr->Apply(Pixel);
     }
 
-    if (m_pTag->m_CurvesM) {
-      Curve = m_pTag->m_CurvesM;
-
-      Pixel[0] = Curve[0]->Apply(Pixel[0]);
-      Pixel[1] = Curve[1]->Apply(Pixel[1]);
-      Pixel[2] = Curve[2]->Apply(Pixel[2]);
+    if (m_ApplyCurvePtrM) {
+      Pixel[0] = m_ApplyCurvePtrM[0]->Apply(Pixel[0]);
+      Pixel[1] = m_ApplyCurvePtrM[1]->Apply(Pixel[1]);
+      Pixel[2] = m_ApplyCurvePtrM[2]->Apply(Pixel[2]);
     }
 
     if (m_pTag->m_CLUT) {
@@ -1335,22 +1457,18 @@ void CIccXform3DLut::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixe
         m_pTag->m_CLUT->Interp3dTetra(Pixel, Pixel);
     }
 
-    if (m_pTag->m_CurvesA) {
-      Curve = m_pTag->m_CurvesA;
-
+    if (m_ApplyCurvePtrA) {
       for (i=0; i<m_pTag->m_nOutput; i++) {
-        Pixel[i] = Curve[i]->Apply(Pixel[i]);
+        Pixel[i] = m_ApplyCurvePtrA[i]->Apply(Pixel[i]);
       }
     }
 
   }
   else {
-    if (m_pTag->m_CurvesA) {
-      Curve = m_pTag->m_CurvesA;
-
-      Pixel[0] = Curve[0]->Apply(Pixel[0]);
-      Pixel[1] = Curve[1]->Apply(Pixel[1]);
-      Pixel[2] = Curve[2]->Apply(Pixel[2]);
+    if (m_ApplyCurvePtrA) {
+      Pixel[0] = m_ApplyCurvePtrA[0]->Apply(Pixel[0]);
+      Pixel[1] = m_ApplyCurvePtrA[1]->Apply(Pixel[1]);
+      Pixel[2] = m_ApplyCurvePtrA[2]->Apply(Pixel[2]);
     }
 
     if (m_pTag->m_CLUT) {
@@ -1360,23 +1478,19 @@ void CIccXform3DLut::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixe
         m_pTag->m_CLUT->Interp3dTetra(Pixel, Pixel);
     }
 
-    if (m_pTag->m_CurvesM) {
-      Curve = m_pTag->m_CurvesM;
-
+    if (m_ApplyCurvePtrM) {
       for (i=0; i<m_pTag->m_nOutput; i++) {
-        Pixel[i] = Curve[i]->Apply(Pixel[i]);
+        Pixel[i] = m_ApplyCurvePtrM[i]->Apply(Pixel[i]);
       }
     }
 
-    if (m_pTag->m_Matrix) {
-      m_pTag->m_Matrix->Apply(Pixel);
+    if (m_ApplyMatrixPtr) {
+      m_ApplyMatrixPtr->Apply(Pixel);
     }
 
-    if (m_pTag->m_CurvesB) {
-      Curve = m_pTag->m_CurvesB;
-
+    if (m_ApplyCurvePtrB) {
       for (i=0; i<m_pTag->m_nOutput; i++) {
-        Pixel[i] = Curve[i]->Apply(Pixel[i]);
+        Pixel[i] = m_ApplyCurvePtrB[i]->Apply(Pixel[i]);
       }
     }
   }
@@ -1385,7 +1499,83 @@ void CIccXform3DLut::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixe
     DstPixel[i] = Pixel[i];
   }
 
-  CheckDstAbs(DstPixel);
+	CheckDstAbs(DstPixel);
+}
+
+/**
+**************************************************************************
+* Name: CIccXform3DLut::ExtractInputCurves
+* 
+* Purpose: 
+*  Gets the input curves. Should be called only after Begin() 
+*  has been called. Once the curves are extracted, they will 
+*  not be used by the Apply() function.
+*  WARNING:  caller owns the curves and must be deleted by the caller.
+*  
+* Return:
+*  Pointer to the input curves.
+**************************************************************************
+*/
+LPIccCurve* CIccXform3DLut::ExtractInputCurves()
+{
+	if (m_bInput) {
+		if (m_pTag->m_bInputMatrix) {
+			if (m_pTag->m_CurvesB) {
+				LPIccCurve* Curve = m_pTag->m_CurvesB;
+				m_pTag->m_CurvesB = NULL;
+				m_ApplyCurvePtrB = NULL;
+				return Curve;
+			}
+		}
+		else {
+			if (m_pTag->m_CurvesA) {
+				LPIccCurve* Curve = m_pTag->m_CurvesA;
+				m_pTag->m_CurvesA = NULL;
+				m_ApplyCurvePtrA = NULL;
+				return Curve;
+			}
+		}
+	}
+
+	return NULL;
+}
+
+/**
+**************************************************************************
+* Name: CIccXform3DLut::ExtractOutputCurves
+* 
+* Purpose: 
+*  Gets the output curves. Should be called only after Begin() 
+*  has been called. Once the curves are extracted, they will 
+*  not be used by the Apply() function.
+*  WARNING:  caller owns the curves and must be deleted by the caller.
+*  
+* Return:
+*  Pointer to the output curves.
+**************************************************************************
+*/
+LPIccCurve* CIccXform3DLut::ExtractOutputCurves()
+{
+	if (!m_bInput) {
+		if (m_pTag->m_bInputMatrix) {
+			if (m_pTag->m_CurvesA) {
+				LPIccCurve* Curve = m_pTag->m_CurvesA;
+				m_pTag->m_CurvesA = NULL;
+				m_ApplyCurvePtrA = NULL;
+				return Curve;
+			}
+		}
+		else {
+			if (m_pTag->m_CurvesB) {
+				LPIccCurve* Curve = m_pTag->m_CurvesB;
+				m_pTag->m_CurvesB = NULL;
+				m_ApplyCurvePtrB = NULL;
+				return Curve;
+			}
+		}
+	}
+
+	return NULL;
 }
 
 /**
@@ -1399,7 +1589,6 @@ void CIccXform3DLut::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixe
  *   pTag = Pointer to the tag of type CIccMBB 
  **************************************************************************
  */
-
 CIccXform4DLut::CIccXform4DLut(CIccTag *pTag)
 {
   if (pTag && pTag->IsMBBType()) {
@@ -1407,6 +1596,9 @@ CIccXform4DLut::CIccXform4DLut(CIccTag *pTag)
   }
   else
     m_pTag = NULL;
+
+	m_ApplyCurvePtrA = m_ApplyCurvePtrB = m_ApplyCurvePtrM = NULL;
+	m_ApplyMatrixPtr = NULL;
 }
 
 
@@ -1446,7 +1638,9 @@ icStatusCMM CIccXform4DLut::Begin()
       m_pTag->InputChannels()!=4)
     return icCmmStatInvalidLut;
 
-  if (m_pTag->m_bInputMatrix) {
+	m_ApplyCurvePtrA = m_ApplyCurvePtrB = m_ApplyCurvePtrM = NULL;
+
+	if (m_pTag->m_bInputMatrix) {
     if (m_pTag->m_CurvesB) {
       Curve = m_pTag->m_CurvesB;
 
@@ -1454,6 +1648,12 @@ icStatusCMM CIccXform4DLut::Begin()
       Curve[1]->Begin();
       Curve[2]->Begin();
       Curve[3]->Begin();
+
+			if (!Curve[0]->IsIdentity() || !Curve[1]->IsIdentity() ||
+					!Curve[2]->IsIdentity() || !Curve[3]->IsIdentity()) 
+			{
+        m_ApplyCurvePtrB = Curve;
+			}
     }
 
     if (m_pTag->m_CLUT) {
@@ -1466,6 +1666,13 @@ icStatusCMM CIccXform4DLut::Begin()
       for (i=0; i<m_pTag->m_nOutput; i++) {
         Curve[i]->Begin();
       }
+
+			for (i=0; i<m_pTag->m_nOutput; i++) {
+				if (!Curve[i]->IsIdentity()) {
+					m_ApplyCurvePtrA = Curve;
+					break;
+				}
+			}
     }
 
   }
@@ -1477,7 +1684,13 @@ icStatusCMM CIccXform4DLut::Begin()
       Curve[1]->Begin();
       Curve[2]->Begin();
       Curve[3]->Begin();
-    }
+
+			if (!Curve[0]->IsIdentity() || !Curve[1]->IsIdentity() ||
+					!Curve[2]->IsIdentity() || !Curve[3]->IsIdentity()) 
+			{
+				m_ApplyCurvePtrA = Curve;
+			}
+		}
 
     if (m_pTag->m_CLUT) {
       m_pTag->m_CLUT->Begin();
@@ -1489,6 +1702,13 @@ icStatusCMM CIccXform4DLut::Begin()
       for (i=0; i<m_pTag->m_nOutput; i++) {
         Curve[i]->Begin();
       }
+
+			for (i=0; i<m_pTag->m_nOutput; i++) {
+				if (!Curve[i]->IsIdentity()) {
+					m_ApplyCurvePtrM = Curve;
+					break;
+				}
+			}
     }
 
     if (m_pTag->m_CurvesB) {
@@ -1497,9 +1717,17 @@ icStatusCMM CIccXform4DLut::Begin()
       for (i=0; i<m_pTag->m_nOutput; i++) {
         Curve[i]->Begin();
       }
+
+			for (i=0; i<m_pTag->m_nOutput; i++) {
+				if (!Curve[i]->IsIdentity()) {
+					m_ApplyCurvePtrB = Curve;
+					break;
+				}
+			}
     }
   }
 
+	m_ApplyMatrixPtr = NULL;
   if (m_pTag->m_Matrix) {
     if (m_pTag->m_bInputMatrix) {
       return icCmmStatInvalidProfile;
@@ -1509,6 +1737,10 @@ icStatusCMM CIccXform4DLut::Begin()
         return icCmmStatInvalidProfile;
       }
     }
+
+		if (!m_pTag->m_Matrix->IsIdentity()) {
+			m_ApplyMatrixPtr = m_pTag->m_Matrix;
+		}
   }
 
   return icCmmStatOk;
@@ -1531,68 +1763,57 @@ void CIccXform4DLut::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixe
 {
   icFloatNumber Pixel[16];
   int i;
-  CIccCurve **Curve;
 
-  SrcPixel = CheckSrcAbs(SrcPixel);
+	SrcPixel = CheckSrcAbs(SrcPixel);
   Pixel[0] = SrcPixel[0];
   Pixel[1] = SrcPixel[1];
   Pixel[2] = SrcPixel[2];
   Pixel[3] = SrcPixel[3];
 
   if (m_pTag->m_bInputMatrix) {
-    if (m_pTag->m_CurvesB) {
-      Curve = m_pTag->m_CurvesB;
-
-      Pixel[0] = Curve[0]->Apply(Pixel[0]);
-      Pixel[1] = Curve[1]->Apply(Pixel[1]);
-      Pixel[2] = Curve[2]->Apply(Pixel[2]);
-      Pixel[3] = Curve[3]->Apply(Pixel[3]);
+    if (m_ApplyCurvePtrB) {
+      Pixel[0] = m_ApplyCurvePtrB[0]->Apply(Pixel[0]);
+      Pixel[1] = m_ApplyCurvePtrB[1]->Apply(Pixel[1]);
+      Pixel[2] = m_ApplyCurvePtrB[2]->Apply(Pixel[2]);
+      Pixel[3] = m_ApplyCurvePtrB[3]->Apply(Pixel[3]);
     }
 
     if (m_pTag->m_CLUT) {
       m_pTag->m_CLUT->Interp4d(Pixel, Pixel);
     }
 
-    if (m_pTag->m_CurvesA) {
-      Curve = m_pTag->m_CurvesA;
-
+    if (m_ApplyCurvePtrA) {
       for (i=0; i<m_pTag->m_nOutput; i++) {
-        Pixel[i] = Curve[i]->Apply(Pixel[i]);
+        Pixel[i] = m_ApplyCurvePtrA[i]->Apply(Pixel[i]);
       }
     }
 
   }
   else {
-    if (m_pTag->m_CurvesA) {
-      Curve = m_pTag->m_CurvesA;
-
-      Pixel[0] = Curve[0]->Apply(Pixel[0]);
-      Pixel[1] = Curve[1]->Apply(Pixel[1]);
-      Pixel[2] = Curve[2]->Apply(Pixel[2]);
-      Pixel[3] = Curve[3]->Apply(Pixel[3]);
+    if (m_ApplyCurvePtrA) {
+      Pixel[0] = m_ApplyCurvePtrA[0]->Apply(Pixel[0]);
+      Pixel[1] = m_ApplyCurvePtrA[1]->Apply(Pixel[1]);
+      Pixel[2] = m_ApplyCurvePtrA[2]->Apply(Pixel[2]);
+      Pixel[3] = m_ApplyCurvePtrA[3]->Apply(Pixel[3]);
     }
 
     if (m_pTag->m_CLUT) {
       m_pTag->m_CLUT->Interp4d(Pixel, Pixel);
     }
 
-    if (m_pTag->m_CurvesM) {
-      Curve = m_pTag->m_CurvesM;
-
+    if (m_ApplyCurvePtrM) {
       for (i=0; i<m_pTag->m_nOutput; i++) {
-        Pixel[i] = Curve[i]->Apply(Pixel[i]);
+        Pixel[i] = m_ApplyCurvePtrM[i]->Apply(Pixel[i]);
       }
     }
 
-    if (m_pTag->m_Matrix) {
-      m_pTag->m_Matrix->Apply(Pixel);
+    if (m_ApplyMatrixPtr) {
+      m_ApplyMatrixPtr->Apply(Pixel);
     }
 
-    if (m_pTag->m_CurvesB) {
-      Curve = m_pTag->m_CurvesB;
-
+    if (m_ApplyCurvePtrB) {
       for (i=0; i<m_pTag->m_nOutput; i++) {
-        Pixel[i] = Curve[i]->Apply(Pixel[i]);
+        Pixel[i] = m_ApplyCurvePtrB[i]->Apply(Pixel[i]);
       }
     }
   }
@@ -1601,7 +1822,83 @@ void CIccXform4DLut::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixe
     DstPixel[i] = Pixel[i];
   }
 
-  CheckDstAbs(DstPixel);
+	CheckDstAbs(DstPixel);
+}
+
+/**
+**************************************************************************
+* Name: CIccXform4DLut::ExtractInputCurves
+* 
+* Purpose: 
+*  Gets the input curves. Should be called only after Begin() 
+*  has been called. Once the curves are extracted, they will 
+*  not be used by the Apply() function.
+*  WARNING:  caller owns the curves and must be deleted by the caller.
+*  
+* Return:
+*  Pointer to the input curves.
+**************************************************************************
+*/
+LPIccCurve* CIccXform4DLut::ExtractInputCurves()
+{
+	if (m_bInput) {
+		if (m_pTag->m_bInputMatrix) {
+			if (m_pTag->m_CurvesB) {
+				LPIccCurve* Curve = m_pTag->m_CurvesB;
+				m_pTag->m_CurvesB = NULL;
+				m_ApplyCurvePtrB = NULL;
+				return Curve;
+			}
+		}
+		else {
+			if (m_pTag->m_CurvesA) {
+				LPIccCurve* Curve = m_pTag->m_CurvesA;
+				m_pTag->m_CurvesA = NULL;
+				m_ApplyCurvePtrA = NULL;
+				return Curve;
+			}
+		}
+	}
+
+	return NULL;
+}
+
+/**
+**************************************************************************
+* Name: CIccXform4DLut::ExtractOutputCurves
+* 
+* Purpose: 
+*  Gets the output curves. Should be called only after Begin() 
+*  has been called. Once the curves are extracted, they will 
+*  not be used by the Apply() function.
+*  WARNING:  caller owns the curves and must be deleted by the caller.
+*  
+* Return:
+*  Pointer to the output curves.
+**************************************************************************
+*/
+LPIccCurve* CIccXform4DLut::ExtractOutputCurves()
+{
+	if (!m_bInput) {
+		if (m_pTag->m_bInputMatrix) {
+			if (m_pTag->m_CurvesA) {
+				LPIccCurve* Curve = m_pTag->m_CurvesA;
+				m_pTag->m_CurvesA = NULL;
+				m_ApplyCurvePtrA = NULL;
+				return Curve;
+			}
+		}
+		else {
+			if (m_pTag->m_CurvesB) {
+				LPIccCurve* Curve = m_pTag->m_CurvesB;
+				m_pTag->m_CurvesB = NULL;
+				m_ApplyCurvePtrB = NULL;
+				return Curve;
+			}
+		}
+	}
+
+	return NULL;
 }
 
 /**
@@ -1622,6 +1919,9 @@ CIccXformNDLut::CIccXformNDLut(CIccTag *pTag)
   }
   else
     m_pTag = NULL;
+
+	m_ApplyCurvePtrA = m_ApplyCurvePtrB = m_ApplyCurvePtrM = NULL;
+	m_ApplyMatrixPtr = NULL;
 }
 
 
@@ -1662,12 +1962,21 @@ icStatusCMM CIccXformNDLut::Begin()
 
   m_nNumInput = m_pTag->m_nInput;
 
+	m_ApplyCurvePtrA = m_ApplyCurvePtrB = m_ApplyCurvePtrM = NULL;
+
   if (m_pTag->m_bInputMatrix) {
     if (m_pTag->m_CurvesB) {
       Curve = m_pTag->m_CurvesB;
 
       for (i=0; i<m_nNumInput; i++)
         Curve[i]->Begin();
+
+			for (i=0; i<m_nNumInput; i++) {
+				if (!Curve[i]->IsIdentity()) {
+					m_ApplyCurvePtrB = Curve;
+					break;
+				}
+			}
     }
 
     if (m_pTag->m_CLUT) {
@@ -1680,6 +1989,13 @@ icStatusCMM CIccXformNDLut::Begin()
       for (i=0; i<m_pTag->m_nOutput; i++) {
         Curve[i]->Begin();
       }
+
+			for (i=0; i<m_pTag->m_nOutput; i++) {
+				if (!Curve[i]->IsIdentity()) {
+					m_ApplyCurvePtrA = Curve;
+					break;
+				}
+			}
     }
 
   }
@@ -1689,6 +2005,13 @@ icStatusCMM CIccXformNDLut::Begin()
 
       for (i=0; i<m_nNumInput; i++)
         Curve[i]->Begin();
+
+			for (i=0; i<m_nNumInput; i++) {
+				if (!Curve[i]->IsIdentity()) {
+					m_ApplyCurvePtrA = Curve;
+					break;
+				}
+			}
     }
 
     if (m_pTag->m_CLUT) {
@@ -1701,7 +2024,14 @@ icStatusCMM CIccXformNDLut::Begin()
       for (i=0; i<m_pTag->m_nOutput; i++) {
         Curve[i]->Begin();
       }
-    }
+
+			for (i=0; i<m_pTag->m_nOutput; i++) {
+				if (!Curve[i]->IsIdentity()) {
+					m_ApplyCurvePtrM = Curve;
+					break;
+				}
+			}
+		}
 
     if (m_pTag->m_CurvesB) {
       Curve = m_pTag->m_CurvesB;
@@ -1709,9 +2039,17 @@ icStatusCMM CIccXformNDLut::Begin()
       for (i=0; i<m_pTag->m_nOutput; i++) {
         Curve[i]->Begin();
       }
+
+			for (i=0; i<m_pTag->m_nOutput; i++) {
+				if (!Curve[i]->IsIdentity()) {
+					m_ApplyCurvePtrB = Curve;
+					break;
+				}
+			}
     }
   }
 
+	m_ApplyMatrixPtr = NULL;
   if (m_pTag->m_Matrix) {
     if (m_pTag->m_bInputMatrix) {
       return icCmmStatInvalidProfile;
@@ -1721,6 +2059,10 @@ icStatusCMM CIccXformNDLut::Begin()
         return icCmmStatInvalidProfile;
       }
     }
+
+		if (!m_pTag->m_Matrix->IsIdentity()) {
+			m_ApplyMatrixPtr = m_pTag->m_Matrix;
+		}
   }
 
   return icCmmStatOk;
@@ -1743,18 +2085,15 @@ void CIccXformNDLut::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixe
 {
   icFloatNumber Pixel[16];
   int i;
-  CIccCurve **Curve;
 
-  SrcPixel = CheckSrcAbs(SrcPixel);
+	SrcPixel = CheckSrcAbs(SrcPixel);
   for (i=0; i<m_nNumInput; i++)
     Pixel[i] = SrcPixel[i];
 
   if (m_pTag->m_bInputMatrix) {
-    if (m_pTag->m_CurvesB) {
-      Curve = m_pTag->m_CurvesB;
-
+    if (m_ApplyCurvePtrB) {
       for (i=0; i<m_nNumInput; i++)
-        Pixel[i] = Curve[i]->Apply(Pixel[i]);
+        Pixel[i] = m_ApplyCurvePtrB[i]->Apply(Pixel[i]);
     }
 
     if (m_pTag->m_CLUT) {
@@ -1771,21 +2110,17 @@ void CIccXformNDLut::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixe
       }
     }
 
-    if (m_pTag->m_CurvesA) {
-      Curve = m_pTag->m_CurvesA;
-
+    if (m_ApplyCurvePtrA) {
       for (i=0; i<m_pTag->m_nOutput; i++) {
-        Pixel[i] = Curve[i]->Apply(Pixel[i]);
+        Pixel[i] = m_ApplyCurvePtrA[i]->Apply(Pixel[i]);
       }
     }
 
   }
   else {
-    if (m_pTag->m_CurvesA) {
-      Curve = m_pTag->m_CurvesA;
-
+    if (m_ApplyCurvePtrA) {
       for (i=0; i<m_nNumInput; i++)
-        Pixel[i] = Curve[i]->Apply(Pixel[i]);
+        Pixel[i] = m_ApplyCurvePtrA[i]->Apply(Pixel[i]);
     }
 
     if (m_pTag->m_CLUT) {
@@ -1802,23 +2137,19 @@ void CIccXformNDLut::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixe
       }
     }
 
-    if (m_pTag->m_CurvesM) {
-      Curve = m_pTag->m_CurvesM;
-
+    if (m_ApplyCurvePtrM) {
       for (i=0; i<m_pTag->m_nOutput; i++) {
-        Pixel[i] = Curve[i]->Apply(Pixel[i]);
+        Pixel[i] = m_ApplyCurvePtrM[i]->Apply(Pixel[i]);
       }
     }
 
-    if (m_pTag->m_Matrix) {
-      m_pTag->m_Matrix->Apply(Pixel);
+    if (m_ApplyMatrixPtr) {
+      m_ApplyMatrixPtr->Apply(Pixel);
     }
 
-    if (m_pTag->m_CurvesB) {
-      Curve = m_pTag->m_CurvesB;
-
+    if (m_ApplyCurvePtrB) {
       for (i=0; i<m_pTag->m_nOutput; i++) {
-        Pixel[i] = Curve[i]->Apply(Pixel[i]);
+        Pixel[i] = m_ApplyCurvePtrB[i]->Apply(Pixel[i]);
       }
     }
   }
@@ -1827,9 +2158,84 @@ void CIccXformNDLut::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixe
     DstPixel[i] = Pixel[i];
   }
 
-  CheckDstAbs(DstPixel);
+	CheckDstAbs(DstPixel);
 }
 
+/**
+**************************************************************************
+* Name: CIccXformNDLut::ExtractInputCurves
+* 
+* Purpose: 
+*  Gets the input curves. Should be called only after Begin() 
+*  has been called. Once the curves are extracted, they will 
+*  not be used by the Apply() function.
+*  WARNING:  caller owns the curves and must be deleted by the caller.
+*  
+* Return:
+*  Pointer to the input curves.
+**************************************************************************
+*/
+LPIccCurve* CIccXformNDLut::ExtractInputCurves()
+{
+	if (m_bInput) {
+		if (m_pTag->m_bInputMatrix) {
+			if (m_pTag->m_CurvesB) {
+				LPIccCurve* Curve = m_pTag->m_CurvesB;
+				m_pTag->m_CurvesB = NULL;
+				m_ApplyCurvePtrB = NULL;
+				return Curve;
+			}
+		}
+		else {
+			if (m_pTag->m_CurvesA) {
+				LPIccCurve* Curve = m_pTag->m_CurvesA;
+				m_pTag->m_CurvesA = NULL;
+				m_ApplyCurvePtrA = NULL;
+				return Curve;
+			}
+		}
+	}
+
+	return NULL;
+}
+
+/**
+**************************************************************************
+* Name: CIccXformNDLut::ExtractOutputCurves
+* 
+* Purpose: 
+*  Gets the output curves. Should be called only after Begin() 
+*  has been called. Once the curves are extracted, they will 
+*  not be used by the Apply() function.
+*  WARNING:  caller owns the curves and must be deleted by the caller.
+*  
+* Return:
+*  Pointer to the output curves.
+**************************************************************************
+*/
+LPIccCurve* CIccXformNDLut::ExtractOutputCurves()
+{
+	if (!m_bInput) {
+		if (m_pTag->m_bInputMatrix) {
+			if (m_pTag->m_CurvesA) {
+				LPIccCurve* Curve = m_pTag->m_CurvesA;
+				m_pTag->m_CurvesA = NULL;
+				m_ApplyCurvePtrA = NULL;
+				return Curve;
+			}
+		}
+		else {
+			if (m_pTag->m_CurvesB) {
+				LPIccCurve* Curve = m_pTag->m_CurvesB;
+				m_pTag->m_CurvesB = NULL;
+				m_ApplyCurvePtrB = NULL;
+				return Curve;
+			}
+		}
+	}
+
+	return NULL;
+}
 
 /**
  **************************************************************************
@@ -2470,6 +2876,7 @@ icStatusCMM CIccCmm::ToInternalEncoding(icColorSpaceSignature nSpace, icFloatCol
   icUInt16Number i;
   icFloatNumber pInput[16];
   memcpy(pInput, pData, nSamples*sizeof(icFloatNumber));
+	bool bCLRspace = icIsSpaceCLR(nSpace);
 
   switch(nSpace) {
 
@@ -2552,6 +2959,15 @@ icStatusCMM CIccCmm::ToInternalEncoding(icColorSpaceSignature nSpace, icFloatCol
     default:
       {
         switch(nEncode) {
+				case icEncodeValue:
+					{
+						if (!bCLRspace || nSamples<3) {
+							return icCmmStatBadColorEncoding;
+						}
+						icLabToPcs(pInput);
+						break;
+					}
+
         case icEncodePercent:
           {
             if (bClip) {
@@ -2700,6 +3116,7 @@ icStatusCMM CIccCmm::FromInternalEncoding(icColorSpaceSignature nSpace, icFloatC
   icUInt16Number i;
   icFloatNumber pInput[16];
   memcpy(pInput, pInternal, nSamples*sizeof(icFloatNumber));
+	bool bCLRspace = icIsSpaceCLR(nSpace);
 
   switch(nSpace) {
 
@@ -2779,6 +3196,14 @@ icStatusCMM CIccCmm::FromInternalEncoding(icColorSpaceSignature nSpace, icFloatC
     default:
       {
         switch(nEncode) {
+				case icEncodeValue:
+					{
+						if (!bCLRspace || nSamples<3) {
+							return icCmmStatBadColorEncoding;
+						}
+						icLabFromPcs(pInput);
+						break;
+					}
         case icEncodePercent:
           {
             if (bClip) {

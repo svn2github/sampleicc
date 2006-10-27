@@ -336,9 +336,9 @@ void icVectorApplyMatrix3x3(icFloatNumber* result,
   const unsigned int e31 = 6;
   const unsigned int e32 = 7;
   const unsigned int e33 = 8;
-  result[0] = m[e11] * v[0] + m[e12] * v[0] + m[e13] * v[0];
-  result[1] = m[e21] * v[1] + m[e22] * v[1] + m[e23] * v[1];
-  result[2] = m[e31] * v[2] + m[e32] * v[2] + m[e23] * v[2];
+  result[0] = m[e11] * v[0] + m[e12] * v[1] + m[e13] * v[2];
+  result[1] = m[e21] * v[0] + m[e22] * v[1] + m[e23] * v[2];
+  result[2] = m[e31] * v[0] + m[e32] * v[1] + m[e23] * v[2];
 }
 
 

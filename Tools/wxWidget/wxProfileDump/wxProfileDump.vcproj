@@ -1238,6 +1238,42 @@
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
 			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="*.h">
+			<File
+				RelativePath="..\..\..\IccProfLib\IccProfile.h">
+			</File>
+			<File
+				RelativePath=".\wxProfileDump.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="Library Files"
+			Filter="">
+			<File
+				RelativePath="..\..\..\IccProfLib\Release_CRTDLL\IccProfLib_CRTDLL.lib">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCustomBuildTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\IccProfLib\Debug_CRTDLL\IccProfLib_CRTDLL.lib">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCustomBuildTool"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="Resource Files"
+			Filter="">
 			<File
 				RelativePath="wxProfileDump.rc">
 				<FileConfiguration
@@ -1351,38 +1387,6 @@
 						Name="VCResourceCompilerTool"
 						PreprocessorDefinitions=""
 						AdditionalIncludeDirectories=""/>
-				</FileConfiguration>
-			</File>
-		</Filter>
-		<Filter
-			Name="Header Files"
-			Filter="*.h">
-			<File
-				RelativePath="..\..\..\IccProfLib\IccProfile.h">
-			</File>
-			<File
-				RelativePath=".\wxProfileDump.h">
-			</File>
-		</Filter>
-		<Filter
-			Name="Library Files"
-			Filter="">
-			<File
-				RelativePath="..\..\..\IccProfLib\Debug_CRTDLL\IccProfLib_CRTDLL.lib">
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCCustomBuildTool"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\IccProfLib\Release_CRTDLL\IccProfLib_CRTDLL.lib">
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCCustomBuildTool"/>
 				</FileConfiguration>
 			</File>
 		</Filter>

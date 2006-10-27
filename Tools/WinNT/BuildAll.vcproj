@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="All"
+  Name="All"
+  ProjectGUID="{F70F064E-0377-484E-8F86-BEC03F35F950}"
 	SccProjectName=""
 	SccAuxPath=""
 	SccLocalPath="."

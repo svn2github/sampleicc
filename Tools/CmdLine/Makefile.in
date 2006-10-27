@@ -101,7 +101,7 @@ am__include = @am__include@
 am__quote = @am__quote@
 install_sh = @install_sh@
 
-SUBDIRS = IccApplyNamedCmm IccDumpProfile IccProfLibTest IccCreateCLUTInputProfile @SICC_ICC_APPLY_PROFILES@
+SUBDIRS = IccApplyNamedCmm IccDumpProfile IccProfLibTest IccCreateCLUTInputProfile IccStripUnknownTags @SICC_ICC_APPLY_PROFILES@
 subdir = Tools/CmdLine
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =

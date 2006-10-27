@@ -59,6 +59,13 @@
  *   the configuration paramaters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
+ * - October 2006
+ *  - Added IsIdentity() function to the CIccCurve and CIccMatrix classes which returns true
+ *    if they are identity
+ *  - Modified the Xform objects in the CMM to use the IsIdentity() function. 
+ *    Now CIccXform::Apply() will not apply the curves or the matrix if 
+ *    they are identity, to improve the CMM performance
+ *
  * - July 2006
  *  - Fixed bug with displaying the icSigPerceptualRenderingIntentGamutTag tag's name correctly
  *  - Added icVectorApplyMatrix3x3() to IccUtil

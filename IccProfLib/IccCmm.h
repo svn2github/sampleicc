@@ -180,8 +180,12 @@ public:
   ///Checks if the profile is to be used as input profile
   bool IsInput() const { return m_bInput; }
 
-  //The following function is for Overriden create functinon
+  /// The following function is for Overriden create function
   void SetParams(CIccProfile *pProfile, bool bInput, icRenderingIntent nIntent, icXformInterp nInterp);
+
+	/// Use these functions to extract the input/output curves from the xform
+	virtual LPIccCurve* ExtractInputCurves()=0;
+	virtual LPIccCurve* ExtractOutputCurves()=0;
 
 protected:
   
@@ -238,6 +242,9 @@ public:
 
   virtual icStatusCMM Begin();
   virtual void Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);
+	
+	virtual LPIccCurve* ExtractInputCurves();
+	virtual LPIccCurve* ExtractOutputCurves();
 
 protected:
   icFloatNumber m_e[9];
@@ -247,6 +254,8 @@ protected:
 
   CIccTagXYZ *GetColumn(icSignature sig) const;
   bool m_bFreeCurve;
+	/// used only when applying the xform
+	LPIccCurve* m_ApplyCurvePtr;
 };
 
 /**
@@ -269,8 +278,17 @@ public:
   virtual void Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);
 
   virtual bool UseLegacyPCS() const { return m_pTag->UseLegacyPCS(); }
+
+	virtual LPIccCurve* ExtractInputCurves();
+	virtual LPIccCurve* ExtractOutputCurves();
 protected:
   CIccMBB *m_pTag;
+
+	/// Pointers to data in m_pTag, used only for applying the xform
+	LPIccCurve* m_ApplyCurvePtrA;
+	LPIccCurve* m_ApplyCurvePtrB;
+	LPIccCurve* m_ApplyCurvePtrM;
+	CIccMatrix* m_ApplyMatrixPtr;
 };
 
 /**
@@ -293,8 +311,17 @@ public:
   virtual void Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);
 
   virtual bool UseLegacyPCS() const { return m_pTag->UseLegacyPCS(); }
+
+	virtual LPIccCurve* ExtractInputCurves();
+	virtual LPIccCurve* ExtractOutputCurves();
 protected:
   CIccMBB *m_pTag;
+
+	/// Pointers to data in m_pTag, used only for applying the xform
+	LPIccCurve* m_ApplyCurvePtrA;
+	LPIccCurve* m_ApplyCurvePtrB;
+	LPIccCurve* m_ApplyCurvePtrM;
+	CIccMatrix* m_ApplyMatrixPtr;
 };
 
 /**
@@ -317,9 +344,18 @@ public:
   virtual void Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);
 
   virtual bool UseLegacyPCS() const { return m_pTag->UseLegacyPCS(); }
+
+	virtual LPIccCurve* ExtractInputCurves();
+	virtual LPIccCurve* ExtractOutputCurves();
 protected:
   CIccMBB *m_pTag;
   int m_nNumInput;
+
+	/// Pointers to data in m_pTag, used only for applying the xform
+	LPIccCurve* m_ApplyCurvePtrA;
+	LPIccCurve* m_ApplyCurvePtrB;
+	LPIccCurve* m_ApplyCurvePtrM;
+	CIccMatrix* m_ApplyMatrixPtr;
 };
 
 /**
@@ -379,6 +415,10 @@ public:
   ///Checks if the destination space of the transform is PCS
   bool IsDestPCS() const {return m_nDestSpace == m_pTag->GetPCS();}
 
+
+	virtual LPIccCurve* ExtractInputCurves() {return NULL;}
+	virtual LPIccCurve* ExtractOutputCurves() {return NULL;}
+
 protected:
   CIccTagNamedColor2 *m_pTag;
   icApplyInterface m_nApplyInterface;
@@ -433,11 +473,18 @@ protected:
   encoding.  The valid encoding transforms for the following color space signatures are given
   below.
 
-  'CMYK', 'RGB ', 'GRAY', 'CMY ', 'XCLR', 'Luv ', 'YCbr', 'Yxy ', 'HSV ', 'HLS ', 'gamt'
+  'CMYK', 'RGB ', 'GRAY', 'CMY ', 'Luv ', 'YCbr', 'Yxy ', 'HSV ', 'HLS ', 'gamt'
     icEncodePercent: 0.0 <= value <= 100.0
     icEncodeFloat: 0.0 <= value <= 1.0
     icEncode8Bit: 0.0 <= value <= 255
     icEncode16Bit: 0.0 <= value <= 65535
+
+	'XCLR'
+	  icEncodeValue: (if X>=3) 0.0 <= L <= 100.0; -128.0 <= a,b <= 127.0 others 0.0 <= value <= 1.0
+		icEncodePercent: 0.0 <= value <= 100.0
+		icEncodeFloat: 0.0 <= value <= 1.0
+		icEncode8Bit: 0.0 <= value <= 255
+		icEncode16Bit: 0.0 <= value <= 65535
 
   'Lab '
     icEncodeValue: 0.0 <= L <= 100.0; -128.0 <= a,b <= 127.0

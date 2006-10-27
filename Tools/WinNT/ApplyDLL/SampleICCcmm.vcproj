@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="SampleICCcmm"
+  Name="SampleICCcmm"
+  ProjectGUID="{623F83ED-CF69-4828-9E08-9B0B068B6315}"
 	SccProjectName=""
 	SccAuxPath=""
 	SccLocalPath="..\..\.."
