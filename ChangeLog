@@ -1,5 +1,7 @@
 2006-10-27 Max Derhak
   * Added CIccTagCurve::SetGamma member function
+  * Added validation check for single entry (gamma) curves to CIccTagLut8
+    and CIccTagLut16
 
 2006-10-10 Rohit Patil
   * Added IsIdentity() function to the CIccCurve and CIccMatrix classes which returns true

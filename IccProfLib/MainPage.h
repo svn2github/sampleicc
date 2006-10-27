@@ -60,7 +60,8 @@
  *
  *  <b>VERSION HISTORY</b>
  * - October 2006
- * - Added CIccTagCurve::SetGamma() funtion
+ * - Added CIccTagCurve::SetGamma() function
+ * - Added validation check for single entry (gamma) curves to CIccTagLut8 and CIccTagLut16
  *  - Added IsIdentity() function to the CIccCurve and CIccMatrix classes which returns true
  *    if they are identity
  *  - Modified the Xform objects in the CMM to use the IsIdentity() function. 

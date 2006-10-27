@@ -4300,6 +4300,15 @@ icValidateStatus CIccTagLut8::Validate(icTagSignature sig, std::string &sReport,
         for (i=0; i<nInput; i++) {
           if (m_CurvesB[i]) {
             rv = icMaxStatus(rv, m_CurvesB[i]->Validate(sig, sReport, pProfile));
+            if (m_CurvesB[i]->GetType()==icSigCurveType) {
+              CIccTagCurve *pTagCurve = (CIccTagCurve*)m_CurvesB[i];
+              if (pTagCurve->GetSize()==1) {
+                sReport += icValidateCriticalErrorMsg;
+                sReport += sSigName;
+                sReport += " - lut8Tags do not support single entry gamma curves.\r\n";
+                rv = icMaxStatus(rv, icValidateCriticalError);
+              }
+            }
           }
           else {
             sReport += icValidateCriticalErrorMsg;
@@ -4331,6 +4340,15 @@ icValidateStatus CIccTagLut8::Validate(icTagSignature sig, std::string &sReport,
         for (i=0; i<nOutput; i++) {
           if (m_CurvesA[i]) {
             rv = icMaxStatus(rv, m_CurvesA[i]->Validate(sig, sReport, pProfile));
+            if (m_CurvesA[i]->GetType()==icSigCurveType) {
+              CIccTagCurve *pTagCurve = (CIccTagCurve*)m_CurvesA[i];
+              if (pTagCurve->GetSize()==1) {
+                sReport += icValidateCriticalErrorMsg;
+                sReport += sSigName;
+                sReport += " - lut8Tags do not support single entry gamma curves.\r\n";
+                rv = icMaxStatus(rv, icValidateCriticalError);
+              }
+            }
           }
           else {
             sReport += icValidateCriticalErrorMsg;
@@ -4692,6 +4710,15 @@ icValidateStatus CIccTagLut16::Validate(icTagSignature sig, std::string &sReport
         for (i=0; i<nInput; i++) {
           if (m_CurvesB[i]) {
             rv = icMaxStatus(rv, m_CurvesB[i]->Validate(sig, sReport, pProfile));
+            if (m_CurvesB[i]->GetType()==icSigCurveType) {
+              CIccTagCurve *pTagCurve = (CIccTagCurve*)m_CurvesB[i];
+              if (pTagCurve->GetSize()==1) {
+                sReport += icValidateCriticalErrorMsg;
+                sReport += sSigName;
+                sReport += " - lut16Tags do not support single entry gamma curves.\r\n";
+                rv = icMaxStatus(rv, icValidateCriticalError);
+              }
+            }
           }
           else {
             sReport += icValidateCriticalErrorMsg;
@@ -4723,6 +4750,15 @@ icValidateStatus CIccTagLut16::Validate(icTagSignature sig, std::string &sReport
         for (i=0; i<nOutput; i++) {
           if (m_CurvesA[i]) {
             rv = icMaxStatus(rv, m_CurvesA[i]->Validate(sig, sReport, pProfile));
+            if (m_CurvesA[i]->GetType()==icSigCurveType) {
+              CIccTagCurve *pTagCurve = (CIccTagCurve*)m_CurvesA[i];
+              if (pTagCurve->GetSize()==1) {
+                sReport += icValidateCriticalErrorMsg;
+                sReport += sSigName;
+                sReport += " - lut16Tags do not support single entry gamma curves.\r\n";
+                rv = icMaxStatus(rv, icValidateCriticalError);
+              }
+            }
           }
           else {
             sReport += icValidateCriticalErrorMsg;
