@@ -433,7 +433,7 @@ void CIccTagCurve::DumpLut(std::string &sDescription, const icChar *szName,
 * 
 * Args: 
 *  nSize - number of entries in the curve,
-*  bZeroNew - flag to zero newly formed values
+*  nSizeOpt - flag to zero newly formed values
 *****************************************************************************
 */
 void CIccTagCurve::SetSize(icUInt32Number nSize, icTagCurveSizeInit nSizeOpt/*=icInitZero*/)
