@@ -484,6 +484,26 @@ void CIccTagCurve::SetSize(icUInt32Number nSize, icTagCurveSizeInit nSizeOpt/*=i
 
 /**
 ****************************************************************************
+* Name: sampleICC::CIccTagCurve::SetGamma
+* 
+* Purpose: Set the curve with a single gamma value.
+* 
+* Args:
+*  gamma - gamma value to use
+*****************************************************************************
+*/
+void CIccTagCurve::SetGamma(icFloatNumber gamma)
+{
+  SetSize(1, icInitNone);
+
+  icInt16Number whole = (icInt16Number)gamma;
+  icFloatNumber frac = gamma - (icFloatNumber)whole;
+
+  m_Curve[0] = (icFloatNumber)((whole * 156) + (frac*256.0)) / (icFloatNumber)65535.0; 
+}
+
+/**
+****************************************************************************
 *  
 *****************************************************************************
 */
