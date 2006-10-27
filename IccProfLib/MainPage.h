@@ -60,6 +60,7 @@
  *
  *  <b>VERSION HISTORY</b>
  * - October 2006
+ * - Added CIccTagCurve::SetGamma() funtion
  *  - Added IsIdentity() function to the CIccCurve and CIccMatrix classes which returns true
  *    if they are identity
  *  - Modified the Xform objects in the CMM to use the IsIdentity() function. 
