@@ -760,6 +760,16 @@ public:
   virtual bool Write(CIccIO *pIO);
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL) const;
 
+  CIccLocalizedUnicode *Find(icLanguageCode nLanguageCode = icLanguageCodeEnglish,
+                             icCountryCode nRegionCode = icCountryCodeUSA);
+
+  void SetText(const icChar *szText,
+               icLanguageCode nLanguageCode = icLanguageCodeEnglish,
+               icCountryCode nRegionCode = icCountryCodeUSA);
+  void SetText(const icUInt16Number *sszUnicodeText,
+               icLanguageCode nLanguageCode = icLanguageCodeEnglish,
+               icCountryCode nRegionCode = icCountryCodeUSA);
+
 
   CIccMultiLocalizedUnicode *m_Strings;
 };

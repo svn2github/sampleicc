@@ -1,3 +1,7 @@
+2006-10-30 Max Derhak
+  * Added direct accessors CIccTagMultiLocalizedUnicode::Find() and 
+    CIccTagMultiLocalizedUnicode::SetText() for easier creation of 
+	multiLocalizedUnicode based tags
 2006-10-27 Max Derhak
   * Added CIccTagCurve::SetGamma member function
   * Added validation check for single entry (gamma) curves to CIccTagLut8

@@ -2602,9 +2602,9 @@ icValidateStatus CIccTagChromaticity::Validate(icTagSignature sig, std::string &
     switch(m_nColorantType) {
       case icColorantITU:
         {
-          if ( (m_xy[0].x != icDtoUF(0.640)) || (m_xy[0].y != icDtoUF(0.330)) ||
-               (m_xy[1].x != icDtoUF(0.300)) || (m_xy[1].y != icDtoUF(0.600)) ||
-               (m_xy[2].x != icDtoUF(0.150)) || (m_xy[2].y != icDtoUF(0.060)) ) {
+          if ( (m_xy[0].x != icDtoUF((icFloatNumber)0.640)) || (m_xy[0].y != icDtoUF((icFloatNumber)0.330)) ||
+               (m_xy[1].x != icDtoUF((icFloatNumber)0.300)) || (m_xy[1].y != icDtoUF((icFloatNumber)0.600)) ||
+               (m_xy[2].x != icDtoUF((icFloatNumber)0.150)) || (m_xy[2].y != icDtoUF((icFloatNumber)0.060)) ) {
                 sReport += icValidateNonCompliantMsg;
                 sReport += sSigName;
                 sReport += " - Chromaticity data does not match specification.\r\n";
@@ -2615,9 +2615,9 @@ icValidateStatus CIccTagChromaticity::Validate(icTagSignature sig, std::string &
 
       case icColorantSMPTE:
         {
-          if ( (m_xy[0].x != icDtoUF(0.630)) || (m_xy[0].y != icDtoUF(0.340)) ||
-               (m_xy[1].x != icDtoUF(0.310)) || (m_xy[1].y != icDtoUF(0.595)) ||
-               (m_xy[2].x != icDtoUF(0.155)) || (m_xy[2].y != icDtoUF(0.070)) ) {
+          if ( (m_xy[0].x != icDtoUF((icFloatNumber)0.630)) || (m_xy[0].y != icDtoUF((icFloatNumber)0.340)) ||
+               (m_xy[1].x != icDtoUF((icFloatNumber)0.310)) || (m_xy[1].y != icDtoUF((icFloatNumber)0.595)) ||
+               (m_xy[2].x != icDtoUF((icFloatNumber)0.155)) || (m_xy[2].y != icDtoUF((icFloatNumber)0.070)) ) {
               sReport += icValidateNonCompliantMsg;
               sReport += sSigName;
               sReport += " - Chromaticity data does not match specification.\r\n";
@@ -2628,9 +2628,9 @@ icValidateStatus CIccTagChromaticity::Validate(icTagSignature sig, std::string &
 
       case icColorantEBU:
         {
-          if ( (m_xy[0].x != icDtoUF(0.64)) || (m_xy[0].y != icDtoUF(0.33)) ||
-               (m_xy[1].x != icDtoUF(0.29)) || (m_xy[1].y != icDtoUF(0.60)) ||
-               (m_xy[2].x != icDtoUF(0.15)) || (m_xy[2].y != icDtoUF(0.06)) ) {
+          if ( (m_xy[0].x != icDtoUF((icFloatNumber)0.64)) || (m_xy[0].y != icDtoUF((icFloatNumber)0.33)) ||
+               (m_xy[1].x != icDtoUF((icFloatNumber)0.29)) || (m_xy[1].y != icDtoUF((icFloatNumber)0.60)) ||
+               (m_xy[2].x != icDtoUF((icFloatNumber)0.15)) || (m_xy[2].y != icDtoUF((icFloatNumber)0.06)) ) {
               sReport += icValidateNonCompliantMsg;
               sReport += sSigName;
               sReport += " - Chromaticity data does not match specification.\r\n";
@@ -2641,9 +2641,9 @@ icValidateStatus CIccTagChromaticity::Validate(icTagSignature sig, std::string &
 
       case icColorantP22:
         {
-          if ( (m_xy[0].x != icDtoUF(0.625)) || (m_xy[0].y != icDtoUF(0.340)) ||
-               (m_xy[1].x != icDtoUF(0.280)) || (m_xy[1].y != icDtoUF(0.605)) ||
-               (m_xy[2].x != icDtoUF(0.155)) || (m_xy[2].y != icDtoUF(0.070)) ) {
+          if ( (m_xy[0].x != icDtoUF((icFloatNumber)0.625)) || (m_xy[0].y != icDtoUF((icFloatNumber)0.340)) ||
+               (m_xy[1].x != icDtoUF((icFloatNumber)0.280)) || (m_xy[1].y != icDtoUF((icFloatNumber)0.605)) ||
+               (m_xy[2].x != icDtoUF((icFloatNumber)0.155)) || (m_xy[2].y != icDtoUF((icFloatNumber)0.070)) ) {
               sReport += icValidateNonCompliantMsg;
               sReport += sSigName;
               sReport += " - Chromaticity data does not match specification.\r\n";
@@ -3952,6 +3952,92 @@ icValidateStatus CIccTagMultiLocalizedUnicode::Validate(icTagSignature sig, std:
   return rv;
 }
 
+/**
+****************************************************************************
+* Name: sampleICC::CIccTagMultiLocalizedUnicode::Find
+* 
+* Purpose: 
+* 
+* Args:
+*  nLanguageCode
+*  nRegionCode
+*
+* Return:
+*  Pointer to CIccLocalizedUnicode object associated with the nLanguageCode
+*  and nRegionCode or NULL if not found
+*****************************************************************************
+*/
+CIccLocalizedUnicode *CIccTagMultiLocalizedUnicode::Find(icLanguageCode nLanguageCode /* = icLanguageCodeEnglish */,
+                                                         icCountryCode nRegionCode /* = icCountryCodeUSA */)
+{
+  CIccMultiLocalizedUnicode::iterator i;
+
+  for (i=m_Strings->begin(); i!=m_Strings->end(); i++) {
+    if (i->m_nLanguageCode == nLanguageCode &&
+      i->m_nCountryCode == nRegionCode) {
+      return &(*i);
+    }
+  }
+
+  return NULL;
+}
+
+/**
+****************************************************************************
+* Name: sampleICC::CIccTagMultiLocalizedUnicode::SetText
+* 
+* Purpose: 
+* 
+* Args:
+*  sszUnicodeText
+*  nLanguageCode
+*  RegionCode
+*****************************************************************************
+*/
+void CIccTagMultiLocalizedUnicode::SetText(const icChar *szText, 
+                                           icLanguageCode nLanguageCode /* = icLanguageCodeEnglish */,
+                                           icCountryCode nRegionCode /* = icCountryCodeUSA */)
+{
+   CIccLocalizedUnicode *pText = Find(nLanguageCode, nRegionCode);
+
+   if (!pText) {
+     CIccLocalizedUnicode newText;
+     newText.SetText(szText, nLanguageCode, nRegionCode);
+     m_Strings->push_back(newText);
+   }
+   else {
+     pText->SetText(szText, nLanguageCode, nRegionCode);
+   }
+}
+
+
+/**
+****************************************************************************
+* Name: sampleICC::CIccTagMultiLocalizedUnicode::SetText
+* 
+* Purpose: 
+* 
+* Args:
+*  sszUnicodeText
+*  nLanguageCode
+*  RegionCode
+*****************************************************************************
+*/
+void CIccTagMultiLocalizedUnicode::SetText(const icUInt16Number *sszUnicodeText, 
+                                           icLanguageCode nLanguageCode /* = icLanguageCodeEnglish */,
+                                           icCountryCode nRegionCode /* = icCountryCodeUSA */)
+{
+  CIccLocalizedUnicode *pText = Find(nLanguageCode, nRegionCode);
+
+  if (!pText) {
+    CIccLocalizedUnicode newText;
+    newText.SetText(sszUnicodeText, nLanguageCode, nRegionCode);
+    m_Strings->push_back(newText);
+  }
+  else {
+    pText->SetText(sszUnicodeText, nLanguageCode, nRegionCode);
+  }
+}
 
 //
 // MD: Moved Curve and LUT tags to IccTagLut.cpp (4-30-05)
