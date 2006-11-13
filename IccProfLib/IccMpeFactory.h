@@ -107,7 +107,7 @@ class CIccMultiProcessElement;
  * This class is pure virtual.
  ***********************************************************************
  */
-class IIccMpeFactory 
+class ICCPROFLIB_API IIccMpeFactory 
 {
 public:
   virtual ~IIccMpeFactory() {}
