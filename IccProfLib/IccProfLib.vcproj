@@ -154,6 +154,15 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\IccMpeACS.cpp">
+			</File>
+			<File
+				RelativePath=".\IccMpeBasic.cpp">
+			</File>
+			<File
+				RelativePath=".\IccMpeFactory.cpp">
+			</File>
+			<File
 				RelativePath="IccProfile.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -226,6 +235,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\IccTagMpe.cpp">
+			</File>
+			<File
 				RelativePath="IccUtil.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -275,6 +287,15 @@
 				RelativePath="IccIO.h">
 			</File>
 			<File
+				RelativePath=".\IccMpeACS.h">
+			</File>
+			<File
+				RelativePath=".\IccMpeBasic.h">
+			</File>
+			<File
+				RelativePath=".\IccMpeFactory.h">
+			</File>
+			<File
 				RelativePath="IccProfile.h">
 			</File>
 			<File
@@ -291,6 +312,9 @@
 			</File>
 			<File
 				RelativePath="IccTagLut.h">
+			</File>
+			<File
+				RelativePath=".\IccTagMpe.h">
 			</File>
 			<File
 				RelativePath="IccUtil.h">

@@ -442,10 +442,10 @@ CIccXform::~CIccXform()
  **************************************************************************
  */
 CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput, icRenderingIntent nIntent, 
-                             icXformInterp nInterp, icXformLutType nLutType)
+                             icXformInterp nInterp, icXformLutType nLutType, bool bUseMpeTags)
 {
   CIccXform *rv = NULL;
-  icRenderingIntent nTagIntent = (nIntent==icAbsoluteColorimetric) ? icRelativeColorimetric : nIntent;
+  icRenderingIntent nTagIntent = nIntent;
 
   if (nTagIntent == icUnknownIntent)
     nTagIntent = icPerceptual;
@@ -453,10 +453,35 @@ CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput, icRenderingInte
   switch (nLutType) {
     case icXformLutColor:
       if (bInput) {
-        CIccTag *pTag = pProfile->FindTag(icSigAToB0Tag + nTagIntent);
+        CIccTag *pTag = NULL;
+        if (bUseMpeTags) {
+          pTag = pProfile->FindTag(icSigDToB0Tag + nTagIntent);
+
+          if (!pTag && nTagIntent ==icAbsoluteColorimetric) {
+            pTag = pProfile->FindTag(icSigDToB1Tag);
+            if (pTag)
+              nTagIntent = icRelativeColorimetric;
+          }
+
+          if (!pTag) {
+            pTag = pProfile->FindTag(icSigDToB0Tag);
+          }
+
+          //Unsupported elements cause fall back behavior
+          if (pTag && !pTag->IsSupported())
+            pTag = NULL;
+        }
+
+        if (!pTag) {
+          if (nTagIntent == icAbsoluteColorimetric)
+            nTagIntent = icRelativeColorimetric;
+          pTag = pProfile->FindTag(icSigAToB0Tag + nTagIntent);
+        }
+
         if (!pTag) {
           pTag = pProfile->FindTag(icSigAToB0Tag);
         }
+
         if (!pTag) {
           if (pProfile->m_Header.colorSpace == icSigRgbData) {
             rv = new CIccXformMatrixTRC();
@@ -464,37 +489,66 @@ CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput, icRenderingInte
           else
             return NULL;
         }
+        else if (pTag->GetType()==icSigMultiProcessElementType) {
+          rv = new CIccXformMpe(pTag);
+        }
         else {
           switch(pProfile->m_Header.colorSpace) {
-          case icSigXYZData:
-          case icSigLabData:
-          case icSigLuvData:
-          case icSigYCbCrData:
-          case icSigYxyData:
-          case icSigRgbData:
-          case icSigHsvData:
-          case icSigHlsData:
-          case icSigCmyData:
-          case icSig3colorData:
-            rv = new CIccXform3DLut(pTag);
-            break;
+            case icSigXYZData:
+            case icSigLabData:
+            case icSigLuvData:
+            case icSigYCbCrData:
+            case icSigYxyData:
+            case icSigRgbData:
+            case icSigHsvData:
+            case icSigHlsData:
+            case icSigCmyData:
+            case icSig3colorData:
+              rv = new CIccXform3DLut(pTag);
+              break;
 
-          case icSigCmykData:
-          case icSig4colorData:
-            rv = new CIccXform4DLut(pTag);
-            break;
+            case icSigCmykData:
+            case icSig4colorData:
+              rv = new CIccXform4DLut(pTag);
+              break;
 
-          default:
-            rv = new CIccXformNDLut(pTag);
-            break;
+            default:
+              rv = new CIccXformNDLut(pTag);
+              break;
           }
         }
       }
       else {
-        CIccTag *pTag = pProfile->FindTag(icSigBToA0Tag + nTagIntent);
+        CIccTag *pTag = NULL;
+        
+        if (bUseMpeTags) {
+          pTag = pProfile->FindTag(icSigBToD0Tag + nTagIntent);
+
+          if (!pTag && nTagIntent ==icAbsoluteColorimetric) {
+            pTag = pProfile->FindTag(icSigBToD1Tag);
+            if (pTag)
+              nTagIntent = icRelativeColorimetric;
+          }
+
+          if (!pTag) {
+            pTag = pProfile->FindTag(icSigBToD0Tag);
+          }
+
+          //Unsupported elements cause fall back behavior
+          if (pTag && !pTag->IsSupported())
+            pTag = NULL;
+        }
+
+        if (!pTag) {
+          if (nTagIntent == icAbsoluteColorimetric)
+            nTagIntent = icRelativeColorimetric;
+          pTag = pProfile->FindTag(icSigBToA0Tag + nTagIntent);
+        }
+
         if (!pTag) {
           pTag = pProfile->FindTag(icSigBToA0Tag);
         }
+
         if (!pTag) {
           if (pProfile->m_Header.colorSpace == icSigRgbData) {
             rv = new CIccXformMatrixTRC();
@@ -502,76 +556,78 @@ CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput, icRenderingInte
           else
             return NULL;
         }
+        if (pTag->GetType()==icSigMultiProcessElementType) {
+          rv = new CIccXformMpe(pTag);
+        }
         else {
           switch(pProfile->m_Header.pcs) {
-          case icSigXYZData:
-          case icSigLabData:
-            rv = new CIccXform3DLut(pTag);
+    case icSigXYZData:
+    case icSigLabData:
+      rv = new CIccXform3DLut(pTag);
 
-          default:
-            break;
+    default:
+      break;
           }
         }
       }
       break;
 
     case icXformLutNamedColor:
-    {
-      CIccTag *pTag = pProfile->FindTag(icSigNamedColor2Tag);
-      if (!pTag)
-        return NULL;
+      {
+        CIccTag *pTag = pProfile->FindTag(icSigNamedColor2Tag);
+        if (!pTag)
+          return NULL;
 
-      rv = new CIccXformNamedColor(pTag, pProfile->m_Header.pcs, pProfile->m_Header.colorSpace);
-    }
-    break;
+        rv = new CIccXformNamedColor(pTag, pProfile->m_Header.pcs, pProfile->m_Header.colorSpace);
+      }
+      break;
 
     case icXformLutPreview:
-    {
-      bInput = false;
-      CIccTag *pTag = pProfile->FindTag(icSigPreview0Tag + nTagIntent);
-      if (!pTag) {
-        pTag = pProfile->FindTag(icSigPreview0Tag);
-      }
-      if (!pTag) {
+      {
+        bInput = false;
+        CIccTag *pTag = pProfile->FindTag(icSigPreview0Tag + nTagIntent);
+        if (!pTag) {
+          pTag = pProfile->FindTag(icSigPreview0Tag);
+        }
+        if (!pTag) {
           return NULL;
-      }
-      else {
-        switch(pProfile->m_Header.pcs) {
-        case icSigXYZData:
-        case icSigLabData:
-          rv = new CIccXform3DLut(pTag);
+        }
+        else {
+          switch(pProfile->m_Header.pcs) {
+    case icSigXYZData:
+    case icSigLabData:
+      rv = new CIccXform3DLut(pTag);
 
-        default:
-          break;
+    default:
+      break;
+          }
         }
       }
-    }
-    break;
+      break;
 
     case icXformLutGamut:
-    {
-      bInput = false;
-      CIccTag *pTag = pProfile->FindTag(icSigGamutTag);
-      if (!pTag) {
+      {
+        bInput = false;
+        CIccTag *pTag = pProfile->FindTag(icSigGamutTag);
+        if (!pTag) {
           return NULL;
-      }
-      else {
-        switch(pProfile->m_Header.pcs) {
-        case icSigXYZData:
-        case icSigLabData:
-          rv = new CIccXform3DLut(pTag);
+        }
+        else {
+          switch(pProfile->m_Header.pcs) {
+    case icSigXYZData:
+    case icSigLabData:
+      rv = new CIccXform3DLut(pTag);
 
-        default:
-          break;
+    default:
+      break;
+          }
         }
       }
-    }
-    break;
+      break;
   }
 
- 
   if (rv) {
-   rv->SetParams(pProfile, bInput, nIntent, nInterp);
+    rv->SetParams(pProfile, bInput, nIntent, nInterp);
   }
 
   return rv;
@@ -619,10 +675,11 @@ void CIccXform::SetParams(CIccProfile *pProfile, bool bInput, icRenderingIntent 
  *  A suitable pXform object
  **************************************************************************
  */
-CIccXform *CIccXform::Create(CIccProfile &Profile, bool bInput, icRenderingIntent nIntent, icXformInterp nInterp, icXformLutType nLutType)
+CIccXform *CIccXform::Create(CIccProfile &Profile, bool bInput, icRenderingIntent nIntent, icXformInterp nInterp, icXformLutType nLutType,
+                             bool bUseMpeTags)
 {
   CIccProfile *pProfile = new CIccProfile(Profile);
-  CIccXform *pXform = Create(pProfile, bInput, nIntent, nInterp, nLutType);
+  CIccXform *pXform = Create(pProfile, bInput, nIntent, nInterp, nLutType, bUseMpeTags);
 
   if (!pXform)
     delete pProfile;
@@ -2445,6 +2502,322 @@ icStatusCMM CIccXformNamedColor::SetDestSpace(icColorSpaceSignature nDestSpace)
 }
 
 /**
+**************************************************************************
+* Name: CIccXformMPE::CIccXformMPE
+* 
+* Purpose: 
+*  Constructor
+**************************************************************************
+*/
+CIccXformMpe::CIccXformMpe(CIccTag *pTag)
+{
+  if (pTag && pTag->GetType()==icSigMultiProcessElementType)
+    m_pTag = (CIccTagMultiProcessElement*)pTag;
+  else
+    m_pTag = NULL;
+
+  m_bUsingAcs = false;
+}
+
+/**
+**************************************************************************
+* Name: CIccXformMPE::~CIccXformMPE
+* 
+* Purpose: 
+*  Destructor
+**************************************************************************
+*/
+CIccXformMpe::~CIccXformMpe()
+{
+}
+
+/**
+**************************************************************************
+* Name: CIccXformMPE::Create
+* 
+* Purpose:
+*  This is a static Creation function that creates derived CIccXform objects and
+*  initializes them.
+* 
+* Args: 
+*  pProfile = pointer to a CIccProfile object that will be owned by the transform.  This object will
+*   be destroyed when the returned CIccXform object is destroyed.  The means that the CIccProfile
+*   object needs to be allocated on the heap.
+*  bInput = flag to indicate whether to use the input or output side of the profile,
+*  nIntent = the rendering intent to apply to the profile,   
+*  nInterp = the interpolation algorithm to use for N-D luts.
+*  nLutType = selection of which transform lut to use
+* 
+* Return: 
+*  A suitable pXform object
+**************************************************************************
+*/
+CIccXform *CIccXformMpe::Create(CIccProfile *pProfile, bool bInput, icRenderingIntent nIntent, 
+                                icXformInterp nInterp, icXformLutType nLutType)
+{
+  CIccXform *rv = NULL;
+  icRenderingIntent nTagIntent = nIntent;
+
+  if (nTagIntent == icUnknownIntent)
+    nTagIntent = icPerceptual;
+
+  switch (nLutType) {
+    case icXformLutColor:
+      if (bInput) {
+        CIccTag *pTag = pProfile->FindTag(icSigDToB0Tag + nTagIntent);
+
+        if (!pTag && nTagIntent ==icAbsoluteColorimetric) {
+          pTag = pProfile->FindTag(icSigDToB1Tag);
+          if (pTag)
+            nTagIntent = icRelativeColorimetric;
+        }
+
+        if (!pTag) {
+          pTag = pProfile->FindTag(icSigDToB0Tag);
+        }
+
+        //Unsupported elements cause fall back behavior
+        if (pTag && !pTag->IsSupported())
+          pTag = NULL;
+
+        if (!pTag) {
+          if (nTagIntent == icAbsoluteColorimetric)
+            nTagIntent = icRelativeColorimetric;
+          pTag = pProfile->FindTag(icSigAToB0Tag + nTagIntent);
+        }
+
+        if (!pTag) {
+          pTag = pProfile->FindTag(icSigAToB0Tag);
+        }
+
+        if (!pTag) {
+          if (pProfile->m_Header.colorSpace == icSigRgbData) {
+            rv = new CIccXformMatrixTRC();
+          }
+          else
+            return NULL;
+        }
+        else if (pTag->GetType()==icSigMultiProcessElementType) {
+          rv = new CIccXformMpe(pTag);
+        }
+        else {
+          switch(pProfile->m_Header.colorSpace) {
+    case icSigXYZData:
+    case icSigLabData:
+    case icSigLuvData:
+    case icSigYCbCrData:
+    case icSigYxyData:
+    case icSigRgbData:
+    case icSigHsvData:
+    case icSigHlsData:
+    case icSigCmyData:
+    case icSig3colorData:
+      rv = new CIccXform3DLut(pTag);
+      break;
+
+    case icSigCmykData:
+    case icSig4colorData:
+      rv = new CIccXform4DLut(pTag);
+      break;
+
+    default:
+      rv = new CIccXformNDLut(pTag);
+      break;
+          }
+        }
+      }
+      else {
+        CIccTag *pTag = pProfile->FindTag(icSigBToD0Tag + nTagIntent);
+
+        if (!pTag && nTagIntent ==icAbsoluteColorimetric) {
+          pTag = pProfile->FindTag(icSigBToD1Tag);
+          if (pTag)
+            nTagIntent = icRelativeColorimetric;
+        }
+
+        if (!pTag) {
+          pTag = pProfile->FindTag(icSigBToD0Tag);
+        }
+
+        //Unsupported elements cause fall back behavior
+        if (pTag && !pTag->IsSupported())
+          pTag = NULL;
+
+        if (!pTag) {
+          if (nTagIntent == icAbsoluteColorimetric)
+            nTagIntent = icRelativeColorimetric;
+          pTag = pProfile->FindTag(icSigBToA0Tag + nTagIntent);
+        }
+
+        if (!pTag) {
+          pTag = pProfile->FindTag(icSigBToA0Tag);
+        }
+
+        if (!pTag) {
+          if (pProfile->m_Header.colorSpace == icSigRgbData) {
+            rv = new CIccXformMatrixTRC();
+          }
+          else
+            return NULL;
+        }
+        if (pTag->GetType()==icSigMultiProcessElementType) {
+          rv = new CIccXformMpe(pTag);
+        }
+        else {
+          switch(pProfile->m_Header.pcs) {
+    case icSigXYZData:
+    case icSigLabData:
+      rv = new CIccXform3DLut(pTag);
+
+    default:
+      break;
+          }
+        }
+      }
+      break;
+
+    case icXformLutNamedColor:
+      {
+        CIccTag *pTag = pProfile->FindTag(icSigNamedColor2Tag);
+        if (!pTag)
+          return NULL;
+
+        rv = new CIccXformNamedColor(pTag, pProfile->m_Header.pcs, pProfile->m_Header.colorSpace);
+      }
+      break;
+
+    case icXformLutPreview:
+      {
+        bInput = false;
+        CIccTag *pTag = pProfile->FindTag(icSigPreview0Tag + nTagIntent);
+        if (!pTag) {
+          pTag = pProfile->FindTag(icSigPreview0Tag);
+        }
+        if (!pTag) {
+          return NULL;
+        }
+        else {
+          switch(pProfile->m_Header.pcs) {
+    case icSigXYZData:
+    case icSigLabData:
+      rv = new CIccXform3DLut(pTag);
+
+    default:
+      break;
+          }
+        }
+      }
+      break;
+
+    case icXformLutGamut:
+      {
+        bInput = false;
+        CIccTag *pTag = pProfile->FindTag(icSigGamutTag);
+        if (!pTag) {
+          return NULL;
+        }
+        else {
+          switch(pProfile->m_Header.pcs) {
+    case icSigXYZData:
+    case icSigLabData:
+      rv = new CIccXform3DLut(pTag);
+
+    default:
+      break;
+          }
+        }
+      }
+      break;
+  }
+
+  if (rv) {
+    rv->SetParams(pProfile, bInput, nIntent, nInterp);
+  }
+
+  return rv;
+}
+
+
+/**
+**************************************************************************
+* Name: CIccXformMPE::Begin
+* 
+* Purpose: 
+*  This function will be called before the xform is applied.  Derived objects
+*  should also call this base class function to initialize for Absolute Colorimetric
+*  Intent handling which is performed through the use of the CheckSrcAbs and
+*  CheckDstAbs functions.
+**************************************************************************
+*/
+icStatusCMM CIccXformMpe::Begin()
+{
+  icStatusCMM rv = CIccXform::Begin();
+
+  if (rv != icCmmStatOk)
+    return rv;
+
+  if (!m_pTag)
+    return icCmmStatInvalidLut;
+
+  if (!m_pTag->Begin()) {
+    return icCmmStatInvalidProfile;
+  }
+
+  return icCmmStatOk;
+}
+
+/**
+**************************************************************************
+* Name: CIccXformMPE::Apply
+* 
+* Purpose: 
+*  Does the actual application of the Xform.
+*  
+* Args:
+*  DstPixel = Destination pixel where the result is stored,
+*  SrcPixel = Source pixel which is to be applied.
+**************************************************************************
+*/
+void CIccXformMpe::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)
+{
+  SrcPixel = CheckSrcAbs(SrcPixel);
+
+  //Since MPE tags use "real" values for PCS we need to convert from 
+  //internal encoding used by IccProfLib
+  icFloatNumber temp[3];
+  switch (GetSrcSpace()) {
+    case icSigXYZData:
+      memcpy(&temp[0], SrcPixel, 3*sizeof(icFloatNumber));
+      icXyzFromPcs(temp);
+      SrcPixel = &temp[0];
+      break;
+
+    case icSigLabData:
+      memcpy(&temp[0], SrcPixel, 3*sizeof(icFloatNumber));
+      icLabFromPcs(temp);
+      SrcPixel = &temp[0];
+      break;
+  }
+
+  m_pTag->Apply(DstPixel, SrcPixel);
+
+  //Since MPE tags use "real" values for PCS we need to convert to
+  //internal encoding used by IccProfLib
+  switch(GetDstSpace()) {
+    case icSigXYZData:
+      icXyzToPcs(DstPixel);
+      break;
+
+    case icSigLabData:
+      icLabToPcs(DstPixel);
+      break;
+  }
+
+  CheckDstAbs(DstPixel);
+}
+
+
+/**
  **************************************************************************
  * Name: CIccCmm::CIccCmm
  * 
@@ -2521,14 +2894,15 @@ CIccCmm::~CIccCmm()
 icStatusCMM CIccCmm::AddXform(const icChar *szProfilePath,
                               icRenderingIntent nIntent /*=icUnknownIntent*/,
                               icXformInterp nInterp /*icXformInterp*/,
-                              icXformLutType nLutType /*=icXformLutColor*/)
+                              icXformLutType nLutType /*=icXformLutColor*/,
+                              bool bUseMpeTags /*=true*/)
 {
   CIccProfile *pProfile = OpenIccProfile(szProfilePath);
 
   if (!pProfile) 
     return icCmmStatCantOpenProfile;
 
-  icStatusCMM rv = AddXform(pProfile, nIntent, nInterp, nLutType);
+  icStatusCMM rv = AddXform(pProfile, nIntent, nInterp, nLutType, bUseMpeTags);
 
   if (rv != icCmmStatOk)
     delete pProfile;
@@ -2560,7 +2934,8 @@ icStatusCMM CIccCmm::AddXform(icUInt8Number *pProfileMem,
                               icUInt32Number nProfileLen,
                               icRenderingIntent nIntent /*=icUnknownIntent*/,
                               icXformInterp nInterp /*icXformInterp*/,
-                              icXformLutType nLutType /*=icXformLutColor*/)
+                              icXformLutType nLutType /*=icXformLutColor*/,
+                              bool bUseMpeTags /*=true*/)
 {
   CIccMemIO *pFile = new CIccMemIO;
 
@@ -2578,7 +2953,7 @@ icStatusCMM CIccCmm::AddXform(icUInt8Number *pProfileMem,
     return icCmmStatCantOpenProfile;
   }
 
-  icStatusCMM rv = AddXform(pProfile, nIntent, nInterp, nLutType);
+  icStatusCMM rv = AddXform(pProfile, nIntent, nInterp, nLutType, bUseMpeTags);
 
   if (rv != icCmmStatOk)
     delete pProfile;
@@ -2607,7 +2982,8 @@ icStatusCMM CIccCmm::AddXform(icUInt8Number *pProfileMem,
 icStatusCMM CIccCmm::AddXform(CIccProfile *pProfile,
                               icRenderingIntent nIntent /*=icUnknownIntent*/,
                               icXformInterp nInterp /*=icInterpLinear*/,
-                              icXformLutType nLutType /*=icXformLutColor*/)
+                              icXformLutType nLutType /*=icXformLutColor*/,
+                              bool bUseMpeTags /*=true*/)
 {
   icColorSpaceSignature nSrcSpace, nDstSpace;
   bool bInput = !m_bLastInput;
@@ -2684,7 +3060,7 @@ icStatusCMM CIccCmm::AddXform(CIccProfile *pProfile,
 
   CIccXformPtr Xform;
   
-  Xform.ptr = CIccXform::Create(pProfile, bInput, nIntent, nInterp, nLutType);
+  Xform.ptr = CIccXform::Create(pProfile, bInput, nIntent, nInterp, nLutType, bUseMpeTags);
 
   if (!Xform.ptr) {
     return icCmmStatBadXform;
@@ -2720,14 +3096,15 @@ icStatusCMM CIccCmm::AddXform(CIccProfile *pProfile,
 icStatusCMM CIccCmm::AddXform(CIccProfile &Profile,
                               icRenderingIntent nIntent /*=icUnknownIntent*/,
                               icXformInterp nInterp /*=icInterpLinear*/,
-                              icXformLutType nLutType /*=icXformLutColor*/)
+                              icXformLutType nLutType /*=icXformLutColor*/,
+                              bool bUseMpeTags /*=true*/)
 {
   CIccProfile *pProfile = new CIccProfile(Profile);
 
   if (!pProfile) 
     return icCmmStatAllocErr;
 
- icStatusCMM stat = AddXform(pProfile, nIntent, nInterp, nLutType);
+ icStatusCMM stat = AddXform(pProfile, nIntent, nInterp, nLutType, bUseMpeTags);
 
   if (stat != icCmmStatOk)
     delete pProfile;
@@ -3481,14 +3858,15 @@ CIccNamedColorCmm::~CIccNamedColorCmm()
 icStatusCMM CIccNamedColorCmm::AddXform(const icChar *szProfilePath,
                                         icRenderingIntent nIntent /*=icUnknownIntent*/,
                                         icXformInterp nInterp /*icXformInterp*/,
-                                        icXformLutType nLutType /*=icXformLutColor*/)
+                                        icXformLutType nLutType /*=icXformLutColor*/,
+                                        bool bUseMpeTags /*=true*/)
 {
   CIccProfile *pProfile = OpenIccProfile(szProfilePath);
 
   if (!pProfile) 
     return icCmmStatCantOpenProfile;
 
-  icStatusCMM rv = AddXform(pProfile, nIntent, nInterp, nLutType);
+  icStatusCMM rv = AddXform(pProfile, nIntent, nInterp, nLutType, bUseMpeTags);
 
   if (rv != icCmmStatOk)
     delete pProfile;
@@ -3516,7 +3894,8 @@ icStatusCMM CIccNamedColorCmm::AddXform(const icChar *szProfilePath,
 icStatusCMM CIccNamedColorCmm::AddXform(CIccProfile *pProfile,
                                         icRenderingIntent nIntent /*=icUnknownIntent*/,
                                         icXformInterp nInterp /*=icInterpLinear*/,
-                                        icXformLutType nLutType /*=icXformLutColor*/)
+                                        icXformLutType nLutType /*=icXformLutColor*/,
+                                        bool bUseMpeTags /*=true*/)
 {
   icColorSpaceSignature nSrcSpace, nDstSpace;
   CIccXformPtr Xform;
@@ -3565,7 +3944,7 @@ icStatusCMM CIccNamedColorCmm::AddXform(CIccProfile *pProfile,
           bInput = false;
         }
 
-        Xform.ptr = CIccXform::Create(pProfile, bInput, nIntent, nInterp, icXformLutNamedColor);
+        Xform.ptr = CIccXform::Create(pProfile, bInput, nIntent, nInterp, icXformLutNamedColor, bUseMpeTags);
         if (!Xform.ptr) {
           return icCmmStatBadXform;
         }
@@ -3645,7 +4024,7 @@ icStatusCMM CIccNamedColorCmm::AddXform(CIccProfile *pProfile,
   }
 
   if (!Xform.ptr)
-    Xform.ptr = CIccXform::Create(pProfile, bInput, nIntent, nInterp, nLutType);
+    Xform.ptr = CIccXform::Create(pProfile, bInput, nIntent, nInterp, nLutType, bUseMpeTags);
 
   if (!Xform.ptr) {
     return icCmmStatBadXform;

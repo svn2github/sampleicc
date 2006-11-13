@@ -133,6 +133,7 @@ typedef enum {
   icXformType4DLut      = 2,
   icXformTypeNDLut      = 3,
   icXformTypeNamedColor = 4,
+  icXformTypeMpe        = 5,
 } icXformType;
 
 /**
@@ -156,12 +157,14 @@ public:
 
   ///Note: The returned CIccXform will own the profile.
   static CIccXform *Create(CIccProfile *pProfile, bool bInput=true, icRenderingIntent nIntent=icUnknownIntent, 
-                           icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor);
+                           icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
+                           bool bUseMpeTags=true);
 
   ///Note: Provide an interface to work profile references.  The IccProfile is copied, and the copy's ownership
   ///is turned over to the Returned CIccXform object.
   static CIccXform *Create(CIccProfile &pProfile, bool bInput=true, icRenderingIntent nIntent=icUnknownIntent, 
-                           icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor);
+                           icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
+                           bool bUseMpeTags=true);
 
   virtual icStatusCMM Begin();
   virtual void Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)=0;
@@ -426,6 +429,28 @@ protected:
   icColorSpaceSignature m_nDestSpace;
 };
 
+class ICCPROFLIB_API CIccXformMpe : public CIccXform
+{
+public:
+  CIccXformMpe(CIccTag *pTag);
+  virtual ~CIccXformMpe();
+
+  virtual icXformType GetXformType() { return icXformTypeMpe; }
+
+  ///Note: The returned CIccXform will own the profile.
+  static CIccXform *Create(CIccProfile *pProfile, bool bInput=true, icRenderingIntent nIntent=icUnknownIntent, 
+    icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor);
+
+  virtual icStatusCMM Begin();
+  virtual void Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);
+  virtual bool UseLegacyPCS() const { return false; }
+  virtual LPIccCurve* ExtractInputCurves() {return NULL;}
+  virtual LPIccCurve* ExtractOutputCurves() {return NULL;}
+
+protected:
+  CIccTagMultiProcessElement *m_pTag;
+  bool m_bUsingAcs;
+};
 
 /**
  **************************************************************************
@@ -531,14 +556,17 @@ public:
 
   ///Must make at least one call to some form of AddXform() before calling Begin()
   virtual icStatusCMM AddXform(const icChar *szProfilePath, icRenderingIntent nIntent=icUnknownIntent,
-                               icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor);
+                               icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
+                               bool bUseMpeTags=true);
   virtual icStatusCMM AddXform(icUInt8Number *pProfileMem, icUInt32Number nProfileLen,
                                icRenderingIntent nIntent=icUnknownIntent, icXformInterp nInterp=icInterpLinear,
-                               icXformLutType nLutType=icXformLutColor);
+                               icXformLutType nLutType=icXformLutColor, bool bUseMpeTags=true);
   virtual icStatusCMM AddXform(CIccProfile *pProfile, icRenderingIntent nIntent=icUnknownIntent,
-                               icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor);  //Note: profile will be owned by the CMM
+                               icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
+                               bool bUseMpeTags=true);  //Note: profile will be owned by the CMM
   virtual icStatusCMM AddXform(CIccProfile &Profile, icRenderingIntent nIntent=icUnknownIntent,
-                               icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor);  //Note the profile will be copied
+                               icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
+                               bool bUseMpeTags=true);  //Note the profile will be copied
 
   ///Must be called before calling Apply()
   virtual icStatusCMM Begin(); 
@@ -624,9 +652,11 @@ public:
 
   ///Must make at least one call to some form of AddXform() before calling Begin()
   virtual icStatusCMM AddXform(const icChar *szProfilePath, icRenderingIntent nIntent=icUnknownIntent,
-                               icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor);
+                               icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
+                               bool bUseMpeTags=true);
   virtual icStatusCMM AddXform(CIccProfile *pProfile, icRenderingIntent nIntent=icUnknownIntent,
-                               icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor);  //Note: profile will be owned by the CMM
+                               icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
+                               bool buseMpeTags=true);  //Note: profile will be owned by the CMM
 
   ///Must be called before calling Apply()
   virtual icStatusCMM Begin(); 

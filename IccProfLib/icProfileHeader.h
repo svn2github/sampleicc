@@ -292,6 +292,13 @@ typedef icInt32Number        icS15Fixed16Number;
 typedef icUInt32Number       icU16Fixed16Number;
 
 
+/** IEEE float storage numbers */
+typedef float icFloat32Number;
+typedef double icFloat64Number;
+
+/** Useful macros for defining Curve Segment breakpoints **/
+#define icMaxFloat32Number  3.402823466e+38F
+#define icMinFloat32Number -3.402823466e+38F
 
 /*------------------------------------------------------------------------*/
 
@@ -316,12 +323,20 @@ typedef enum {
     icSigColorantTableTag                  = 0x636C7274,  /* 'clrt' */
     icSigColorantTableOutTag               = 0x636C6F74,  /* 'clot' */
     icSigCopyrightTag                      = 0x63707274,  /* 'cprt' */
-  icSigCrdInfoTag                        = 0x63726469,  /* 'crdi' Removed in V4 */
-  icSigDataTag                           = 0x64617461,  /* 'data' Removed in V4 */
-  icSigDateTimeTag                       = 0x6474696D,  /* 'dtim' Removed in V4 */
+    icSigCrdInfoTag                          = 0x63726469,  /* 'crdi' Removed in V4 */
+    icSigDataTag                             = 0x64617461,  /* 'data' Removed in V4 */
+    icSigDateTimeTag                         = 0x6474696D,  /* 'dtim' Removed in V4 */
     icSigDeviceMfgDescTag                  = 0x646D6E64,  /* 'dmnd' */
     icSigDeviceModelDescTag                = 0x646D6464,  /* 'dmdd' */
-  icSigDeviceSettingsTag                 = 0x64657673,  /* 'devs' Removed in V4 */
+    icSigDeviceSettingsTag                   = 0x64657673,  /* 'devs' Removed in V4 */
+    icSigDToB0Tag                          = 0x44324230,  /* 'D2B0' */
+    icSigDToB1Tag                          = 0x44324231,  /* 'D2B1' */
+    icSigDToB2Tag                          = 0x44324232,  /* 'D2B2' */
+    icSigDToB3Tag                          = 0x44324233,  /* 'D2B3' */
+    icSigBToD0Tag                          = 0x42324430,  /* 'B2D0' */
+    icSigBToD1Tag                          = 0x42324431,  /* 'B2D1' */
+    icSigBToD2Tag                          = 0x42324432,  /* 'B2D2' */
+    icSigBToD3Tag                          = 0x42324433,  /* 'B2D3' */
     icSigGamutTag                          = 0x67616D74,  /* 'gamt' */
     icSigGrayTRCTag                        = 0x6b545243,  /* 'kTRC' */
     icSigGreenColorantTag                  = 0x6758595A,  /* 'gXYZ' */
@@ -334,26 +349,26 @@ typedef enum {
   /*icSigNamedColorTag                    = 0x6E636f6C,  / 'ncol' OBSOLETE, use ncl2 */
     icSigNamedColor2Tag                    = 0x6E636C32,  /* 'ncl2' */
     icSigOutputResponseTag                 = 0x72657370,  /* 'resp' */
-  icSigPerceptualRenderingIntentGamutTag = 0x72696730,  /* 'rig0' */
+    icSigPerceptualRenderingIntentGamutTag = 0x72696730,  /* 'rig0' */
     icSigPreview0Tag                       = 0x70726530,  /* 'pre0' */
     icSigPreview1Tag                       = 0x70726531,  /* 'pre1' */
     icSigPreview2Tag                       = 0x70726532,  /* 'pre2' */
     icSigProfileDescriptionTag             = 0x64657363,  /* 'desc' */
     icSigProfileSequenceDescTag            = 0x70736571,  /* 'pseq' */
-  icSigPs2CRD0Tag                        = 0x70736430,  /* 'psd0' Removed in V4 */
-  icSigPs2CRD1Tag                        = 0x70736431,  /* 'psd1' Removed in V4 */
-  icSigPs2CRD2Tag                        = 0x70736432,  /* 'psd2' Removed in V4 */
-  icSigPs2CRD3Tag                        = 0x70736433,  /* 'psd3' Removed in V4 */
-  icSigPs2CSATag                         = 0x70733273,  /* 'ps2s' Removed in V4 */
-  icSigPs2RenderingIntentTag             = 0x70733269,  /* 'ps2i' Removed in V4 */
+    icSigPs2CRD0Tag                        = 0x70736430,  /* 'psd0' Removed in V4 */
+    icSigPs2CRD1Tag                        = 0x70736431,  /* 'psd1' Removed in V4 */
+    icSigPs2CRD2Tag                        = 0x70736432,  /* 'psd2' Removed in V4 */
+    icSigPs2CRD3Tag                        = 0x70736433,  /* 'psd3' Removed in V4 */
+    icSigPs2CSATag                         = 0x70733273,  /* 'ps2s' Removed in V4 */
+    icSigPs2RenderingIntentTag             = 0x70733269,  /* 'ps2i' Removed in V4 */
     icSigRedColorantTag                    = 0x7258595A,  /* 'rXYZ' */
     icSigRedMatrixColumnTag                = 0x7258595A,  /* 'rXYZ' */
     icSigRedTRCTag                         = 0x72545243,  /* 'rTRC' */
-  icSigSaturationRenderingIntentGamutTag = 0x72696732,  /* 'rig2' */
-  icSigScreeningDescTag                  = 0x73637264,  /* 'scrd' Removed in V4 */
-  icSigScreeningTag                      = 0x7363726E,  /* 'scrn' Removed in V4 */
+    icSigSaturationRenderingIntentGamutTag = 0x72696732,  /* 'rig2' */
+    icSigScreeningDescTag                  = 0x73637264,  /* 'scrd' Removed in V4 */
+    icSigScreeningTag                      = 0x7363726E,  /* 'scrn' Removed in V4 */
     icSigTechnologyTag                     = 0x74656368,  /* 'tech' */
-  icSigUcrBgTag                          = 0x62666420,  /* 'bfd ' Removed in V4 */
+    icSigUcrBgTag                          = 0x62666420,  /* 'bfd ' Removed in V4 */
     icSigViewingCondDescTag                = 0x76756564,  /* 'vued' */
     icSigViewingConditionsTag              = 0x76696577,  /* 'view' */
 } icTagSignature;
@@ -395,8 +410,6 @@ typedef enum {
 /** Convenience Enum Definition - Not defined in ICC specification*/
 #define icMaxEnumTechnology ((icTechnologySignature) 0xFFFFFFFF)
 
-
-
 /**
  * type signatures 
  */
@@ -404,29 +417,30 @@ typedef enum {
     icSigChromaticityType               = 0x6368726D,  /* 'chrm' */
     icSigColorantOrderType              = 0x636C726F,  /* 'clro' */
     icSigColorantTableType              = 0x636C7274,  /* 'clrt' */
-  icSigCrdInfoType                    = 0x63726469,  /* 'crdi' Removed in V4 */
+    icSigCrdInfoType                    = 0x63726469,  /* 'crdi' Removed in V4 */
     icSigCurveType                      = 0x63757276,  /* 'curv' */
     icSigDataType                       = 0x64617461,  /* 'data' */
     icSigDateTimeType                   = 0x6474696D,  /* 'dtim' */
-  icSigDeviceSettingsType             = 0x64657673,  /* 'devs' Removed in V4 */
+    icSigDeviceSettingsType             = 0x64657673,  /* 'devs' Removed in V4 */
     icSigLut16Type                      = 0x6d667432,  /* 'mft2' */
     icSigLut8Type                       = 0x6d667431,  /* 'mft1' */
     icSigLutAtoBType                    = 0x6d414220,  /* 'mAB ' */
     icSigLutBtoAType                    = 0x6d424120,  /* 'mBA ' */
     icSigMeasurementType                = 0x6D656173,  /* 'meas' */
     icSigMultiLocalizedUnicodeType      = 0x6D6C7563,  /* 'mluc' */
+	  icSigMultiProcessElementType        = 0x6D706574,  /* 'mpet' */
   /*icSigNamedColorType                 = 0x6E636f6C,  /* 'ncol' OBSOLETE, use ncl2 */
     icSigNamedColor2Type                = 0x6E636C32,  /* 'ncl2' */
     icSigParametricCurveType            = 0x70617261,  /* 'para' */
     icSigProfileSequenceDescType        = 0x70736571,  /* 'pseq' */
     icSigResponseCurveSet16Type         = 0x72637332,  /* 'rcs2' */
     icSigS15Fixed16ArrayType            = 0x73663332,  /* 'sf32' */
-  icSigScreeningType                  = 0x7363726E,  /* 'scrn' Removed in V4 */
+    icSigScreeningType                  = 0x7363726E,  /* 'scrn' Removed in V4 */
     icSigSignatureType                  = 0x73696720,  /* 'sig ' */
     icSigTextType                       = 0x74657874,  /* 'text' */
-  icSigTextDescriptionType            = 0x64657363,  /* 'desc' Removed in V4 */
+    icSigTextDescriptionType            = 0x64657363,  /* 'desc' Removed in V4 */
     icSigU16Fixed16ArrayType            = 0x75663332,  /* 'uf32' */
-  icSigUcrBgType                      = 0x62666420,  /* 'bfd ' Removed in V4 */
+    icSigUcrBgType                      = 0x62666420,  /* 'bfd ' Removed in V4 */
     icSigUInt16ArrayType                = 0x75693136,  /* 'ui16' */
     icSigUInt32ArrayType                = 0x75693332,  /* 'ui32' */
     icSigUInt64ArrayType                = 0x75693634,  /* 'ui64' */
@@ -440,6 +454,20 @@ typedef enum {
 #define icSigUnknownType ((icTagTypeSignature) 0x3f3f3f3f)  /* '????' */
 #define icMaxEnumType    ((icTagTypeSignature) 0xFFFFFFFF)
 
+/************************************************************************/
+/* Element type signatures
+/************************************************************************/
+typedef enum {
+    //DMP Proposal 1.0 elements
+    icSigCurveSetElemType             = 0x63767374,  /* 'cvst' */
+    icSigMatrixElemType               = 0x6D617466,  /* 'matf' */
+    icSigCLutElemType                 = 0x636C7574,  /* 'clut' */
+    icSigBAcsElemType                 = 0x62414353,  /* 'bACS' */
+    icSigEAcsElemType                 = 0x65414353,  /* 'eACS' */
+} icElemTypeSignature;
+/** Convenience Enum Definitions - Not defined in proposal*/
+#define icSigUnknownElemType    ((icElemTypeSignature) 0x3f3f3f3f)  /* '????' */
+#define icMaxEnumElemType       ((icElemTypeSignature) 0xFFFFFFFF)
 
 
 /** 
@@ -545,6 +573,35 @@ typedef enum {
 #define icMaxEnumReferenceMediumGamut ((icReferenceMediumGamutSignature 0xFFFFFFFF)
 
 
+/************************************************************************/
+/* Additional MPE Curve segment Signatures
+/************************************************************************/
+typedef enum {
+    icSigFormulaCurveSeg              = 0x70617266,  /* 'parf' */
+    icSigSampledCurveSeg              = 0x73616D66,  /* 'samf' */
+} icCurveSegSignature;
+
+/** Convenience Enum Definition - Not defined in ICC specification*/
+#define icMaxCurveSegSignature ((icCurveSegSignature 0xFFFFFFFF)
+
+/************************************************************************/
+/* MPE Curve Set Curve signature
+/************************************************************************/
+typedef enum {
+    icSigSementedCurve                = 0x63757266,  /* 'curf' */
+} icCurveElemSignature;
+
+/** Convenience Enum Definition - Not defined in ICC specification*/
+#define icMaxCurveElemSignature ((icCurveElemSignature 0xFFFFFFFF)
+
+/************************************************************************/
+/* MPE Future Extension Acs signature
+/************************************************************************/
+
+typedef icSignature icAcsSignature;
+
+/** Convenience Definition - Not defined in ICC specification*/
+#define icSigAcsZero ((icAcsSignature) 0x00000000)
 
 /*------------------------------------------------------------------------*/
 
@@ -849,6 +906,13 @@ typedef struct {
     icUInt16Number reserved;
     icS15Fixed16Number measurementValue;
 } icResponse16Number;
+
+/** positionNumber **/
+typedef struct {
+  icUInt32Number offset;
+  icUInt32Number size;
+} icPositionNumber;
+
 
 /** Curve */
 typedef struct {

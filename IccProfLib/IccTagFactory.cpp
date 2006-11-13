@@ -124,6 +124,9 @@ CIccTag* CIccSpecTagFactory::CreateTag(icTagTypeSignature tagSig)
     case icSigMultiLocalizedUnicodeType:
       return new CIccTagMultiLocalizedUnicode;
 
+    case icSigMultiProcessElementType:
+      return new CIccTagMultiProcessElement();
+
     case icSigParametricCurveType:
       return new CIccTagParametricCurve;
 
@@ -205,6 +208,18 @@ const icChar* CIccSpecTagFactory::GetTagSigName(icTagSignature tagSig)
   case icSigBToA2Tag:
     return "BToA2Tag";
 
+  case icSigBToD0Tag:
+    return "BToD0Tag";
+
+  case icSigBToD1Tag:
+    return "BToD1Tag";
+
+  case icSigBToD2Tag:
+    return "BToD2Tag";
+
+  case icSigBToD3Tag:
+    return "BToD3Tag";
+
   case icSigCalibrationDateTimeTag:
     return "calibrationDateTimeTag";
 
@@ -231,6 +246,18 @@ const icChar* CIccSpecTagFactory::GetTagSigName(icTagSignature tagSig)
 
   case icSigDeviceModelDescTag:
     return "deviceModelDescTag";
+
+  case icSigDToB0Tag:
+    return "DToB0Tag";
+
+  case icSigDToB1Tag:
+    return "DToB1Tag";
+
+  case icSigDToB2Tag:
+    return "DToB2Tag";
+
+  case icSigDToB3Tag:
+    return "DToB3Tag";
 
   case icSigGamutTag:
     return "gamutTag";
@@ -388,6 +415,9 @@ const icChar* CIccSpecTagFactory::GetTagTypeSigName(icTagTypeSignature tagSig)
 
   case icSigMultiLocalizedUnicodeType:
     return "multiLocalizedUnicodeType";
+
+  case icSigMultiProcessElementType:
+    return "multiProcessElementType";
 
   case icSigNamedColor2Type:
     return "namedColor2Type";

@@ -273,6 +273,45 @@ icInt32Number CIccIO::Write16Float(void *pBufFloat, icInt32Number nNum)
   return i;
 }
 
+icInt32Number CIccIO::ReadFloat32Float(void *pBufFloat, icInt32Number nNum)
+{
+  if (sizeof(icFloat32Number)==sizeof(icFloatNumber))
+    return Read32(pBufFloat, nNum);
+
+  icFloatNumber *ptr = (icFloatNumber*)pBufFloat;
+  icFloat32Number tmp;
+  icInt32Number i;
+
+  for (i=0; i<nNum; i++) {
+    if (Read32(&tmp, 1)!=1)
+      break;
+    *ptr = (icFloatNumber)tmp;
+    ptr++;
+  }
+
+  return i;
+}
+
+icInt32Number CIccIO::WriteFloat32Float(void *pBufFloat, icInt32Number nNum)
+{
+  if (sizeof(icFloat32Number)==sizeof(icFloatNumber))
+    return Write32(pBufFloat, nNum);
+
+  icFloatNumber *ptr = (icFloatNumber*)pBufFloat;
+  icFloat32Number tmp;
+  icInt32Number i;
+
+  for (i=0; i<nNum; i++) {
+    tmp = (icFloat32Number)*ptr;
+
+    if (Write32(&tmp, 1)!=1)
+      break;
+    ptr++;
+  }
+
+  return i;
+}
+
 bool CIccIO::Align32()
 {
   int mod = GetLength() % 4;

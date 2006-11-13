@@ -343,7 +343,6 @@ void CIccTagUnknown::Describe(std::string &sDescription)
   sDescription += "\r\n\r\nData Follows:\r\n";
 
   icMemDump(sDescription, m_pData+4, m_nSize-4);
-
 }
 
 /**
@@ -5650,8 +5649,7 @@ bool CIccTagProfileSeqDesc::Read(icUInt32Number size, CIccIO *pIO)
   icUInt32Number nCount;
 
   if (sizeof(icTagTypeSignature) + 
-      sizeof(icUInt32Number)*2 +
-      sizeof(CIccProfileDescStruct) > size)
+      sizeof(icUInt32Number)*2 > size)
     return false;
 
   if (!pIO) {
@@ -5663,6 +5661,13 @@ bool CIccTagProfileSeqDesc::Read(icUInt32Number size, CIccIO *pIO)
       !pIO->Read32(&nCount))
     return false;
 
+  if (!nCount)
+    return true;
+
+  if (sizeof(icTagTypeSignature) + 
+    sizeof(icUInt32Number)*2 +
+    sizeof(CIccProfileDescStruct) > size)
+    return false;
 
   icUInt32Number i; 
   CIccProfileDescStruct ProfileDescStruct;

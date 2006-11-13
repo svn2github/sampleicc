@@ -59,6 +59,16 @@
  *   the configuration paramaters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
+ * - November 2006
+ *  - Added support for optional multiProcessingElementType tags.  These tags provide
+ *    an arbitrary order of curves, matricies, and N-D luts encoded using floating
+ *    point.  The CIccTagMultiProcessElement class implements these objects.  MPE based tags
+ *    can have 1 or more CIccMultiProcessElement based objects attached to them.
+ *    See CIccMpeCurveSet, CIccMpeMatrix, CIccMpeCLUT for more details.  Additional future
+ *    placeholder elements CIccMpeBAcs and CIccMpeEAcs objects are defined, but provide no
+ *    processing capabilities. See additions to Icc Specification for more details
+ *    releated to optional MPE based tags.  
+ *
  * - October 2006
  *  - Added direct accessors CIccTagMultiLocalizedUnicode::Find() and 
  *    CIccTagMultiLocalizedUnicode::SetText() for easier creation of tags based on 
