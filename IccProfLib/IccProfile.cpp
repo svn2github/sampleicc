@@ -1797,6 +1797,42 @@ CIccProfile* ReadIccProfile(const icChar *szFilename)
 
 
 /**
+*****************************************************************************
+* Name: ReadIccProfile
+* 
+* Purpose: Read an ICC profile file.
+* 
+* Args: 
+*  pMem = pointer to memory containing profile data
+*  nSize = size of memory related to profile
+* 
+* Return: 
+*  Pointer to icc profile object, or NULL on failure
+******************************************************************************
+*/
+CIccProfile* ReadIccProfile(const icUInt8Number *pMem, icUInt32Number nSize)
+{
+  CIccMemIO *pMemIO = new CIccMemIO();
+
+  if (!pMemIO->Attach((icUInt8Number*)pMem, nSize)) {
+    delete pMemIO;
+    return NULL;
+  }
+
+  CIccProfile *pIcc = new CIccProfile;
+
+  if (!pIcc->Read(pMemIO)) {
+    delete pIcc;
+    delete pMemIO;
+    return NULL;
+  }
+  delete pMemIO;
+
+  return pIcc;
+}
+
+
+/**
  ******************************************************************************
  * Name: OpenIccProfile
  * 
@@ -1825,6 +1861,42 @@ CIccProfile* OpenIccProfile(const icChar *szFilename)
   if (!pIcc->Attach(pFileIO)) {
     delete pIcc;
     delete pFileIO;
+    return NULL;
+  }
+
+  return pIcc;
+}
+
+/**
+******************************************************************************
+* Name: OpenIccProfile
+* 
+* Purpose: Open an ICC profile file.  This will only read the profile header
+*  and tag directory.  Loading of actual tags will be deferred until the
+*  tags are actually referenced by FindTag().
+* 
+* Args: 
+*  pMem = pointer to memory containing profile data
+*  nSize = size of memory related to profile
+* 
+* Return: 
+*  Pointer to icc profile object, or NULL on failure
+*******************************************************************************
+*/
+CIccProfile* OpenIccProfile(const icUInt8Number *pMem, icUInt32Number nSize)
+{
+  CIccMemIO *pMemIO = new CIccMemIO;
+
+  if (!pMemIO->Attach((icUInt8Number*)pMem, nSize)) {
+    delete pMemIO;
+    return NULL;
+  }
+
+  CIccProfile *pIcc = new CIccProfile;
+
+  if (!pIcc->Attach(pMemIO)) {
+    delete pIcc;
+    delete pMemIO;
     return NULL;
   }
 

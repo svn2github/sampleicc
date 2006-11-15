@@ -194,7 +194,9 @@ protected:
 };
 
 CIccProfile ICCPROFLIB_API *ReadIccProfile(const icChar *szFilename);
+CIccProfile ICCPROFLIB_API *ReadIccProfile(const icUInt8Number *pMem, icUInt32Number nSize);
 CIccProfile ICCPROFLIB_API *OpenIccProfile(const icChar *szFilename);
+CIccProfile ICCPROFLIB_API *OpenIccProfile(const icUInt8Number *pMem, icUInt32Number nSize);  //pMem must be available for entire life of returned CIccProfile Object
 CIccProfile ICCPROFLIB_API *ValidateIccProfile(const icChar *szFilename, std::string &sReport, icValidateStatus &nStatus);
 
 bool ICCPROFLIB_API SaveIccProfile(const icChar *szFilename, CIccProfile *pIcc);
