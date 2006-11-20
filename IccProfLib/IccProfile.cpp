@@ -1325,7 +1325,6 @@ bool CIccProfile::IsTypeValid(icTagSignature tagSig, icTagTypeSignature typeSig)
     }
 
     // Multi-localized Unicode type tags
-  case icSigViewingCondDescTag:
   case icSigCopyrightTag:
     {
       if (m_Header.version>=0x04000000L) {
@@ -1340,6 +1339,7 @@ bool CIccProfile::IsTypeValid(icTagSignature tagSig, icTagTypeSignature typeSig)
       }
     }
 
+  case icSigViewingCondDescTag:
   case icSigDeviceMfgDescTag:
   case icSigDeviceModelDescTag:
   case icSigProfileDescriptionTag:
