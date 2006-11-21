@@ -1,7 +1,7 @@
 /** @file
     File:       IccMpeACS.cpp
 
-    Contains:   Implementation of Alternative Connection Space Elements
+    Contains:   Implementation of ACS Elements
 
     Version:    V1
 

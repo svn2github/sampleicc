@@ -1,8 +1,8 @@
 /** @file
 File:       IccMpeACS.h
 
-Contains:   Header for implementation of CIccTagMPE ACS elements and 
-supporting classes
+Contains:   Header for implementation of CIccTagMultiProcessElement
+ACS elements and supporting classes
 
 Version:    V1
 
