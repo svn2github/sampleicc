@@ -510,7 +510,7 @@ void CIccTagCurve::SetGamma(icFloatNumber gamma)
 const icFloatNumber VERYSMALLNUM = (icFloatNumber)0.0000001;
 static bool IsUnity(const icFloatNumber& num)
 {
-	return (num>(1.0-VERYSMALLNUM) && num<(1.0+VERYSMALLNUM));
+  return (num>(1.0-VERYSMALLNUM) && num<(1.0+VERYSMALLNUM));
 }
 
 /**
@@ -525,22 +525,22 @@ static bool IsUnity(const icFloatNumber& num)
 */
 bool CIccTagCurve::IsIdentity()
 {
-	if (!m_nSize) {
-		return true;
-	}
+  if (!m_nSize) {
+    return true;
+  }
 
-	if (m_nSize==1) {
-		return  IsUnity(icFloatNumber(m_Curve[0]*65535.0/256.0));
-	}
+  if (m_nSize==1) {
+    return  IsUnity(icFloatNumber(m_Curve[0]*65535.0/256.0));
+  }
 
-	icUInt32Number i;
-	for (i=0; i<m_nSize; i++) {
-		if (fabs(m_Curve[i]-((icFloatNumber)i/(icFloatNumber)m_nMaxIndex))>VERYSMALLNUM) {
-			return false;
-		}
-	}
+  icUInt32Number i;
+  for (i=0; i<m_nSize; i++) {
+    if (fabs(m_Curve[i]-((icFloatNumber)i/(icFloatNumber)m_nMaxIndex))>VERYSMALLNUM) {
+      return false;
+    }
+  }
 
-	return true;
+  return true;
 }
 
 /**
@@ -926,28 +926,28 @@ bool CIccTagParametricCurve::SetFunctionType(icUInt16Number nFunctionType)
   icUInt16Number nNumParam;
 
   switch(nFunctionType) {
-		case 0x0000:
-			nNumParam = 1;
-			break;
+    case 0x0000:
+      nNumParam = 1;
+      break;
 
-		case 0x0001:
-			nNumParam = 3;
-			break;
+    case 0x0001:
+      nNumParam = 3;
+      break;
 
-		case 0x0002:
-			nNumParam = 4;
-			break;
+    case 0x0002:
+      nNumParam = 4;
+      break;
 
-		case 0x0003:
-			nNumParam = 5;
-			break;
+    case 0x0003:
+      nNumParam = 5;
+      break;
 
-		case 0x0004:
-			nNumParam = 7;
-			break;
+    case 0x0004:
+      nNumParam = 7;
+      break;
 
-		default:
-			nNumParam = 0;
+    default:
+      nNumParam = 0;
   }
 
   if (m_Param)
@@ -996,19 +996,19 @@ void CIccTagParametricCurve::Begin()
 */
 bool CIccTagParametricCurve::IsIdentity()
 {
-	switch(m_nFunctionType) {
-		case 0x0000:
-			return IsUnity(m_dParam[0]);
+  switch(m_nFunctionType) {
+    case 0x0000:
+      return IsUnity(m_dParam[0]);
 
-		case 0x0001:
-		case 0x0002:
-		case 0x0003:
-		case 0x0004:
-			return false;
+    case 0x0001:
+    case 0x0002:
+    case 0x0003:
+    case 0x0004:
+      return false;
 
-		default:
-			return true;
-	}
+    default:
+      return true;
+  }
 }
 
 /**
@@ -1029,49 +1029,49 @@ icFloatNumber CIccTagParametricCurve::Apply(icFloatNumber X)
   double a, b;
 
   switch(m_nFunctionType) {
-		case 0x0000:
-			return pow(X, m_dParam[0]);
+    case 0x0000:
+      return pow(X, m_dParam[0]);
 
-		case 0x0001:
-			a=m_dParam[1];
-			b=m_dParam[2];
+    case 0x0001:
+      a=m_dParam[1];
+      b=m_dParam[2];
 
-			if (X >= -b/a) {
-				return (icFloatNumber)pow((double)a*X + b, (double)m_dParam[0]);
-			}
-			else {
-				return 0;
-			}
+      if (X >= -b/a) {
+        return (icFloatNumber)pow((double)a*X + b, (double)m_dParam[0]);
+      }
+      else {
+        return 0;
+      }
 
-		case 0x0002:
-			a=m_dParam[1];
-			b=m_dParam[2];
+    case 0x0002:
+      a=m_dParam[1];
+      b=m_dParam[2];
 
-			if (X >= -b/a) {
-				return (icFloatNumber)pow((double)a*X + b, (double)m_dParam[0]) + m_dParam[3];
-			}
-			else {
-				return m_dParam[3];
-			}
+      if (X >= -b/a) {
+        return (icFloatNumber)pow((double)a*X + b, (double)m_dParam[0]) + m_dParam[3];
+      }
+      else {
+        return m_dParam[3];
+      }
 
-		case 0x0003:
-			if (X >= m_dParam[4]) {
-				return (icFloatNumber)pow((double)m_dParam[1]*X + m_dParam[2], (double)m_dParam[0]);
-			}
-			else {
-				return m_dParam[3]*X;
-			}
+    case 0x0003:
+      if (X >= m_dParam[4]) {
+        return (icFloatNumber)pow((double)m_dParam[1]*X + m_dParam[2], (double)m_dParam[0]);
+      }
+      else {
+        return m_dParam[3]*X;
+      }
 
-		case 0x0004:
-			if (X >= m_dParam[4]) {
-				return (icFloatNumber)pow((double)m_dParam[1]*X + m_dParam[2], (double)m_dParam[0]) + m_dParam[5];
-			}
-			else {
-				return m_dParam[3]*X + m_dParam[6];
-			}
+    case 0x0004:
+      if (X >= m_dParam[4]) {
+        return (icFloatNumber)pow((double)m_dParam[1]*X + m_dParam[2], (double)m_dParam[0]) + m_dParam[5];
+      }
+      else {
+        return m_dParam[3]*X + m_dParam[6];
+      }
 
-		default:
-			return X;
+    default:
+      return X;
   }
 }
 
@@ -1290,23 +1290,23 @@ void CIccMatrix::DumpLut(std::string &sDescription, const icChar *szName)
 */
 bool CIccMatrix::IsIdentity()
 {
-	if (m_bUseConstants) {
-		if (fabs(m_e[9])>0.0 || fabs(m_e[10])>0.0 || fabs(m_e[11])>0.0) {
-			return false;
-		}
-	}
+  if (m_bUseConstants) {
+    if (fabs(m_e[9])>0.0 || fabs(m_e[10])>0.0 || fabs(m_e[11])>0.0) {
+      return false;
+    }
+  }
 
-	if (!IsUnity(m_e[0]) || !IsUnity(m_e[4]) || !IsUnity(m_e[8])) {
-		return false;
-	}
+  if (!IsUnity(m_e[0]) || !IsUnity(m_e[4]) || !IsUnity(m_e[8])) {
+    return false;
+  }
 
-	if (fabs(m_e[1])>0.0 || fabs(m_e[2])>0.0 || fabs(m_e[3])>0.0 ||
-			fabs(m_e[5])>0.0 || fabs(m_e[6])>0.0 || fabs(m_e[7])>0.0) 
-	{
-		return false;
-	}
+  if (fabs(m_e[1])>0.0 || fabs(m_e[2])>0.0 || fabs(m_e[3])>0.0 ||
+      fabs(m_e[5])>0.0 || fabs(m_e[6])>0.0 || fabs(m_e[7])>0.0) 
+  {
+    return false;
+  }
 
-	return true;
+  return true;
 }
 
 /**

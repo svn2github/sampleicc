@@ -428,7 +428,7 @@ typedef enum {
     icSigLutBtoAType                    = 0x6d424120,  /* 'mBA ' */
     icSigMeasurementType                = 0x6D656173,  /* 'meas' */
     icSigMultiLocalizedUnicodeType      = 0x6D6C7563,  /* 'mluc' */
-	  icSigMultiProcessElementType        = 0x6D706574,  /* 'mpet' */
+    icSigMultiProcessElementType        = 0x6D706574,  /* 'mpet' */
   /*icSigNamedColorType                 = 0x6E636f6C,  /* 'ncol' OBSOLETE, use ncl2 */
     icSigNamedColor2Type                = 0x6E636C32,  /* 'ncl2' */
     icSigParametricCurveType            = 0x70617261,  /* 'para' */

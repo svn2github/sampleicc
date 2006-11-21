@@ -1901,13 +1901,13 @@ CIccMpeMatrix::CIccMpeMatrix(const CIccMpeMatrix &matrix)
   else
     m_pMatrix = NULL;
 
-	if (matrix.m_pConstants) {
-		int num = m_nOutputChannels*sizeof(icFloatNumber);
-		m_pConstants = (icFloatNumber*)malloc(num);
-		memcpy(m_pConstants, matrix.m_pConstants, num);
-	}
-	else
-		m_pConstants = NULL;
+  if (matrix.m_pConstants) {
+    int num = m_nOutputChannels*sizeof(icFloatNumber);
+    m_pConstants = (icFloatNumber*)malloc(num);
+    memcpy(m_pConstants, matrix.m_pConstants, num);
+  }
+  else
+    m_pConstants = NULL;
 }
 
 /**

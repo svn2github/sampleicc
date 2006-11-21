@@ -130,7 +130,7 @@ bool CIccBasicMpeFactory::GetElementSigName(std::string &elemName, icElemTypeSig
       break;
   }
 
-	return true;
+  return true;
 }
 
 std::auto_ptr<CIccMpeCreator> CIccMpeCreator::theElementCreator;
@@ -147,56 +147,56 @@ CIccMpeCreator::~CIccMpeCreator()
 
 CIccMpeCreator* CIccMpeCreator::GetInstance()
 {
-	if (!theElementCreator.get()) {
+  if (!theElementCreator.get()) {
     theElementCreator = CIccMpeCreatorPtr(new CIccMpeCreator);
 
-		theElementCreator->DoPushFactory(new CIccBasicMpeFactory);
-	}
+    theElementCreator->DoPushFactory(new CIccBasicMpeFactory);
+  }
 
-	return theElementCreator.get();
+  return theElementCreator.get();
 }
 
 CIccMultiProcessElement* CIccMpeCreator::DoCreateElement(icElemTypeSignature elemTypeSig)
 {
-	CIccMpeFactoryList::iterator i;
-	CIccMultiProcessElement *rv = NULL;
+  CIccMpeFactoryList::iterator i;
+  CIccMultiProcessElement *rv = NULL;
 
-	for (i=factoryStack.begin(); i!=factoryStack.end(); i++) {
-		rv = (*i)->CreateElement(elemTypeSig);
-		if (rv)
-			break;
-	}
-	return rv;
+  for (i=factoryStack.begin(); i!=factoryStack.end(); i++) {
+    rv = (*i)->CreateElement(elemTypeSig);
+    if (rv)
+      break;
+  }
+  return rv;
 }
 
 bool CIccMpeCreator::DoGetElementSigName(std::string &elemName, icElemTypeSignature elemTypeSig)
 {
-	CIccMpeFactoryList::iterator i;
+  CIccMpeFactoryList::iterator i;
 
-	for (i=factoryStack.begin(); i!=factoryStack.end(); i++) {
-		if ((*i)->GetElementSigName(elemName, elemTypeSig))
-			return true;
-	}
+  for (i=factoryStack.begin(); i!=factoryStack.end(); i++) {
+    if ((*i)->GetElementSigName(elemName, elemTypeSig))
+      return true;
+  }
 
-	return false;
+  return false;
 }
 
 void CIccMpeCreator::DoPushFactory(IIccMpeFactory *pFactory)
 {
-	factoryStack.push_front(pFactory);
+  factoryStack.push_front(pFactory);
 }
 
 IIccMpeFactory* CIccMpeCreator::DoPopFactory(bool bAll /*=false*/)
 {
   int nNum = (bAll ? 0 : 1);
 
-	if (factoryStack.size()>0) {
-		CIccMpeFactoryList::iterator i=factoryStack.begin();
-		IIccMpeFactory* rv = (*i);
-		factoryStack.pop_front();
-		return rv;
-	}
-	return NULL;
+  if (factoryStack.size()>0) {
+    CIccMpeFactoryList::iterator i=factoryStack.begin();
+    IIccMpeFactory* rv = (*i);
+    factoryStack.pop_front();
+    return rv;
+  }
+  return NULL;
 }
 
 #ifdef USESAMPLEICCNAMESPACE

@@ -2,7 +2,7 @@
     File:       IccMpeFactory.h
 
     Contains:   Header for implementation of CIccMpeFactory class and
-		            creation factories
+                creation factories
 
     Version:    V1
 
@@ -124,20 +124,20 @@ public:
   * If the element factory doesn't support creation of elements of type
   * elemTypeSig then it should return NULL.
   */
-	virtual CIccMultiProcessElement* CreateElement(icElemTypeSignature elemTypeSig)=0;
+  virtual CIccMultiProcessElement* CreateElement(icElemTypeSignature elemTypeSig)=0;
 
   /**
   * Function: GetElementSigName(elemTypeSig)
   *  Get display name of elemTypeSig.
   *
   * Parameter(s):
-	*  elemName = string to put element name into, 
+  *  elemName = string to put element name into, 
   *  elemTypeSig = signature of the ICC element type to get a name for
   *
   * Returns true if element type is recognized by the factory, false if
   * the factory doesn't create elemTypeSig elements.
   */
-	virtual bool GetElementSigName(std::string &elemName, icElemTypeSignature elemTypeSig)=0;
+  virtual bool GetElementSigName(std::string &elemName, icElemTypeSignature elemTypeSig)=0;
 };
 
 
@@ -167,22 +167,22 @@ public:
   *  elemTypeSig = signature of the ICC element type for the element to be created
   *
   * Returns a new CIccProcessElement object of the given signature type.
-	* Unrecognized elemTypeSig's will be created as a CIccProcessElementUnknown object.
+  * Unrecognized elemTypeSig's will be created as a CIccProcessElementUnknown object.
   */
-	virtual CIccMultiProcessElement* CreateElement(icElemTypeSignature elementSig);
+  virtual CIccMultiProcessElement* CreateElement(icElemTypeSignature elementSig);
 
   /**
   * Function: GetElementSigName(elemTypeSig)
   *  Get display name of elemTypeSig.
   *
   * Parameter(s):
-	*  elemName = string to put element name into, 
+  *  elemName = string to put element name into, 
   *  elemTypeSig = signature of the ICC element type to get a name for
   *
   * Returns true if element type is recognized by the factory, false if the
-	* factory doesn't create elemTypeSig elements.
+  * factory doesn't create elemTypeSig elements.
   */
-	virtual bool GetElementSigName(std::string &elemName, icElemTypeSignature elemTypeSig);
+  virtual bool GetElementSigName(std::string &elemName, icElemTypeSignature elemTypeSig);
 };
 
 class CIccMpeCreator;
@@ -213,8 +213,8 @@ public:
   *  be created
   *
   * Returns a new CIccProcessElement object of the given signature type.
-	* Each factory in the factoryStack is used until a factory supports the
-	* signature type.
+  * Each factory in the factoryStack is used until a factory supports the
+  * signature type.
   */
   static CIccMultiProcessElement* CreateElement(icElemTypeSignature elemTypeSig)
       { return CIccMpeCreator::GetInstance()->DoCreateElement(elemTypeSig); }
@@ -224,15 +224,15 @@ public:
   *  Get display name of elemTypeSig.
   *
   * Parameter(s):
-	*  elemName = string to put element name into
+  *  elemName = string to put element name into
   *  elemTypeSig = signature of the ICC element type to get a name for
   *
   * Returns true if element type is recognized by any factory, false if all
-	* factories do not create elemTypeSig elements. If element type is not
+  * factories do not create elemTypeSig elements. If element type is not
   * recognized by any factories a suitable display name will be placed in
   * elemName.
   */
-	static bool GetElementSigName(std::string &elemName, icElemTypeSignature elemTypeSig)
+  static bool GetElementSigName(std::string &elemName, icElemTypeSignature elemTypeSig)
       { return CIccMpeCreator::GetInstance()->DoGetElementSigName(elemName, elemTypeSig); }
 
   /**
@@ -248,7 +248,7 @@ public:
   *    application shutdown.
   *
   */
-	static void PushFactory(IIccMpeFactory *pFactory)
+  static void PushFactory(IIccMpeFactory *pFactory)
       { CIccMpeCreator::GetInstance()->CIccMpeCreator::DoPushFactory(pFactory); }
 
   /**
@@ -265,7 +265,7 @@ public:
   *
   *  Note: The initial CIccBasicElemFactory cannot be popped off the stack.
   */
-	static IIccMpeFactory* PopFactory()
+  static IIccMpeFactory* PopFactory()
       { return CIccMpeCreator::GetInstance()->DoPopFactory(); }
 
 private:
@@ -292,7 +292,7 @@ private:
 
   static CIccMpeCreatorPtr theElementCreator; 
 
-	CIccMpeFactoryList factoryStack;
+  CIccMpeFactoryList factoryStack;
 };
 
 #ifdef USESAMPLEICCNAMESPACE

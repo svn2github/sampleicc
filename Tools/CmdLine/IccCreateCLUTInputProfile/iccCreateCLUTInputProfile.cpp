@@ -348,22 +348,22 @@ main(int argc, char * const argv[])
     switch (shortOpt) 
       {
       case 'h':
-	usage(cout, argv[0]);
-	return EXIT_SUCCESS;
+  usage(cout, argv[0]);
+  return EXIT_SUCCESS;
       case 'f':
-	readXYZFromString(flare, optarg);
-	sawExplicitFlare = true;
-	break;
+  readXYZFromString(flare, optarg);
+  sawExplicitFlare = true;
+  break;
       case 'i':
-	readXYZFromString(illuminant, optarg);
-	sawExplicitIlluminant = true;
-	break;
+  readXYZFromString(illuminant, optarg);
+  sawExplicitIlluminant = true;
+  break;
       case 'c':
-	copyright = optarg;
-	break;
+  copyright = optarg;
+  break;
       default:
-	usage(cout, argv[0]);
-	return EXIT_FAILURE;
+  usage(cout, argv[0]);
+  return EXIT_FAILURE;
       }
     }
 

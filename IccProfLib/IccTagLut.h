@@ -106,7 +106,7 @@ public:
   virtual icFloatNumber Apply(icFloatNumber v) { return v; }
 
   icFloatNumber Find(icFloatNumber v) { return Find(v, 0, Apply(0), 1.0, Apply(1.0)); }
-	virtual bool IsIdentity() {return false;}
+  virtual bool IsIdentity() {return false;}
 
 protected:
   icFloatNumber Find(icFloatNumber v,
@@ -157,7 +157,7 @@ public:
   virtual void Begin() {m_nMaxIndex = (icUInt16Number)m_nSize - 1;}
   virtual icFloatNumber Apply(icFloatNumber v);
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL) const;
-	virtual bool IsIdentity();
+  virtual bool IsIdentity();
 
 protected:
   icFloatNumber *m_Curve;
@@ -203,7 +203,7 @@ public:
   virtual void Begin();
   virtual icFloatNumber Apply(icFloatNumber v);
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL);
-	virtual bool IsIdentity();
+  virtual bool IsIdentity();
 
 protected:
   icUInt16Number      m_nReserved2;
@@ -237,7 +237,7 @@ public:
 
   virtual void Apply(icFloatNumber *Pixel);
   icValidateStatus Validate(icTagTypeSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL) const;
-	virtual bool IsIdentity();
+  virtual bool IsIdentity();
 };
 
 /**
