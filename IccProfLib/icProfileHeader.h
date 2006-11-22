@@ -405,6 +405,10 @@ typedef enum {
     icSigOffsetLithography              = 0x6F666673,  /* 'offs' */
     icSigSilkscreen                     = 0x73696C6B,  /* 'silk' */
     icSigFlexography                    = 0x666C6578,  /* 'flex' */
+    icSigMotionPictureFilmScanner       = 0x6D706673,  /* 'mpfs' */
+    icSigMotionPictureFilmRecorder      = 0x6D706672,  /* 'mpfr' */
+    icSigDigitalMotionPictureCamera     = 0x646D7063,  /* 'dmpc' */
+    icSigDigitalCinemaProjector         = 0x64636A70,  /* 'dcpj' */
 } icTechnologySignature;
 
 /** Convenience Enum Definition - Not defined in ICC specification*/

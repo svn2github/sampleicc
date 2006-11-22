@@ -67,7 +67,9 @@
  *    See CIccMpeCurveSet, CIccMpeMatrix, CIccMpeCLUT for more details.  Additional future
  *    placeholder elements CIccMpeBAcs and CIccMpeEAcs objects are defined, but provide no
  *    processing capabilities. See additions to Icc Specification for more details
- *    releated to optional MPE based tags.  
+ *    releated to optional MPE based tags.
+ *  - Modified icProfileHeader.h to include newly approved Technololgy signatures for the
+ *    digital motion picture industry.
  *
  * - October 2006
  *  - Added direct accessors CIccTagMultiLocalizedUnicode::Find() and 

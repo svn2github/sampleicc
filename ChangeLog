@@ -1,3 +1,7 @@
+2006-11-22 Max Derhak
+  * Added newly approved technology tag signatures for Motion Picture Industry to
+    icProfileHeader.h
+
 2006-11-07 Max Derhak
   * Added support for optional multiProcessingElementType tags.  These tags provide
     an arbitrary order of curves, matricies, and N-D luts encoded using floating
