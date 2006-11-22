@@ -80,10 +80,6 @@
 #ifndef __INCLUDED_CAT_H__
 #define __INCLUDED_CAT_H__
 
-#include <iostream>
-using std::cout;
-using std::endl;
-
 #include "IccTag.h"
 #include "IccUtil.h"
 // icMatrixMultiply3x3
@@ -105,11 +101,11 @@ class CAT
                                            (icFloatNumber)-0.00852866, (icFloatNumber)0.0400428, (icFloatNumber)0.968487 };
 
       icFloatNumber rhoPCS = fwdLinBfd[0] * PCS[0] + fwdLinBfd[1] * PCS[1] + fwdLinBfd[2] * PCS[2];
-      icFloatNumber gamPCS = fwdLinBfd[3] * PCS[1] + fwdLinBfd[4] * PCS[1] + fwdLinBfd[5] * PCS[2];
-      icFloatNumber betPCS = fwdLinBfd[6] * PCS[2] + fwdLinBfd[7] * PCS[1] + fwdLinBfd[8] * PCS[2];
+      icFloatNumber gamPCS = fwdLinBfd[3] * PCS[0] + fwdLinBfd[4] * PCS[1] + fwdLinBfd[5] * PCS[2];
+      icFloatNumber betPCS = fwdLinBfd[6] * PCS[0] + fwdLinBfd[7] * PCS[1] + fwdLinBfd[8] * PCS[2];
       icFloatNumber rhoSrc = fwdLinBfd[0] * src[0] + fwdLinBfd[1] * src[1] + fwdLinBfd[2] * src[2];
-      icFloatNumber gamSrc = fwdLinBfd[3] * src[1] + fwdLinBfd[4] * src[1] + fwdLinBfd[5] * src[2];
-      icFloatNumber betSrc = fwdLinBfd[6] * src[2] + fwdLinBfd[7] * src[1] + fwdLinBfd[8] * src[2];
+      icFloatNumber gamSrc = fwdLinBfd[3] * src[0] + fwdLinBfd[4] * src[1] + fwdLinBfd[5] * src[2];
+      icFloatNumber betSrc = fwdLinBfd[6] * src[0] + fwdLinBfd[7] * src[1] + fwdLinBfd[8] * src[2];
       icFloatNumber scaling[9];
       scaling[0] = rhoPCS / rhoSrc;
       scaling[1] = 0;

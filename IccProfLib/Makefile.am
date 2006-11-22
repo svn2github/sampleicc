@@ -3,6 +3,7 @@
 lib_LTLIBRARIES = libSampleICC.la
 
 libSampleICC_la_SOURCES = IccCmm.cpp IccIO.cpp IccProfile.cpp \
+	IccMpeACS.cpp IccMpeBasic.cpp IccMpeFactory.cpp IccTagMPE.cpp \
 	IccTagBasic.cpp IccTagFactory.cpp IccTagLut.cpp IccUtil.cpp \
 	md5.cpp
 
@@ -12,6 +13,7 @@ libSampleICCincludedir = $(includedir)/SampleICC
 
 libSampleICCinclude_HEADERS = IccCmm.h IccDefs.h IccIO.h \
 	IccProfLibConf.h IccProfile.h \
+	IccMpeACS.cpp IccMpeBasic.cpp IccMpeFactory.cpp IccTagMPE.cpp \
 	IccTag.h IccTagBasic.h IccTagFactory.h IccTagLut.h \
 	IccUtil.h MainPage.h \
 	icProfileHeader.h \

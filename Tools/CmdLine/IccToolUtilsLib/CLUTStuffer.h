@@ -1,13 +1,13 @@
 /*
-    File:       CLUT.cpp
-
-    Contains:   part of iccCreateCLUTInputProfile command-line tool:
-                create and write CLUT tag data
-
-    Version:    V1
-
-    Copyright:  © see below
-*/
+ File:       CLUTStuffer.h
+ 
+ Contains:   part of iccCreateCLUTInputProfile command-line tool:
+ create CLUT tag data
+ 
+ Version:    V1
+ 
+ Copyright:  ï¿½ see below
+ */
 
 /*
  * The ICC Software License, Version 0.1
@@ -73,51 +73,39 @@
 ////////////////////////////////////////////////////////////////////// 
 // HISTORY:
 //
-// -Initial implementation by Joseph Goldstone spring 2006
+// -broken out of CLUT.h by Joseph Goldstone fall 2006
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <iostream>
-using std::cout;
-using std::cerr;
-using std::endl;
+#ifndef __INCLUDED_CLUT_STUFFER_H__
+#define __INCLUDED_CLUT_STUFFER_H__
 
+#include "IccDefs.h"
+#include "CAT.h"
 #include "CLUT.h"
 
-CIccTagLut16*
-CLUT::makeAToB0Tag(const unsigned int edgeN,
-                   const icFloatNumber* const rawXYZ,
-                   const CAT* const CATToPCS,
-                   const icFloatNumber* const flare,
-                   const icFloatNumber* const illuminant,
-                   const icFloatNumber* const mediaWhite) const
+class CLUTStuffer : public IIccCLUTExec
 {
-        unsigned int i;
-  CIccTagLut16* lut16 = new CIccTagLut16();
-  lut16->Init(3, 3);
-  lut16->SetColorSpaces(icSigRgbData, icSigLabData);
+public:
+	CLUTStuffer(unsigned int edgeN,
+		const icFloatNumber* const measuredXYZ,
+		const icFloatNumber* flare,
+		const icFloatNumber illuminantY,
+		const CAT* const CATToPCS,
+		const icFloatNumber* adaptedMediaWhite);
+	
+ ~CLUTStuffer()	{}
+	
+	void
+	PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData);
 
-  lut16->NewMatrix();
+private:
+	const unsigned int m_EdgeN;
+	const icFloatNumber* const m_MeasuredXYZ;
+	icFloatNumber m_Flare[3];
+	const icFloatNumber m_IlluminantY;
+	const CAT* const m_CAT;
+	icFloatNumber m_AdaptedMediaWhite[3];
+};
 
-  LPIccCurve* iLUT = lut16->NewCurvesA();
-  for (i = 0; i < 3; ++i)
-  {
-      CIccTagCurve* pCurve = new CIccTagCurve(0);
-      pCurve->SetSize(2, icInitIdentity);
-      iLUT[i] = pCurve;
-  }
-  CIccCLUT* trueCLUT = lut16->NewCLUT(edgeN);
-
-  CLUT::Stuffer stuffer(edgeN, rawXYZ, CATToPCS, flare, illuminant, mediaWhite);
-  trueCLUT->Iterate(&stuffer);
-
-  LPIccCurve* oLUT = lut16->NewCurvesB();
-  for (i = 0; i < 3; ++i)
-  {
-      CIccTagCurve* pCurve = new CIccTagCurve(0);
-      pCurve->SetSize(2, icInitIdentity);
-      oLUT[i] = pCurve;
-  }
-
-  return lut16;
-}
+#endif

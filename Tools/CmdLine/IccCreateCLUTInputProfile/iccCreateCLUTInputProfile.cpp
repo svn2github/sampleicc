@@ -79,28 +79,16 @@
 
 
 #include <iostream>
-using std::istream;
-using std::cerr;
-using std::cout;
-using std::flush;
-using std::clog;
-using std::endl;
-
 #include <ostream>
-using std::ostream;
-
 #include <fstream>
-using std::ifstream;
-
 #include <string>
-using std::string;
-
 #include <sstream>
-using std::istringstream;
-
 #include <list>
+#include <exception>
+using namespace std;
 
 #include "getopt.h" // for getopt_long
+#include "IccToolException.h"
 
 // At the moment this is a hack; later we will figure out how to set HAS_GETOPT_LONG
 // in the configure script.  Feel free to extend this to support your favorite platform.
@@ -117,6 +105,7 @@ using std::istringstream;
 
 #include "CAT.h"
 #include "CLUT.h"
+#include "BlackScaler.h"
 
 void
 readXYZFromString(icFloatNumber* const XYZ, char * s)
@@ -133,18 +122,20 @@ createProfile(const string& inFilename,
               const int size,
               const string& description,
               const string& copyright,
-              const icFloatNumber* flare,
-              const icFloatNumber* mediaWhite,
-              const icFloatNumber* illuminant)
+							const icFloatNumber* flare,
+							const icFloatNumber* illuminant,
+							const icFloatNumber inputShaperGamma,
+							const string& inputShaperFilename,
+              const icFloatNumber* mediaWhite)
 {                   
        unsigned int i;
 
   ifstream iFS(inFilename.c_str());
   unsigned int numData = 3 * size * size * size;
-  icFloatNumber* rawXYZ = new icFloatNumber[numData];
+  icFloatNumber* measuredXYZ = new icFloatNumber[numData];
   for (i = 0; i < numData; ++i)
-    iFS >> rawXYZ[i];
-  
+    iFS >> measuredXYZ[i];
+	
   CIccProfile profile;
   profile.InitHeader();
   profile.m_Header.deviceClass = icSigInputClass;
@@ -152,7 +143,7 @@ createProfile(const string& inFilename,
   profile.m_Header.pcs = icSigLabData;
   profile.m_Header.platform = icSigMacintosh;
   profile.m_Header.attributes = static_cast<icUInt64Number>(icTransparency);
-  profile.m_Header.renderingIntent = icPerceptual;
+  profile.m_Header.renderingIntent = icRelativeColorimetric;
 
   // Required tags for an N-component LUT-based input profile, as layed out in
   // the ICC spec [sections 8.2 and 8.3.2] are:
@@ -166,7 +157,7 @@ createProfile(const string& inFilename,
   
   // profileDescriptionTag
   CIccLocalizedUnicode USAEnglishDesc;
-  USAEnglishDesc.SetText(description.c_str());
+  USAEnglishDesc.SetText((string("(faux A2B0) ") + description).c_str());
   CIccTagMultiLocalizedUnicode* descriptionTag = new CIccTagMultiLocalizedUnicode;
   descriptionTag->m_Strings = new CIccMultiLocalizedUnicode; // dtor does deletion
   descriptionTag->m_Strings->push_back(USAEnglishDesc);
@@ -179,35 +170,105 @@ createProfile(const string& inFilename,
   copyrightTag->m_Strings = new CIccMultiLocalizedUnicode; // dtor does deletion
   copyrightTag->m_Strings->push_back(USAEnglishCopyright);
   profile.AttachTag(icSigCopyrightTag, copyrightTag);
-
-  // mediaWhitePointTag  
-  CAT* CATToD50 = new CAT(icD50XYZ, illuminant);
-
+	
+	// some prep work for remaining tags
+	icFloatNumber measuredBlack[3];
+	icFloatNumber measuredWhite[3];
+	for (unsigned int i = 0; i < 3; ++i)
+	{
+		measuredBlack[i] = measuredXYZ[                       0 * 3 + i];
+		measuredWhite[i] = measuredXYZ[(size * size * size - 1) * 3 + i];
+	}
+	icFloatNumber illuminantY = illuminant[1];
+	icFloatNumber normalizedIlluminant[3];
+	for (i = 0; i < 3; ++i)
+		normalizedIlluminant[i] = illuminant[i] / illuminantY;
+  CAT* CATToD50 = new CAT(icD50XYZ, normalizedIlluminant);
+	
+//	cout << endl;
+//	cout << "measured black:" << endl
+//		<< measuredBlack[0] << " "
+//		<< measuredBlack[1] << " "
+//		<< measuredBlack[2] << endl;
+//	cout << "measured white:" << endl
+//		<< measuredWhite[0] << " "
+//		<< measuredWhite[1] << " "
+//		<< measuredWhite[2] << endl;
+//	cout << "illuminant:" << endl
+//		<< illuminant[0] << " "
+//		<< illuminant[1] << " "
+//		<< illuminant[2] << endl;
+//	cout << "normalized illuminant:" << endl
+//		<< normalizedIlluminant[0] << " "
+//		<< normalizedIlluminant[1] << " "
+//		<< normalizedIlluminant[2] << endl;
+//	cout << "D50:" << endl
+//		<< icD50XYZ[0] << " "
+//		<< icD50XYZ[1] << " "
+//		<< icD50XYZ[2] << endl;
+//	cout << "chromatic adaptation matrix (to D50):" << endl
+//		<< CATToD50->m_CAT[0] << " " 
+//		<< CATToD50->m_CAT[1] << " " 
+//		<< CATToD50->m_CAT[2] << endl
+//		<< CATToD50->m_CAT[3] << " " 
+//		<< CATToD50->m_CAT[4] << " " 
+//		<< CATToD50->m_CAT[5] << endl
+//		<< CATToD50->m_CAT[6] << " " 
+//		<< CATToD50->m_CAT[7] << " " 
+//		<< CATToD50->m_CAT[8] << endl;
+	
+	// mediaWhitePointTag
   CIccTagXYZ* whitePointTag = new CIccTagXYZ;
-  icFloatNumber illuminantRelativeMediaWhite[3];
-  for (i = 0; i < 3; ++i)
-    illuminantRelativeMediaWhite[i] = mediaWhite[i];
-
-  illuminantRelativeMediaWhite[0] /= illuminant[1];
-  illuminantRelativeMediaWhite[1] /= illuminant[1];
-  illuminantRelativeMediaWhite[2] /= illuminant[1];
-  icFloatNumber adaptedWhite[3];
-  CATToD50->Apply(adaptedWhite, illuminantRelativeMediaWhite);
-  (*whitePointTag)[0].X = icDtoF(adaptedWhite[0]);
-  (*whitePointTag)[0].Y = icDtoF(adaptedWhite[1]);
-  (*whitePointTag)[0].Z = icDtoF(adaptedWhite[2]);
+	icFloatNumber adaptedMediaWhite[3];
+	CLUT::measuredXYZToAdaptedXYZ(adaptedMediaWhite, measuredWhite,
+		flare, illuminantY, CATToD50);
+//	cout << "adaptedMediaWhite:" << endl
+//		<< adaptedMediaWhite[0] << " " 
+//		<< adaptedMediaWhite[1] << " "
+//		<< adaptedMediaWhite[2]	<< endl;
+  (*whitePointTag)[0].X = icDtoF(adaptedMediaWhite[0]);
+  (*whitePointTag)[0].Y = icDtoF(adaptedMediaWhite[1]);
+  (*whitePointTag)[0].Z = icDtoF(adaptedMediaWhite[2]);
   profile.AttachTag(icSigMediaWhitePointTag, whitePointTag);
+
+	// mediaBlackPointTag
+	CIccTagXYZ* blackPointTag = new CIccTagXYZ;
+	icFloatNumber adaptedMediaBlack[3];
+	CLUT::measuredXYZToAdaptedXYZ(adaptedMediaBlack, measuredBlack,
+		flare, illuminantY, CATToD50);
+//	cout << "adaptedMediaBlack:" << endl
+//		<< adaptedMediaBlack[0] << " "
+//		<< adaptedMediaBlack[1] << " "
+//		<< adaptedMediaBlack[2] << endl;
+  (*blackPointTag)[0].X = icDtoF(adaptedMediaBlack[0]);
+  (*blackPointTag)[0].Y = icDtoF(adaptedMediaBlack[1]);
+  (*blackPointTag)[0].Z = icDtoF(adaptedMediaBlack[2]);
+  profile.AttachTag(icSigMediaBlackPointTag, blackPointTag);
 
   // chromaticAdaptationTag  
   CIccTagS15Fixed16* chromaticAdaptationTag = CATToD50->makeChromaticAdaptationTag();
   profile.AttachTag(icSigChromaticAdaptationTag, chromaticAdaptationTag);
 
-  // A2B0 tag
-  CLUT* AToB0CLUT = new CLUT();
-  CIccTagLut16* AToB0Tag = AToB0CLUT->makeAToB0Tag(size, rawXYZ, CATToD50,
-                                                   flare, illuminant, mediaWhite);
-  profile.AttachTag(icSigAToB0Tag, AToB0Tag);
+  // A2B1 tag
+  CLUT* AToB1CLUT = new CLUT();
+  CIccTagLut16* AToB1Tag
+		= AToB1CLUT->makeAToBxTag(size, measuredXYZ, flare, illuminant, CATToD50,
+			inputShaperGamma, inputShaperFilename, adaptedMediaWhite);
+  profile.AttachTag(icSigAToB1Tag, AToB1Tag); // the A2B1 tag
 
+	// We can get away with this because the Saturation Intent is so
+	// vaguely defined, and because the spec allows multiple tags to share
+	// the same data.
+	profile.AttachTag(icSigAToB2Tag, AToB1Tag);
+	
+	CLUT* AToB0CLUT = new CLUT();
+  CIccTagLut16* AToB0Tag
+		= AToB0CLUT->makeAToBxTag(size, measuredXYZ, flare, illuminant, CATToD50,
+			inputShaperGamma, inputShaperFilename, adaptedMediaWhite);
+	BlackScaler blackScaler(size, measuredXYZ, adaptedMediaBlack, adaptedMediaWhite);
+	AToB0CLUT->Iterate(&blackScaler);
+  profile.AttachTag(icSigAToB0Tag, AToB0Tag); // the A2B0 tag
+	
   //Verify things
   string validationReport;
   icValidateStatus validationStatus = profile.Validate(validationReport);
@@ -240,7 +301,7 @@ createProfile(const string& inFilename,
   out.Close();
   
   delete CATToD50;
-  delete[] rawXYZ;
+  delete[] measuredXYZ;
 
 }
 
@@ -258,8 +319,10 @@ usage(ostream& oS, const string& myName)
      << " [OPTION]... DESCRIPTION MEDIA_WHITE SIZE IN_FILE OUT_FILE"                                  << endl
                                                                                                       << endl
      << "Examples:"                                                                                   << endl
-     << "  iccCreateCLUTInputProfile \"sample profile\" \"0.21 0.24 0.52\" 11"                        << endl
-     << "  iccCreateCLUTInputProfile -f \"0.01 0.005 0.02\" \"sample profile\" \"0.21 0.24 0.52\" 11" << endl
+     << "  iccCreateCLUTInputProfile \"sample profile\" \"0.21 0.24 0.52\" 11"
+		 << " /tmp/in.txt /tmp/out.icc"                                                                   << endl
+     << "  iccCreateCLUTInputProfile -f \"0.01 0.005 0.02\" \"sample profile\" \"0.21 0.24 0.52\" 11"
+		 << " /tmp/in.txt /tmp/out.icc"                                                                   << endl
                                                                                                       << endl
      << "where"                                                                                       << endl
      << "  DESCRIPTION is a string used to identify the profile, often set to the same as the"        << endl
@@ -287,7 +350,25 @@ usage(ostream& oS, const string& myName)
      << " (indicates flare to be subtracted from measurements as a first stage in converting raw"     << endl
      << "  XYZ measurements to the ICC PCS)"                                                          << endl
                                                                                                       << endl
-     << "   -i"
+		 << "   -g"
+#if defined(HAS_GETOPT_LONG)
+		 << "   --input-shaper-gamma"
+#endif
+		 << " g (default 1.0)"																																						<< endl
+     << " (indicates value of gamma to be used to populate input shaper LUTs -- mutually exclusive"		<< endl
+		 << "  with --input-shaper-file option)"																													<< endl
+																																																			<< endl
+		 << "   -n"
+#if defined(HAS_GETOPT_LONG)
+		 << "   --input-shaper-file"
+#endif
+		 << " input_shaper_file (default none)"																														<< endl
+		 << " (indicates name of file containing a first line of the maximum encodable value in the "			<< endl
+		 << "  lines comprising the remainder of the file, each of which contains three floating-point"		<< endl
+		 << "  values.  The first line of the file is used to normalize the contents of the rest of"			<< endl
+		 << "  the file.  Mutually exclusive with --input-shaper-gamma option"														<< endl
+																																																			<< endl
+		 << "   -i"
 #if defined(HAS_GETOPT_LONG)
      << ", --illuminant"
 #endif
@@ -307,11 +388,19 @@ usage(ostream& oS, const string& myName)
 int
 main(int argc, char * const argv[])
 {
+	string myName(argv[0]);
+	
   icFloatNumber flare[3] = { 0, 0, 0 };
   bool sawExplicitFlare = false;
 
   icFloatNumber illuminant[3] = { 0, 0, 0 };
   bool sawExplicitIlluminant = false;
+	
+	icFloatNumber inputShaperGamma = 1.0;
+	bool sawInputShaperGamma = false;
+	
+	string inputShaperFilename("");
+	bool sawInputShaperFilename = false;
 
   string copyright("");
 
@@ -329,6 +418,8 @@ main(int argc, char * const argv[])
   static struct option longopts[] = {
     { "flare",       optional_argument, NULL, 'f' },
     { "illuminant",  optional_argument, NULL, 'i' },
+		{ "input-shaper-gamma", optional_argument, NULL, 'g' },
+		{ "input-shaper-file",  optional_argument, NULL, 'n' },
     { "copyright",   optional_argument, NULL, 'c' },
     { "description", required_argument, NULL, 'd' },
     { "mediaWhite",  required_argument, NULL, 'w' },
@@ -339,31 +430,39 @@ main(int argc, char * const argv[])
 
   while (true) {
 #if defined(HAS_GETOPT_LONG)
-    int shortOpt = getopt_long(argc, argv, "hf:i:c:", longopts, NULL);
+    int shortOpt = getopt_long(argc, argv, "hf:i:g:n:c:", longopts, NULL);
 #else
-    int shortOpt = getopt(argc, argv, "hf:i:c:");
+    int shortOpt = getopt(argc, argv, "hf:i:g:n:c:");
 #endif
     if (shortOpt == -1)
       break;
     switch (shortOpt) 
       {
       case 'h':
-  usage(cout, argv[0]);
-  return EXIT_SUCCESS;
+	usage(cout, argv[0]);
+	return EXIT_SUCCESS;
       case 'f':
-  readXYZFromString(flare, optarg);
-  sawExplicitFlare = true;
-  break;
+	readXYZFromString(flare, optarg);
+	sawExplicitFlare = true;
+	break;
       case 'i':
-  readXYZFromString(illuminant, optarg);
-  sawExplicitIlluminant = true;
-  break;
+	readXYZFromString(illuminant, optarg);
+	sawExplicitIlluminant = true;
+	break;
+			case 'g':
+	inputShaperGamma = strtod(optarg, NULL);
+	sawInputShaperGamma = true;
+	break;
+			case 'n':
+	inputShaperFilename = optarg;
+	sawInputShaperFilename = true;
+	break;
       case 'c':
-  copyright = optarg;
-  break;
+	copyright = optarg;
+	break;
       default:
-  usage(cout, argv[0]);
-  return EXIT_FAILURE;
+	usage(cout, argv[0]);
+	return EXIT_FAILURE;
       }
     }
 
@@ -372,7 +471,7 @@ main(int argc, char * const argv[])
 
   if (argc != 5)
   {
-    usage(cout, argv[0]);
+    usage(cout, myName.c_str());
     return EXIT_FAILURE;
   }
   
@@ -382,28 +481,43 @@ main(int argc, char * const argv[])
   inFilename                  = argv[3];
   outFilename                 = argv[4];
 
-  if (! sawExplicitIlluminant)
-    for (unsigned int i = 0; i < 3; ++i)
-      illuminant[i] = mediaWhite[i];
+	try
+	{
+		// check for obvious problems
+		if (sawInputShaperGamma && sawInputShaperFilename)
+			throw IccToolException("both --inputShaperGamma (-g) and"
+				" --inputShaperFilename (-n) specified, but the two options are"
+				" mutually exclusive");
+		
+		if (! sawExplicitIlluminant)
+			for (unsigned int i = 0; i < 3; ++i)
+				illuminant[i] = mediaWhite[i];
 
-  clog << "creating " << size << "x" << size << "x" << size
-       << " CLUT-based ICC input profile `" << outFilename << "'" << endl
-       << " from data in file " << inFilename << endl
-       << " with an explicitly-specified media white point of "
-       << mediaWhite[0] << " " << mediaWhite[1] << " " << mediaWhite[2] << endl
-       << " an " << (sawExplicitIlluminant ? "explicit" : "implicit") << " illuminant of "
-       << illuminant[0] << " " << illuminant[1] << " " << illuminant[2] << endl
-       << " an " << (sawExplicitFlare ? "explicit" : "implicit") << " measurement flare level of "
-       << flare[0] << " " << flare[1] << " " << flare[2] << endl;
-  if (copyright == "")
-    clog << " no copyright" << endl;
-  else
-    clog << " a copyright '" << copyright << "'" << endl;
-  clog << " and the description `" << description << "'" << endl;
+		clog << "creating " << size << "x" << size << "x" << size
+				 << " CLUT-based ICC input profile `" << outFilename << "'" << endl
+				 << " from data in file " << inFilename << endl
+				 << " with an explicitly-specified media white point of "
+				 << mediaWhite[0] << " " << mediaWhite[1] << " " << mediaWhite[2] << endl
+				 << " an " << (sawExplicitIlluminant ? "explicit" : "implicit") << " illuminant of "
+				 << illuminant[0] << " " << illuminant[1] << " " << illuminant[2] << endl
+				 << " an " << (sawExplicitFlare ? "explicit" : "implicit") << " measurement flare level of "
+				 << flare[0] << " " << flare[1] << " " << flare[2] << endl;
+		if (copyright == "")
+			clog << " no copyright" << endl;
+		else
+			clog << " a copyright '" << copyright << "'" << endl;
+		clog << " and the description `" << description << "'" << endl;
 
-  createProfile(inFilename, outFilename, size,
-                description, copyright,
-                flare, illuminant, mediaWhite);
+		createProfile(inFilename, outFilename, size,
+									description, copyright,
+									flare, illuminant, inputShaperGamma, inputShaperFilename,
+									mediaWhite);
 
-  return EXIT_SUCCESS;
+		return EXIT_SUCCESS;
+	}
+	catch (const exception& e)
+	{
+		cerr << myName << ": error: " << e.what() << endl;
+		return EXIT_FAILURE;
+	}
 }

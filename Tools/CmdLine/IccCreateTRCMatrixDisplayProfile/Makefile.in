@@ -37,8 +37,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-bin_PROGRAMS = iccDumpProfile$(EXEEXT)
-subdir = Tools/CmdLine/IccDumpProfile
+bin_PROGRAMS = iccCreateTRCMatrixDisplayProfile$(EXEEXT)
+subdir = Tools/CmdLine/IccCreateTRCMatrixDisplayProfile
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
@@ -50,10 +50,12 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
-am_iccDumpProfile_OBJECTS = iccDumpProfile.$(OBJEXT)
-iccDumpProfile_OBJECTS = $(am_iccDumpProfile_OBJECTS)
-iccDumpProfile_LDADD = $(LDADD)
-iccDumpProfile_DEPENDENCIES =
+am_iccCreateTRCMatrixDisplayProfile_OBJECTS =  \
+	iccCreateTRCMatrixDisplayProfile.$(OBJEXT)
+iccCreateTRCMatrixDisplayProfile_OBJECTS =  \
+	$(am_iccCreateTRCMatrixDisplayProfile_OBJECTS)
+iccCreateTRCMatrixDisplayProfile_LDADD = $(LDADD)
+iccCreateTRCMatrixDisplayProfile_DEPENDENCIES =
 DEFAULT_INCLUDES = -I. -I$(srcdir)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -65,8 +67,8 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(iccDumpProfile_SOURCES)
-DIST_SOURCES = $(iccDumpProfile_SOURCES)
+SOURCES = $(iccCreateTRCMatrixDisplayProfile_SOURCES)
+DIST_SOURCES = $(iccCreateTRCMatrixDisplayProfile_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -186,9 +188,15 @@ target_alias = @target_alias@
 target_cpu = @target_cpu@
 target_os = @target_os@
 target_vendor = @target_vendor@
-INCLUDES = -I$(top_builddir) -I$(top_srcdir)/IccProfLib
-LDADD = -L$(top_builddir)/IccProfLib -lSampleICC
-iccDumpProfile_SOURCES = iccDumpProfile.cpp
+INCLUDES = -I$(top_builddir) -I$(top_srcdir)/IccProfLib \
+	-I$(top_srcdir)/Tools/CmdLine/IccToolUtilsLib
+
+LDADD = -L$(top_builddir)/IccProfLib -lSampleICC \
+	-L$(top_builddir)/Tools/CmdLine/IccToolUtilsLib -lSampleICCToolUtils
+
+iccCreateTRCMatrixDisplayProfile_SOURCES = \
+	iccCreateTRCMatrixDisplayProfile.cpp
+
 all: all-am
 
 .SUFFIXES:
@@ -202,9 +210,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  Tools/CmdLine/IccDumpProfile/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  Tools/CmdLine/IccCreateTRCMatrixDisplayProfile/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  Tools/CmdLine/IccDumpProfile/Makefile
+	  $(AUTOMAKE) --gnu  Tools/CmdLine/IccCreateTRCMatrixDisplayProfile/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -250,9 +258,9 @@ clean-binPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-iccDumpProfile$(EXEEXT): $(iccDumpProfile_OBJECTS) $(iccDumpProfile_DEPENDENCIES) 
-	@rm -f iccDumpProfile$(EXEEXT)
-	$(CXXLINK) $(iccDumpProfile_LDFLAGS) $(iccDumpProfile_OBJECTS) $(iccDumpProfile_LDADD) $(LIBS)
+iccCreateTRCMatrixDisplayProfile$(EXEEXT): $(iccCreateTRCMatrixDisplayProfile_OBJECTS) $(iccCreateTRCMatrixDisplayProfile_DEPENDENCIES) 
+	@rm -f iccCreateTRCMatrixDisplayProfile$(EXEEXT)
+	$(CXXLINK) $(iccCreateTRCMatrixDisplayProfile_LDFLAGS) $(iccCreateTRCMatrixDisplayProfile_OBJECTS) $(iccCreateTRCMatrixDisplayProfile_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -260,7 +268,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iccDumpProfile.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iccCreateTRCMatrixDisplayProfile.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

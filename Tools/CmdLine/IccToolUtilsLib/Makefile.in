@@ -14,6 +14,7 @@
 
 @SET_MAKE@
 
+
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH = @srcdir@
@@ -37,9 +38,9 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-bin_PROGRAMS = iccDumpProfile$(EXEEXT)
-subdir = Tools/CmdLine/IccDumpProfile
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+subdir = Tools/CmdLine/IccToolUtilsLib
+DIST_COMMON = $(libSampleICCToolUtilsinclude_HEADERS) \
+	$(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.ac
@@ -47,13 +48,21 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
-am__installdirs = "$(DESTDIR)$(bindir)"
-binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
-PROGRAMS = $(bin_PROGRAMS)
-am_iccDumpProfile_OBJECTS = iccDumpProfile.$(OBJEXT)
-iccDumpProfile_OBJECTS = $(am_iccDumpProfile_OBJECTS)
-iccDumpProfile_LDADD = $(LDADD)
-iccDumpProfile_DEPENDENCIES =
+am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+am__vpath_adj = case $$p in \
+    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
+    *) f=$$p;; \
+  esac;
+am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
+am__installdirs = "$(DESTDIR)$(libdir)" \
+	"$(DESTDIR)$(libSampleICCToolUtilsincludedir)"
+libLTLIBRARIES_INSTALL = $(INSTALL)
+LTLIBRARIES = $(lib_LTLIBRARIES)
+libSampleICCToolUtils_la_LIBADD =
+am_libSampleICCToolUtils_la_OBJECTS = CAT.lo CLUT.lo CLUTStuffer.lo \
+	IccToolException.lo
+libSampleICCToolUtils_la_OBJECTS =  \
+	$(am_libSampleICCToolUtils_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -65,8 +74,10 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(iccDumpProfile_SOURCES)
-DIST_SOURCES = $(iccDumpProfile_SOURCES)
+SOURCES = $(libSampleICCToolUtils_la_SOURCES)
+DIST_SOURCES = $(libSampleICCToolUtils_la_SOURCES)
+libSampleICCToolUtilsincludeHEADERS_INSTALL = $(INSTALL_HEADER)
+HEADERS = $(libSampleICCToolUtilsinclude_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -186,9 +197,17 @@ target_alias = @target_alias@
 target_cpu = @target_cpu@
 target_os = @target_os@
 target_vendor = @target_vendor@
-INCLUDES = -I$(top_builddir) -I$(top_srcdir)/IccProfLib
+lib_LTLIBRARIES = libSampleICCToolUtils.la
+libSampleICCToolUtils_la_SOURCES = CAT.cpp CLUT.cpp CLUTStuffer.cpp \
+	IccToolException.cpp
+
+libSampleICCToolUtils_la_LDFLAGS = -version-info @LIBTOOL_VERSION@
+libSampleICCToolUtilsincludedir = $(includedir)/SampleICC
+libSampleICCToolUtilsinclude_HEADERS = CAT.h CLUT.h CLUTStuffer.h IccToolException.h
+INCLUDES = -I$(top_builddir) -I$(top_srcdir)/IccProfLib \
+	-I$(top_srcdir)/Tools/CmdLine/IccToolUtilsLib
+
 LDADD = -L$(top_builddir)/IccProfLib -lSampleICC
-iccDumpProfile_SOURCES = iccDumpProfile.cpp
 all: all-am
 
 .SUFFIXES:
@@ -202,9 +221,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  Tools/CmdLine/IccDumpProfile/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  Tools/CmdLine/IccToolUtilsLib/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  Tools/CmdLine/IccDumpProfile/Makefile
+	  $(AUTOMAKE) --gnu  Tools/CmdLine/IccToolUtilsLib/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -222,37 +241,35 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
-install-binPROGRAMS: $(bin_PROGRAMS)
+install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
-	test -z "$(bindir)" || $(mkdir_p) "$(DESTDIR)$(bindir)"
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  if test -f $$p \
-	     || test -f $$p1 \
-	  ; then \
-	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
-	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) '$$p' '$(DESTDIR)$(bindir)/$$f'"; \
-	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) "$$p" "$(DESTDIR)$(bindir)/$$f" || exit 1; \
+	test -z "$(libdir)" || $(mkdir_p) "$(DESTDIR)$(libdir)"
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    f=$(am__strip_dir) \
+	    echo " $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) '$$p' '$(DESTDIR)$(libdir)/$$f'"; \
+	    $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) "$$p" "$(DESTDIR)$(libdir)/$$f"; \
 	  else :; fi; \
 	done
 
-uninstall-binPROGRAMS:
+uninstall-libLTLIBRARIES:
 	@$(NORMAL_UNINSTALL)
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  f=`echo "$$p" | sed 's,^.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
-	  echo " rm -f '$(DESTDIR)$(bindir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(bindir)/$$f"; \
+	@set -x; list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  p=$(am__strip_dir) \
+	  echo " $(LIBTOOL) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$p'"; \
+	  $(LIBTOOL) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$p"; \
 	done
 
-clean-binPROGRAMS:
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  echo " rm -f $$p $$f"; \
-	  rm -f $$p $$f ; \
+clean-libLTLIBRARIES:
+	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
+	  test "$$dir" != "$$p" || dir=.; \
+	  echo "rm -f \"$${dir}/so_locations\""; \
+	  rm -f "$${dir}/so_locations"; \
 	done
-iccDumpProfile$(EXEEXT): $(iccDumpProfile_OBJECTS) $(iccDumpProfile_DEPENDENCIES) 
-	@rm -f iccDumpProfile$(EXEEXT)
-	$(CXXLINK) $(iccDumpProfile_LDFLAGS) $(iccDumpProfile_OBJECTS) $(iccDumpProfile_LDADD) $(LIBS)
+libSampleICCToolUtils.la: $(libSampleICCToolUtils_la_OBJECTS) $(libSampleICCToolUtils_la_DEPENDENCIES) 
+	$(CXXLINK) -rpath $(libdir) $(libSampleICCToolUtils_la_LDFLAGS) $(libSampleICCToolUtils_la_OBJECTS) $(libSampleICCToolUtils_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -260,7 +277,10 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iccDumpProfile.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CAT.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CLUT.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CLUTStuffer.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IccToolException.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
@@ -292,6 +312,23 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
+install-libSampleICCToolUtilsincludeHEADERS: $(libSampleICCToolUtilsinclude_HEADERS)
+	@$(NORMAL_INSTALL)
+	test -z "$(libSampleICCToolUtilsincludedir)" || $(mkdir_p) "$(DESTDIR)$(libSampleICCToolUtilsincludedir)"
+	@list='$(libSampleICCToolUtilsinclude_HEADERS)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(libSampleICCToolUtilsincludeHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(libSampleICCToolUtilsincludedir)/$$f'"; \
+	  $(libSampleICCToolUtilsincludeHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(libSampleICCToolUtilsincludedir)/$$f"; \
+	done
+
+uninstall-libSampleICCToolUtilsincludeHEADERS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(libSampleICCToolUtilsinclude_HEADERS)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(libSampleICCToolUtilsincludedir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(libSampleICCToolUtilsincludedir)/$$f"; \
+	done
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -370,9 +407,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(PROGRAMS)
+all-am: Makefile $(LTLIBRARIES) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(bindir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(libSampleICCToolUtilsincludedir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
 install: install-am
@@ -401,7 +438,8 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
+clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
+	mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -419,9 +457,9 @@ info: info-am
 
 info-am:
 
-install-data-am:
+install-data-am: install-libSampleICCToolUtilsincludeHEADERS
 
-install-exec-am: install-binPROGRAMS
+install-exec-am: install-libLTLIBRARIES
 
 install-info: install-info-am
 
@@ -447,19 +485,23 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS uninstall-info-am
+uninstall-am: uninstall-info-am uninstall-libLTLIBRARIES \
+	uninstall-libSampleICCToolUtilsincludeHEADERS
 
-.PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
-	clean-generic clean-libtool ctags distclean distclean-compile \
-	distclean-generic distclean-libtool distclean-tags distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-binPROGRAMS install-data install-data-am install-exec \
-	install-exec-am install-info install-info-am install-man \
+.PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
+	clean-libLTLIBRARIES clean-libtool ctags distclean \
+	distclean-compile distclean-generic distclean-libtool \
+	distclean-tags distdir dvi dvi-am html html-am info info-am \
+	install install-am install-data install-data-am install-exec \
+	install-exec-am install-info install-info-am \
+	install-libLTLIBRARIES \
+	install-libSampleICCToolUtilsincludeHEADERS install-man \
 	install-strip installcheck installcheck-am installdirs \
 	maintainer-clean maintainer-clean-generic mostlyclean \
 	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
 	pdf pdf-am ps ps-am tags uninstall uninstall-am \
-	uninstall-binPROGRAMS uninstall-info-am
+	uninstall-info-am uninstall-libLTLIBRARIES \
+	uninstall-libSampleICCToolUtilsincludeHEADERS
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

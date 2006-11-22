@@ -1,0 +1,1464 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		7CE0F50A0AF05322002F2A93 /* Libraries */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 7CE0F5190AF05373002F2A93 /* Build configuration list for PBXAggregateTarget "Libraries" */;
+			buildPhases = (
+			);
+			dependencies = (
+				7CE0F50C0AF05327002F2A93 /* PBXTargetDependency */,
+				7CFB29130B14D8C00093D058 /* PBXTargetDependency */,
+			);
+			name = Libraries;
+			productName = Libraries;
+		};
+		7CE0F50D0AF05334002F2A93 /* Commands */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 7CE0F51C0AF05373002F2A93 /* Build configuration list for PBXAggregateTarget "Commands" */;
+			buildPhases = (
+			);
+			dependencies = (
+				7CE0F50F0AF0533D002F2A93 /* PBXTargetDependency */,
+				7CE0F5110AF0533D002F2A93 /* PBXTargetDependency */,
+				7CE0F5130AF0533D002F2A93 /* PBXTargetDependency */,
+				7CE0F5150AF0533D002F2A93 /* PBXTargetDependency */,
+				7CE0F5170AF0533D002F2A93 /* PBXTargetDependency */,
+			);
+			name = Commands;
+			productName = Commands;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		7C49EA900B09122C00ADFFE7 /* iccCreateTRCMatrixDisplayProfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C49EA8F0B09122C00ADFFE7 /* iccCreateTRCMatrixDisplayProfile.cpp */; };
+		7C6291FF0AFEC69C002D7386 /* BlackScaler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C6291FE0AFEC69C002D7386 /* BlackScaler.cpp */; };
+		7C9E18CB0B14E0A5002EF2BB /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
+		7CE0F4320AF04D3F002F2A93 /* IccCmm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4160AF04D3F002F2A93 /* IccCmm.cpp */; };
+		7CE0F4330AF04D3F002F2A93 /* IccCmm.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4170AF04D3F002F2A93 /* IccCmm.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CE0F4340AF04D3F002F2A93 /* IccDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4180AF04D3F002F2A93 /* IccDefs.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CE0F4350AF04D3F002F2A93 /* IccIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4190AF04D3F002F2A93 /* IccIO.cpp */; };
+		7CE0F4360AF04D3F002F2A93 /* IccIO.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F41A0AF04D3F002F2A93 /* IccIO.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CE0F4370AF04D3F002F2A93 /* IccProfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F41B0AF04D3F002F2A93 /* IccProfile.cpp */; };
+		7CE0F4380AF04D3F002F2A93 /* IccProfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F41C0AF04D3F002F2A93 /* IccProfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CE0F4390AF04D3F002F2A93 /* IccProfLibConf.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4210AF04D3F002F2A93 /* IccProfLibConf.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CE0F43A0AF04D3F002F2A93 /* IccTag.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4220AF04D3F002F2A93 /* IccTag.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CE0F43B0AF04D3F002F2A93 /* IccTagBasic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4230AF04D3F002F2A93 /* IccTagBasic.cpp */; };
+		7CE0F43C0AF04D3F002F2A93 /* IccTagBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4240AF04D3F002F2A93 /* IccTagBasic.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CE0F43D0AF04D3F002F2A93 /* IccTagFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4250AF04D3F002F2A93 /* IccTagFactory.cpp */; };
+		7CE0F43E0AF04D3F002F2A93 /* IccTagFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4260AF04D3F002F2A93 /* IccTagFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CE0F43F0AF04D3F002F2A93 /* IccTagLut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4270AF04D3F002F2A93 /* IccTagLut.cpp */; };
+		7CE0F4400AF04D3F002F2A93 /* IccTagLut.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4280AF04D3F002F2A93 /* IccTagLut.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CE0F4410AF04D3F002F2A93 /* IccUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4290AF04D3F002F2A93 /* IccUtil.cpp */; };
+		7CE0F4420AF04D3F002F2A93 /* IccUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F42A0AF04D3F002F2A93 /* IccUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CE0F4430AF04D3F002F2A93 /* icProfileHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F42B0AF04D3F002F2A93 /* icProfileHeader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CE0F4450AF04D3F002F2A93 /* md5.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F42F0AF04D3F002F2A93 /* md5.cpp */; };
+		7CE0F4460AF04D3F002F2A93 /* md5.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4300AF04D3F002F2A93 /* md5.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CE0F4850AF04F9B002F2A93 /* iccApplyNamedCmm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F47F0AF04F9B002F2A93 /* iccApplyNamedCmm.cpp */; };
+		7CE0F4960AF04FE9002F2A93 /* cmyk16bit.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CE0F4790AF04F9B002F2A93 /* cmyk16bit.txt */; };
+		7CE0F4970AF04FE9002F2A93 /* cmyk8bit.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CE0F47A0AF04F9B002F2A93 /* cmyk8bit.txt */; };
+		7CE0F4980AF04FE9002F2A93 /* cmykFloat.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CE0F47B0AF04F9B002F2A93 /* cmykFloat.txt */; };
+		7CE0F4990AF04FE9002F2A93 /* cmykPercent.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CE0F47C0AF04F9B002F2A93 /* cmykPercent.txt */; };
+		7CE0F49A0AF04FE9002F2A93 /* labValue.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CE0F47D0AF04F9B002F2A93 /* labValue.txt */; };
+		7CE0F49B0AF04FE9002F2A93 /* namedColor.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CE0F47E0AF04F9B002F2A93 /* namedColor.txt */; };
+		7CE0F49C0AF04FFB002F2A93 /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
+		7CE0F4C50AF05033002F2A93 /* iccApplyProfiles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4BD0AF05033002F2A93 /* iccApplyProfiles.cpp */; };
+		7CE0F4C60AF05033002F2A93 /* TiffImg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4C30AF05033002F2A93 /* TiffImg.cpp */; };
+		7CE0F4C70AF05041002F2A93 /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
+		7CE0F4DA0AF05090002F2A93 /* iccCreateCLUTInputProfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4CE0AF05090002F2A93 /* iccCreateCLUTInputProfile.cpp */; };
+		7CE0F4DD0AF0509A002F2A93 /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
+		7CE0F4E70AF05133002F2A93 /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
+		7CE0F4E80AF05143002F2A93 /* iccFlattenAToBTag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4D10AF05090002F2A93 /* iccFlattenAToBTag.cpp */; };
+		7CE0F4F30AF0517D002F2A93 /* iccDumpProfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4ED0AF0517D002F2A93 /* iccDumpProfile.cpp */; };
+		7CE0F4F40AF05189002F2A93 /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
+		7CE0F5070AF052BA002F2A93 /* iccProfLibTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4FF0AF052BA002F2A93 /* iccProfLibTest.cpp */; };
+		7CE0F5080AF052BA002F2A93 /* WriteFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F5050AF052BA002F2A93 /* WriteFunctions.cpp */; };
+		7CE0F5090AF052FF002F2A93 /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
+		7CF53DC00B0A77C500F6E353 /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
+		7CFB28B70B13D0230093D058 /* IccMpeACS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CFB28AF0B13D0230093D058 /* IccMpeACS.cpp */; };
+		7CFB28B80B13D0230093D058 /* IccMpeACS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CFB28B00B13D0230093D058 /* IccMpeACS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CFB28B90B13D0230093D058 /* IccMpeBasic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CFB28B10B13D0230093D058 /* IccMpeBasic.cpp */; };
+		7CFB28BA0B13D0230093D058 /* IccMpeBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CFB28B20B13D0230093D058 /* IccMpeBasic.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CFB28BB0B13D0230093D058 /* IccMpeFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CFB28B30B13D0230093D058 /* IccMpeFactory.cpp */; };
+		7CFB28BC0B13D0230093D058 /* IccMpeFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CFB28B40B13D0230093D058 /* IccMpeFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CFB28BD0B13D0230093D058 /* IccTagMPE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CFB28B50B13D0230093D058 /* IccTagMPE.cpp */; };
+		7CFB28BE0B13D0230093D058 /* IccTagMPE.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CFB28B60B13D0230093D058 /* IccTagMPE.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CFB29140B14D8E20093D058 /* CAT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4CA0AF05090002F2A93 /* CAT.cpp */; };
+		7CFB29150B14D8E20093D058 /* CLUT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4CC0AF05090002F2A93 /* CLUT.cpp */; };
+		7CFB29160B14D8E20093D058 /* CLUTStuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C6291120AFEAD9C002D7386 /* CLUTStuffer.cpp */; };
+		7CFB29170B14D9070093D058 /* libSampleICCToolUtils.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CFB290F0B14D8AB0093D058 /* libSampleICCToolUtils.dylib */; };
+		7CFB29180B14D91D0093D058 /* IccToolException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C732D890B0E3746006A574A /* IccToolException.cpp */; };
+		7CFB29190B14D9490093D058 /* libSampleICCToolUtils.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CFB290F0B14D8AB0093D058 /* libSampleICCToolUtils.dylib */; };
+		7CFB29220B14D9CA0093D058 /* CLUTStuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C6291110AFEAD9C002D7386 /* CLUTStuffer.h */; };
+		7CFB29230B14D9CA0093D058 /* CAT.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4CB0AF05090002F2A93 /* CAT.h */; };
+		7CFB29240B14D9CA0093D058 /* CLUT.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4CD0AF05090002F2A93 /* CLUT.h */; };
+		7CFB29250B14D9CA0093D058 /* IccToolException.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C732D880B0E3746006A574A /* IccToolException.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7C49EA7A0B09115400ADFFE7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC0620554660B00DB518D;
+			remoteInfo = SampleICC;
+		};
+		7CE0F4590AF04F08002F2A93 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC0620554660B00DB518D;
+			remoteInfo = SampleICC;
+		};
+		7CE0F4600AF04F22002F2A93 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC0620554660B00DB518D;
+			remoteInfo = SampleICC;
+		};
+		7CE0F4670AF04F46002F2A93 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC0620554660B00DB518D;
+			remoteInfo = SampleICC;
+		};
+		7CE0F46E0AF04F5F002F2A93 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC0620554660B00DB518D;
+			remoteInfo = SampleICC;
+		};
+		7CE0F4750AF04F79002F2A93 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC0620554660B00DB518D;
+			remoteInfo = SampleICC;
+		};
+		7CE0F4E30AF050EA002F2A93 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC0620554660B00DB518D;
+			remoteInfo = SampleICC;
+		};
+		7CE0F4E50AF0510F002F2A93 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7CE0F4E00AF050E4002F2A93;
+			remoteInfo = iccFlattenAToBTag;
+		};
+		7CE0F50B0AF05327002F2A93 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC0620554660B00DB518D;
+			remoteInfo = SampleICC;
+		};
+		7CE0F50E0AF0533D002F2A93 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7CE0F4560AF04F02002F2A93;
+			remoteInfo = iccApplyNamedCmm;
+		};
+		7CE0F5100AF0533D002F2A93 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7CE0F4E00AF050E4002F2A93;
+			remoteInfo = iccFlattenAToBTag;
+		};
+		7CE0F5120AF0533D002F2A93 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7CE0F4640AF04F3C002F2A93;
+			remoteInfo = iccCreateCLUTInputProfile;
+		};
+		7CE0F5140AF0533D002F2A93 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7CE0F46B0AF04F59002F2A93;
+			remoteInfo = iccDumpProfile;
+		};
+		7CE0F5160AF0533D002F2A93 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7CE0F4720AF04F73002F2A93;
+			remoteInfo = iccProfLibTest;
+		};
+		7CFB29100B14D8B30093D058 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC0620554660B00DB518D;
+			remoteInfo = SampleICC;
+		};
+		7CFB29120B14D8C00093D058 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7CFB290E0B14D8AB0093D058;
+			remoteInfo = SampleICCToolUtils;
+		};
+		7CFB291A0B14D9570093D058 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7CFB290E0B14D8AB0093D058;
+			remoteInfo = SampleICCToolUtils;
+		};
+		7CFB291C0B14D9660093D058 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7CFB290E0B14D8AB0093D058;
+			remoteInfo = SampleICCToolUtils;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7CE0F4BB0AF05017002F2A93 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				7CE0F4960AF04FE9002F2A93 /* cmyk16bit.txt in CopyFiles */,
+				7CE0F4970AF04FE9002F2A93 /* cmyk8bit.txt in CopyFiles */,
+				7CE0F4980AF04FE9002F2A93 /* cmykFloat.txt in CopyFiles */,
+				7CE0F4990AF04FE9002F2A93 /* cmykPercent.txt in CopyFiles */,
+				7CE0F49A0AF04FE9002F2A93 /* labValue.txt in CopyFiles */,
+				7CE0F49B0AF04FE9002F2A93 /* namedColor.txt in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		7C49EA780B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccCreateTRCMatrixDisplayProfile; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C49EA8F0B09122C00ADFFE7 /* iccCreateTRCMatrixDisplayProfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = iccCreateTRCMatrixDisplayProfile.cpp; path = Tools/CmdLine/iccCreateTRCMatrixDisplayProfile/iccCreateTRCMatrixDisplayProfile.cpp; sourceTree = "<group>"; };
+		7C6291110AFEAD9C002D7386 /* CLUTStuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CLUTStuffer.h; path = ../Tools/CmdLine/IccToolUtilsLib/CLUTStuffer.h; sourceTree = "<group>"; };
+		7C6291120AFEAD9C002D7386 /* CLUTStuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CLUTStuffer.cpp; path = ../Tools/CmdLine/IccToolUtilsLib/CLUTStuffer.cpp; sourceTree = "<group>"; };
+		7C6291FE0AFEC69C002D7386 /* BlackScaler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlackScaler.cpp; sourceTree = "<group>"; };
+		7C6292E80AFFEC19002D7386 /* BlackScaler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlackScaler.h; sourceTree = "<group>"; };
+		7C732D880B0E3746006A574A /* IccToolException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IccToolException.h; path = ../Tools/CmdLine/IccToolUtilsLib/IccToolException.h; sourceTree = "<group>"; };
+		7C732D890B0E3746006A574A /* IccToolException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IccToolException.cpp; path = ../Tools/CmdLine/IccToolUtilsLib/IccToolException.cpp; sourceTree = "<group>"; };
+		7CE0F4160AF04D3F002F2A93 /* IccCmm.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = IccCmm.cpp; sourceTree = "<group>"; };
+		7CE0F4170AF04D3F002F2A93 /* IccCmm.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccCmm.h; sourceTree = "<group>"; };
+		7CE0F4180AF04D3F002F2A93 /* IccDefs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccDefs.h; sourceTree = "<group>"; };
+		7CE0F4190AF04D3F002F2A93 /* IccIO.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = IccIO.cpp; sourceTree = "<group>"; };
+		7CE0F41A0AF04D3F002F2A93 /* IccIO.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccIO.h; sourceTree = "<group>"; };
+		7CE0F41B0AF04D3F002F2A93 /* IccProfile.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = IccProfile.cpp; sourceTree = "<group>"; };
+		7CE0F41C0AF04D3F002F2A93 /* IccProfile.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccProfile.h; sourceTree = "<group>"; };
+		7CE0F4210AF04D3F002F2A93 /* IccProfLibConf.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccProfLibConf.h; sourceTree = "<group>"; };
+		7CE0F4220AF04D3F002F2A93 /* IccTag.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccTag.h; sourceTree = "<group>"; };
+		7CE0F4230AF04D3F002F2A93 /* IccTagBasic.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = IccTagBasic.cpp; sourceTree = "<group>"; };
+		7CE0F4240AF04D3F002F2A93 /* IccTagBasic.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccTagBasic.h; sourceTree = "<group>"; };
+		7CE0F4250AF04D3F002F2A93 /* IccTagFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = IccTagFactory.cpp; sourceTree = "<group>"; };
+		7CE0F4260AF04D3F002F2A93 /* IccTagFactory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccTagFactory.h; sourceTree = "<group>"; };
+		7CE0F4270AF04D3F002F2A93 /* IccTagLut.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = IccTagLut.cpp; sourceTree = "<group>"; };
+		7CE0F4280AF04D3F002F2A93 /* IccTagLut.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccTagLut.h; sourceTree = "<group>"; };
+		7CE0F4290AF04D3F002F2A93 /* IccUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = IccUtil.cpp; sourceTree = "<group>"; };
+		7CE0F42A0AF04D3F002F2A93 /* IccUtil.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccUtil.h; sourceTree = "<group>"; };
+		7CE0F42B0AF04D3F002F2A93 /* icProfileHeader.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = icProfileHeader.h; sourceTree = "<group>"; };
+		7CE0F42F0AF04D3F002F2A93 /* md5.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = md5.cpp; sourceTree = "<group>"; };
+		7CE0F4300AF04D3F002F2A93 /* md5.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = md5.h; sourceTree = "<group>"; };
+		7CE0F4570AF04F02002F2A93 /* iccApplyNamedCmm */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccApplyNamedCmm; sourceTree = BUILT_PRODUCTS_DIR; };
+		7CE0F45E0AF04F1C002F2A93 /* iccApplyProfiles */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccApplyProfiles; sourceTree = BUILT_PRODUCTS_DIR; };
+		7CE0F4650AF04F3C002F2A93 /* iccCreateCLUTInputProfile */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccCreateCLUTInputProfile; sourceTree = BUILT_PRODUCTS_DIR; };
+		7CE0F46C0AF04F59002F2A93 /* iccDumpProfile */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccDumpProfile; sourceTree = BUILT_PRODUCTS_DIR; };
+		7CE0F4730AF04F73002F2A93 /* iccProfLibTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccProfLibTest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7CE0F4790AF04F9B002F2A93 /* cmyk16bit.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = cmyk16bit.txt; sourceTree = "<group>"; };
+		7CE0F47A0AF04F9B002F2A93 /* cmyk8bit.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = cmyk8bit.txt; sourceTree = "<group>"; };
+		7CE0F47B0AF04F9B002F2A93 /* cmykFloat.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = cmykFloat.txt; sourceTree = "<group>"; };
+		7CE0F47C0AF04F9B002F2A93 /* cmykPercent.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = cmykPercent.txt; sourceTree = "<group>"; };
+		7CE0F47D0AF04F9B002F2A93 /* labValue.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = labValue.txt; sourceTree = "<group>"; };
+		7CE0F47E0AF04F9B002F2A93 /* namedColor.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = namedColor.txt; sourceTree = "<group>"; };
+		7CE0F47F0AF04F9B002F2A93 /* iccApplyNamedCmm.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = iccApplyNamedCmm.cpp; sourceTree = "<group>"; };
+		7CE0F4BD0AF05033002F2A93 /* iccApplyProfiles.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = iccApplyProfiles.cpp; sourceTree = "<group>"; };
+		7CE0F4C30AF05033002F2A93 /* TiffImg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TiffImg.cpp; sourceTree = "<group>"; };
+		7CE0F4C40AF05033002F2A93 /* TiffImg.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TiffImg.h; sourceTree = "<group>"; };
+		7CE0F4CA0AF05090002F2A93 /* CAT.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CAT.cpp; path = ../Tools/CmdLine/IccToolUtilsLib/CAT.cpp; sourceTree = "<group>"; };
+		7CE0F4CB0AF05090002F2A93 /* CAT.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAT.h; path = ../Tools/CmdLine/IccToolUtilsLib/CAT.h; sourceTree = "<group>"; };
+		7CE0F4CC0AF05090002F2A93 /* CLUT.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CLUT.cpp; path = ../Tools/CmdLine/IccToolUtilsLib/CLUT.cpp; sourceTree = "<group>"; };
+		7CE0F4CD0AF05090002F2A93 /* CLUT.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CLUT.h; path = ../Tools/CmdLine/IccToolUtilsLib/CLUT.h; sourceTree = "<group>"; };
+		7CE0F4CE0AF05090002F2A93 /* iccCreateCLUTInputProfile.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = iccCreateCLUTInputProfile.cpp; sourceTree = "<group>"; };
+		7CE0F4D10AF05090002F2A93 /* iccFlattenAToBTag.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = iccFlattenAToBTag.cpp; sourceTree = "<group>"; };
+		7CE0F4E10AF050E4002F2A93 /* iccFlattenAToBTag */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccFlattenAToBTag; sourceTree = BUILT_PRODUCTS_DIR; };
+		7CE0F4ED0AF0517D002F2A93 /* iccDumpProfile.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = iccDumpProfile.cpp; sourceTree = "<group>"; };
+		7CE0F4FF0AF052BA002F2A93 /* iccProfLibTest.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = iccProfLibTest.cpp; sourceTree = "<group>"; };
+		7CE0F5000AF052BA002F2A93 /* iccProfLibTest.dsp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = iccProfLibTest.dsp; sourceTree = "<group>"; };
+		7CE0F5010AF052BA002F2A93 /* iccProfLibTest.vcproj */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = iccProfLibTest.vcproj; sourceTree = "<group>"; };
+		7CE0F5020AF052BA002F2A93 /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
+		7CE0F5030AF052BA002F2A93 /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; };
+		7CE0F5050AF052BA002F2A93 /* WriteFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = WriteFunctions.cpp; sourceTree = "<group>"; };
+		7CE0F5060AF052BA002F2A93 /* WriteFunctions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = WriteFunctions.h; sourceTree = "<group>"; };
+		7CFB28AF0B13D0230093D058 /* IccMpeACS.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = IccMpeACS.cpp; sourceTree = "<group>"; };
+		7CFB28B00B13D0230093D058 /* IccMpeACS.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccMpeACS.h; sourceTree = "<group>"; };
+		7CFB28B10B13D0230093D058 /* IccMpeBasic.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = IccMpeBasic.cpp; sourceTree = "<group>"; };
+		7CFB28B20B13D0230093D058 /* IccMpeBasic.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccMpeBasic.h; sourceTree = "<group>"; };
+		7CFB28B30B13D0230093D058 /* IccMpeFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = IccMpeFactory.cpp; sourceTree = "<group>"; };
+		7CFB28B40B13D0230093D058 /* IccMpeFactory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccMpeFactory.h; sourceTree = "<group>"; };
+		7CFB28B50B13D0230093D058 /* IccTagMPE.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = IccTagMPE.cpp; sourceTree = "<group>"; };
+		7CFB28B60B13D0230093D058 /* IccTagMPE.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccTagMPE.h; sourceTree = "<group>"; };
+		7CFB290F0B14D8AB0093D058 /* libSampleICCToolUtils.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libSampleICCToolUtils.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2AAC0630554660B00DB518D /* libSampleICC.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libSampleICC.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7C49EA760B09114D00ADFFE7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7CF53DC00B0A77C500F6E353 /* libSampleICC.dylib in Frameworks */,
+				7CFB29170B14D9070093D058 /* libSampleICCToolUtils.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7CE0F4550AF04F02002F2A93 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7CE0F49C0AF04FFB002F2A93 /* libSampleICC.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7CE0F45C0AF04F1C002F2A93 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7CE0F4C70AF05041002F2A93 /* libSampleICC.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7CE0F4630AF04F3C002F2A93 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7CE0F4DD0AF0509A002F2A93 /* libSampleICC.dylib in Frameworks */,
+				7CFB29190B14D9490093D058 /* libSampleICCToolUtils.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7CE0F46A0AF04F59002F2A93 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7CE0F4F40AF05189002F2A93 /* libSampleICC.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7CE0F4710AF04F73002F2A93 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7CE0F5090AF052FF002F2A93 /* libSampleICC.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7CE0F4DF0AF050E4002F2A93 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7CE0F4E70AF05133002F2A93 /* libSampleICC.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7CFB290D0B14D8AB0093D058 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C9E18CB0B14E0A5002EF2BB /* libSampleICC.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D289988505E68E00004EDB86 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* SampleICC */ = {
+			isa = PBXGroup;
+			children = (
+				08FB7795FE84155DC02AAC07 /* Source */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = SampleICC;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				7CE0F4120AF04D3F002F2A93 /* IccProfLib */,
+				7CFB29210B14D9920093D058 /* IccToolUtils */,
+				7CE0F4770AF04F9B002F2A93 /* IccApplyNamedCmm */,
+				7CE0F4BC0AF05033002F2A93 /* IccApplyProfiles */,
+				7CE0F4C90AF05090002F2A93 /* iccCreateCLUTInputProfile */,
+				7C49EA7F0B09116A00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */,
+				7CE0F4EC0AF0517D002F2A93 /* IccDumpProfile */,
+				7CE0F4FE0AF052BA002F2A93 /* IccProfLibTest */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2AAC0630554660B00DB518D /* libSampleICC.dylib */,
+				7CE0F4570AF04F02002F2A93 /* iccApplyNamedCmm */,
+				7CE0F45E0AF04F1C002F2A93 /* iccApplyProfiles */,
+				7CE0F4E10AF050E4002F2A93 /* iccFlattenAToBTag */,
+				7CE0F4650AF04F3C002F2A93 /* iccCreateCLUTInputProfile */,
+				7CE0F46C0AF04F59002F2A93 /* iccDumpProfile */,
+				7CE0F4730AF04F73002F2A93 /* iccProfLibTest */,
+				7C49EA780B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */,
+				7CFB290F0B14D8AB0093D058 /* libSampleICCToolUtils.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7C49EA7F0B09116A00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */ = {
+			isa = PBXGroup;
+			children = (
+				7C49EA8F0B09122C00ADFFE7 /* iccCreateTRCMatrixDisplayProfile.cpp */,
+			);
+			name = iccCreateTRCMatrixDisplayProfile;
+			sourceTree = "<group>";
+		};
+		7CE0F4120AF04D3F002F2A93 /* IccProfLib */ = {
+			isa = PBXGroup;
+			children = (
+				7CFB28AF0B13D0230093D058 /* IccMpeACS.cpp */,
+				7CFB28B00B13D0230093D058 /* IccMpeACS.h */,
+				7CFB28B10B13D0230093D058 /* IccMpeBasic.cpp */,
+				7CFB28B20B13D0230093D058 /* IccMpeBasic.h */,
+				7CFB28B30B13D0230093D058 /* IccMpeFactory.cpp */,
+				7CFB28B40B13D0230093D058 /* IccMpeFactory.h */,
+				7CFB28B50B13D0230093D058 /* IccTagMPE.cpp */,
+				7CFB28B60B13D0230093D058 /* IccTagMPE.h */,
+				7CE0F4160AF04D3F002F2A93 /* IccCmm.cpp */,
+				7CE0F4170AF04D3F002F2A93 /* IccCmm.h */,
+				7CE0F4180AF04D3F002F2A93 /* IccDefs.h */,
+				7CE0F4190AF04D3F002F2A93 /* IccIO.cpp */,
+				7CE0F41A0AF04D3F002F2A93 /* IccIO.h */,
+				7CE0F41B0AF04D3F002F2A93 /* IccProfile.cpp */,
+				7CE0F41C0AF04D3F002F2A93 /* IccProfile.h */,
+				7CE0F4210AF04D3F002F2A93 /* IccProfLibConf.h */,
+				7CE0F4220AF04D3F002F2A93 /* IccTag.h */,
+				7CE0F4230AF04D3F002F2A93 /* IccTagBasic.cpp */,
+				7CE0F4240AF04D3F002F2A93 /* IccTagBasic.h */,
+				7CE0F4250AF04D3F002F2A93 /* IccTagFactory.cpp */,
+				7CE0F4260AF04D3F002F2A93 /* IccTagFactory.h */,
+				7CE0F4270AF04D3F002F2A93 /* IccTagLut.cpp */,
+				7CE0F4280AF04D3F002F2A93 /* IccTagLut.h */,
+				7CE0F4290AF04D3F002F2A93 /* IccUtil.cpp */,
+				7CE0F42A0AF04D3F002F2A93 /* IccUtil.h */,
+				7CE0F42B0AF04D3F002F2A93 /* icProfileHeader.h */,
+				7CE0F42F0AF04D3F002F2A93 /* md5.cpp */,
+				7CE0F4300AF04D3F002F2A93 /* md5.h */,
+			);
+			path = IccProfLib;
+			sourceTree = "<group>";
+		};
+		7CE0F4770AF04F9B002F2A93 /* IccApplyNamedCmm */ = {
+			isa = PBXGroup;
+			children = (
+				7CE0F4780AF04F9B002F2A93 /* DataSetFiles */,
+				7CE0F47F0AF04F9B002F2A93 /* iccApplyNamedCmm.cpp */,
+			);
+			name = IccApplyNamedCmm;
+			path = Tools/CmdLine/IccApplyNamedCmm;
+			sourceTree = "<group>";
+		};
+		7CE0F4780AF04F9B002F2A93 /* DataSetFiles */ = {
+			isa = PBXGroup;
+			children = (
+				7CE0F4790AF04F9B002F2A93 /* cmyk16bit.txt */,
+				7CE0F47A0AF04F9B002F2A93 /* cmyk8bit.txt */,
+				7CE0F47B0AF04F9B002F2A93 /* cmykFloat.txt */,
+				7CE0F47C0AF04F9B002F2A93 /* cmykPercent.txt */,
+				7CE0F47D0AF04F9B002F2A93 /* labValue.txt */,
+				7CE0F47E0AF04F9B002F2A93 /* namedColor.txt */,
+			);
+			path = DataSetFiles;
+			sourceTree = "<group>";
+		};
+		7CE0F4BC0AF05033002F2A93 /* IccApplyProfiles */ = {
+			isa = PBXGroup;
+			children = (
+				7CE0F4BD0AF05033002F2A93 /* iccApplyProfiles.cpp */,
+				7CE0F4C30AF05033002F2A93 /* TiffImg.cpp */,
+				7CE0F4C40AF05033002F2A93 /* TiffImg.h */,
+			);
+			name = IccApplyProfiles;
+			path = Tools/CmdLine/IccApplyProfiles;
+			sourceTree = "<group>";
+		};
+		7CE0F4C90AF05090002F2A93 /* iccCreateCLUTInputProfile */ = {
+			isa = PBXGroup;
+			children = (
+				7C6292E80AFFEC19002D7386 /* BlackScaler.h */,
+				7C6291FE0AFEC69C002D7386 /* BlackScaler.cpp */,
+				7CE0F4CE0AF05090002F2A93 /* iccCreateCLUTInputProfile.cpp */,
+				7CE0F4D10AF05090002F2A93 /* iccFlattenAToBTag.cpp */,
+			);
+			name = iccCreateCLUTInputProfile;
+			path = Tools/CmdLine/IccCreateCLUTInputProfile;
+			sourceTree = "<group>";
+		};
+		7CE0F4EC0AF0517D002F2A93 /* IccDumpProfile */ = {
+			isa = PBXGroup;
+			children = (
+				7CE0F4ED0AF0517D002F2A93 /* iccDumpProfile.cpp */,
+			);
+			name = IccDumpProfile;
+			path = Tools/CmdLine/IccDumpProfile;
+			sourceTree = "<group>";
+		};
+		7CE0F4FE0AF052BA002F2A93 /* IccProfLibTest */ = {
+			isa = PBXGroup;
+			children = (
+				7CE0F4FF0AF052BA002F2A93 /* iccProfLibTest.cpp */,
+				7CE0F5000AF052BA002F2A93 /* iccProfLibTest.dsp */,
+				7CE0F5010AF052BA002F2A93 /* iccProfLibTest.vcproj */,
+				7CE0F5020AF052BA002F2A93 /* Makefile.am */,
+				7CE0F5030AF052BA002F2A93 /* Makefile.in */,
+				7CE0F5040AF052BA002F2A93 /* Release */,
+				7CE0F5050AF052BA002F2A93 /* WriteFunctions.cpp */,
+				7CE0F5060AF052BA002F2A93 /* WriteFunctions.h */,
+			);
+			name = IccProfLibTest;
+			path = Tools/CmdLine/IccProfLibTest;
+			sourceTree = "<group>";
+		};
+		7CE0F5040AF052BA002F2A93 /* Release */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Release;
+			sourceTree = "<group>";
+		};
+		7CFB29210B14D9920093D058 /* IccToolUtils */ = {
+			isa = PBXGroup;
+			children = (
+				7C6291110AFEAD9C002D7386 /* CLUTStuffer.h */,
+				7C6291120AFEAD9C002D7386 /* CLUTStuffer.cpp */,
+				7CE0F4CB0AF05090002F2A93 /* CAT.h */,
+				7CE0F4CA0AF05090002F2A93 /* CAT.cpp */,
+				7CE0F4CD0AF05090002F2A93 /* CLUT.h */,
+				7CE0F4CC0AF05090002F2A93 /* CLUT.cpp */,
+				7C732D880B0E3746006A574A /* IccToolException.h */,
+				7C732D890B0E3746006A574A /* IccToolException.cpp */,
+			);
+			name = IccToolUtils;
+			path = IccProfLib;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		7CFB290B0B14D8AB0093D058 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7CFB29220B14D9CA0093D058 /* CLUTStuffer.h in Headers */,
+				7CFB29230B14D9CA0093D058 /* CAT.h in Headers */,
+				7CFB29240B14D9CA0093D058 /* CLUT.h in Headers */,
+				7CFB29250B14D9CA0093D058 /* IccToolException.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D2AAC0600554660B00DB518D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7CE0F4330AF04D3F002F2A93 /* IccCmm.h in Headers */,
+				7CE0F4340AF04D3F002F2A93 /* IccDefs.h in Headers */,
+				7CE0F4360AF04D3F002F2A93 /* IccIO.h in Headers */,
+				7CE0F4380AF04D3F002F2A93 /* IccProfile.h in Headers */,
+				7CE0F4390AF04D3F002F2A93 /* IccProfLibConf.h in Headers */,
+				7CE0F43A0AF04D3F002F2A93 /* IccTag.h in Headers */,
+				7CE0F43C0AF04D3F002F2A93 /* IccTagBasic.h in Headers */,
+				7CE0F43E0AF04D3F002F2A93 /* IccTagFactory.h in Headers */,
+				7CE0F4400AF04D3F002F2A93 /* IccTagLut.h in Headers */,
+				7CE0F4420AF04D3F002F2A93 /* IccUtil.h in Headers */,
+				7CE0F4430AF04D3F002F2A93 /* icProfileHeader.h in Headers */,
+				7CE0F4460AF04D3F002F2A93 /* md5.h in Headers */,
+				7CFB28B80B13D0230093D058 /* IccMpeACS.h in Headers */,
+				7CFB28BA0B13D0230093D058 /* IccMpeBasic.h in Headers */,
+				7CFB28BC0B13D0230093D058 /* IccMpeFactory.h in Headers */,
+				7CFB28BE0B13D0230093D058 /* IccTagMPE.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		7C49EA770B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7C49EA800B09116B00ADFFE7 /* Build configuration list for PBXNativeTarget "iccCreateTRCMatrixDisplayProfile" */;
+			buildPhases = (
+				7C49EA750B09114D00ADFFE7 /* Sources */,
+				7C49EA760B09114D00ADFFE7 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7C49EA7B0B09115400ADFFE7 /* PBXTargetDependency */,
+				7CFB291B0B14D9570093D058 /* PBXTargetDependency */,
+			);
+			name = iccCreateTRCMatrixDisplayProfile;
+			productName = iccCreateTRCMatrixDisplayProfile;
+			productReference = 7C49EA780B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */;
+			productType = "com.apple.product-type.tool";
+		};
+		7CE0F4560AF04F02002F2A93 /* iccApplyNamedCmm */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7CE0F4860AF04F9B002F2A93 /* Build configuration list for PBXNativeTarget "iccApplyNamedCmm" */;
+			buildPhases = (
+				7CE0F4540AF04F02002F2A93 /* Sources */,
+				7CE0F4550AF04F02002F2A93 /* Frameworks */,
+				7CE0F4BB0AF05017002F2A93 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7CE0F45A0AF04F08002F2A93 /* PBXTargetDependency */,
+			);
+			name = iccApplyNamedCmm;
+			productName = iccApplyNamedCmm;
+			productReference = 7CE0F4570AF04F02002F2A93 /* iccApplyNamedCmm */;
+			productType = "com.apple.product-type.tool";
+		};
+		7CE0F45D0AF04F1C002F2A93 /* iccApplyProfiles */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7CE0F4890AF04F9B002F2A93 /* Build configuration list for PBXNativeTarget "iccApplyProfiles" */;
+			buildPhases = (
+				7CE0F45B0AF04F1C002F2A93 /* Sources */,
+				7CE0F45C0AF04F1C002F2A93 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7CE0F4610AF04F22002F2A93 /* PBXTargetDependency */,
+			);
+			name = iccApplyProfiles;
+			productName = iccApplyProfiles;
+			productReference = 7CE0F45E0AF04F1C002F2A93 /* iccApplyProfiles */;
+			productType = "com.apple.product-type.tool";
+		};
+		7CE0F4640AF04F3C002F2A93 /* iccCreateCLUTInputProfile */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7CE0F48C0AF04F9B002F2A93 /* Build configuration list for PBXNativeTarget "iccCreateCLUTInputProfile" */;
+			buildPhases = (
+				7CE0F4620AF04F3C002F2A93 /* Sources */,
+				7CE0F4630AF04F3C002F2A93 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7CE0F4680AF04F46002F2A93 /* PBXTargetDependency */,
+				7CFB291D0B14D9660093D058 /* PBXTargetDependency */,
+				7CE0F4E60AF0510F002F2A93 /* PBXTargetDependency */,
+			);
+			name = iccCreateCLUTInputProfile;
+			productName = iccCreateCLUTInputProfile;
+			productReference = 7CE0F4650AF04F3C002F2A93 /* iccCreateCLUTInputProfile */;
+			productType = "com.apple.product-type.tool";
+		};
+		7CE0F46B0AF04F59002F2A93 /* iccDumpProfile */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7CE0F48F0AF04F9B002F2A93 /* Build configuration list for PBXNativeTarget "iccDumpProfile" */;
+			buildPhases = (
+				7CE0F4690AF04F59002F2A93 /* Sources */,
+				7CE0F46A0AF04F59002F2A93 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7CE0F46F0AF04F5F002F2A93 /* PBXTargetDependency */,
+			);
+			name = iccDumpProfile;
+			productName = iccDumpProfile;
+			productReference = 7CE0F46C0AF04F59002F2A93 /* iccDumpProfile */;
+			productType = "com.apple.product-type.tool";
+		};
+		7CE0F4720AF04F73002F2A93 /* iccProfLibTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7CE0F4920AF04F9B002F2A93 /* Build configuration list for PBXNativeTarget "iccProfLibTest" */;
+			buildPhases = (
+				7CE0F4700AF04F73002F2A93 /* Sources */,
+				7CE0F4710AF04F73002F2A93 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7CE0F4760AF04F79002F2A93 /* PBXTargetDependency */,
+			);
+			name = iccProfLibTest;
+			productName = iccProfLibTest;
+			productReference = 7CE0F4730AF04F73002F2A93 /* iccProfLibTest */;
+			productType = "com.apple.product-type.tool";
+		};
+		7CE0F4E00AF050E4002F2A93 /* iccFlattenAToBTag */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7CE0F4E90AF05161002F2A93 /* Build configuration list for PBXNativeTarget "iccFlattenAToBTag" */;
+			buildPhases = (
+				7CE0F4DE0AF050E4002F2A93 /* Sources */,
+				7CE0F4DF0AF050E4002F2A93 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7CE0F4E40AF050EA002F2A93 /* PBXTargetDependency */,
+			);
+			name = iccFlattenAToBTag;
+			productName = iccFlattenAToBTag;
+			productReference = 7CE0F4E10AF050E4002F2A93 /* iccFlattenAToBTag */;
+			productType = "com.apple.product-type.tool";
+		};
+		7CFB290E0B14D8AB0093D058 /* SampleICCToolUtils */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7CFB291E0B14D9880093D058 /* Build configuration list for PBXNativeTarget "SampleICCToolUtils" */;
+			buildPhases = (
+				7CFB290B0B14D8AB0093D058 /* Headers */,
+				7CFB290C0B14D8AB0093D058 /* Sources */,
+				7CFB290D0B14D8AB0093D058 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7CFB29110B14D8B30093D058 /* PBXTargetDependency */,
+			);
+			name = SampleICCToolUtils;
+			productName = SampleICCToolUtils;
+			productReference = 7CFB290F0B14D8AB0093D058 /* libSampleICCToolUtils.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		D2AAC0620554660B00DB518D /* SampleICC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB914A08733D8E0010E9CD /* Build configuration list for PBXNativeTarget "SampleICC" */;
+			buildPhases = (
+				D2AAC0600554660B00DB518D /* Headers */,
+				D2AAC0610554660B00DB518D /* Sources */,
+				D289988505E68E00004EDB86 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SampleICC;
+			productName = SampleICC;
+			productReference = D2AAC0630554660B00DB518D /* libSampleICC.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB914E08733D8E0010E9CD /* Build configuration list for PBXProject "SampleICC" */;
+			compatibilityVersion = "Xcode 2.4";
+			hasScannedForEncodings = 1;
+			mainGroup = 08FB7794FE84155DC02AAC07 /* SampleICC */;
+			projectDirPath = "";
+			projectRoot = "";
+			shouldCheckCompatibility = 1;
+			targets = (
+				D2AAC0620554660B00DB518D /* SampleICC */,
+				7CFB290E0B14D8AB0093D058 /* SampleICCToolUtils */,
+				7CE0F50A0AF05322002F2A93 /* Libraries */,
+				7CE0F4560AF04F02002F2A93 /* iccApplyNamedCmm */,
+				7CE0F45D0AF04F1C002F2A93 /* iccApplyProfiles */,
+				7CE0F4E00AF050E4002F2A93 /* iccFlattenAToBTag */,
+				7CE0F4640AF04F3C002F2A93 /* iccCreateCLUTInputProfile */,
+				7C49EA770B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */,
+				7CE0F46B0AF04F59002F2A93 /* iccDumpProfile */,
+				7CE0F4720AF04F73002F2A93 /* iccProfLibTest */,
+				7CE0F50D0AF05334002F2A93 /* Commands */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7C49EA750B09114D00ADFFE7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C49EA900B09122C00ADFFE7 /* iccCreateTRCMatrixDisplayProfile.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7CE0F4540AF04F02002F2A93 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7CE0F4850AF04F9B002F2A93 /* iccApplyNamedCmm.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7CE0F45B0AF04F1C002F2A93 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7CE0F4C50AF05033002F2A93 /* iccApplyProfiles.cpp in Sources */,
+				7CE0F4C60AF05033002F2A93 /* TiffImg.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7CE0F4620AF04F3C002F2A93 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C6291FF0AFEC69C002D7386 /* BlackScaler.cpp in Sources */,
+				7CE0F4DA0AF05090002F2A93 /* iccCreateCLUTInputProfile.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7CE0F4690AF04F59002F2A93 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7CE0F4F30AF0517D002F2A93 /* iccDumpProfile.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7CE0F4700AF04F73002F2A93 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7CE0F5070AF052BA002F2A93 /* iccProfLibTest.cpp in Sources */,
+				7CE0F5080AF052BA002F2A93 /* WriteFunctions.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7CE0F4DE0AF050E4002F2A93 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7CE0F4E80AF05143002F2A93 /* iccFlattenAToBTag.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7CFB290C0B14D8AB0093D058 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7CFB29140B14D8E20093D058 /* CAT.cpp in Sources */,
+				7CFB29150B14D8E20093D058 /* CLUT.cpp in Sources */,
+				7CFB29160B14D8E20093D058 /* CLUTStuffer.cpp in Sources */,
+				7CFB29180B14D91D0093D058 /* IccToolException.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D2AAC0610554660B00DB518D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7CE0F4320AF04D3F002F2A93 /* IccCmm.cpp in Sources */,
+				7CE0F4350AF04D3F002F2A93 /* IccIO.cpp in Sources */,
+				7CE0F4370AF04D3F002F2A93 /* IccProfile.cpp in Sources */,
+				7CE0F43B0AF04D3F002F2A93 /* IccTagBasic.cpp in Sources */,
+				7CE0F43D0AF04D3F002F2A93 /* IccTagFactory.cpp in Sources */,
+				7CE0F43F0AF04D3F002F2A93 /* IccTagLut.cpp in Sources */,
+				7CE0F4410AF04D3F002F2A93 /* IccUtil.cpp in Sources */,
+				7CE0F4450AF04D3F002F2A93 /* md5.cpp in Sources */,
+				7CFB28B70B13D0230093D058 /* IccMpeACS.cpp in Sources */,
+				7CFB28B90B13D0230093D058 /* IccMpeBasic.cpp in Sources */,
+				7CFB28BB0B13D0230093D058 /* IccMpeFactory.cpp in Sources */,
+				7CFB28BD0B13D0230093D058 /* IccTagMPE.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7C49EA7B0B09115400ADFFE7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D2AAC0620554660B00DB518D /* SampleICC */;
+			targetProxy = 7C49EA7A0B09115400ADFFE7 /* PBXContainerItemProxy */;
+		};
+		7CE0F45A0AF04F08002F2A93 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D2AAC0620554660B00DB518D /* SampleICC */;
+			targetProxy = 7CE0F4590AF04F08002F2A93 /* PBXContainerItemProxy */;
+		};
+		7CE0F4610AF04F22002F2A93 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D2AAC0620554660B00DB518D /* SampleICC */;
+			targetProxy = 7CE0F4600AF04F22002F2A93 /* PBXContainerItemProxy */;
+		};
+		7CE0F4680AF04F46002F2A93 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D2AAC0620554660B00DB518D /* SampleICC */;
+			targetProxy = 7CE0F4670AF04F46002F2A93 /* PBXContainerItemProxy */;
+		};
+		7CE0F46F0AF04F5F002F2A93 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D2AAC0620554660B00DB518D /* SampleICC */;
+			targetProxy = 7CE0F46E0AF04F5F002F2A93 /* PBXContainerItemProxy */;
+		};
+		7CE0F4760AF04F79002F2A93 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D2AAC0620554660B00DB518D /* SampleICC */;
+			targetProxy = 7CE0F4750AF04F79002F2A93 /* PBXContainerItemProxy */;
+		};
+		7CE0F4E40AF050EA002F2A93 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D2AAC0620554660B00DB518D /* SampleICC */;
+			targetProxy = 7CE0F4E30AF050EA002F2A93 /* PBXContainerItemProxy */;
+		};
+		7CE0F4E60AF0510F002F2A93 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7CE0F4E00AF050E4002F2A93 /* iccFlattenAToBTag */;
+			targetProxy = 7CE0F4E50AF0510F002F2A93 /* PBXContainerItemProxy */;
+		};
+		7CE0F50C0AF05327002F2A93 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D2AAC0620554660B00DB518D /* SampleICC */;
+			targetProxy = 7CE0F50B0AF05327002F2A93 /* PBXContainerItemProxy */;
+		};
+		7CE0F50F0AF0533D002F2A93 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7CE0F4560AF04F02002F2A93 /* iccApplyNamedCmm */;
+			targetProxy = 7CE0F50E0AF0533D002F2A93 /* PBXContainerItemProxy */;
+		};
+		7CE0F5110AF0533D002F2A93 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7CE0F4E00AF050E4002F2A93 /* iccFlattenAToBTag */;
+			targetProxy = 7CE0F5100AF0533D002F2A93 /* PBXContainerItemProxy */;
+		};
+		7CE0F5130AF0533D002F2A93 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7CE0F4640AF04F3C002F2A93 /* iccCreateCLUTInputProfile */;
+			targetProxy = 7CE0F5120AF0533D002F2A93 /* PBXContainerItemProxy */;
+		};
+		7CE0F5150AF0533D002F2A93 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7CE0F46B0AF04F59002F2A93 /* iccDumpProfile */;
+			targetProxy = 7CE0F5140AF0533D002F2A93 /* PBXContainerItemProxy */;
+		};
+		7CE0F5170AF0533D002F2A93 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7CE0F4720AF04F73002F2A93 /* iccProfLibTest */;
+			targetProxy = 7CE0F5160AF0533D002F2A93 /* PBXContainerItemProxy */;
+		};
+		7CFB29110B14D8B30093D058 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D2AAC0620554660B00DB518D /* SampleICC */;
+			targetProxy = 7CFB29100B14D8B30093D058 /* PBXContainerItemProxy */;
+		};
+		7CFB29130B14D8C00093D058 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7CFB290E0B14D8AB0093D058 /* SampleICCToolUtils */;
+			targetProxy = 7CFB29120B14D8C00093D058 /* PBXContainerItemProxy */;
+		};
+		7CFB291B0B14D9570093D058 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7CFB290E0B14D8AB0093D058 /* SampleICCToolUtils */;
+			targetProxy = 7CFB291A0B14D9570093D058 /* PBXContainerItemProxy */;
+		};
+		7CFB291D0B14D9660093D058 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7CFB290E0B14D8AB0093D058 /* SampleICCToolUtils */;
+			targetProxy = 7CFB291C0B14D9660093D058 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB914B08733D8E0010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				EXECUTABLE_PREFIX = lib;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = SampleICC;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		1DEB914C08733D8E0010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_PREFIX = lib;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = SampleICC;
+			};
+			name = Release;
+		};
+		1DEB914F08733D8E0010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_DEBUGGING_SYMBOLS = full;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+			};
+			name = Debug;
+		};
+		1DEB915008733D8E0010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+			};
+			name = Release;
+		};
+		7C49EA810B09116B00ADFFE7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = iccCreateTRCMatrixDisplayProfile;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		7C49EA820B09116B00ADFFE7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = iccCreateTRCMatrixDisplayProfile;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7CE0F4870AF04F9B002F2A93 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = iccApplyNamedCmm;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		7CE0F4880AF04F9B002F2A93 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = iccApplyNamedCmm;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7CE0F48A0AF04F9B002F2A93 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = iccApplyProfiles;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		7CE0F48B0AF04F9B002F2A93 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = iccApplyProfiles;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7CE0F48D0AF04F9B002F2A93 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = iccCreateCLUTInputProfile;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		7CE0F48E0AF04F9B002F2A93 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = iccCreateCLUTInputProfile;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7CE0F4900AF04F9B002F2A93 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = iccDumpProfile;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		7CE0F4910AF04F9B002F2A93 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = iccDumpProfile;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7CE0F4930AF04F9B002F2A93 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = iccProfLibTest;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		7CE0F4940AF04F9B002F2A93 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = iccProfLibTest;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7CE0F4EA0AF05161002F2A93 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = iccFlattenAToBTag;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		7CE0F4EB0AF05161002F2A93 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = iccFlattenAToBTag;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7CE0F51A0AF05373002F2A93 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = Libraries;
+			};
+			name = Debug;
+		};
+		7CE0F51B0AF05373002F2A93 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				PRODUCT_NAME = Libraries;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7CE0F51D0AF05373002F2A93 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = Commands;
+			};
+			name = Debug;
+		};
+		7CE0F51E0AF05373002F2A93 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				PRODUCT_NAME = Commands;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7CFB291F0B14D9880093D058 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				EXECUTABLE_PREFIX = lib;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = SampleICCToolUtils;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		7CFB29200B14D9880093D058 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = SampleICCToolUtils;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB914A08733D8E0010E9CD /* Build configuration list for PBXNativeTarget "SampleICC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB914B08733D8E0010E9CD /* Debug */,
+				1DEB914C08733D8E0010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB914E08733D8E0010E9CD /* Build configuration list for PBXProject "SampleICC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB914F08733D8E0010E9CD /* Debug */,
+				1DEB915008733D8E0010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7C49EA800B09116B00ADFFE7 /* Build configuration list for PBXNativeTarget "iccCreateTRCMatrixDisplayProfile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7C49EA810B09116B00ADFFE7 /* Debug */,
+				7C49EA820B09116B00ADFFE7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7CE0F4860AF04F9B002F2A93 /* Build configuration list for PBXNativeTarget "iccApplyNamedCmm" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7CE0F4870AF04F9B002F2A93 /* Debug */,
+				7CE0F4880AF04F9B002F2A93 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7CE0F4890AF04F9B002F2A93 /* Build configuration list for PBXNativeTarget "iccApplyProfiles" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7CE0F48A0AF04F9B002F2A93 /* Debug */,
+				7CE0F48B0AF04F9B002F2A93 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7CE0F48C0AF04F9B002F2A93 /* Build configuration list for PBXNativeTarget "iccCreateCLUTInputProfile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7CE0F48D0AF04F9B002F2A93 /* Debug */,
+				7CE0F48E0AF04F9B002F2A93 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7CE0F48F0AF04F9B002F2A93 /* Build configuration list for PBXNativeTarget "iccDumpProfile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7CE0F4900AF04F9B002F2A93 /* Debug */,
+				7CE0F4910AF04F9B002F2A93 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7CE0F4920AF04F9B002F2A93 /* Build configuration list for PBXNativeTarget "iccProfLibTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7CE0F4930AF04F9B002F2A93 /* Debug */,
+				7CE0F4940AF04F9B002F2A93 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7CE0F4E90AF05161002F2A93 /* Build configuration list for PBXNativeTarget "iccFlattenAToBTag" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7CE0F4EA0AF05161002F2A93 /* Debug */,
+				7CE0F4EB0AF05161002F2A93 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7CE0F5190AF05373002F2A93 /* Build configuration list for PBXAggregateTarget "Libraries" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7CE0F51A0AF05373002F2A93 /* Debug */,
+				7CE0F51B0AF05373002F2A93 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7CE0F51C0AF05373002F2A93 /* Build configuration list for PBXAggregateTarget "Commands" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7CE0F51D0AF05373002F2A93 /* Debug */,
+				7CE0F51E0AF05373002F2A93 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7CFB291E0B14D9880093D058 /* Build configuration list for PBXNativeTarget "SampleICCToolUtils" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7CFB291F0B14D9880093D058 /* Debug */,
+				7CFB29200B14D9880093D058 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}

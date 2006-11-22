@@ -89,9 +89,9 @@ using std::string;
 #include <iostream>
 using std::ostream;
 using std::cout;
-using std::cerr;
-using std::clog;
 using std::endl;
+using std::clog;
+using std::cerr;
 
 #include <fstream>
 using std::ofstream;
@@ -125,7 +125,7 @@ main(const int argc, const char* argv[])
 {
   if (argc != 4)
   {  
-    cerr << "iccFlattenAToBTag: usage is"
+    cout << "iccFlattenAToBTag: usage is"
    << " iccFlattenAToBTag src_profile granularity results_file"
    << endl;
     return EXIT_FAILURE;
