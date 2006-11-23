@@ -311,6 +311,9 @@
 				RelativePath="IccTag.h">
 			</File>
 			<File
+				RelativePath=".\IccTagFactory.h">
+			</File>
+			<File
 				RelativePath=".\IccTagMpe.h">
 			</File>
 			<File

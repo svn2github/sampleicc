@@ -124,7 +124,7 @@ CLUT::loadInputShaperLUTs(CIccTagCurve** inputShaperLUTs,
 		greenVals.push_back(greenVal);
 		blueVals.push_back(blueVal);
 	}
-	unsigned int numEntries = redVals.size();
+	unsigned int numEntries = (unsigned int)redVals.size();
 	// now make the LUT objects of the appropriate length and stuff them.	
 	CIccTagCurve*   redCurve = inputShaperLUTs[0];
 	CIccTagCurve* greenCurve = inputShaperLUTs[1];
@@ -134,9 +134,9 @@ CLUT::loadInputShaperLUTs(CIccTagCurve** inputShaperLUTs,
 	 blueCurve->SetSize(numEntries, icInitIdentity);
 	for (unsigned int j = 0, N = numEntries; j < N; ++j)
 	{
-		(  *redCurve)[j] =   redVals[j] / maxChannelValue;
-		(*greenCurve)[j] = greenVals[j] / maxChannelValue;
-		( *blueCurve)[j] =  blueVals[j] / maxChannelValue;
+		(  *redCurve)[j] = (icFloatNumber)(  redVals[j] / maxChannelValue);
+		(*greenCurve)[j] = (icFloatNumber)(greenVals[j] / maxChannelValue);
+		( *blueCurve)[j] = (icFloatNumber)( blueVals[j] / maxChannelValue);
 	}
 }
 

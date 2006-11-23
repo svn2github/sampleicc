@@ -250,17 +250,17 @@ main(int argc, char* argv[])
 		profile.AttachTag(icSigBlueMatrixColumnTag, blueMatrixColumnTag);
 		
 		CIccTagCurve* redTRCTag = new CIccTagCurve(N);
-		for (unsigned int i = 0; i < N; ++i)
+		for (int i = 0; i < N; ++i)
 			(*redTRCTag)[i] = redTRC[i];
 		profile.AttachTag(icSigRedTRCTag, redTRCTag);
 		
 		CIccTagCurve* greenTRCTag = new CIccTagCurve(N);
-		for (unsigned int i = 0; i < N; ++i)
+		for (int i = 0; i < N; ++i)
 			(*greenTRCTag)[i] = greenTRC[i];
 		profile.AttachTag(icSigGreenTRCTag, greenTRCTag);
 		
 		CIccTagCurve* blueTRCTag = new CIccTagCurve(N);
-		for (unsigned int i = 0; i < N; ++i)
+		for (int i = 0; i < N; ++i)
 			(*blueTRCTag)[i] = blueTRC[i];
 		profile.AttachTag(icSigBlueTRCTag, blueTRCTag);
 		

@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="iccCreateCLUTInputProfile"
-	ProjectGUID="{16326F94-522C-4C2A-9FCE-56828AF23C8B}"
+	Name="iccCreateTRCMatrixDisplayProfile"
+	ProjectGUID="{45AFC99C-232B-45F6-B0D8-6697D4306366}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -29,7 +29,7 @@
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\Release/IccCreateCLUTInputProfile.pch"
+				PrecompiledHeaderFile=".\Release/IccCreateTRCMatrixDisplayProfile.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -40,15 +40,15 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\Release/IccCreateCLUTInputProfile.exe"
+				OutputFile=".\Release/IccCreateTRCMatrixDisplayProfile.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\Release/IccCreateCLUTInputProfile.pdb"
+				ProgramDatabaseFile=".\Release/IccCreateTRCMatrixDisplayProfile.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Release/IccCreateCLUTInputProfile.tlb"
+				TypeLibraryName=".\Release/IccCreateTRCMatrixDisplayProfile.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -87,7 +87,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\Debug/IccCreateCLUTInputProfile.pch"
+				PrecompiledHeaderFile=".\Debug/IccCreateTRCMatrixDisplayProfile.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
@@ -99,16 +99,16 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\Debug/IccCreateCLUTInputProfile.exe"
+				OutputFile=".\Debug/IccCreateTRCMatrixDisplayProfile.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\Debug/IccCreateCLUTInputProfile.pdb"
+				ProgramDatabaseFile=".\Debug/IccCreateTRCMatrixDisplayProfile.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Debug/IccCreateCLUTInputProfile.tlb"
+				TypeLibraryName=".\Debug/IccCreateTRCMatrixDisplayProfile.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -139,61 +139,12 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
-				RelativePath=".\BlackScaler.cpp">
-			</File>
-			<File
-				RelativePath="winGetOpt\getopt.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="iccCreateCLUTInputProfile.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
+				RelativePath=".\iccCreateTRCMatrixDisplayProfile.cpp">
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
-			<File
-				RelativePath=".\BlackScaler.h">
-			</File>
-			<File
-				RelativePath="winGetOpt\getopt.h">
-			</File>
-			<File
-				RelativePath="Util.h">
-			</File>
 		</Filter>
 		<Filter
 			Name="Library Files"

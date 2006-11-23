@@ -95,9 +95,9 @@ BlackScaler::BlackScaler(const unsigned int edgeN,
 		m_A2B1WhiteXYZ[i] = adaptedMediaWhite[i];
 	}
 		
-	m_A2B0WhiteXYZ[0] = 0.9642;
-	m_A2B0WhiteXYZ[1] = 1.0;
-	m_A2B0WhiteXYZ[2] = 0.8249;
+	m_A2B0WhiteXYZ[0] = (icFloatNumber)0.9642;
+	m_A2B0WhiteXYZ[1] = (icFloatNumber)1.0;
+	m_A2B0WhiteXYZ[2] = (icFloatNumber)0.8249;
 //	cout << "m_A2B0BlackXYZ" << endl
 //		<< m_A2B0BlackXYZ[0] << " "
 //		<< m_A2B0BlackXYZ[1] << " " 
@@ -107,7 +107,9 @@ BlackScaler::BlackScaler(const unsigned int edgeN,
 	// Table 12 of section 6.3.4.3 of the ISO spec does not map perfectly to
 	// the PCS black encoding of 0x0808 0x8080 0x8080, so we back into it.
 	icFloatNumber A2B0BlackLab[3]
-		= { 0x0808/65535.0, 0x8080/65535.0, 0x8080/65535.0 };
+		= { (icFloatNumber)(0x0808/65535.0),
+        (icFloatNumber)(0x8080/65535.0),
+        (icFloatNumber)(0x8080/65535.0) };
 	icLabFromPcs(A2B0BlackLab);
 	icLabtoXYZ(m_A2B0BlackXYZ, A2B0BlackLab, m_A2B0WhiteXYZ);
 //	cout << "m_A2B1BlackXYZ" << endl
