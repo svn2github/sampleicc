@@ -230,7 +230,9 @@
  *
  * <b>TODO List</b>
  *
- * - Cross platform builds and testing needs to be done. 
+ * - Create OS specific loadable library CMM wrappers to IccProfLib CMM objects.
+ * - Naming Convention Cleanup of conversion functions in IccUtil.
+ * - Restructure profile validation to use Tag Factory mechanism.
  *
  * <b>The ICC Software License, Version 0.1</b>
  *
