@@ -174,7 +174,7 @@ CLUT::makeAToBxTag(const unsigned int edgeN,
 	if (inputShaperGamma == 1.0)
 	{
 		if (inputShaperFilename == "")
-			for (unsigned int i = 0; i < 3; ++i)
+			for (i = 0; i < 3; ++i)
 			{
 				CIccTagCurve* pCurve = new CIccTagCurve(0);
 				pCurve->SetSize(2, icInitIdentity);
@@ -183,13 +183,13 @@ CLUT::makeAToBxTag(const unsigned int edgeN,
 		else
 		{
 			CIccTagCurve* inputShaperLUTs[3];
-			for (unsigned int i = 0; i < 3; ++i)
+			for (i = 0; i < 3; ++i)
 			{
 				inputShaperLUTs[i] = new CIccTagCurve(0);
 				inputShaperLUTs[i]->SetSize(2, icInitIdentity);
 			}
 			loadInputShaperLUTs(inputShaperLUTs, inputShaperFilename);
-			for (unsigned int i = 0; i < 3; ++i)
+			for (i = 0; i < 3; ++i)
 				oLUT[i] = inputShaperLUTs[i];
 		}
 	}

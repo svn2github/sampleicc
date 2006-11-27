@@ -128,7 +128,7 @@ createProfile(const string& inFilename,
 							const string& inputShaperFilename,
               const icFloatNumber* mediaWhite)
 {                   
-       unsigned int i;
+  unsigned int i;
 
   ifstream iFS(inFilename.c_str());
   unsigned int numData = 3 * size * size * size;
@@ -174,7 +174,7 @@ createProfile(const string& inFilename,
 	// some prep work for remaining tags
 	icFloatNumber measuredBlack[3];
 	icFloatNumber measuredWhite[3];
-	for (unsigned int i = 0; i < 3; ++i)
+	for (i = 0; i < 3; ++i)
 	{
 		measuredBlack[i] = measuredXYZ[                       0 * 3 + i];
 		measuredWhite[i] = measuredXYZ[(size * size * size - 1) * 3 + i];
@@ -450,7 +450,7 @@ main(int argc, char * const argv[])
 	sawExplicitIlluminant = true;
 	break;
 			case 'g':
-	inputShaperGamma = strtod(optarg, NULL);
+	inputShaperGamma = (icFloatNumber)strtod(optarg, NULL);
 	sawInputShaperGamma = true;
 	break;
 			case 'n':

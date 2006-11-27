@@ -146,7 +146,8 @@ main(int argc, char* argv[])
 		icFloatNumber*   redTRC = new icFloatNumber[N];
 		icFloatNumber* greenTRC = new icFloatNumber[N];
 		icFloatNumber*  blueTRC = new icFloatNumber[N];
-		for (int i = 0; i < N; ++i)
+		int i;
+		for (i = 0; i < N; ++i)
 			in >> redTRC[i] >> greenTRC[i] >> blueTRC[i];
 		
 		CIccProfile profile;
@@ -192,7 +193,7 @@ main(int argc, char* argv[])
 		// as the illuminant.
 		icFloatNumber illuminantY = measuredWhite[1];
 		icFloatNumber normalizedIlluminant[3];
-		for (unsigned int i = 0; i < 3; ++i)
+		for (i = 0; i < 3; ++i)
 			normalizedIlluminant[i] = measuredWhite[i] / illuminantY;
 		CAT* CATToD50 = new CAT(icD50XYZ, normalizedIlluminant);
 		
@@ -250,17 +251,17 @@ main(int argc, char* argv[])
 		profile.AttachTag(icSigBlueMatrixColumnTag, blueMatrixColumnTag);
 		
 		CIccTagCurve* redTRCTag = new CIccTagCurve(N);
-		for (int i = 0; i < N; ++i)
+		for (i = 0; i < N; ++i)
 			(*redTRCTag)[i] = redTRC[i];
 		profile.AttachTag(icSigRedTRCTag, redTRCTag);
 		
 		CIccTagCurve* greenTRCTag = new CIccTagCurve(N);
-		for (int i = 0; i < N; ++i)
+		for (i = 0; i < N; ++i)
 			(*greenTRCTag)[i] = greenTRC[i];
 		profile.AttachTag(icSigGreenTRCTag, greenTRCTag);
 		
 		CIccTagCurve* blueTRCTag = new CIccTagCurve(N);
-		for (int i = 0; i < N; ++i)
+		for (i = 0; i < N; ++i)
 			(*blueTRCTag)[i] = blueTRC[i];
 		profile.AttachTag(icSigBlueTRCTag, blueTRCTag);
 		
