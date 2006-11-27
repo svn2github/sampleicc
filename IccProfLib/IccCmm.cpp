@@ -549,26 +549,27 @@ CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput, icRenderingInte
           pTag = pProfile->FindTag(icSigBToA0Tag);
         }
 
-        if (!pTag) {
-          if (pProfile->m_Header.colorSpace == icSigRgbData) {
-            rv = new CIccXformMatrixTRC();
-          }
-          else
-            return NULL;
-        }
-        if (pTag->GetType()==icSigMultiProcessElementType) {
-          rv = new CIccXformMpe(pTag);
-        }
-        else {
-          switch(pProfile->m_Header.pcs) {
-    case icSigXYZData:
-    case icSigLabData:
-      rv = new CIccXform3DLut(pTag);
+				if (!pTag) {
+					if (pProfile->m_Header.colorSpace == icSigRgbData) {
+						rv = new CIccXformMatrixTRC();
+					}
+					else
+						return NULL;
+				}
+				else if (pTag->GetType()==icSigMultiProcessElementType) {
+					rv = new CIccXformMpe(pTag);
+				}
+				else {
+					switch(pProfile->m_Header.pcs) {
+						case icSigXYZData:
+						case icSigLabData:
+							rv = new CIccXform3DLut(pTag);
+							break;
 
-    default:
-      break;
-          }
-        }
+					default:
+						break;
+					}
+				}
       }
       break;
 
@@ -1022,7 +1023,7 @@ icStatusCMM CIccXformMatrixTRC::Begin()
   m_e[5] = icFtoD((*pXYZ)[0].Y);
   m_e[8] = icFtoD((*pXYZ)[0].Z);
 
-  m_ApplyCurvePtr[0] = m_ApplyCurvePtr[1] = m_ApplyCurvePtr[2] = NULL;
+  m_ApplyCurvePtr = NULL;
 
   if (m_bInput) {
     m_Curve[0] = GetCurve(icSigRedTRCTag);
