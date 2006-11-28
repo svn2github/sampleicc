@@ -136,7 +136,7 @@ public:
 
   virtual ~CIccMultiProcessElement() {}
   
-  static CIccMultiProcessElement* CIccMultiProcessElement::Create(icElemTypeSignature sig);
+  static CIccMultiProcessElement* Create(icElemTypeSignature sig);
 
   virtual CIccMultiProcessElement *NewCopy() const = 0;
 
