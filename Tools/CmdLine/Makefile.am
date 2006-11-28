@@ -9,3 +9,13 @@ SUBDIRS = IccApplyNamedCmm \
 	IccToolUtilsLib \
 	IccCreateCLUTInputProfile \
 	IccCreateTRCMatrixDisplayProfile
+
+DIST_SUBDIRS = IccApplyNamedCmm \
+	IccDumpProfile \
+	IccProfLibTest \
+	IccStripUnknownTags \
+	IccV4ToMPE \
+	IccApplyProfiles \
+	IccToolUtilsLib \
+	IccCreateCLUTInputProfile \
+	IccCreateTRCMatrixDisplayProfile
