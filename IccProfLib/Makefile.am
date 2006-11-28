@@ -13,7 +13,7 @@ libSampleICCincludedir = $(includedir)/SampleICC
 
 libSampleICCinclude_HEADERS = IccCmm.h IccDefs.h IccIO.h \
 	IccProfLibConf.h IccProfile.h \
-	IccMpeACS.cpp IccMpeBasic.cpp IccMpeFactory.cpp IccTagMPE.cpp \
+	IccMpeACS.h IccMpeBasic.h IccMpeFactory.h IccTagMPE.h \
 	IccTag.h IccTagBasic.h IccTagFactory.h IccTagLut.h \
 	IccUtil.h MainPage.h \
 	icProfileHeader.h \
