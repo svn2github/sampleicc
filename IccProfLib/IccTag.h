@@ -94,6 +94,6 @@
 
 #include "IccTagBasic.h"
 #include "IccTagLut.h"
-#include "IccTagMpe.h"
+#include "IccTagMPE.h"
 
 #endif //_ICCTAG_H

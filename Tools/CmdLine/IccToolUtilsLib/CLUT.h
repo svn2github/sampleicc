@@ -83,7 +83,6 @@
 #include <list>
 #include <string>
 #include <math.h>
-using namespace std;
 
 #include "IccProfLibConf.h"
 #include "IccDefs.h"
@@ -102,17 +101,17 @@ class CLUT
  
 	void
 	loadInputShaperLUTs(CIccTagCurve** inputShaperLUTs,
-		const string& inputShaperFilename) const;
+			    const std::string& inputShaperFilename) const;
 	
 	CIccTagLut16*
   makeAToBxTag(const unsigned int edgeN,
                const icFloatNumber* const rawXYZ,
                const icFloatNumber* const flare,
                const icFloatNumber* const illuminant,
-							 const CAT* const CATToPCS,
-							 const icFloatNumber inputShaperGamma,
-							 const string& inputShaperFilename,
-							 const icFloatNumber* const mediaWhite);
+	       const CAT* const CATToPCS,
+	       const icFloatNumber inputShaperGamma,
+	       const std::string& inputShaperFilename,
+	       const icFloatNumber* const mediaWhite);
 	
 	static
 	void

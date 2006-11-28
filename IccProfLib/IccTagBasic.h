@@ -79,6 +79,8 @@
 #if !defined(_ICCTAGBASIC_H)
 #define _ICCTAGBASIC_H
 
+#include <list>
+
 #ifdef USESAMPLEICCNAMESPACE
 namespace sampleICC {
 #endif

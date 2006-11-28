@@ -80,7 +80,7 @@ Copyright:  © see ICC Software License
 #ifndef _ICCMPEACS_H
 #define _ICCMPEACS_H
 
-#include "IccTagMpe.h"
+#include "IccTagMPE.h"
 
 
 //CIccFloatTag support

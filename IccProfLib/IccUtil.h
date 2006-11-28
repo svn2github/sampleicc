@@ -221,7 +221,7 @@ inline void icSwab64Ptr(void *pVoid)
 
   tmp = ptr[0]; ptr[0] = ptr[7]; ptr[7] = tmp;
   tmp = ptr[1]; ptr[1] = ptr[6]; ptr[6] = tmp;
-  tmp = ptr[2]; ptr[2] = ptr[5]; ptr[4] = tmp;
+  tmp = ptr[2]; ptr[2] = ptr[5]; ptr[5] = tmp;
   tmp = ptr[3]; ptr[3] = ptr[4]; ptr[4] = tmp;
 }
 
@@ -233,7 +233,7 @@ inline void icSwab64Array(void *pVoid, int num)
   while (num>0) {
     tmp = ptr[0]; ptr[0] = ptr[7]; ptr[7] = tmp;
     tmp = ptr[1]; ptr[1] = ptr[6]; ptr[6] = tmp;
-    tmp = ptr[2]; ptr[2] = ptr[5]; ptr[4] = tmp;
+    tmp = ptr[2]; ptr[2] = ptr[5]; ptr[5] = tmp;
     tmp = ptr[3]; ptr[3] = ptr[4]; ptr[4] = tmp;
     ptr += 8;
     num--;

@@ -83,7 +83,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
-#include "IccTagMpe.h"
+#include "IccTagMPE.h"
 #include "IccIO.h"
 #include "IccMpeFactory.h"
 #include <map>
@@ -126,7 +126,7 @@ CIccMpeUnknown::CIccMpeUnknown()
    m_nInputChannels = 0;
    m_nOutputChannels = 0;
    m_nSize = 0;
-   m_pData = NULL;
+   m_pData = 0;
 }
 
 /**
