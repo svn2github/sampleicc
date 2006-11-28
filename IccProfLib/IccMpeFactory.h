@@ -299,4 +299,4 @@ private:
 } //namespace sampleICC
 #endif
 
-#endif //_ICCELEMFACTORY_H
+#endif //_ICCMPEFACTORY_H

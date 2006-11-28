@@ -235,7 +235,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\IccTagMpe.cpp">
+				RelativePath=".\IccTagMPE.cpp">
 			</File>
 			<File
 				RelativePath="IccUtil.cpp">
@@ -314,7 +314,7 @@
 				RelativePath="IccTagLut.h">
 			</File>
 			<File
-				RelativePath=".\IccTagMpe.h">
+				RelativePath=".\IccTagMPE.h">
 			</File>
 			<File
 				RelativePath="IccUtil.h">

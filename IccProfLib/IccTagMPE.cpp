@@ -245,7 +245,7 @@ bool CIccMpeUnknown::SetDataSize(icUInt32Number nSize, bool bZeroData/*=true*/)
     m_pData = (icUInt8Number*)malloc(m_nSize);
     if (!m_pData) {
       rv = false;
-      m_nSize = NULL;
+      m_nSize = 0;
     }
   }
   else

@@ -1,5 +1,5 @@
 /** @file
-File:       IccTagMpe.h
+File:       IccTagMPE.h
 
 Contains:   Header for implementation of CIccTagMultiProcessElement
 and supporting classes

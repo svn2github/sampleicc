@@ -80,7 +80,7 @@
 #ifndef __DEFINED_CLUT_H__
 #define __DEFINED_CLUT_H__
 
-#include <list>
+
 #include <string>
 #include <math.h>
 
@@ -99,33 +99,33 @@ class CLUT
 
   CLUT() {}
  
-	void
-	loadInputShaperLUTs(CIccTagCurve** inputShaperLUTs,
-			    const std::string& inputShaperFilename) const;
-	
-	CIccTagLut16*
+  void
+  loadInputShaperLUTs(CIccTagCurve** inputShaperLUTs,
+                      const std::string& inputShaperFilename) const;
+  
+  CIccTagLut16*
   makeAToBxTag(const unsigned int edgeN,
                const icFloatNumber* const rawXYZ,
                const icFloatNumber* const flare,
                const icFloatNumber* const illuminant,
-	       const CAT* const CATToPCS,
-	       const icFloatNumber inputShaperGamma,
-	       const std::string& inputShaperFilename,
-	       const icFloatNumber* const mediaWhite);
-	
-	static
-	void
-	measuredXYZToAdaptedXYZ(icFloatNumber* const adaptedXYZ,
-		const icFloatNumber* const measuredXYZ,
-		const icFloatNumber* const flare,
-		const icFloatNumber illuminantY,
-		const CAT* CATToPCS);
-	
-	void
-	Iterate(IIccCLUTExec* pExec);
-	
+               const CAT* const CATToPCS,
+               const icFloatNumber inputShaperGamma,
+               const std::string& inputShaperFilename,
+               const icFloatNumber* const mediaWhite);
+  
+  static
+  void
+  measuredXYZToAdaptedXYZ(icFloatNumber* const adaptedXYZ,
+                          const icFloatNumber* const measuredXYZ,
+                          const icFloatNumber* const flare,
+                          const icFloatNumber illuminantY,
+                          const CAT* CATToPCS);
+  
+  void
+  Iterate(IIccCLUTExec* pExec);
+  
 private:
-	CIccCLUT* m_innerCLUT;
+  CIccCLUT* m_innerCLUT;
 };
 
 #endif

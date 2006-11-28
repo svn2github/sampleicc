@@ -87,25 +87,25 @@
 class CLUTStuffer : public IIccCLUTExec
 {
 public:
-	CLUTStuffer(unsigned int edgeN,
-		const icFloatNumber* const measuredXYZ,
-		const icFloatNumber* flare,
-		const icFloatNumber illuminantY,
-		const CAT* const CATToPCS,
-		const icFloatNumber* adaptedMediaWhite);
-	
- ~CLUTStuffer()	{}
-	
-	void
-	PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData);
+  CLUTStuffer(unsigned int edgeN,
+    const icFloatNumber* const measuredXYZ,
+    const icFloatNumber* flare,
+    const icFloatNumber illuminantY,
+    const CAT* const CATToPCS,
+    const icFloatNumber* adaptedMediaWhite);
+  
+ ~CLUTStuffer()  {}
+  
+  void
+  PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData);
 
 private:
-	const unsigned int m_EdgeN;
-	const icFloatNumber* const m_MeasuredXYZ;
-	icFloatNumber m_Flare[3];
-	const icFloatNumber m_IlluminantY;
-	const CAT* const m_CAT;
-	icFloatNumber m_AdaptedMediaWhite[3];
+  const unsigned int m_EdgeN;
+  const icFloatNumber* const m_MeasuredXYZ;
+  icFloatNumber m_Flare[3];
+  const icFloatNumber m_IlluminantY;
+  const CAT* const m_CAT;
+  icFloatNumber m_AdaptedMediaWhite[3];
 };
 
 #endif

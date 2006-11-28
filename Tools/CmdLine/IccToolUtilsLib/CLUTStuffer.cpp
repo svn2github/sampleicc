@@ -90,64 +90,64 @@ using std::list;
 #include "IccTagLut.h"
 
 CLUTStuffer::CLUTStuffer(unsigned int edgeN,
-	const icFloatNumber* const measuredXYZ,
-	const icFloatNumber* flare,
-	const icFloatNumber illuminantY,
-	const CAT* const CATToPCS,
-	const icFloatNumber* adaptedMediaWhite)
-	:	m_EdgeN(edgeN),
-		m_MeasuredXYZ(measuredXYZ),
-		m_IlluminantY(illuminantY),
-		m_CAT(CATToPCS)
+  const icFloatNumber* const measuredXYZ,
+  const icFloatNumber* flare,
+  const icFloatNumber illuminantY,
+  const CAT* const CATToPCS,
+  const icFloatNumber* adaptedMediaWhite)
+  :  m_EdgeN(edgeN),
+    m_MeasuredXYZ(measuredXYZ),
+    m_IlluminantY(illuminantY),
+    m_CAT(CATToPCS)
 {
-		for (int i = 0; i < 3; ++i)
-		{
-			m_Flare[i] = flare[i];
-			m_AdaptedMediaWhite[i] = adaptedMediaWhite[i];
-		}
+    for (int i = 0; i < 3; ++i)
+    {
+      m_Flare[i] = flare[i];
+      m_AdaptedMediaWhite[i] = adaptedMediaWhite[i];
+    }
 }
 
 void
 CLUTStuffer::PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData)
 {
-		// 1.  Obtain CIE Tristimulus values for a set of colour patches on the device
-		// or media to be profiled.  More information about measurement procedures is 
-		// provided in clause D.3.  There should be at least one measurement of the
-		// "media white" and the tristimulus values of the illumination source or
-		// perfect reflecting diffuser should be specified.
-		
-		// [Presumably, this was done in order to get the XYZ values which are being
-		// stuffed into this CLUT input profile, so there's no processing done here,
-		
-		unsigned int rIdx = static_cast<unsigned int>(pGridAdr[0] * (m_EdgeN - 1) + 0.5);
-		unsigned int gIdx = static_cast<unsigned int>(pGridAdr[1] * (m_EdgeN - 1) + 0.5);
-		unsigned int bIdx = static_cast<unsigned int>(pGridAdr[2] * (m_EdgeN - 1) + 0.5);
-		unsigned int flattenedIdx = (rIdx * m_EdgeN * m_EdgeN + gIdx * m_EdgeN + bIdx) * 3;
-		icFloatNumber measuredXYZ[3];
-		for (unsigned int i = 0; i < 3; ++i)
-		measuredXYZ[i] = m_MeasuredXYZ[flattenedIdx + i];
-		
-		// 2. Remove flare from the measured XYZ values as needed to match
-		// the PCS measurement conditions, creating flare-free XYZ values (XYZflare-free).
-		
-		// 3. If necessary, scale the flare-free measurement values so they
-		// are relative to the actual illumination source by dividing all
-		// values by the measured Y value of the perfect diffuser.
-		
-		// 4. If the chromaticity of the illumination source is different
-		// from that of D50, convert the illuminant-relative XYZ values
-		// from the illumination source white point chromaticity to the
-		// PCS white point chromaticity using an appropriate chromatic
-		// adaptation transform and equation D.9 (which is the same as
-		// D.1).  This may be done by applying one of the transformations
-		// described in clause D.4 and Annex E.  The transform used must
-		// be specified in the chromaticAdaptationTag.
-		
-		icFloatNumber adaptedPCSXYZ[3];
-		CLUT::measuredXYZToAdaptedXYZ(adaptedPCSXYZ, measuredXYZ, m_Flare,
-			m_IlluminantY, m_CAT);
-		
-		icXYZtoLab(pData, adaptedPCSXYZ, m_AdaptedMediaWhite);
-	
-		icLabToPcs(pData);
+    // 1.  Obtain CIE Tristimulus values for a set of colour patches on the device
+    // or media to be profiled.  More information about measurement procedures is 
+    // provided in clause D.3.  There should be at least one measurement of the
+    // "media white" and the tristimulus values of the illumination source or
+    // perfect reflecting diffuser should be specified.
+    
+    // [Presumably, this was done in order to get the XYZ values which are being
+    // stuffed into this CLUT input profile, so there's no processing done here,
+    
+    unsigned int rIdx = static_cast<unsigned int>(pGridAdr[0] * (m_EdgeN - 1) + 0.5);
+    unsigned int gIdx = static_cast<unsigned int>(pGridAdr[1] * (m_EdgeN - 1) + 0.5);
+    unsigned int bIdx = static_cast<unsigned int>(pGridAdr[2] * (m_EdgeN - 1) + 0.5);
+    unsigned int flattenedIdx = (rIdx * m_EdgeN * m_EdgeN + gIdx * m_EdgeN + bIdx) * 3;
+    icFloatNumber measuredXYZ[3];
+    for (unsigned int i = 0; i < 3; ++i)
+    measuredXYZ[i] = m_MeasuredXYZ[flattenedIdx + i];
+    
+    // 2. Remove flare from the measured XYZ values as needed to match
+    // the PCS measurement conditions, creating flare-free XYZ values (XYZflare-free).
+    
+    // 3. If necessary, scale the flare-free measurement values so they
+    // are relative to the actual illumination source by dividing all
+    // values by the measured Y value of the perfect diffuser.
+    
+    // 4. If the chromaticity of the illumination source is different
+    // from that of D50, convert the illuminant-relative XYZ values
+    // from the illumination source white point chromaticity to the
+    // PCS white point chromaticity using an appropriate chromatic
+    // adaptation transform and equation D.9 (which is the same as
+    // D.1).  This may be done by applying one of the transformations
+    // described in clause D.4 and Annex E.  The transform used must
+    // be specified in the chromaticAdaptationTag.
+    
+    icFloatNumber adaptedPCSXYZ[3];
+    CLUT::measuredXYZToAdaptedXYZ(adaptedPCSXYZ, measuredXYZ, m_Flare,
+                                  m_IlluminantY, m_CAT);
+    
+    icXYZtoLab(pData, adaptedPCSXYZ, m_AdaptedMediaWhite);
+  
+    icLabToPcs(pData);
 }

@@ -549,27 +549,27 @@ CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput, icRenderingInte
           pTag = pProfile->FindTag(icSigBToA0Tag);
         }
 
-				if (!pTag) {
-					if (pProfile->m_Header.colorSpace == icSigRgbData) {
-						rv = new CIccXformMatrixTRC();
-					}
-					else
-						return NULL;
-				}
-				else if (pTag->GetType()==icSigMultiProcessElementType) {
-					rv = new CIccXformMpe(pTag);
-				}
-				else {
-					switch(pProfile->m_Header.pcs) {
-						case icSigXYZData:
-						case icSigLabData:
-							rv = new CIccXform3DLut(pTag);
-							break;
+        if (!pTag) {
+          if (pProfile->m_Header.colorSpace == icSigRgbData) {
+            rv = new CIccXformMatrixTRC();
+          }
+          else
+            return NULL;
+        }
+        else if (pTag->GetType()==icSigMultiProcessElementType) {
+          rv = new CIccXformMpe(pTag);
+        }
+        else {
+          switch(pProfile->m_Header.pcs) {
+            case icSigXYZData:
+            case icSigLabData:
+              rv = new CIccXform3DLut(pTag);
+              break;
 
-					default:
-						break;
-					}
-				}
+          default:
+            break;
+          }
+        }
       }
       break;
 

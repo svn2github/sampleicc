@@ -96,25 +96,25 @@ using std::list;
 class BlackScaler : public IIccCLUTExec
 {
 public:
-	BlackScaler(const unsigned int edgeN,
-		const icFloatNumber* const rawXYZ,
-		const icFloatNumber* const adaptedMediaBlack,
-		const icFloatNumber* const adaptedMediaWhite);
-	
+  BlackScaler(const unsigned int edgeN,
+              const icFloatNumber* const rawXYZ,
+              const icFloatNumber* const adaptedMediaBlack,
+              const icFloatNumber* const adaptedMediaWhite);
+  
  ~BlackScaler() {}
-	
-	void
-	PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData);
-	
+  
+  void
+  PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData);
+  
 private:
-	const unsigned int m_EdgeN;
-	const icFloatNumber* const m_rawXYZ;
-	icFloatNumber m_A2B0BlackXYZ[3];
-	icFloatNumber m_A2B0WhiteXYZ[3];
-	icFloatNumber m_A2B1BlackXYZ[3];
-	icFloatNumber m_A2B1WhiteXYZ[3];
-	icFloatNumber m_A2B0RangeXYZ[3];
-	icFloatNumber m_A2B1RangeXYZ[3];
+  const unsigned int m_EdgeN;
+  const icFloatNumber* const m_rawXYZ;
+  icFloatNumber m_A2B0BlackXYZ[3];
+  icFloatNumber m_A2B0WhiteXYZ[3];
+  icFloatNumber m_A2B1BlackXYZ[3];
+  icFloatNumber m_A2B1WhiteXYZ[3];
+  icFloatNumber m_A2B0RangeXYZ[3];
+  icFloatNumber m_A2B1RangeXYZ[3];
 };
 
 #endif

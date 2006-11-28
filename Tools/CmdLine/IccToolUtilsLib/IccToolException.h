@@ -88,14 +88,14 @@
 
 class IccToolException : public std::exception
 {
-	public:
-	IccToolException(const std::string& reason) : reason_(reason) {}
+  public:
+  IccToolException(const std::string& reason) : reason_(reason) {}
  ~IccToolException() throw () {};
-	
-	const char*
-	what() const throw() { return strdup(reason_.c_str()); }
+  
+  const char*
+  what() const throw() { return strdup(reason_.c_str()); }
 private:
-	const std::string reason_;
+  const std::string reason_;
 
 };
 

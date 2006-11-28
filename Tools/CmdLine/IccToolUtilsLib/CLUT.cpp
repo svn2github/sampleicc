@@ -82,6 +82,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <cmath>
 using namespace std;
 
 #include "CLUT.h"
@@ -90,54 +91,54 @@ using namespace std;
 
 void
 CLUT::loadInputShaperLUTs(CIccTagCurve** inputShaperLUTs,
-	const string& inputShaperFilename) const
+                          const std::string& inputShaperFilename) const
 {
-	ifstream s(inputShaperFilename.c_str());
-	if (! s)
-	{
-		ostringstream os;
-		os << "Could not load input shaper LUTs from `" << inputShaperFilename
-			 << "'";
-		throw IccToolException(os.str());
-	}
+  ifstream s(inputShaperFilename.c_str());
+  if (! s)
+  {
+    ostringstream os;
+    os << "Could not load input shaper LUTs from `" << inputShaperFilename
+       << "'";
+    throw IccToolException(os.str());
+  }
 
-	string maxChannelValueAsString;
-	s >> maxChannelValueAsString;
-	int maxChannelValue = atoi(maxChannelValueAsString.c_str());
-//	cerr << "max channel value is " << maxChannelValue << endl;
-	vector<double> redVals;
-	vector<double> greenVals;
-	vector<double> blueVals;
-	string line("");
-	while (getline(s, line))
-	{
-		if (line == "")
-				continue;
-		double redVal;
-		double greenVal;
-		double blueVal;
-		istringstream is(line);
-		is >> redVal;
-		is >> greenVal;
-		is >> blueVal;
-		redVals.push_back(redVal);
-		greenVals.push_back(greenVal);
-		blueVals.push_back(blueVal);
-	}
-	unsigned int numEntries = (unsigned int)redVals.size();
-	// now make the LUT objects of the appropriate length and stuff them.	
-	CIccTagCurve*   redCurve = inputShaperLUTs[0];
-	CIccTagCurve* greenCurve = inputShaperLUTs[1];
-	CIccTagCurve*  blueCurve = inputShaperLUTs[2];
-		redCurve->SetSize(numEntries, icInitIdentity);
-	greenCurve->SetSize(numEntries, icInitIdentity);
-	 blueCurve->SetSize(numEntries, icInitIdentity);
-	for (unsigned int j = 0, N = numEntries; j < N; ++j)
-	{
-		(  *redCurve)[j] = (icFloatNumber)(  redVals[j] / maxChannelValue);
-		(*greenCurve)[j] = (icFloatNumber)(greenVals[j] / maxChannelValue);
-		( *blueCurve)[j] = (icFloatNumber)( blueVals[j] / maxChannelValue);
-	}
+  string maxChannelValueAsString;
+  s >> maxChannelValueAsString;
+  int maxChannelValue = atoi(maxChannelValueAsString.c_str());
+//  cerr << "max channel value is " << maxChannelValue << endl;
+  vector<double> redVals;
+  vector<double> greenVals;
+  vector<double> blueVals;
+  string line("");
+  while (getline(s, line))
+  {
+    if (line == "")
+        continue;
+    double redVal;
+    double greenVal;
+    double blueVal;
+    istringstream is(line);
+    is >> redVal;
+    is >> greenVal;
+    is >> blueVal;
+    redVals.push_back(redVal);
+    greenVals.push_back(greenVal);
+    blueVals.push_back(blueVal);
+  }
+  unsigned int numEntries = (unsigned int)redVals.size();
+  // now make the LUT objects of the appropriate length and stuff them.  
+  CIccTagCurve*   redCurve = inputShaperLUTs[0];
+  CIccTagCurve* greenCurve = inputShaperLUTs[1];
+  CIccTagCurve*  blueCurve = inputShaperLUTs[2];
+    redCurve->SetSize(numEntries, icInitIdentity);
+  greenCurve->SetSize(numEntries, icInitIdentity);
+   blueCurve->SetSize(numEntries, icInitIdentity);
+  for (unsigned int j = 0, N = numEntries; j < N; ++j)
+  {
+    (  *redCurve)[j] = (icFloatNumber)(  redVals[j] / maxChannelValue);
+    (*greenCurve)[j] = (icFloatNumber)(greenVals[j] / maxChannelValue);
+    ( *blueCurve)[j] = (icFloatNumber)( blueVals[j] / maxChannelValue);
+  }
 }
 
 CIccTagLut16*
@@ -145,92 +146,92 @@ CLUT::makeAToBxTag(const unsigned int edgeN,
                    const icFloatNumber* const rawXYZ,
                    const icFloatNumber* const flare,
                    const icFloatNumber* const illuminant,
-									 const CAT* const CATToPCS,
-									 const icFloatNumber inputShaperGamma,
-									 const string& inputShaperFilename,
+                   const CAT* const CATToPCS,
+                   const icFloatNumber inputShaperGamma,
+                   const std::string& inputShaperFilename,
                    const icFloatNumber* const mediaWhite)
 {
-	unsigned int i;
+  unsigned int i;
   CIccTagLut16* lut16 = new CIccTagLut16();
   lut16->Init(3, 3);
   lut16->SetColorSpaces(icSigRgbData, icSigLabData);
 
   lut16->NewMatrix();
 
-	LPIccCurve* iLUT = lut16->NewCurvesA();
-	for (i = 0; i < 3; ++i)
-	{
-		CIccTagCurve* pCurve = new CIccTagCurve(0);
-		pCurve->SetSize(2, icInitIdentity);
-		iLUT[i] = pCurve;
-	}
-	
+  LPIccCurve* iLUT = lut16->NewCurvesA();
+  for (i = 0; i < 3; ++i)
+  {
+    CIccTagCurve* pCurve = new CIccTagCurve(0);
+    pCurve->SetSize(2, icInitIdentity);
+    iLUT[i] = pCurve;
+  }
+  
   m_innerCLUT = lut16->NewCLUT(edgeN);
 
   CLUTStuffer stuffer(edgeN, rawXYZ, flare, illuminant[1], CATToPCS, mediaWhite);
   m_innerCLUT->Iterate(&stuffer);
 
   LPIccCurve* oLUT = lut16->NewCurvesB();
-	if (inputShaperGamma == 1.0)
-	{
-		if (inputShaperFilename == "")
-			for (i = 0; i < 3; ++i)
-			{
-				CIccTagCurve* pCurve = new CIccTagCurve(0);
-				pCurve->SetSize(2, icInitIdentity);
-				oLUT[i] = pCurve;
-			}
-		else
-		{
-			CIccTagCurve* inputShaperLUTs[3];
-			for (i = 0; i < 3; ++i)
-			{
-				inputShaperLUTs[i] = new CIccTagCurve(0);
-				inputShaperLUTs[i]->SetSize(2, icInitIdentity);
-			}
-			loadInputShaperLUTs(inputShaperLUTs, inputShaperFilename);
-			for (i = 0; i < 3; ++i)
-				oLUT[i] = inputShaperLUTs[i];
-		}
-	}
-	else
-	{
-		if (inputShaperFilename != "")
-			throw IccToolException("input shaper LUT gamma and input shaper LUT"
-				" filename both specified, but they are mutually exclusive");
-		cerr << "------- where we should be -------, gamma is " 
-			<< inputShaperGamma << endl;
-		for (i = 0; i < 3; ++i)
-		{
-			CIccTagCurve* pCurve = new CIccTagCurve(0);
-			pCurve->SetSize(4096, icInitIdentity);
-			for (unsigned int j = 0; j < 4096; ++j)
-				(*pCurve)[j] = pow((*pCurve)[j], inputShaperGamma);
-			oLUT[i] = pCurve;
-		}
+  if (inputShaperGamma == 1.0)
+  {
+    if (inputShaperFilename == "")
+      for (i = 0; i < 3; ++i)
+      {
+        CIccTagCurve* pCurve = new CIccTagCurve(0);
+        pCurve->SetSize(2, icInitIdentity);
+        oLUT[i] = pCurve;
+      }
+    else
+    {
+      CIccTagCurve* inputShaperLUTs[3];
+      for (i = 0; i < 3; ++i)
+      {
+        inputShaperLUTs[i] = new CIccTagCurve(0);
+        inputShaperLUTs[i]->SetSize(2, icInitIdentity);
+      }
+      loadInputShaperLUTs(inputShaperLUTs, inputShaperFilename);
+      for (i = 0; i < 3; ++i)
+        oLUT[i] = inputShaperLUTs[i];
+    }
+  }
+  else
+  {
+    if (inputShaperFilename != "")
+      throw IccToolException("input shaper LUT gamma and input shaper LUT"
+        " filename both specified, but they are mutually exclusive");
+    cerr << "------- where we should be -------, gamma is " 
+      << inputShaperGamma << endl;
+    for (i = 0; i < 3; ++i)
+    {
+      CIccTagCurve* pCurve = new CIccTagCurve(0);
+      pCurve->SetSize(4096, icInitIdentity);
+      for (unsigned int j = 0; j < 4096; ++j)
+        (*pCurve)[j] = pow((*pCurve)[j], inputShaperGamma);
+      oLUT[i] = pCurve;
+    }
   }
   return lut16;
 }
 
 void
 CLUT::measuredXYZToAdaptedXYZ(icFloatNumber* const adaptedXYZ,
-	const icFloatNumber* const measuredXYZ,
-	const icFloatNumber* const flare,
-	const icFloatNumber illuminantY,
-	const CAT* CATToPCS)
+  const icFloatNumber* const measuredXYZ,
+  const icFloatNumber* const flare,
+  const icFloatNumber illuminantY,
+  const CAT* CATToPCS)
 {
-	icFloatNumber flarelessMeasuredXYZ[3];
-	icFloatNumber illuminantRelativeXYZ[3];
-	for (unsigned int i = 0; i < 3; ++i)
-	{
-		flarelessMeasuredXYZ[i] = measuredXYZ[i] - flare[i];
-		illuminantRelativeXYZ[i] = flarelessMeasuredXYZ[i] / illuminantY;
-	}
-	CATToPCS->Apply(adaptedXYZ, illuminantRelativeXYZ);
+  icFloatNumber flarelessMeasuredXYZ[3];
+  icFloatNumber illuminantRelativeXYZ[3];
+  for (unsigned int i = 0; i < 3; ++i)
+  {
+    flarelessMeasuredXYZ[i] = measuredXYZ[i] - flare[i];
+    illuminantRelativeXYZ[i] = flarelessMeasuredXYZ[i] / illuminantY;
+  }
+  CATToPCS->Apply(adaptedXYZ, illuminantRelativeXYZ);
 }
 
 void
 CLUT::Iterate(IIccCLUTExec* pExec)
 {
-	m_innerCLUT->Iterate(pExec);
+  m_innerCLUT->Iterate(pExec);
 }
