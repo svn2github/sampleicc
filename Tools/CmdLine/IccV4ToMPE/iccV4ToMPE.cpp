@@ -2,7 +2,7 @@
 //
 
 #include "IccCmm.h"
-#include "IccTagMpe.h"
+#include "IccTagMPE.h"
 #include "IccMpeBasic.h"
 
 #define minXYZ 0.0
@@ -369,31 +369,31 @@ CIccTag* ConvertTag(CIccTag *pTag, bool bStrict, icColorSpaceSignature pcs)
           pMPE->Attach(pElem);
       }
 
-      if (pCurves = lutTag->GetCurvesB()) {
+      if ((pCurves = lutTag->GetCurvesB())) {
         pElem = ConvertCurves(pCurves, lutTag->InputChannels(), bStrict);
         if (pElem)
           pMPE->Attach(pElem);
       }
 
-      if (pMatrix = lutTag->GetMatrix()) {
+      if ((pMatrix = lutTag->GetMatrix())) {
         pElem = ConvertMatrix(pMatrix);
         if (pElem)
           pMPE->Attach(pElem);
       } 
 
-      if (pCurves = lutTag->GetCurvesM()) {
+      if ((pCurves = lutTag->GetCurvesM())) {
         pElem = ConvertCurves(pCurves, lutTag->InputChannels(), bStrict);
         if (pElem)
           pMPE->Attach(pElem);
       }
 
-      if (pCLUT = lutTag->GetCLUT()) {
+      if ((pCLUT = lutTag->GetCLUT())) {
         pElem = ConvertCLUT(pCLUT);
         if (pElem)
           pMPE->Attach(pElem);
       }
 
-      if (pCurves = lutTag->GetCurvesA()) {
+      if ((pCurves = lutTag->GetCurvesA())) {
         pElem = ConvertCurves(pCurves, lutTag->OutputChannels(), bStrict);
         if (pElem)
           pMPE->Attach(pElem);
@@ -401,31 +401,31 @@ CIccTag* ConvertTag(CIccTag *pTag, bool bStrict, icColorSpaceSignature pcs)
 
     }
     else {
-      if (pCurves = lutTag->GetCurvesA()) {
+      if ((pCurves = lutTag->GetCurvesA())) {
         pElem = ConvertCurves(pCurves, lutTag->InputChannels(), bStrict);
         if (pElem)
           pMPE->Attach(pElem);
       }
 
-      if (pCLUT = lutTag->GetCLUT()) {
+      if ((pCLUT = lutTag->GetCLUT())) {
         pElem = ConvertCLUT(pCLUT);
         if (pElem)
           pMPE->Attach(pElem);
       }
 
-      if (pCurves = lutTag->GetCurvesM()) {
+      if ((pCurves = lutTag->GetCurvesM())) {
         pElem = ConvertCurves(pCurves, lutTag->OutputChannels(), bStrict);
         if (pElem)
           pMPE->Attach(pElem);
       }
 
-      if (pMatrix = lutTag->GetMatrix()) {
+      if ((pMatrix = lutTag->GetMatrix())) {
         pElem = ConvertMatrix(pMatrix);
         if (pElem)
           pMPE->Attach(pElem);
       }
 
-      if (pCurves = lutTag->GetCurvesB()) {
+      if ((pCurves = lutTag->GetCurvesB())) {
         pElem = ConvertCurves(pCurves, lutTag->OutputChannels(), bStrict);
         if (pElem)
           pMPE->Attach(pElem);
@@ -471,42 +471,42 @@ int main(int argc, char* argv[])
         else
           connectSig = icSigUnknownData;
 
-        if (pTagLut=pProfile->FindTag(icSigAToB0Tag)) {
+        if ((pTagLut=pProfile->FindTag(icSigAToB0Tag))) {
           pTagMBE = ConvertTag(pTagLut, bStrict, connectSig);
           if (pTagMBE) {
             pProfile->AttachTag(icSigDToB0Tag, pTagMBE);
           }
         }
 
-        if (pTagLut=pProfile->FindTag(icSigAToB1Tag)) {
+        if ((pTagLut=pProfile->FindTag(icSigAToB1Tag))) {
           pTagMBE = ConvertTag(pTagLut, bStrict, connectSig);
           if (pTagMBE) {
             pProfile->AttachTag(icSigDToB1Tag, pTagMBE);
           }
         }
 
-        if (pTagLut=pProfile->FindTag(icSigAToB2Tag)) {
+        if ((pTagLut=pProfile->FindTag(icSigAToB2Tag))) {
           pTagMBE = ConvertTag(pTagLut, bStrict, connectSig);
           if (pTagMBE) {
             pProfile->AttachTag(icSigDToB2Tag, pTagMBE);
           }
         }
 
-        if (pTagLut=pProfile->FindTag(icSigBToA0Tag)) {
+        if ((pTagLut=pProfile->FindTag(icSigBToA0Tag))) {
           pTagMBE = ConvertTag(pTagLut, bStrict, connectSig);
           if (pTagMBE) {
             pProfile->AttachTag(icSigBToD0Tag, pTagMBE);
           }
         }
 
-        if (pTagLut=pProfile->FindTag(icSigBToA1Tag)) {
+        if ((pTagLut=pProfile->FindTag(icSigBToA1Tag))) {
           pTagMBE = ConvertTag(pTagLut, bStrict, connectSig);
           if (pTagMBE) {
             pProfile->AttachTag(icSigBToD1Tag, pTagMBE);
           }
         }
 
-        if (pTagLut=pProfile->FindTag(icSigBToA2Tag)) {
+        if ((pTagLut=pProfile->FindTag(icSigBToA2Tag))) {
           pTagMBE = ConvertTag(pTagLut, bStrict, connectSig);
           if (pTagMBE) {
             pProfile->AttachTag(icSigBToD2Tag, pTagMBE);

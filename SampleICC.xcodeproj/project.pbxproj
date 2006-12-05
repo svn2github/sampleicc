@@ -30,6 +30,8 @@
 				7CE0F5130AF0533D002F2A93 /* PBXTargetDependency */,
 				7CE0F5150AF0533D002F2A93 /* PBXTargetDependency */,
 				7CE0F5170AF0533D002F2A93 /* PBXTargetDependency */,
+				7C333A180B1EAA09006AB880 /* PBXTargetDependency */,
+				7C333A1A0B1EAA09006AB880 /* PBXTargetDependency */,
 			);
 			name = Commands;
 			productName = Commands;
@@ -37,6 +39,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		7C333A0A0B1EA948006AB880 /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
+		7C333A100B1EA99D006AB880 /* iccV4ToMPE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C333A0F0B1EA99D006AB880 /* iccV4ToMPE.cpp */; };
 		7C49EA900B09122C00ADFFE7 /* iccCreateTRCMatrixDisplayProfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C49EA8F0B09122C00ADFFE7 /* iccCreateTRCMatrixDisplayProfile.cpp */; };
 		7C6291FF0AFEC69C002D7386 /* BlackScaler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C6291FE0AFEC69C002D7386 /* BlackScaler.cpp */; };
 		7C9E18CB0B14E0A5002EF2BB /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
@@ -102,6 +106,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		7C333A080B1EA92D006AB880 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC0620554660B00DB518D;
+			remoteInfo = SampleICC;
+		};
+		7C333A170B1EAA09006AB880 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C49EA770B09114D00ADFFE7;
+			remoteInfo = iccCreateTRCMatrixDisplayProfile;
+		};
+		7C333A190B1EAA09006AB880 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C333A050B1EA925006AB880;
+			remoteInfo = iccV4ToMpe;
+		};
 		7C49EA7A0B09115400ADFFE7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
@@ -249,6 +274,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7C333A060B1EA925006AB880 /* iccV4ToMpe */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccV4ToMpe; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C333A0F0B1EA99D006AB880 /* iccV4ToMPE.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = iccV4ToMPE.cpp; path = Tools/CmdLine/IccV4ToMPE/iccV4ToMPE.cpp; sourceTree = "<group>"; };
 		7C49EA780B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccCreateTRCMatrixDisplayProfile; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C49EA8F0B09122C00ADFFE7 /* iccCreateTRCMatrixDisplayProfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = iccCreateTRCMatrixDisplayProfile.cpp; path = Tools/CmdLine/iccCreateTRCMatrixDisplayProfile/iccCreateTRCMatrixDisplayProfile.cpp; sourceTree = "<group>"; };
 		7C6291110AFEAD9C002D7386 /* CLUTStuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CLUTStuffer.h; path = ../Tools/CmdLine/IccToolUtilsLib/CLUTStuffer.h; sourceTree = "<group>"; };
@@ -320,6 +347,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7C333A040B1EA925006AB880 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C333A0A0B1EA948006AB880 /* libSampleICC.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7C49EA760B09114D00ADFFE7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -416,6 +451,7 @@
 				7C49EA7F0B09116A00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */,
 				7CE0F4EC0AF0517D002F2A93 /* IccDumpProfile */,
 				7CE0F4FE0AF052BA002F2A93 /* IccProfLibTest */,
+				7C333A0B0B1EA951006AB880 /* iccV4ToMpe */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -432,8 +468,17 @@
 				7CE0F4730AF04F73002F2A93 /* iccProfLibTest */,
 				7C49EA780B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */,
 				7CFB290F0B14D8AB0093D058 /* libSampleICCToolUtils.dylib */,
+				7C333A060B1EA925006AB880 /* iccV4ToMpe */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		7C333A0B0B1EA951006AB880 /* iccV4ToMpe */ = {
+			isa = PBXGroup;
+			children = (
+				7C333A0F0B1EA99D006AB880 /* iccV4ToMPE.cpp */,
+			);
+			name = iccV4ToMpe;
 			sourceTree = "<group>";
 		};
 		7C49EA7F0B09116A00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */ = {
@@ -613,6 +658,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		7C333A050B1EA925006AB880 /* iccV4ToMpe */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7C333A0C0B1EA952006AB880 /* Build configuration list for PBXNativeTarget "iccV4ToMpe" */;
+			buildPhases = (
+				7C333A030B1EA925006AB880 /* Sources */,
+				7C333A040B1EA925006AB880 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7C333A090B1EA92D006AB880 /* PBXTargetDependency */,
+			);
+			name = iccV4ToMpe;
+			productName = iccC4ToMpe;
+			productReference = 7C333A060B1EA925006AB880 /* iccV4ToMpe */;
+			productType = "com.apple.product-type.tool";
+		};
 		7C49EA770B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7C49EA800B09116B00ADFFE7 /* Build configuration list for PBXNativeTarget "iccCreateTRCMatrixDisplayProfile" */;
@@ -794,12 +856,21 @@
 				7C49EA770B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */,
 				7CE0F46B0AF04F59002F2A93 /* iccDumpProfile */,
 				7CE0F4720AF04F73002F2A93 /* iccProfLibTest */,
+				7C333A050B1EA925006AB880 /* iccV4ToMpe */,
 				7CE0F50D0AF05334002F2A93 /* Commands */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7C333A030B1EA925006AB880 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C333A100B1EA99D006AB880 /* iccV4ToMPE.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7C49EA750B09114D00ADFFE7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -892,6 +963,21 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		7C333A090B1EA92D006AB880 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D2AAC0620554660B00DB518D /* SampleICC */;
+			targetProxy = 7C333A080B1EA92D006AB880 /* PBXContainerItemProxy */;
+		};
+		7C333A180B1EAA09006AB880 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C49EA770B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */;
+			targetProxy = 7C333A170B1EAA09006AB880 /* PBXContainerItemProxy */;
+		};
+		7C333A1A0B1EAA09006AB880 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C333A050B1EA925006AB880 /* iccV4ToMpe */;
+			targetProxy = 7C333A190B1EAA09006AB880 /* PBXContainerItemProxy */;
+		};
 		7C49EA7B0B09115400ADFFE7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D2AAC0620554660B00DB518D /* SampleICC */;
@@ -996,7 +1082,9 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/lib;
+				PRIVATE_HEADERS_FOLDER_PATH = /usr/local/include/SampleICC;
 				PRODUCT_NAME = SampleICC;
+				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/SampleICC;
 				ZERO_LINK = YES;
 			};
 			name = Debug;
@@ -1013,7 +1101,9 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/lib;
+				PRIVATE_HEADERS_FOLDER_PATH = /usr/local/include/SampleICC;
 				PRODUCT_NAME = SampleICC;
+				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/SampleICC;
 			};
 			name = Release;
 		};
@@ -1038,6 +1128,38 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+			};
+			name = Release;
+		};
+		7C333A0D0B1EA952006AB880 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = iccV4ToMpe;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		7C333A0E0B1EA952006AB880 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = iccC4ToMpe;
+				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -1364,6 +1486,15 @@
 			buildConfigurations = (
 				1DEB914F08733D8E0010E9CD /* Debug */,
 				1DEB915008733D8E0010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7C333A0C0B1EA952006AB880 /* Build configuration list for PBXNativeTarget "iccV4ToMpe" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7C333A0D0B1EA952006AB880 /* Debug */,
+				7C333A0E0B1EA952006AB880 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -43,7 +43,7 @@ am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-mkinstalldirs = $(install_sh) -d
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =
 SOURCES =
 DIST_SOURCES =
@@ -55,7 +55,6 @@ RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	uninstall-recursive
 ETAGS = etags
 CTAGS = ctags
-DIST_SUBDIRS = $(SUBDIRS)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMDEP_FALSE = @AMDEP_FALSE@
@@ -179,6 +178,16 @@ SUBDIRS = IccApplyNamedCmm \
 	IccStripUnknownTags \
 	IccV4ToMPE \
 	@SICC_ICC_APPLY_PROFILES@ \
+	IccToolUtilsLib \
+	IccCreateCLUTInputProfile \
+	IccCreateTRCMatrixDisplayProfile
+
+DIST_SUBDIRS = IccApplyNamedCmm \
+	IccDumpProfile \
+	IccProfLibTest \
+	IccStripUnknownTags \
+	IccV4ToMPE \
+	IccApplyProfiles \
 	IccToolUtilsLib \
 	IccCreateCLUTInputProfile \
 	IccCreateTRCMatrixDisplayProfile
