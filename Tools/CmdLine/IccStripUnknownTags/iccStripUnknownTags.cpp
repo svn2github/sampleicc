@@ -104,15 +104,14 @@ int main(int argc, char* argv[])
   TagEntryList::iterator i;
   CIccInfo Fmt;
 
-
   while (!done) {
     done = true;
     for (n=0, i=pIcc->m_Tags->begin(); i!=pIcc->m_Tags->end(); i++, n++) {
       IccTagEntry *pEntry = &(*i);
-      if (!CIccTagCreator::GetTagSigName(i->TagInfo.sig)) {
-        printf("Removing '%s'\n", Fmt.GetTagSigName(i->TagInfo.sig));
+      if (!CIccTagCreator::GetTagSigName(pEntry->TagInfo.sig)) {
+        printf("Removing '%s'\n", Fmt.GetTagSigName(pEntry->TagInfo.sig));
         done = false;
-        pIcc->DeleteTag(i->TagInfo.sig);
+        pIcc->DeleteTag(pEntry->TagInfo.sig);
         break;
       }
     }

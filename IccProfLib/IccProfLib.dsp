@@ -95,6 +95,18 @@ SOURCE=.\IccIO.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\IccMpeACS.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\IccMpeBasic.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\IccMpeFactory.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\IccProfile.cpp
 # End Source File
 # Begin Source File
@@ -108,6 +120,10 @@ SOURCE=.\IccTagFactory.cpp
 # Begin Source File
 
 SOURCE=.\IccTagLut.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\IccTagMPE.cpp
 # End Source File
 # Begin Source File
 
@@ -135,6 +151,18 @@ SOURCE=.\IccIO.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\IccMpeACS.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\IccMpeBasic.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\IccMpeFactory.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\IccProfile.h
 # End Source File
 # Begin Source File
@@ -156,6 +184,10 @@ SOURCE=.\IccTagFactory.h
 # Begin Source File
 
 SOURCE=.\IccTagLut.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\IccTagMPE.h
 # End Source File
 # Begin Source File
 

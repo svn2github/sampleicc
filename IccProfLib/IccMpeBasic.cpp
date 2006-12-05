@@ -240,12 +240,12 @@ void CIccFormulaCurveSegment::Describe(std::string &sDescription)
 
   case 0x0002:
     sprintf(buf, "Y = %.8f * (%.8f ^ (%.8f * X + %.8f)) + %.8f\r\n\r\n",
-            m_params[0], m_params[1], m_params[2], m_params[3], m_params[4], m_params[5]);
+            m_params[0], m_params[1], m_params[2], m_params[3], m_params[4]);
     sDescription += buf;
 
   default:
     int i;
-    sprintf(buf, "Unknown Function with %d parameters:\r\n\r\n");
+    sprintf(buf, "Unknown Function with %d parameters:\r\n\r\n", m_nParameters);
     sDescription += buf;
 
     for (i=0; i<m_nParameters; i++) {
@@ -1159,8 +1159,6 @@ bool CIccSegmentedCurve::Write(CIccIO *pIO)
 
   if (!pIO)
     return false;
-
-  icUInt32Number elemStart = pIO->Tell();
 
   if (!pIO->Write32(&sig))
     return false;

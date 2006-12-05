@@ -46,7 +46,4 @@ typedef struct {
 void MD5Init  (MD5_CTX *);
 void MD5Update  (MD5_CTX *, unsigned char *, unsigned int);
 void MD5Final  (unsigned char* , MD5_CTX *);
-static void MD5Transform  (UINT4 [4], unsigned char [64]);
-static void Encode  (unsigned char *, UINT4 *, unsigned int);
-static void Decode  (UINT4 *, unsigned char *, unsigned int);
 

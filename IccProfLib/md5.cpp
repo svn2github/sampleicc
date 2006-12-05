@@ -26,6 +26,11 @@ documentation and/or software.
 
 #include "md5.h"
 #include <memory.h>
+
+static void MD5Transform  (UINT4 [4], unsigned char [64]);
+static void Encode  (unsigned char *, UINT4 *, unsigned int);
+static void Decode  (UINT4 *, unsigned char *, unsigned int);
+
 /* Constants for MD5Transform routine.
  */
 

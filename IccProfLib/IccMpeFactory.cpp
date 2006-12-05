@@ -188,8 +188,6 @@ void CIccMpeCreator::DoPushFactory(IIccMpeFactory *pFactory)
 
 IIccMpeFactory* CIccMpeCreator::DoPopFactory(bool bAll /*=false*/)
 {
-  int nNum = (bAll ? 0 : 1);
-
   if (factoryStack.size()>0) {
     CIccMpeFactoryList::iterator i=factoryStack.begin();
     IIccMpeFactory* rv = (*i);

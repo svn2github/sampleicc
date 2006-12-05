@@ -1663,7 +1663,7 @@ void CIccTagNamedColor2::Describe(std::string &sDescription)
 
   sDescription.reserve(sDescription.size() + m_nSize*79);
 
-  sprintf(buf, "BEGIN_NAMED_COLORS flags=%08x %d %d\r\n", m_nVendorFlags, m_nSize, m_nDeviceCoords);
+  sprintf(buf, "BEGIN_NAMED_COLORS flags=%08x %u %u\r\n", m_nVendorFlags, m_nSize, m_nDeviceCoords);
   sDescription += buf;
 
   for (i=0; i<m_nSize; i++) {
@@ -3157,7 +3157,7 @@ void CIccTagNum<T, Tsig>::Describe(std::string &sDescription)
     sDescription.reserve(sDescription.size() + m_nSize*79);
 
     for (i=0; i<m_nSize; i++) {
-      sprintf(buf, "Value[%d] = %u (0x%x)\r\n", i, m_Num[i], m_Num[i]);
+      sprintf(buf, "Value[%u] = %u (0x%x)\r\n", i, m_Num[i], m_Num[i]);
       sDescription += buf;
     }
   }
@@ -4973,7 +4973,7 @@ void CIccTagColorantTable::Describe(std::string &sDescription)
     sDescription += buf;
   }
   for (i=0; i<m_nCount; i++) {
-    sprintf(buf, "%2d \"%s\"", i, m_pData[i].name);
+    sprintf(buf, "%2u \"%s\"", i, m_pData[i].name);
     sDescription += buf;
     memset(buf, ' ', 128);
     buf[nMaxLen + 1 - strlen(m_pData[i].name)] ='\0';

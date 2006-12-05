@@ -1330,10 +1330,20 @@ const icChar *CIccInfo::GetMeasurementUnit(icSignature sig)
       return "Narrow band DIN with polarizing filter";
 
     default:
-      sprintf(m_szStr, "Unknown Measurement Type '%s'", (icChar)sig);
+    {
+      char buf[10];
+      buf[0] = (char)(sig>>24);
+      buf[1] = (char)(sig>>16);
+      buf[2] = (char)(sig>>8);
+      buf[3] = (char)(sig);
+      buf[4] = '\0';
+
+      sprintf(m_szStr, "Unknown Measurement Type '%s'", buf);
       return m_szStr;
+    }
   }
 }
+
 
 const icChar *CIccInfo::GetProfileID(icProfileID *profileID)
 {

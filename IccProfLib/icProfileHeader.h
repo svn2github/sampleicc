@@ -458,9 +458,9 @@ typedef enum {
 #define icSigUnknownType ((icTagTypeSignature) 0x3f3f3f3f)  /* '????' */
 #define icMaxEnumType    ((icTagTypeSignature) 0xFFFFFFFF)
 
-/************************************************************************/
-/* Element type signatures
-/************************************************************************/
+/**
+ * Element type signatures
+ */
 typedef enum {
     //DMP Proposal 1.0 elements
     icSigCurveSetElemType             = 0x63767374,  /* 'cvst' */
@@ -577,9 +577,9 @@ typedef enum {
 #define icMaxEnumReferenceMediumGamut ((icReferenceMediumGamutSignature 0xFFFFFFFF)
 
 
-/************************************************************************/
-/* Additional MPE Curve segment Signatures
-/************************************************************************/
+/**
+ * MPE Curve segment Signatures
+ */
 typedef enum {
     icSigFormulaCurveSeg              = 0x70617266,  /* 'parf' */
     icSigSampledCurveSeg              = 0x73616D66,  /* 'samf' */
@@ -588,9 +588,9 @@ typedef enum {
 /** Convenience Enum Definition - Not defined in ICC specification*/
 #define icMaxCurveSegSignature ((icCurveSegSignature 0xFFFFFFFF)
 
-/************************************************************************/
-/* MPE Curve Set Curve signature
-/************************************************************************/
+/**
+ * MPE Curve Set Curve signature
+ */
 typedef enum {
     icSigSementedCurve                = 0x63757266,  /* 'curf' */
 } icCurveElemSignature;
@@ -598,9 +598,9 @@ typedef enum {
 /** Convenience Enum Definition - Not defined in ICC specification*/
 #define icMaxCurveElemSignature ((icCurveElemSignature 0xFFFFFFFF)
 
-/************************************************************************/
-/* MPE Future Extension Acs signature
-/************************************************************************/
+/**
+ * MPE Future Extension Acs signature
+ */
 
 typedef icSignature icAcsSignature;
 
