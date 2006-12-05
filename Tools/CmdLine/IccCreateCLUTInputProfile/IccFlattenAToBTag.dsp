@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="iccCreateCLUTInputProfile" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="iccFlattenAToBTag" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Console Application" 0x0103
 
-CFG=iccCreateCLUTInputProfile - Win32 Debug
+CFG=iccFlattenAToBTag - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "IccCreateCLUTInputProfile.mak".
+!MESSAGE NMAKE /f "IccFlattenAToBTag.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "IccCreateCLUTInputProfile.mak" CFG="iccCreateCLUTInputProfile - Win32 Debug"
+!MESSAGE NMAKE /f "IccFlattenAToBTag.mak" CFG="iccFlattenAToBTag - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "iccCreateCLUTInputProfile - Win32 Release" (based on "Win32 (x86) Console Application")
-!MESSAGE "iccCreateCLUTInputProfile - Win32 Debug" (based on "Win32 (x86) Console Application")
+!MESSAGE "iccFlattenAToBTag - Win32 Release" (based on "Win32 (x86) Console Application")
+!MESSAGE "iccFlattenAToBTag - Win32 Debug" (based on "Win32 (x86) Console Application")
 !MESSAGE 
 
 # Begin Project
@@ -28,7 +28,7 @@ CFG=iccCreateCLUTInputProfile - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "iccCreateCLUTInputProfile - Win32 Release"
+!IF  "$(CFG)" == "iccFlattenAToBTag - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /I "winGetOpt" /I "..\..\..\IccProfLib" /I "..\IccToolUtilsLib" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "winGetOpt" /I "..\..\..\IccProfLib" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -51,7 +51,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 
-!ELSEIF  "$(CFG)" == "iccCreateCLUTInputProfile - Win32 Debug"
+!ELSEIF  "$(CFG)" == "iccFlattenAToBTag - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -64,7 +64,7 @@ LINK32=link.exe
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "winGetOpt" /I "..\..\..\IccProfLib" /I "..\IccToolUtilsLib" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "winGetOpt" /I "..\..\..\IccProfLib" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -78,35 +78,19 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "iccCreateCLUTInputProfile - Win32 Release"
-# Name "iccCreateCLUTInputProfile - Win32 Debug"
+# Name "iccFlattenAToBTag - Win32 Release"
+# Name "iccFlattenAToBTag - Win32 Debug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\BlackScaler.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\winGetOpt\getopt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\iccCreateCLUTInputProfile.cpp
+SOURCE=.\iccFlattenAToBTag.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=.\BlackScaler.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\winGetOpt\getopt.h
-# End Source File
 # End Group
 # Begin Group "Resource Files"
 
@@ -119,11 +103,11 @@ SOURCE=.\winGetOpt\getopt.h
 
 SOURCE=..\..\..\IccProfLib\Debug\IccProfLib.lib
 
-!IF  "$(CFG)" == "iccCreateCLUTInputProfile - Win32 Release"
+!IF  "$(CFG)" == "iccFlattenAToBTag - Win32 Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "iccCreateCLUTInputProfile - Win32 Debug"
+!ELSEIF  "$(CFG)" == "iccFlattenAToBTag - Win32 Debug"
 
 !ENDIF 
 
@@ -132,35 +116,9 @@ SOURCE=..\..\..\IccProfLib\Debug\IccProfLib.lib
 
 SOURCE=..\..\..\IccProfLib\Release\IccProfLib.lib
 
-!IF  "$(CFG)" == "iccCreateCLUTInputProfile - Win32 Release"
+!IF  "$(CFG)" == "iccFlattenAToBTag - Win32 Release"
 
-!ELSEIF  "$(CFG)" == "iccCreateCLUTInputProfile - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\IccToolUtilsLib\Debug\IccToolUtilsLib.lib
-
-!IF  "$(CFG)" == "iccCreateCLUTInputProfile - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "iccCreateCLUTInputProfile - Win32 Debug"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\IccToolUtilsLib\Release\IccToolUtilsLib.lib
-
-!IF  "$(CFG)" == "iccCreateCLUTInputProfile - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "iccCreateCLUTInputProfile - Win32 Debug"
+!ELSEIF  "$(CFG)" == "iccFlattenAToBTag - Win32 Debug"
 
 # PROP Exclude_From_Build 1
 

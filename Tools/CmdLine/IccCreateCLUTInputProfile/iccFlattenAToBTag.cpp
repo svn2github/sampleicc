@@ -79,7 +79,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <unistd.h>
+//#include <unistd.h>
 // EXIT_SUCCESS
 // EXIT_FAILURE
 
@@ -171,9 +171,9 @@ main(const int argc, const char* argv[])
         {
           icFloatNumber dstPixel[3];
           icFloatNumber srcPixel[3];
-          srcPixel[0] = i / (N - 1.0);
-          srcPixel[1] = j / (N - 1.0);
-          srcPixel[2] = k / (N - 1.0);
+          srcPixel[0] = (icFloatNumber) (i / (N - 1.0));
+          srcPixel[1] = (icFloatNumber) (j / (N - 1.0));
+          srcPixel[2] = (icFloatNumber) (k / (N - 1.0));
           cmm.Apply(dstPixel, srcPixel);
           if (srcProfile->m_Header.pcs == icSigLabData)
           {

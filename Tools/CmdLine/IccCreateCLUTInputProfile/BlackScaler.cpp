@@ -89,7 +89,8 @@ BlackScaler::BlackScaler(const unsigned int edgeN,
   const icFloatNumber* const adaptedMediaWhite)
   : m_EdgeN(edgeN), m_rawXYZ(rawXYZ)
 {
-  for (unsigned int i = 0; i < 3; ++i)
+	unsigned int i;
+  for (i = 0; i < 3; ++i)
   {
     m_A2B1BlackXYZ[i] = adaptedMediaBlack[i];
     m_A2B1WhiteXYZ[i] = adaptedMediaWhite[i];
@@ -148,7 +149,7 @@ BlackScaler::BlackScaler(const unsigned int edgeN,
 //    << m_A2B1WhiteXYZ[0] << " " 
 //    << m_A2B1WhiteXYZ[1] << " " 
 //    << m_A2B1WhiteXYZ[2] << endl;
-  for (unsigned int i = 0; i < 3; ++i)
+  for (i = 0; i < 3; ++i)
   {
     m_A2B1RangeXYZ[i] = m_A2B1WhiteXYZ[i] - m_A2B1BlackXYZ[i];
     m_A2B0RangeXYZ[i] = m_A2B0WhiteXYZ[i] - m_A2B0BlackXYZ[i];
@@ -189,9 +190,10 @@ void BlackScaler::PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData)
   
   icFloatNumber A2B1StimulusLab[3];
   icFloatNumber A2B1StimulusXYZ[3];
+	unsigned int i;
   
   // 1. Extract the PCS colorimetry
-  for (unsigned int i = 0; i < 3; ++i)
+  for (i = 0; i < 3; ++i)
     A2B1StimulusLab[i] = pData[i];
   
   // 2. Convert to LAB
@@ -212,7 +214,7 @@ void BlackScaler::PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData)
   //    something into the A2B0 tag that won't panic an artist if they don't
   //    know color management and load this profile with the default intent
   //    being set in some program to 'perceptual'.
-  for (unsigned int i = 0; i < 3; ++i)
+  for (i = 0; i < 3; ++i)
   {
     A2B1StimulusFrac[i] = (A2B1StimulusXYZ[i] - m_A2B1BlackXYZ[i]) / m_A2B1RangeXYZ[i];
     A2B0StimulusXYZ[i] = m_A2B0BlackXYZ[i] + A2B1StimulusFrac[i] * m_A2B0RangeXYZ[i];
@@ -250,7 +252,7 @@ void BlackScaler::PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData)
 //    <<endl;
   
   // 7. Inject the modified PCS colorimetry
-  for (unsigned int i = 0; i < 3; ++i)
+  for (i = 0; i < 3; ++i)
      pData[i] = A2B0StimulusLab[i];
 }
 
