@@ -3521,7 +3521,7 @@ icUInt32Number CIccLocalizedUnicode::GetAnsiSize()
 {
   icUInt32Number len;
 #ifdef USE_WINDOWS_MB_SUPPORT
-  len = WideCharToMultiByte(CP_ACP, 0x00000400, m_pBuf, m_nLength,  NULL, 0, NULL, NULL);
+  len = WideCharToMultiByte(CP_ACP, 0x00000400, (LPCWSTR)m_pBuf, m_nLength,  NULL, 0, NULL, NULL);
 #else
   len = m_nLength;   
 #endif
@@ -3553,7 +3553,7 @@ const icChar *CIccLocalizedUnicode::GetAnsi(icChar *szBuf, icUInt32Number nBufSi
   }
   else {
 #ifdef USE_WINDOWS_MB_SUPPORT
-    int len = WideCharToMultiByte(CP_ACP, 0x00000400, m_pBuf, m_nLength,  szBuf, nBufSize, NULL, NULL);
+    int len = WideCharToMultiByte(CP_ACP, 0x00000400, (LPCWSTR)m_pBuf, m_nLength,  szBuf, nBufSize, NULL, NULL);
     szBuf[len]='\0';
 #else
   icUInt32Number i;

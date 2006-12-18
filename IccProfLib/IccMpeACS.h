@@ -160,7 +160,7 @@ public:
 class CIccMpeEAcs : public CIccMpeAcs
 {
 public:
-  CIccMpeEAcs(icUInt16Number nChannels=0, icSignature sig = 0);
+  CIccMpeEAcs(icUInt16Number nChannels=0, icAcsSignature sig = 0);
   CIccMpeEAcs(const CIccMpeEAcs &elemAcs);
   CIccMpeEAcs &operator=(const CIccMpeEAcs &elemAcs);
   virtual CIccMultiProcessElement *NewCopy() const { return new CIccMpeEAcs(*this);}

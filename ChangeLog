@@ -1,3 +1,7 @@
+2006-12-06 Kevin Wheatley
+  * Miscelaneouos Bug Fixes
+  * Clean up of various compiler warnings
+
 2006-11-22 Max Derhak
   * Added newly approved technology tag signatures for Motion Picture Industry to
     icProfileHeader.h
@@ -5,20 +9,20 @@
 2006-11-07 Max Derhak
   * Added support for optional multiProcessingElementType tags.  These tags provide
     an arbitrary order of curves, matricies, and N-D luts encoded using floating
-	point.  The CIccTagMultiProcessElement class implements these objects.  MPE based tags
-	can have 1 or more CIccMultiProcessElement based objects attached to them.
-	See CIccMpeCurveSet, CIccMpeMatrix, CIccMpeCLUT for more details.  Additional future
-	placeholder elements CIccMpeBAcs and CIccMpeEAcs objects are defined, but provide no
-	processing capabilities. See additions to Icc Specification for more details
-	releated to optional MPE based tags.  
+    point.  The CIccTagMultiProcessElement class implements these objects.  MPE based tags
+    can have 1 or more CIccMultiProcessElement based objects attached to them.
+    See CIccMpeCurveSet, CIccMpeMatrix, CIccMpeCLUT for more details.  Additional future
+    placeholder elements CIccMpeBAcs and CIccMpeEAcs objects are defined, but provide no
+    processing capabilities. See additions to Icc Specification for more details
+    releated to optional MPE based tags.  
   * Added CmdLine tool IccV4ToMPE that allows one to populate MPE based tags based upon
     contents of LutAtoB and LutBtoA based tags.
-	
+  
 2006-10-30 Max Derhak
   * Added direct accessors CIccTagMultiLocalizedUnicode::Find() and 
     CIccTagMultiLocalizedUnicode::SetText() for easier creation of 
-	multiLocalizedUnicode based tags
-	
+    multiLocalizedUnicode based tags
+  
 2006-10-27 Max Derhak
   * Added CIccTagCurve::SetGamma member function
   * Added validation check for single entry (gamma) curves to CIccTagLut8
@@ -37,7 +41,7 @@
 
 2006-07-31  Max Derhak
   * Fixed bug in CIccTagChromaticity::Validate() to make comparisons
-	  with fixed floating point encoding rather than IEEE encoding
+    with fixed floating point encoding rather than IEEE encoding
 
 2006-07-13  Max Derhak
   * Fixed bug with displaying icSigPerceptualRenderingIntentGamutTag
@@ -52,26 +56,26 @@
 2006-05-09  Max Derhak
 
   * Cleanup to get things to work with VC6.
-	
-	* Reformated text replacing tabs with spaces.
+  
+  * Reformated text replacing tabs with spaces.
 
 2006-03-24  Joseph Goldstone  <joseph@Cloudbase.local>
 
-	* Add a cut-and-paste of ab_lib_id3.m4 from Oskar Liljeblad
-	  (oskar@osk.mine.nu) as published in the autoconf archive,
-	  downloadable at http://autoconf-archive.cryp.to/ac_lib_id3.m4,
-	  to produce AC_LIB_TIFF.  Use the resulting TIFF_CPPFLAGS,
-	  TIFF_LDFLAGS and TIFF_LIBS in the Makefile.am file in the
-	  Tools/CmdLine/IccApplyProfile subdir.
+  * Add a cut-and-paste of ab_lib_id3.m4 from Oskar Liljeblad
+    (oskar@osk.mine.nu) as published in the autoconf archive,
+    downloadable at http://autoconf-archive.cryp.to/ac_lib_id3.m4,
+    to produce AC_LIB_TIFF.  Use the resulting TIFF_CPPFLAGS,
+    TIFF_LDFLAGS and TIFF_LIBS in the Makefile.am file in the
+    Tools/CmdLine/IccApplyProfile subdir.
 
-	* Add a dist-hook target in the top-level Makefile.am that gets
-	  rid of any .DS_Store files.
+  * Add a dist-hook target in the top-level Makefile.am that gets
+    rid of any .DS_Store files.
 
-	* Correct capitalization of SUBDIRS in Tools/CmdLine/Makefile.am
-	  so that we have a chance of running on Red Hat et al.
+  * Correct capitalization of SUBDIRS in Tools/CmdLine/Makefile.am
+    so that we have a chance of running on Red Hat et al.
 
 2006-02-18  Joseph Goldstone  <joseph@Cloudbase.local>
 
-	* Initial attempt at using GNU suite (automake, autoconf,
-	  [g]libtool) to build IccProfLib and command-line tools.
-	
+  * Initial attempt at using GNU suite (automake, autoconf,
+    [g]libtool) to build IccProfLib and command-line tools.
+  
