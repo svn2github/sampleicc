@@ -105,7 +105,6 @@ CLUT::loadInputShaperLUTs(CIccTagCurve** inputShaperLUTs,
   string maxChannelValueAsString;
   s >> maxChannelValueAsString;
   int maxChannelValue = atoi(maxChannelValueAsString.c_str());
-//  cerr << "max channel value is " << maxChannelValue << endl;
   vector<double> redVals;
   vector<double> greenVals;
   vector<double> blueVals;

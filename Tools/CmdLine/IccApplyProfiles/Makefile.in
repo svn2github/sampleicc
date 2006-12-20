@@ -54,7 +54,9 @@ am_iccApplyProfiles_OBJECTS = iccApplyProfiles.$(OBJEXT) \
 	TiffImg.$(OBJEXT)
 iccApplyProfiles_OBJECTS = $(am_iccApplyProfiles_OBJECTS)
 iccApplyProfiles_LDADD = $(LDADD)
-iccApplyProfiles_DEPENDENCIES =
+am__DEPENDENCIES_1 =
+iccApplyProfiles_DEPENDENCIES = $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I. -I$(srcdir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -195,8 +197,8 @@ target_alias = @target_alias@
 target_cpu = @target_cpu@
 target_os = @target_os@
 target_vendor = @target_vendor@
-INCLUDES = -I$(top_builddir) -I$(top_srcdir)/IccProfLib -I/opt/local/include
-LDADD = -L$(top_builddir)/IccProfLib -lSampleICC -L/opt/local/lib -ltiff
+INCLUDES = -I$(top_builddir) -I$(top_srcdir)/IccProfLib $(TIFF_CPPFLAGS)
+LDADD = -L$(top_builddir)/IccProfLib -lSampleICC $(TIFF_LDFLAGS) $(TIFF_LIBS)
 iccApplyProfiles_SOURCES = iccApplyProfiles.cpp TiffImg.cpp TiffImg.h
 all: all-am
 

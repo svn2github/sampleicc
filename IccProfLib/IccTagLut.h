@@ -85,6 +85,8 @@
 namespace sampleICC {
 #endif
 
+#include "IccTagBasic.h"
+
 /**
 ****************************************************************************
 * Class: CIccCurve

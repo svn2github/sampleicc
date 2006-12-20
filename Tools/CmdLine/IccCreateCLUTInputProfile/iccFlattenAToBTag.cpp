@@ -79,25 +79,11 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-//#include <unistd.h>
-// EXIT_SUCCESS
-// EXIT_FAILURE
-
 #include <string>
-using std::string;
-
 #include <iostream>
-using std::ostream;
-using std::cout;
-using std::endl;
-using std::clog;
-using std::cerr;
-
 #include <fstream>
-using std::ofstream;
-
 #include <vector>
-using std::vector;
+using namespace std;
 
 #include "IccProfile.h"
 // OpenICCProfile

@@ -89,6 +89,7 @@
 
 #include "IccDefs.h"
 #include <memory>
+#include <list>
 
 //CIccProcessElement factory support
 #ifdef USESAMPLEICCNAMESPACE

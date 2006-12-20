@@ -81,14 +81,7 @@
 #ifndef __INCLUDED_BLACK_SCALER_H__
 #define __INCLUDED_BLACK_SCALER_H__
 
-#include <list>
-using std::list;
-
-#include "IccProfLibConf.h"
-#include "IccDefs.h"
 #include "IccUtil.h"
-#include "IccIO.h"
-#include "IccTagBasic.h"
 #include "IccTagLut.h"
 
 #include "CAT.h"

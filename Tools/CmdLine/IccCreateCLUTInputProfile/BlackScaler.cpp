@@ -99,10 +99,6 @@ BlackScaler::BlackScaler(const unsigned int edgeN,
   m_A2B0WhiteXYZ[0] = (icFloatNumber)0.9642;
   m_A2B0WhiteXYZ[1] = (icFloatNumber)1.0;
   m_A2B0WhiteXYZ[2] = (icFloatNumber)0.8249;
-//  cout << "m_A2B0BlackXYZ" << endl
-//    << m_A2B0BlackXYZ[0] << " "
-//    << m_A2B0BlackXYZ[1] << " " 
-//    << m_A2B0BlackXYZ[2] << endl;
   
   // Done this way because going forwards from the decimal numbers shown in
   // Table 12 of section 6.3.4.3 of the ISO spec does not map perfectly to
@@ -113,55 +109,18 @@ BlackScaler::BlackScaler(const unsigned int edgeN,
         (icFloatNumber)(0x8080/65535.0) };
   icLabFromPcs(A2B0BlackLab);
   icLabtoXYZ(m_A2B0BlackXYZ, A2B0BlackLab, m_A2B0WhiteXYZ);
-//  cout << "m_A2B1BlackXYZ" << endl
-//    << m_A2B1BlackXYZ[0] << " "
-//    << m_A2B1BlackXYZ[1] << " " 
-//    << m_A2B1BlackXYZ[2] << endl;
   
   icFloatNumber A2B0Black_via_A2B0White[3];
   icXYZtoLab(A2B0Black_via_A2B0White, m_A2B0BlackXYZ, m_A2B0WhiteXYZ);
-//  cout << "From A2B0 white:"
-//    << A2B0Black_via_A2B0White[0] << " "
-//    << A2B0Black_via_A2B0White[1] << " " 
-//    << A2B0Black_via_A2B0White[2] << endl;
   icLabToPcs(A2B0Black_via_A2B0White);
-//  cout << "encoded:"
-//    << round(65535 * A2B0Black_via_A2B0White[0]) << " "
-//    << round(65535 * A2B0Black_via_A2B0White[1]) << " " 
-//    << round(65535 * A2B0Black_via_A2B0White[2]) << endl;
   
   icFloatNumber A2B0Black_via_A2B1White[3];
   icXYZtoLab(A2B0Black_via_A2B1White, m_A2B0BlackXYZ, m_A2B1WhiteXYZ);
-//  cout << "From A2B1 white:"
-//    << A2B0Black_via_A2B1White[0] << " "
-//    << A2B0Black_via_A2B1White[1] << " " 
-//    << A2B0Black_via_A2B1White[2] << endl;
-  
-//  cout << "m_A2B0WhiteXYZ" << endl
-//    << m_A2B0WhiteXYZ[0] << " " 
-//    << m_A2B0WhiteXYZ[1] << " " 
-//    << m_A2B0WhiteXYZ[2] << endl;
-//  cout << "m_A2B1BlackXYZ" << endl
-//    << m_A2B1BlackXYZ[0] << " " 
-//    << m_A2B1BlackXYZ[1] << " " 
-//    << m_A2B1BlackXYZ[2] << endl;
-//  cout << "m_A2B1WhiteXYZ" << endl
-//    << m_A2B1WhiteXYZ[0] << " " 
-//    << m_A2B1WhiteXYZ[1] << " " 
-//    << m_A2B1WhiteXYZ[2] << endl;
   for (i = 0; i < 3; ++i)
   {
     m_A2B1RangeXYZ[i] = m_A2B1WhiteXYZ[i] - m_A2B1BlackXYZ[i];
     m_A2B0RangeXYZ[i] = m_A2B0WhiteXYZ[i] - m_A2B0BlackXYZ[i];
   }
-//  cout << "m_A2B0RangeXYZ" << endl
-//    << m_A2B0RangeXYZ[0] << " " 
-//    << m_A2B0RangeXYZ[1] << " " 
-//    << m_A2B0RangeXYZ[2] << endl;
-//  cout << "m_A2B0RangeXYZ" << endl
-//    << m_A2B0RangeXYZ[0] << " " 
-//    << m_A2B0RangeXYZ[1] << " " 
-//    << m_A2B0RangeXYZ[2] << endl;
 }
 
 void BlackScaler::PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData)
@@ -201,7 +160,6 @@ void BlackScaler::PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData)
   
   // 3. Convert to XYZ
   icLabtoXYZ(A2B1StimulusXYZ, A2B1StimulusLab, m_A2B1WhiteXYZ);
-  // icLabtoXYZ(A2B1StimulusXYZ, A2B1StimulusLab, m_A2B0WhiteXYZ);
   
   icFloatNumber A2B1StimulusFrac[3];
   icFloatNumber A2B0StimulusLab[3];
@@ -222,34 +180,9 @@ void BlackScaler::PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData)
   
   // 5. Convert back to Lab colorimetry
   icXYZtoLab(A2B0StimulusLab, A2B0StimulusXYZ, m_A2B1WhiteXYZ);
-  // icXYZtoLab(A2B0StimulusLab, A2B0StimulusXYZ, m_A2B0WhiteXYZ);
-  // A2B1Lab, A2B1XYZ, A2B1Range, A2B1frac, A2B0Range, A2B0XYZ, A2B0Lab
-//  cout
-//    << A2B1StimulusLab[0] << " "
-//    << A2B1StimulusLab[1] << " "
-//    << A2B1StimulusLab[2] << " "
-//    << A2B1StimulusXYZ[0] << " "
-//    << A2B1StimulusXYZ[1] << " "
-//    << A2B1StimulusXYZ[2] << " "
-//    << A2B1StimulusFrac[0] << " "
-//    << A2B1StimulusFrac[1] << " "
-//    << A2B1StimulusFrac[2] << " "
-//    << A2B0StimulusXYZ[0] << " "
-//    << A2B0StimulusXYZ[1] << " "
-//    << A2B0StimulusXYZ[2] << " "
-//    << A2B0StimulusLab[0] << " "
-//    << A2B0StimulusLab[1] << " "
-//    // << A2B0StimulusLab[2] << " "
-//    // << endl;
-//    << A2B0StimulusLab[2] << " ";
   
   // 6. Convert back to PCS colorimetry
   icLabToPcs(A2B0StimulusLab);
-//  cout
-//    << A2B0StimulusLab[0] << " "
-//    << A2B0StimulusLab[1] << " "
-//    << A2B0StimulusLab[2] << " "
-//    <<endl;
   
   // 7. Inject the modified PCS colorimetry
   for (i = 0; i < 3; ++i)

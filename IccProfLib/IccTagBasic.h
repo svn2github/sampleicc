@@ -80,10 +80,13 @@
 #define _ICCTAGBASIC_H
 
 #include <list>
-
+#include <string>
+#include "IccDefs.h"
 #ifdef USESAMPLEICCNAMESPACE
 namespace sampleICC {
 #endif
+
+class CIccIO;
 
 class ICCPROFLIB_API CIccProfile;
 

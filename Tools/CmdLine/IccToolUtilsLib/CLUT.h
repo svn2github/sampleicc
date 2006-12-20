@@ -82,13 +82,8 @@
 
 
 #include <string>
-#include <math.h>
 
-#include "IccProfLibConf.h"
-#include "IccDefs.h"
 #include "IccUtil.h"
-#include "IccIO.h"
-#include "IccTagBasic.h"
 #include "IccTagLut.h"
 
 #include "CAT.h"

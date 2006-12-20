@@ -185,47 +185,11 @@ createProfile(const string& inFilename,
     normalizedIlluminant[i] = illuminant[i] / illuminantY;
   CAT* CATToD50 = new CAT(icD50XYZ, normalizedIlluminant);
   
-//  cout << endl;
-//  cout << "measured black:" << endl
-//    << measuredBlack[0] << " "
-//    << measuredBlack[1] << " "
-//    << measuredBlack[2] << endl;
-//  cout << "measured white:" << endl
-//    << measuredWhite[0] << " "
-//    << measuredWhite[1] << " "
-//    << measuredWhite[2] << endl;
-//  cout << "illuminant:" << endl
-//    << illuminant[0] << " "
-//    << illuminant[1] << " "
-//    << illuminant[2] << endl;
-//  cout << "normalized illuminant:" << endl
-//    << normalizedIlluminant[0] << " "
-//    << normalizedIlluminant[1] << " "
-//    << normalizedIlluminant[2] << endl;
-//  cout << "D50:" << endl
-//    << icD50XYZ[0] << " "
-//    << icD50XYZ[1] << " "
-//    << icD50XYZ[2] << endl;
-//  cout << "chromatic adaptation matrix (to D50):" << endl
-//    << CATToD50->m_CAT[0] << " " 
-//    << CATToD50->m_CAT[1] << " " 
-//    << CATToD50->m_CAT[2] << endl
-//    << CATToD50->m_CAT[3] << " " 
-//    << CATToD50->m_CAT[4] << " " 
-//    << CATToD50->m_CAT[5] << endl
-//    << CATToD50->m_CAT[6] << " " 
-//    << CATToD50->m_CAT[7] << " " 
-//    << CATToD50->m_CAT[8] << endl;
-  
   // mediaWhitePointTag
   CIccTagXYZ* whitePointTag = new CIccTagXYZ;
   icFloatNumber adaptedMediaWhite[3];
   CLUT::measuredXYZToAdaptedXYZ(adaptedMediaWhite, measuredWhite,
     flare, illuminantY, CATToD50);
-//  cout << "adaptedMediaWhite:" << endl
-//    << adaptedMediaWhite[0] << " " 
-//    << adaptedMediaWhite[1] << " "
-//    << adaptedMediaWhite[2]  << endl;
   (*whitePointTag)[0].X = icDtoF(adaptedMediaWhite[0]);
   (*whitePointTag)[0].Y = icDtoF(adaptedMediaWhite[1]);
   (*whitePointTag)[0].Z = icDtoF(adaptedMediaWhite[2]);
@@ -236,10 +200,6 @@ createProfile(const string& inFilename,
   icFloatNumber adaptedMediaBlack[3];
   CLUT::measuredXYZToAdaptedXYZ(adaptedMediaBlack, measuredBlack,
     flare, illuminantY, CATToD50);
-//  cout << "adaptedMediaBlack:" << endl
-//    << adaptedMediaBlack[0] << " "
-//    << adaptedMediaBlack[1] << " "
-//    << adaptedMediaBlack[2] << endl;
   (*blackPointTag)[0].X = icDtoF(adaptedMediaBlack[0]);
   (*blackPointTag)[0].Y = icDtoF(adaptedMediaBlack[1]);
   (*blackPointTag)[0].Z = icDtoF(adaptedMediaBlack[2]);

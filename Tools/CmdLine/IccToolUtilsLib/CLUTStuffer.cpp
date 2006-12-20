@@ -79,14 +79,7 @@
 
 #include "CLUTStuffer.h"
 
-#include <list>
-using std::list;
-
-#include "IccProfLibConf.h"
-#include "IccDefs.h"
 #include "IccUtil.h"
-#include "IccIO.h"
-#include "IccTagBasic.h"
 #include "IccTagLut.h"
 
 CLUTStuffer::CLUTStuffer(unsigned int edgeN,
