@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-  Name="SampleICCcmm"
-  ProjectGUID="{623F83ED-CF69-4828-9E08-9B0B068B6315}"
+	Name="SampleICCcmm"
+	ProjectGUID="{623F83ED-CF69-4828-9E08-9B0B068B6315}"
 	SccProjectName=""
 	SccAuxPath=""
 	SccLocalPath="..\..\.."
@@ -191,6 +191,15 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\IccProfLib\IccMpeACS.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\IccProfLib\IccMpeBasic.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\IccProfLib\IccMpeFactory.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\IccProfLib\IccProfile.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -218,6 +227,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\IccProfLib\IccTagLut.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\IccProfLib\IccTagMPE.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\IccProfLib\IccUtil.cpp">
@@ -296,6 +308,15 @@
 				RelativePath="..\..\..\IccProfLib\IccIO.h">
 			</File>
 			<File
+				RelativePath="..\..\..\IccProfLib\IccMpeACS.h">
+			</File>
+			<File
+				RelativePath="..\..\..\IccProfLib\IccMpeBasic.h">
+			</File>
+			<File
+				RelativePath="..\..\..\IccProfLib\IccMpeFactory.h">
+			</File>
+			<File
 				RelativePath="..\..\..\IccProfLib\IccProfile.h">
 			</File>
 			<File
@@ -312,6 +333,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\IccProfLib\IccTagLut.h">
+			</File>
+			<File
+				RelativePath="..\..\..\IccProfLib\IccTagMPE.h">
 			</File>
 			<File
 				RelativePath="..\..\..\IccProfLib\IccUtil.h">

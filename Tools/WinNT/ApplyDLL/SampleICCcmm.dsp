@@ -100,6 +100,18 @@ SOURCE=..\..\..\IccProfLib\IccIO.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\IccProfLib\IccMpeACS.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\IccProfLib\IccMpeBasic.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\IccProfLib\IccMpeFactory.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\IccProfLib\IccProfile.cpp
 # End Source File
 # Begin Source File
@@ -113,6 +125,10 @@ SOURCE=..\..\..\IccProfLib\IccTagFactory.cpp
 # Begin Source File
 
 SOURCE=..\..\..\IccProfLib\IccTagLut.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\IccProfLib\IccTagMPE.cpp
 # End Source File
 # Begin Source File
 
@@ -148,6 +164,18 @@ SOURCE=..\..\..\IccProfLib\IccIO.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\IccProfLib\IccMpeACS.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\IccProfLib\IccMpeBasic.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\IccProfLib\IccMpeFactory.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\IccProfLib\IccProfile.h
 # End Source File
 # Begin Source File
@@ -165,6 +193,10 @@ SOURCE=..\..\..\IccProfLib\IccTagBasic.h
 # Begin Source File
 
 SOURCE=..\..\..\IccProfLib\IccTagLut.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\IccProfLib\IccTagMPE.h
 # End Source File
 # Begin Source File
 
