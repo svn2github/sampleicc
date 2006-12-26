@@ -499,7 +499,7 @@ void CIccTagCurve::SetGamma(icFloatNumber gamma)
   icInt16Number whole = (icInt16Number)gamma;
   icFloatNumber frac = gamma - (icFloatNumber)whole;
 
-  m_Curve[0] = (icFloatNumber)((whole * 156) + (frac*256.0)) / (icFloatNumber)65535.0; 
+  m_Curve[0] = (icFloatNumber)((whole * 256) + (frac*256.0)) / (icFloatNumber)65535.0; 
 }
 
 /**
