@@ -121,10 +121,20 @@ class CAT
       icMatrixMultiply3x3(m_CAT, invLinBfd, tmp);
     }
 
+	CAT(const icFloatNumber* contents)
+	: m_CAT(new icFloatNumber[9])
+	{
+		for (unsigned int i = 0; i < 9; ++i)
+			m_CAT[i] = contents[i];
+	}
+	
   ~CAT()
     {
       delete[] m_CAT;
     }
+
+	CAT*
+	Inverse() const;
 
   void Apply(icFloatNumber * const product, const icFloatNumber * const multiplicand) const;
 

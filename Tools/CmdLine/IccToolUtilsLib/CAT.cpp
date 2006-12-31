@@ -80,6 +80,16 @@
 #include "CAT.h"
 #include "IccUtil.h"
 
+CAT*
+CAT::Inverse() const
+{
+	icFloatNumber contents[9];
+	for (unsigned int i = 0; i < 9; ++i)
+		contents[i] = m_CAT[i];
+	icMatrixInvert3x3(contents);
+	return new CAT(contents);
+}
+
 void
 CAT::Apply(icFloatNumber * const product, const icFloatNumber * const multiplicand) const
 {
