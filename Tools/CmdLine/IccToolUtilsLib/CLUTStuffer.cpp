@@ -6,7 +6,7 @@
  
  Version:    V1
  
- Copyright:  Â© see below
+ Copyright:  © see below
  */
 
 /*
@@ -109,8 +109,7 @@ CLUTStuffer::PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData)
     // "media white" and the tristimulus values of the illumination source or
     // perfect reflecting diffuser should be specified.
     
-    // [Presumably, this was done in order to get the XYZ values which are being
-    // stuffed into this CLUT input profile, so there's no processing done here,
+    // [We assume this is done upstream, outside of this member function]
     
     unsigned int rIdx = static_cast<unsigned int>(pGridAdr[0] * (m_EdgeN - 1) + 0.5);
     unsigned int gIdx = static_cast<unsigned int>(pGridAdr[1] * (m_EdgeN - 1) + 0.5);
@@ -136,11 +135,32 @@ CLUTStuffer::PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData)
     // described in clause D.4 and Annex E.  The transform used must
     // be specified in the chromaticAdaptationTag.
     
-    icFloatNumber adaptedPCSXYZ[3];
-    CLUT::measuredXYZToAdaptedXYZ(adaptedPCSXYZ, measuredXYZ, m_Flare,
+    icFloatNumber adaptedXYZ[3];
+    CLUT::measuredXYZToAdaptedXYZ(adaptedXYZ, measuredXYZ, m_Flare,
                                   m_IlluminantY, m_CAT);
-    
-    icXYZtoLab(pData, adaptedPCSXYZ, m_AdaptedMediaWhite);
+	
+		// 5. Record the converted media white point in the mediaWhitePointTag.
+		// Optionally, record the converted media black point in the
+		// mediaBlackPointTag.
+	
+		// [This should be done, but not here in per-CLUT-entry land]
+	
+		// 6. Convert colorimetry from D50 illuminant-relative to
+		// mediawhite-relative values, by scaling each value by the ratio of the
+		// PCS D50 illuminantion source over the converted media white point, using
+		// equation D.10 (which is the same as D.3).  After scaling, the XYZ values
+		// for the media white point measurement will be equal to the XYZ values of
+		// the PCS D50 illumination source.
+	
+		icFloatNumber adjustedPCSXYZ[3];
+    for (unsigned int i = 0; i < 3; ++i)
+			adjustedPCSXYZ[i] = adaptedXYZ[i] * icD50XYZ[i] / m_AdaptedMediaWhite[i];
+	
+		// 7. Optionally, convert the adjusted PCS XYZ coordinates to PCS L*a*b*
+		// as described in Annex A.
+    icXYZtoLab(pData, adjustedPCSXYZ, icD50XYZ);
   
+		// 8. Encode the PCS XYZ coordinates or the PCS L*a*b* coordinates digitally
+		// in 8-bit or 16-bit representations as defined in 6.3.4.
     icLabToPcs(pData);
 }
