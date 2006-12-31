@@ -150,7 +150,7 @@ main(int argc, char* argv[])
     for (i = 0; i < N; ++i)
       in >> redTRC[i] >> greenTRC[i] >> blueTRC[i];
     
-    CIccProfile profile;
+		CIccProfile profile;
     profile.InitHeader();
     profile.m_Header.deviceClass = icSigDisplayClass;
     profile.m_Header.colorSpace = icSigRgbData;
@@ -251,18 +251,27 @@ main(int argc, char* argv[])
     profile.AttachTag(icSigBlueMatrixColumnTag, blueMatrixColumnTag);
     
     CIccTagCurve* redTRCTag = new CIccTagCurve(N);
-    for (i = 0; i < N; ++i)
-      (*redTRCTag)[i] = redTRC[i];
+		if (N == 1)
+			redTRCTag->SetGamma(redTRC[0]);
+		else
+			for (i = 0; i < N; ++i)
+				(*redTRCTag)[i] = redTRC[i];
     profile.AttachTag(icSigRedTRCTag, redTRCTag);
     
     CIccTagCurve* greenTRCTag = new CIccTagCurve(N);
-    for (i = 0; i < N; ++i)
-      (*greenTRCTag)[i] = greenTRC[i];
+		if (N == 1)
+			greenTRCTag->SetGamma(greenTRC[0]);
+		else
+			for (i = 0; i < N; ++i)
+				(*greenTRCTag)[i] = greenTRC[i];
     profile.AttachTag(icSigGreenTRCTag, greenTRCTag);
     
     CIccTagCurve* blueTRCTag = new CIccTagCurve(N);
-    for (i = 0; i < N; ++i)
-      (*blueTRCTag)[i] = blueTRC[i];
+		if (N == 1)
+			blueTRCTag->SetGamma(blueTRC[0]);
+		else
+			for (i = 0; i < N; ++i)
+				(*blueTRCTag)[i] = blueTRC[i];
     profile.AttachTag(icSigBlueTRCTag, blueTRCTag);
     
     //Verify things
