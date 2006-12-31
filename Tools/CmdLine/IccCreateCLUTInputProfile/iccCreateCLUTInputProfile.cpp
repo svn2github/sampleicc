@@ -131,11 +131,25 @@ createProfile(const string& inFilename,
   unsigned int i;
 
   ifstream iFS(inFilename.c_str());
+	if (! iFS)
+	{
+		ostringstream s;
+		s << "Could not open data file `" << inFilename << "'";
+		throw IccToolException(s.str());
+	}
   unsigned int numData = 3 * size * size * size;
   icFloatNumber* measuredXYZ = new icFloatNumber[numData];
   for (i = 0; i < numData; ++i)
+	{
     iFS >> measuredXYZ[i];
-  
+		if (iFS.eof())
+		{
+			ostringstream s;
+			s << "Could not read " << numData << " entries from file `"
+				<< inFilename << "': premature end-of-file";
+			throw IccToolException(s.str());
+		}
+  }
   CIccProfile profile;
   profile.InitHeader();
   profile.m_Header.deviceClass = icSigInputClass;
