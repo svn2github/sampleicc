@@ -111,10 +111,18 @@ class CLUT
   static
   void
   measuredXYZToAdaptedXYZ(icFloatNumber* const adaptedXYZ,
-                          const icFloatNumber* const measuredXYZ,
-                          const icFloatNumber* const flare,
-                          const icFloatNumber illuminantY,
-                          const CAT* CATToPCS);
+													const icFloatNumber* const measuredXYZ,
+													const icFloatNumber* const flare,
+													const icFloatNumber illuminantY,
+													const CAT* CATToPCS);
+  
+	static
+  void
+  adaptedXYZToMeasuredXYZ(icFloatNumber* const measuredXYZ,
+													const icFloatNumber* const adaptedXYZ,
+													const icFloatNumber* const flare,
+													const icFloatNumber illuminantY,
+													const CAT* invCATToPCS);
   
   void
   Iterate(IIccCLUTExec* pExec);

@@ -230,6 +230,23 @@ CLUT::measuredXYZToAdaptedXYZ(icFloatNumber* const adaptedXYZ,
 }
 
 void
+CLUT::adaptedXYZToMeasuredXYZ(icFloatNumber* const measuredXYZ,
+															const icFloatNumber* const adaptedXYZ,
+															const icFloatNumber* const flare,
+															const icFloatNumber illuminantY,
+															const CAT* invCATToPCS)
+{
+  icFloatNumber illuminantRelativeXYZ[3];
+  invCATToPCS->Apply(illuminantRelativeXYZ, adaptedXYZ);
+  icFloatNumber flarelessMeasuredXYZ[3];
+  for (unsigned int i = 0; i < 3; ++i)
+  {
+    flarelessMeasuredXYZ[i] = illuminantRelativeXYZ[i] * illuminantY;
+		measuredXYZ[i] = flarelessMeasuredXYZ[i] + flare[i];
+  }
+}
+
+void
 CLUT::Iterate(IIccCLUTExec* pExec)
 {
   m_innerCLUT->Iterate(pExec);
