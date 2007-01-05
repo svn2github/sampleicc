@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleIccCmm", "SampleIccCmm.vcproj", "{62025065-8784-4EBD-A380-57763DDBD26D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IccProfLib", "..\..\..\IccProfLib\IccProfLib.vcproj", "{A6480823-31F6-41FE-AA64-D11B1AF8B3FF}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{62025065-8784-4EBD-A380-57763DDBD26D}.Debug.ActiveCfg = Debug|Win32
+		{62025065-8784-4EBD-A380-57763DDBD26D}.Debug.Build.0 = Debug|Win32
+		{62025065-8784-4EBD-A380-57763DDBD26D}.Release.ActiveCfg = Release|Win32
+		{62025065-8784-4EBD-A380-57763DDBD26D}.Release.Build.0 = Release|Win32
+		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF}.Debug.ActiveCfg = Debug|Win32
+		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF}.Debug.Build.0 = Debug|Win32
+		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF}.Release.ActiveCfg = Release|Win32
+		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
