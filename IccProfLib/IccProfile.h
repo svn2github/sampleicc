@@ -160,6 +160,7 @@ public:
   bool DeleteTag(icSignature sig);
 
   bool Attach(CIccIO *pIO);
+  bool Detach();
   bool Read(CIccIO *pIO);
   icValidateStatus ReadValidate(CIccIO *pIO, std::string &sReport);
   bool Write(CIccIO *pIO);

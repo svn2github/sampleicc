@@ -444,6 +444,8 @@ CIccMemIO::CIccMemIO() : CIccIO()
   m_nSize = 0;
   m_nAvail = 0;
   m_nPos = 0;
+
+  m_bFreeData = false;
 }
 
 CIccMemIO::~CIccMemIO()
@@ -451,10 +453,35 @@ CIccMemIO::~CIccMemIO()
   Close();
 }
 
+
+bool CIccMemIO::Alloc(icUInt32Number nSize, bool bWrite)
+{
+  if (m_pData)
+    Close();
+
+  icUInt8Number *pData = (icUInt8Number*)malloc(nSize);
+
+  if (!pData)
+    return false;
+
+  if (!Attach(pData, nSize, bWrite)) {
+    free(pData);
+    return false;
+  }
+
+  m_bFreeData = true;
+
+  return true;
+}
+
+
 bool CIccMemIO::Attach(icUInt8Number *pData, icUInt32Number nSize, bool bWrite)
 {
   if (!pData)
     return false;
+
+  if (m_pData)
+   Close();
 
   m_pData = pData;
   m_nPos = 0;
@@ -474,6 +501,11 @@ bool CIccMemIO::Attach(icUInt8Number *pData, icUInt32Number nSize, bool bWrite)
 void CIccMemIO::Close()
 {
   if (m_pData) {
+    if (m_bFreeData) {
+      free(m_pData);
+
+      m_bFreeData = false;
+    }
     m_pData = NULL;
   }
 }

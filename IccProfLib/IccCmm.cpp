@@ -175,11 +175,11 @@ const icFloatNumber *CIccPCS::Check(const icFloatNumber *SrcPixel, CIccXform *pX
   else if (m_Space==NextSpace) {
     rv = SrcPixel;
   }
-  else if (m_Space==icSigXYZData) {
+  else if (m_Space==icSigXYZData && NextSpace==icSigLabData) {
     XyzToLab(m_Convert, SrcPixel);
     rv = m_Convert;
   }
-  else if (m_Space==icSigLabData) {
+  else if (m_Space==icSigLabData && NextSpace==icSigXYZData) {
     LabToXyz(m_Convert, SrcPixel);
     rv = m_Convert;
   }
@@ -3205,6 +3205,34 @@ icStatusCMM CIccCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixe
 
 
 /**
+**************************************************************************
+* Name: CIccCmm::RemoveAllIO()
+* 
+* Purpose: 
+*  Remove any attachments to CIccIO objects associated with the profiles
+*  related to the transforms attached to the CMM.
+*  Must be called after Begin().
+*
+*  Return:
+*   icCmmStatOK - All IO objects removed
+*   icCmmStatBadXform - Begin() has not been performed.
+**************************************************************************
+*/
+icStatusCMM CIccCmm::RemoveAllIO()
+{
+  if (!Valid())
+    return icCmmStatBadXform;
+
+  CIccXformList::iterator i;
+
+  for (i=m_Xforms->begin(); i!=m_Xforms->end(); i++) {
+    i->ptr->RemoveIO();
+  }
+
+  return icCmmStatOk;
+}
+
+/**
  *************************************************************************
  ** Name: CIccCmm::IsInGamut
  **
@@ -4548,6 +4576,186 @@ icStatusCMM CIccNamedColorCmm::SetLastXformDest(icColorSpaceSignature nDestSpace
   return icCmmStatBadXform;
 }
 
+/**
+****************************************************************************
+* Name: CIccMruCmm::CIccMruCmm
+* 
+* Purpose: private constructor - Use Attach to create CIccMruCmm objects
+*****************************************************************************
+*/
+CIccMruCmm::CIccMruCmm()
+{
+  m_pCmm = NULL;
+}
+
+
+/**
+****************************************************************************
+* Name: CIccMruCmm::~CIccMruCmm
+* 
+* Purpose: destructor
+*****************************************************************************
+*/
+CIccMruCmm::~CIccMruCmm()
+{
+   if (m_pCmm)
+     delete m_pCmm;
+
+   if (m_cache)
+     delete [] m_cache;
+
+   if (m_pixelData)
+     free(m_pixelData);
+}
+
+
+/**
+****************************************************************************
+* Name: CIccMruCmm::Attach
+* 
+* Purpose: Create a Cmm decorator object that implements a cache of most
+*  recently used pixel transformations.
+* 
+* Args:
+*  pCmm - pointer to cmm object that we are attaching to.
+*  nCacheSize - number of most recently used transformations to cache
+*
+* Return:
+*  A CIccMruCmm object that represents a cached form of the pCmm passed in.
+*  The pCmm will be owned by the returned object.
+*
+*  If this function fails the pCmm object will be deleted.
+*****************************************************************************
+*/
+CIccMruCmm* CIccMruCmm::Attach(CIccCmm *pCmm, icUInt8Number nCacheSize/* =4 */)
+{
+  if (!pCmm || !nCacheSize)
+    return NULL;
+
+  if (!pCmm->Valid()) {
+    delete pCmm;
+    return NULL;
+  }
+
+  CIccMruCmm *rv = new CIccMruCmm();
+
+  if (!rv->Init(pCmm, nCacheSize)) {
+    delete rv;
+    return NULL;
+  }
+
+  return rv;
+}
+
+/**
+****************************************************************************
+* Name: CIccMruCmm::Init
+* 
+* Purpose: Initialize the object and set up the cache
+* 
+* Args:
+*  pCmm - pointer to cmm object that we are attaching to.
+*  nCacheSize - number of most recently used transformations to cache
+*
+* Return:
+*  true if successful
+*****************************************************************************
+*/
+bool CIccMruCmm::Init(CIccCmm *pCmm, icUInt8Number nCacheSize)
+{
+  m_pCmm = pCmm;
+
+  m_bValid = true;
+
+  m_nSrcSpace = pCmm->GetSourceSpace();
+  m_nDestSpace = pCmm->GetDestSpace();
+
+  m_nLastIntent = pCmm->GetLastIntent();
+
+  m_nSrcSamples = GetSourceSamples();
+  m_nSrcSize = m_nSrcSamples * sizeof(icFloatNumber);
+  m_nDstSize = m_nSrcSamples * sizeof(icFloatNumber);
+
+  m_nTotalSamples = m_nSrcSamples + GetDestSamples();
+
+  m_nNumPixel = 0;
+  m_nCacheSize = nCacheSize;
+
+  m_pFirst = NULL;
+  m_cache = new CIccMruPixel[nCacheSize];
+
+  if (!m_cache)
+    return false;
+
+  m_pixelData = (icFloatNumber*)malloc(nCacheSize * m_nTotalSamples * sizeof(icFloatNumber));
+
+  if (!m_pixelData)
+    return false;
+
+  return true;
+}
+
+/**
+****************************************************************************
+* Name: CIccMruCmm::Apply
+* 
+* Purpose: Apply a transformation to a pixel.
+* 
+* Args:
+*  DstPixel - Location to store pixel results
+*  SrcPixel - Location to get pixel values from
+*
+* Return:
+*  icCmmStatOk if successful
+*****************************************************************************
+*/
+icStatusCMM CIccMruCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)
+{
+  CIccMruPixel *ptr, *prev=NULL, *last=NULL;
+  int i;
+  icFloatNumber *pixel;
+
+  for (ptr = m_pFirst, i=0; ptr; ptr=ptr->pNext, i++) {
+    if (!memcmp(SrcPixel, ptr->pPixelData, m_nSrcSize)) {
+      memcpy(DstPixel, &ptr->pPixelData[m_nSrcSamples], m_nDstSize);
+      return icCmmStatOk;
+    }
+    prev = last;
+    last = ptr;
+  }
+
+  //If we get here SrcPixel is not in the cache
+  if (i<m_nCacheSize) {
+    pixel = &m_pixelData[i*m_nTotalSamples];
+
+    ptr = &m_cache[i];
+    ptr->pPixelData = pixel;
+
+    if (!last) {
+      m_pFirst = ptr;
+    }
+    else {
+
+      last->pNext =  ptr;
+    }
+  }
+  else {  //Reuse oldest value and put it at the front of the list
+    prev->pNext = NULL;
+    last->pNext = m_pFirst;
+
+    m_pFirst = last;
+    pixel = last->pPixelData;
+  }
+  icFloatNumber *dest = &pixel[m_nSrcSamples];
+
+  memcpy(pixel, SrcPixel, m_nSrcSize);
+
+  m_pCmm->Apply(dest, pixel);
+
+  memcpy(DstPixel, dest, m_nDstSize);
+
+  return icCmmStatOk;
+}
 
 #ifdef USESAMPLEICCNAMESPACE
 } //namespace sampleICC

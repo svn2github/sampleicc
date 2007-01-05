@@ -814,7 +814,7 @@ typedef enum {
   icDMDitherReserved6                = 0x0006,
   icDMDitherReserved7                = 0x0007,
   icDMDitherReserved8                = 0x0008,
-  icDMDitherReserved9                 = 0x0009,
+  icDMDitherReserved9                = 0x0009,
   icDMDitherGrayscale                = 0x000A, /* Device does grayscaling */
   icDMDitherUser                     = 0x0100, /* Device-specifice halftones 
                                                   are >= 256 */

@@ -184,6 +184,8 @@ public:
   CIccMemIO();
   virtual ~CIccMemIO();
 
+  bool Alloc(icUInt32Number nSize, bool bWrite = false);
+
   bool Attach(icUInt8Number *pData, icUInt32Number nSize, bool bWrite=false);
   virtual void Close();
 
@@ -195,11 +197,15 @@ public:
   virtual icInt32Number Seek(icInt32Number nOffset, icSeekVal pos);
   virtual icInt32Number Tell();
 
+  icUInt8Number *GetData() { return m_pData; }
+
 protected:
   icUInt8Number *m_pData;
   icUInt32Number m_nSize;
   icUInt32Number m_nAvail;
   icUInt32Number m_nPos;
+
+  bool m_bFreeData;
 };
 
 #ifdef USESAMPLEICCNAMESPACE

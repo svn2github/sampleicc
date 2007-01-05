@@ -169,6 +169,9 @@ public:
   virtual icStatusCMM Begin();
   virtual void Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)=0;
 
+  //Detach and remove CIccIO object associated with xform's profile.  Must call after Begin()
+  virtual bool RemoveIO() { return m_pProfile->Detach(); }
+
   ///Returns the source color space of the transform
   virtual icColorSpaceSignature GetSrcSpace() const;
 
@@ -573,6 +576,9 @@ public:
 
   virtual icStatusCMM Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);
 
+  //Call to Detach and remove all pending IO objects attached to the profiles used by the CMM. Must be called after Begin()
+  virtual icStatusCMM RemoveAllIO();
+
   ///Returns the number of profiles/transforms added 
   virtual icUInt32Number GetNumXforms() const;
 
@@ -674,6 +680,77 @@ public:
 
 protected:
   icApplyInterface m_nApplyInterface;
+};
+
+
+class ICCPROFLIB_API CIccMruPixel
+{
+public:
+  CIccMruPixel() { pPixelData = NULL; pNext = NULL; }
+
+  icFloatNumber *pPixelData;
+  CIccMruPixel *pNext;
+};
+
+/**
+**************************************************************************
+* Type: Class
+* 
+* Purpose: A CMM decorator class that provides limited caching of results
+* 
+**************************************************************************
+*/
+class ICCPROFLIB_API CIccMruCmm : public CIccCmm
+{
+private:
+  CIccMruCmm();
+public:
+  virtual ~CIccMruCmm();
+
+  //This is the function used to create a new CIccMruCmm.  The pCmm must be valid and its Begin() already called.
+  static CIccMruCmm* Attach(CIccCmm *pCmm, icUInt8Number nCacheSize=6);  //The returned object will own pCmm, and pCmm is deleted on failure.
+
+  //override AddXform/Begin functions to return bad status.
+  virtual icStatusCMM AddXform(const icChar *szProfilePath, icRenderingIntent nIntent=icUnknownIntent,
+    icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
+    bool bUseMpeTags=true) { return icCmmStatBad; }
+  virtual icStatusCMM AddXform(icUInt8Number *pProfileMem, icUInt32Number nProfileLen,
+    icRenderingIntent nIntent=icUnknownIntent, icXformInterp nInterp=icInterpLinear,
+    icXformLutType nLutType=icXformLutColor, bool bUseMpeTags=true)  { return icCmmStatBad; }
+  virtual icStatusCMM AddXform(CIccProfile *pProfile, icRenderingIntent nIntent=icUnknownIntent,
+    icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
+    bool bUseMpeTags=true)  { return icCmmStatBad; }
+  virtual icStatusCMM AddXform(CIccProfile &Profile, icRenderingIntent nIntent=icUnknownIntent,
+    icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
+    bool bUseMpeTags=true) { return icCmmStatBad; }
+  virtual icStatusCMM Begin()  { return icCmmStatBad; }
+
+  virtual icStatusCMM Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);
+
+  //Forward calls to attached CMM
+  virtual icStatusCMM RemoveAllIO() { return m_pCmm->RemoveAllIO(); }
+  virtual CIccPCS *GetPCS() { return m_pCmm->GetPCS(); }
+  virtual icUInt32Number GetNumXforms() const { return m_pCmm->GetNumXforms(); }
+
+protected:
+  bool Init(CIccCmm *pCmm, icUInt8Number nCacheSize);
+
+  CIccCmm *m_pCmm;
+
+  icUInt16Number m_nCacheSize;
+
+  icFloatNumber *m_pixelData;
+
+  CIccMruPixel *m_pFirst;
+  CIccMruPixel *m_cache;
+
+  icUInt16Number m_nNumPixel;
+
+  icUInt32Number m_nTotalSamples;
+  icUInt32Number m_nSrcSamples;
+
+  icUInt32Number m_nSrcSize;
+  icUInt32Number m_nDstSize;
 };
 
 #ifdef USESAMPLEICCNAMESPACE

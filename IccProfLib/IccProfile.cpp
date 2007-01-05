@@ -480,6 +480,31 @@ bool CIccProfile::Attach(CIccIO *pIO)
 }
 
 /**
+******************************************************************************
+* Name: CIccProfile::Detach
+* 
+* Purpose: Discontinues the use of defferred IO with a profile.  This can be done
+*  once all the information needed for performing a transform has been extracted
+*  from the profile.
+* 
+* Args: 
+*  true - If an IO object was attached to the profile
+*  false - if no IO object was attached to the profile
+*******************************************************************************
+*/
+bool CIccProfile::Detach()
+{
+  if (m_pAttachIO) {
+    delete m_pAttachIO;
+
+    m_pAttachIO = NULL;
+    return true;
+  }
+
+  return false;
+}
+
+/**
  ******************************************************************************
  * Name: CIccProfile::Read
  * 
