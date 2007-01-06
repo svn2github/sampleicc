@@ -7,17 +7,17 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		7CE0F50A0AF05322002F2A93 /* Libraries */ = {
+		7C605EF60B4B6A4800350479 /* Frameworks */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 7CE0F5190AF05373002F2A93 /* Build configuration list for PBXAggregateTarget "Libraries" */;
+			buildConfigurationList = 7C605EFC0B4B6A7100350479 /* Build configuration list for PBXAggregateTarget "Frameworks" */;
 			buildPhases = (
 			);
 			dependencies = (
-				7CE0F50C0AF05327002F2A93 /* PBXTargetDependency */,
-				7CFB29130B14D8C00093D058 /* PBXTargetDependency */,
+				7C605EF90B4B6A5200350479 /* PBXTargetDependency */,
+				7C605EFB0B4B6A5200350479 /* PBXTargetDependency */,
 			);
-			name = Libraries;
-			productName = Libraries;
+			name = Frameworks;
+			productName = Frameworks;
 		};
 		7CE0F50D0AF05334002F2A93 /* Commands */ = {
 			isa = PBXAggregateTarget;
@@ -40,34 +40,59 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		7C333A0A0B1EA948006AB880 /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
 		7C333A100B1EA99D006AB880 /* iccV4ToMPE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C333A0F0B1EA99D006AB880 /* iccV4ToMPE.cpp */; };
 		7C49EA900B09122C00ADFFE7 /* iccCreateTRCMatrixDisplayProfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C49EA8F0B09122C00ADFFE7 /* iccCreateTRCMatrixDisplayProfile.cpp */; };
+		7C605E690B4B65E200350479 /* IccCmm.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4170AF04D3F002F2A93 /* IccCmm.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605E6A0B4B65E200350479 /* IccDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4180AF04D3F002F2A93 /* IccDefs.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605E6B0B4B65E200350479 /* IccIO.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F41A0AF04D3F002F2A93 /* IccIO.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605E6C0B4B65E200350479 /* IccMpeACS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CFB28B00B13D0230093D058 /* IccMpeACS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605E6D0B4B65E200350479 /* IccMpeBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CFB28B20B13D0230093D058 /* IccMpeBasic.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605E6E0B4B65E200350479 /* IccMpeFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CFB28B40B13D0230093D058 /* IccMpeFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605E6F0B4B65E200350479 /* IccProfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F41C0AF04D3F002F2A93 /* IccProfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605E700B4B65E200350479 /* IccProfLibConf.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4210AF04D3F002F2A93 /* IccProfLibConf.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605E710B4B65E200350479 /* IccTag.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4220AF04D3F002F2A93 /* IccTag.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605E720B4B65E200350479 /* IccTagBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4240AF04D3F002F2A93 /* IccTagBasic.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605E730B4B65E200350479 /* IccTagFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4260AF04D3F002F2A93 /* IccTagFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605E740B4B65E200350479 /* IccTagLut.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4280AF04D3F002F2A93 /* IccTagLut.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605E750B4B65E200350479 /* IccTagMPE.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CFB28B60B13D0230093D058 /* IccTagMPE.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605E760B4B65E200350479 /* IccUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F42A0AF04D3F002F2A93 /* IccUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605E770B4B65E200350479 /* icProfileHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F42B0AF04D3F002F2A93 /* icProfileHeader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605E780B4B65E200350479 /* md5.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4300AF04D3F002F2A93 /* md5.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605E7B0B4B661400350479 /* IccCmm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4160AF04D3F002F2A93 /* IccCmm.cpp */; };
+		7C605E7C0B4B661400350479 /* IccIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4190AF04D3F002F2A93 /* IccIO.cpp */; };
+		7C605E7D0B4B661400350479 /* IccMpeACS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CFB28AF0B13D0230093D058 /* IccMpeACS.cpp */; };
+		7C605E7E0B4B661400350479 /* IccMpeBasic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CFB28B10B13D0230093D058 /* IccMpeBasic.cpp */; };
+		7C605E7F0B4B661400350479 /* IccMpeFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CFB28B30B13D0230093D058 /* IccMpeFactory.cpp */; };
+		7C605E800B4B661400350479 /* IccProfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F41B0AF04D3F002F2A93 /* IccProfile.cpp */; };
+		7C605E810B4B661400350479 /* IccTagBasic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4230AF04D3F002F2A93 /* IccTagBasic.cpp */; };
+		7C605E820B4B661400350479 /* IccTagFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4250AF04D3F002F2A93 /* IccTagFactory.cpp */; };
+		7C605E830B4B661400350479 /* IccTagLut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4270AF04D3F002F2A93 /* IccTagLut.cpp */; };
+		7C605E840B4B661400350479 /* IccTagMPE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CFB28B50B13D0230093D058 /* IccTagMPE.cpp */; };
+		7C605E850B4B661400350479 /* IccUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4290AF04D3F002F2A93 /* IccUtil.cpp */; };
+		7C605E860B4B661400350479 /* md5.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F42F0AF04D3F002F2A93 /* md5.cpp */; };
+		7C605ECA0B4B68FC00350479 /* CLUTStuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C6291110AFEAD9C002D7386 /* CLUTStuffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605ECB0B4B68FC00350479 /* CAT.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4CB0AF05090002F2A93 /* CAT.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605ECC0B4B68FC00350479 /* CLUT.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4CD0AF05090002F2A93 /* CLUT.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605ECD0B4B68FC00350479 /* IccToolException.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C732D880B0E3746006A574A /* IccToolException.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C605ECE0B4B690E00350479 /* CLUTStuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C6291120AFEAD9C002D7386 /* CLUTStuffer.cpp */; };
+		7C605ECF0B4B690E00350479 /* CAT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4CA0AF05090002F2A93 /* CAT.cpp */; };
+		7C605ED00B4B690E00350479 /* CLUT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4CC0AF05090002F2A93 /* CLUT.cpp */; };
+		7C605ED10B4B690E00350479 /* IccToolException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C732D890B0E3746006A574A /* IccToolException.cpp */; };
+		7C605EF20B4B6A1C00350479 /* SampleICC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605E5C0B4B65A900350479 /* SampleICC.framework */; };
+		7C605F000B4B6A7700350479 /* SampleICC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605E5C0B4B65A900350479 /* SampleICC.framework */; };
+		7C605F0C0B4B6AF200350479 /* SampleICC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605E5C0B4B65A900350479 /* SampleICC.framework */; };
+		7C605F0D0B4B6B0700350479 /* SampleICC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605E5C0B4B65A900350479 /* SampleICC.framework */; };
+		7C605F120B4B6B3900350479 /* SampleICC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605E5C0B4B65A900350479 /* SampleICC.framework */; };
+		7C605F130B4B6B3C00350479 /* SampleICCToolUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605EB30B4B683200350479 /* SampleICCToolUtils.framework */; };
+		7C605F180B4B6B6F00350479 /* SampleICC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605E5C0B4B65A900350479 /* SampleICC.framework */; };
+		7C605F190B4B6B6F00350479 /* SampleICCToolUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605EB30B4B683200350479 /* SampleICCToolUtils.framework */; };
+		7C605F1E0B4B6B9300350479 /* SampleICC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605E5C0B4B65A900350479 /* SampleICC.framework */; };
+		7C605F210B4B6BB400350479 /* SampleICC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605E5C0B4B65A900350479 /* SampleICC.framework */; };
+		7C605F240B4B6BD700350479 /* SampleICC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605E5C0B4B65A900350479 /* SampleICC.framework */; };
+		7C605F270B4B6BF600350479 /* SampleICC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605E5C0B4B65A900350479 /* SampleICC.framework */; };
+		7C605F280B4B6BF600350479 /* SampleICCToolUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605EB30B4B683200350479 /* SampleICCToolUtils.framework */; };
 		7C6291FF0AFEC69C002D7386 /* BlackScaler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C6291FE0AFEC69C002D7386 /* BlackScaler.cpp */; };
-		7C9E18CB0B14E0A5002EF2BB /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
 		7CDB8F240B44742A009C7341 /* iccExtractPrimaryRamps.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CDB8F230B44742A009C7341 /* iccExtractPrimaryRamps.cpp */; };
-		7CDB8F3C0B447C25009C7341 /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
-		7CDB8F3D0B447C29009C7341 /* libSampleICCToolUtils.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CFB290F0B14D8AB0093D058 /* libSampleICCToolUtils.dylib */; };
-		7CE0F4320AF04D3F002F2A93 /* IccCmm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4160AF04D3F002F2A93 /* IccCmm.cpp */; };
-		7CE0F4330AF04D3F002F2A93 /* IccCmm.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4170AF04D3F002F2A93 /* IccCmm.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7CE0F4340AF04D3F002F2A93 /* IccDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4180AF04D3F002F2A93 /* IccDefs.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7CE0F4350AF04D3F002F2A93 /* IccIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4190AF04D3F002F2A93 /* IccIO.cpp */; };
-		7CE0F4360AF04D3F002F2A93 /* IccIO.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F41A0AF04D3F002F2A93 /* IccIO.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7CE0F4370AF04D3F002F2A93 /* IccProfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F41B0AF04D3F002F2A93 /* IccProfile.cpp */; };
-		7CE0F4380AF04D3F002F2A93 /* IccProfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F41C0AF04D3F002F2A93 /* IccProfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7CE0F4390AF04D3F002F2A93 /* IccProfLibConf.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4210AF04D3F002F2A93 /* IccProfLibConf.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7CE0F43A0AF04D3F002F2A93 /* IccTag.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4220AF04D3F002F2A93 /* IccTag.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7CE0F43B0AF04D3F002F2A93 /* IccTagBasic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4230AF04D3F002F2A93 /* IccTagBasic.cpp */; };
-		7CE0F43C0AF04D3F002F2A93 /* IccTagBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4240AF04D3F002F2A93 /* IccTagBasic.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7CE0F43D0AF04D3F002F2A93 /* IccTagFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4250AF04D3F002F2A93 /* IccTagFactory.cpp */; };
-		7CE0F43E0AF04D3F002F2A93 /* IccTagFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4260AF04D3F002F2A93 /* IccTagFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7CE0F43F0AF04D3F002F2A93 /* IccTagLut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4270AF04D3F002F2A93 /* IccTagLut.cpp */; };
-		7CE0F4400AF04D3F002F2A93 /* IccTagLut.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4280AF04D3F002F2A93 /* IccTagLut.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7CE0F4410AF04D3F002F2A93 /* IccUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4290AF04D3F002F2A93 /* IccUtil.cpp */; };
-		7CE0F4420AF04D3F002F2A93 /* IccUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F42A0AF04D3F002F2A93 /* IccUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7CE0F4430AF04D3F002F2A93 /* icProfileHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F42B0AF04D3F002F2A93 /* icProfileHeader.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7CE0F4450AF04D3F002F2A93 /* md5.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F42F0AF04D3F002F2A93 /* md5.cpp */; };
-		7CE0F4460AF04D3F002F2A93 /* md5.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4300AF04D3F002F2A93 /* md5.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7CE0F4850AF04F9B002F2A93 /* iccApplyNamedCmm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F47F0AF04F9B002F2A93 /* iccApplyNamedCmm.cpp */; };
 		7CE0F4960AF04FE9002F2A93 /* cmyk16bit.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CE0F4790AF04F9B002F2A93 /* cmyk16bit.txt */; };
 		7CE0F4970AF04FE9002F2A93 /* cmyk8bit.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CE0F47A0AF04F9B002F2A93 /* cmyk8bit.txt */; };
@@ -75,48 +100,16 @@
 		7CE0F4990AF04FE9002F2A93 /* cmykPercent.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CE0F47C0AF04F9B002F2A93 /* cmykPercent.txt */; };
 		7CE0F49A0AF04FE9002F2A93 /* labValue.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CE0F47D0AF04F9B002F2A93 /* labValue.txt */; };
 		7CE0F49B0AF04FE9002F2A93 /* namedColor.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CE0F47E0AF04F9B002F2A93 /* namedColor.txt */; };
-		7CE0F49C0AF04FFB002F2A93 /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
 		7CE0F4C50AF05033002F2A93 /* iccApplyProfiles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4BD0AF05033002F2A93 /* iccApplyProfiles.cpp */; };
 		7CE0F4C60AF05033002F2A93 /* TiffImg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4C30AF05033002F2A93 /* TiffImg.cpp */; };
-		7CE0F4C70AF05041002F2A93 /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
 		7CE0F4DA0AF05090002F2A93 /* iccCreateCLUTInputProfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4CE0AF05090002F2A93 /* iccCreateCLUTInputProfile.cpp */; };
-		7CE0F4DD0AF0509A002F2A93 /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
-		7CE0F4E70AF05133002F2A93 /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
 		7CE0F4E80AF05143002F2A93 /* iccFlattenAToBTag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4D10AF05090002F2A93 /* iccFlattenAToBTag.cpp */; };
 		7CE0F4F30AF0517D002F2A93 /* iccDumpProfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4ED0AF0517D002F2A93 /* iccDumpProfile.cpp */; };
-		7CE0F4F40AF05189002F2A93 /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
 		7CE0F5070AF052BA002F2A93 /* iccProfLibTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4FF0AF052BA002F2A93 /* iccProfLibTest.cpp */; };
 		7CE0F5080AF052BA002F2A93 /* WriteFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F5050AF052BA002F2A93 /* WriteFunctions.cpp */; };
-		7CE0F5090AF052FF002F2A93 /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
-		7CF53DC00B0A77C500F6E353 /* libSampleICC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC0630554660B00DB518D /* libSampleICC.dylib */; };
-		7CFB28B70B13D0230093D058 /* IccMpeACS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CFB28AF0B13D0230093D058 /* IccMpeACS.cpp */; };
-		7CFB28B80B13D0230093D058 /* IccMpeACS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CFB28B00B13D0230093D058 /* IccMpeACS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7CFB28B90B13D0230093D058 /* IccMpeBasic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CFB28B10B13D0230093D058 /* IccMpeBasic.cpp */; };
-		7CFB28BA0B13D0230093D058 /* IccMpeBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CFB28B20B13D0230093D058 /* IccMpeBasic.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7CFB28BB0B13D0230093D058 /* IccMpeFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CFB28B30B13D0230093D058 /* IccMpeFactory.cpp */; };
-		7CFB28BC0B13D0230093D058 /* IccMpeFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CFB28B40B13D0230093D058 /* IccMpeFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7CFB28BD0B13D0230093D058 /* IccTagMPE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CFB28B50B13D0230093D058 /* IccTagMPE.cpp */; };
-		7CFB28BE0B13D0230093D058 /* IccTagMPE.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CFB28B60B13D0230093D058 /* IccTagMPE.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7CFB29140B14D8E20093D058 /* CAT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4CA0AF05090002F2A93 /* CAT.cpp */; };
-		7CFB29150B14D8E20093D058 /* CLUT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F4CC0AF05090002F2A93 /* CLUT.cpp */; };
-		7CFB29160B14D8E20093D058 /* CLUTStuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C6291120AFEAD9C002D7386 /* CLUTStuffer.cpp */; };
-		7CFB29170B14D9070093D058 /* libSampleICCToolUtils.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CFB290F0B14D8AB0093D058 /* libSampleICCToolUtils.dylib */; };
-		7CFB29180B14D91D0093D058 /* IccToolException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C732D890B0E3746006A574A /* IccToolException.cpp */; };
-		7CFB29190B14D9490093D058 /* libSampleICCToolUtils.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CFB290F0B14D8AB0093D058 /* libSampleICCToolUtils.dylib */; };
-		7CFB29220B14D9CA0093D058 /* CLUTStuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C6291110AFEAD9C002D7386 /* CLUTStuffer.h */; };
-		7CFB29230B14D9CA0093D058 /* CAT.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4CB0AF05090002F2A93 /* CAT.h */; };
-		7CFB29240B14D9CA0093D058 /* CLUT.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4CD0AF05090002F2A93 /* CLUT.h */; };
-		7CFB29250B14D9CA0093D058 /* IccToolException.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C732D880B0E3746006A574A /* IccToolException.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		7C333A080B1EA92D006AB880 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC0620554660B00DB518D;
-			remoteInfo = SampleICC;
-		};
 		7C333A170B1EAA09006AB880 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
@@ -131,75 +124,117 @@
 			remoteGlobalIDString = 7C333A050B1EA925006AB880;
 			remoteInfo = iccV4ToMpe;
 		};
-		7C49EA7A0B09115400ADFFE7 /* PBXContainerItemProxy */ = {
+		7C605ED20B4B692000350479 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = D2AAC0620554660B00DB518D;
+			remoteGlobalIDString = 7C605E5B0B4B65A800350479;
 			remoteInfo = SampleICC;
+		};
+		7C605EF80B4B6A5200350479 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C605E5B0B4B65A800350479;
+			remoteInfo = SampleICC;
+		};
+		7C605EFA0B4B6A5200350479 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C605EB20B4B683200350479;
+			remoteInfo = SampleICCToolUtils;
+		};
+		7C605F010B4B6A9100350479 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C605E5B0B4B65A800350479;
+			remoteInfo = SampleICC;
+		};
+		7C605F0E0B4B6B1700350479 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C605E5B0B4B65A800350479;
+			remoteInfo = SampleICC;
+		};
+		7C605F100B4B6B2B00350479 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C605E5B0B4B65A800350479;
+			remoteInfo = SampleICC;
+		};
+		7C605F140B4B6B5900350479 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C605E5B0B4B65A800350479;
+			remoteInfo = SampleICC;
+		};
+		7C605F160B4B6B5900350479 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C605EB20B4B683200350479;
+			remoteInfo = SampleICCToolUtils;
+		};
+		7C605F1A0B4B6B8200350479 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C605E5B0B4B65A800350479;
+			remoteInfo = SampleICC;
+		};
+		7C605F1C0B4B6B8200350479 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C605EB20B4B683200350479;
+			remoteInfo = SampleICCToolUtils;
+		};
+		7C605F1F0B4B6BA300350479 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C605E5B0B4B65A800350479;
+			remoteInfo = SampleICC;
+		};
+		7C605F220B4B6BC800350479 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C605E5B0B4B65A800350479;
+			remoteInfo = SampleICC;
+		};
+		7C605F250B4B6BE900350479 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C605E5B0B4B65A800350479;
+			remoteInfo = SampleICC;
+		};
+		7C605F290B4B6C1700350479 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C605E5B0B4B65A800350479;
+			remoteInfo = SampleICC;
+		};
+		7C605F2B0B4B6C1700350479 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C605EB20B4B683200350479;
+			remoteInfo = SampleICCToolUtils;
 		};
 		7C8DF2C80B47582F0085565C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 7CDB8F130B4473E0009C7341 /* iccExtractPrimaryRamps */;
+			remoteGlobalIDString = 7CDB8F130B4473E0009C7341;
 			remoteInfo = iccExtractPrimaryRamps;
-		};
-		7CDB8F160B4473E8009C7341 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC0620554660B00DB518D;
-			remoteInfo = SampleICC;
-		};
-		7CDB8F620B448186009C7341 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7CFB290E0B14D8AB0093D058;
-			remoteInfo = SampleICCToolUtils;
-		};
-		7CE0F4590AF04F08002F2A93 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC0620554660B00DB518D;
-			remoteInfo = SampleICC;
-		};
-		7CE0F4600AF04F22002F2A93 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC0620554660B00DB518D;
-			remoteInfo = SampleICC;
-		};
-		7CE0F4670AF04F46002F2A93 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC0620554660B00DB518D;
-			remoteInfo = SampleICC;
-		};
-		7CE0F46E0AF04F5F002F2A93 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC0620554660B00DB518D;
-			remoteInfo = SampleICC;
-		};
-		7CE0F4750AF04F79002F2A93 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC0620554660B00DB518D;
-			remoteInfo = SampleICC;
-		};
-		7CE0F4E30AF050EA002F2A93 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC0620554660B00DB518D;
-			remoteInfo = SampleICC;
 		};
 		7CE0F4E50AF0510F002F2A93 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -207,13 +242,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 7CE0F4E00AF050E4002F2A93;
 			remoteInfo = iccFlattenAToBTag;
-		};
-		7CE0F50B0AF05327002F2A93 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC0620554660B00DB518D;
-			remoteInfo = SampleICC;
 		};
 		7CE0F50E0AF0533D002F2A93 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -250,34 +278,6 @@
 			remoteGlobalIDString = 7CE0F4720AF04F73002F2A93;
 			remoteInfo = iccProfLibTest;
 		};
-		7CFB29100B14D8B30093D058 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC0620554660B00DB518D;
-			remoteInfo = SampleICC;
-		};
-		7CFB29120B14D8C00093D058 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7CFB290E0B14D8AB0093D058;
-			remoteInfo = SampleICCToolUtils;
-		};
-		7CFB291A0B14D9570093D058 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7CFB290E0B14D8AB0093D058;
-			remoteInfo = SampleICCToolUtils;
-		};
-		7CFB291C0B14D9660093D058 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7CFB290E0B14D8AB0093D058;
-			remoteInfo = SampleICCToolUtils;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -299,10 +299,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		7C333A060B1EA925006AB880 /* iccV4ToMpe */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccV4ToMpe; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C333A060B1EA925006AB880 /* iccC4ToMpe */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccC4ToMpe; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C333A0F0B1EA99D006AB880 /* iccV4ToMPE.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = iccV4ToMPE.cpp; path = Tools/CmdLine/IccV4ToMPE/iccV4ToMPE.cpp; sourceTree = "<group>"; };
 		7C49EA780B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccCreateTRCMatrixDisplayProfile; sourceTree = BUILT_PRODUCTS_DIR; };
-		7C49EA8F0B09122C00ADFFE7 /* iccCreateTRCMatrixDisplayProfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = iccCreateTRCMatrixDisplayProfile.cpp; path = Tools/CmdLine/iccCreateTRCMatrixDisplayProfile/iccCreateTRCMatrixDisplayProfile.cpp; sourceTree = "<group>"; };
+		7C49EA8F0B09122C00ADFFE7 /* iccCreateTRCMatrixDisplayProfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = iccCreateTRCMatrixDisplayProfile.cpp; path = Tools/CmdLine/IccCreateTRCMatrixDisplayProfile/iccCreateTRCMatrixDisplayProfile.cpp; sourceTree = "<group>"; };
+		7C605E5C0B4B65A900350479 /* SampleICC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SampleICC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C605E5D0B4B65A900350479 /* SampleICC-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "SampleICC-Info.plist"; sourceTree = "<group>"; };
+		7C605EB30B4B683200350479 /* SampleICCToolUtils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SampleICCToolUtils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C605EB40B4B683200350479 /* SampleICCToolUtils-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "SampleICCToolUtils-Info.plist"; sourceTree = "<group>"; };
 		7C6291110AFEAD9C002D7386 /* CLUTStuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CLUTStuffer.h; path = ../Tools/CmdLine/IccToolUtilsLib/CLUTStuffer.h; sourceTree = "<group>"; };
 		7C6291120AFEAD9C002D7386 /* CLUTStuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CLUTStuffer.cpp; path = ../Tools/CmdLine/IccToolUtilsLib/CLUTStuffer.cpp; sourceTree = "<group>"; };
 		7C6291FE0AFEC69C002D7386 /* BlackScaler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlackScaler.cpp; sourceTree = "<group>"; };
@@ -369,8 +373,6 @@
 		7CFB28B40B13D0230093D058 /* IccMpeFactory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccMpeFactory.h; sourceTree = "<group>"; };
 		7CFB28B50B13D0230093D058 /* IccTagMPE.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = IccTagMPE.cpp; sourceTree = "<group>"; };
 		7CFB28B60B13D0230093D058 /* IccTagMPE.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccTagMPE.h; sourceTree = "<group>"; };
-		7CFB290F0B14D8AB0093D058 /* libSampleICCToolUtils.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libSampleICCToolUtils.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		D2AAC0630554660B00DB518D /* libSampleICC.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libSampleICC.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -378,7 +380,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C333A0A0B1EA948006AB880 /* libSampleICC.dylib in Frameworks */,
+				7C605F240B4B6BD700350479 /* SampleICC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,8 +388,23 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CF53DC00B0A77C500F6E353 /* libSampleICC.dylib in Frameworks */,
-				7CFB29170B14D9070093D058 /* libSampleICCToolUtils.dylib in Frameworks */,
+				7C605F180B4B6B6F00350479 /* SampleICC.framework in Frameworks */,
+				7C605F190B4B6B6F00350479 /* SampleICCToolUtils.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C605E5A0B4B65A800350479 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C605EB10B4B683200350479 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C605EF20B4B6A1C00350479 /* SampleICC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,8 +412,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CDB8F3C0B447C25009C7341 /* libSampleICC.dylib in Frameworks */,
-				7CDB8F3D0B447C29009C7341 /* libSampleICCToolUtils.dylib in Frameworks */,
+				7C605F270B4B6BF600350479 /* SampleICC.framework in Frameworks */,
+				7C605F280B4B6BF600350479 /* SampleICCToolUtils.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,7 +421,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CE0F49C0AF04FFB002F2A93 /* libSampleICC.dylib in Frameworks */,
+				7C605F000B4B6A7700350479 /* SampleICC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,7 +429,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CE0F4C70AF05041002F2A93 /* libSampleICC.dylib in Frameworks */,
+				7C605F0C0B4B6AF200350479 /* SampleICC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,8 +437,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CE0F4DD0AF0509A002F2A93 /* libSampleICC.dylib in Frameworks */,
-				7CFB29190B14D9490093D058 /* libSampleICCToolUtils.dylib in Frameworks */,
+				7C605F120B4B6B3900350479 /* SampleICC.framework in Frameworks */,
+				7C605F130B4B6B3C00350479 /* SampleICCToolUtils.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -429,7 +446,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CE0F4F40AF05189002F2A93 /* libSampleICC.dylib in Frameworks */,
+				7C605F1E0B4B6B9300350479 /* SampleICC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,7 +454,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CE0F5090AF052FF002F2A93 /* libSampleICC.dylib in Frameworks */,
+				7C605F210B4B6BB400350479 /* SampleICC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -445,22 +462,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CE0F4E70AF05133002F2A93 /* libSampleICC.dylib in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7CFB290D0B14D8AB0093D058 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7C9E18CB0B14E0A5002EF2BB /* libSampleICC.dylib in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D289988505E68E00004EDB86 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				7C605F0D0B4B6B0700350479 /* SampleICC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,6 +474,8 @@
 			children = (
 				08FB7795FE84155DC02AAC07 /* Source */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
+				7C605E5D0B4B65A900350479 /* SampleICC-Info.plist */,
+				7C605EB40B4B683200350479 /* SampleICCToolUtils-Info.plist */,
 			);
 			name = SampleICC;
 			sourceTree = "<group>";
@@ -496,7 +500,8 @@
 		1AB674ADFE9D54B511CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D2AAC0630554660B00DB518D /* libSampleICC.dylib */,
+				7C605E5C0B4B65A900350479 /* SampleICC.framework */,
+				7C605EB30B4B683200350479 /* SampleICCToolUtils.framework */,
 				7CE0F4570AF04F02002F2A93 /* iccApplyNamedCmm */,
 				7CE0F45E0AF04F1C002F2A93 /* iccApplyProfiles */,
 				7CE0F4E10AF050E4002F2A93 /* iccFlattenAToBTag */,
@@ -504,9 +509,8 @@
 				7CE0F46C0AF04F59002F2A93 /* iccDumpProfile */,
 				7CE0F4730AF04F73002F2A93 /* iccProfLibTest */,
 				7C49EA780B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */,
-				7C333A060B1EA925006AB880 /* iccV4ToMpe */,
+				7C333A060B1EA925006AB880 /* iccC4ToMpe */,
 				7CDB8F140B4473E0009C7341 /* iccExtractPrimaryRamps */,
-				7CFB290F0B14D8AB0093D058 /* libSampleICCToolUtils.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -667,37 +671,37 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		7CFB290B0B14D8AB0093D058 /* Headers */ = {
+		7C605E570B4B65A800350479 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CFB29220B14D9CA0093D058 /* CLUTStuffer.h in Headers */,
-				7CFB29230B14D9CA0093D058 /* CAT.h in Headers */,
-				7CFB29240B14D9CA0093D058 /* CLUT.h in Headers */,
-				7CFB29250B14D9CA0093D058 /* IccToolException.h in Headers */,
+				7C605E690B4B65E200350479 /* IccCmm.h in Headers */,
+				7C605E6A0B4B65E200350479 /* IccDefs.h in Headers */,
+				7C605E6B0B4B65E200350479 /* IccIO.h in Headers */,
+				7C605E6C0B4B65E200350479 /* IccMpeACS.h in Headers */,
+				7C605E6D0B4B65E200350479 /* IccMpeBasic.h in Headers */,
+				7C605E6E0B4B65E200350479 /* IccMpeFactory.h in Headers */,
+				7C605E6F0B4B65E200350479 /* IccProfile.h in Headers */,
+				7C605E700B4B65E200350479 /* IccProfLibConf.h in Headers */,
+				7C605E710B4B65E200350479 /* IccTag.h in Headers */,
+				7C605E720B4B65E200350479 /* IccTagBasic.h in Headers */,
+				7C605E730B4B65E200350479 /* IccTagFactory.h in Headers */,
+				7C605E740B4B65E200350479 /* IccTagLut.h in Headers */,
+				7C605E750B4B65E200350479 /* IccTagMPE.h in Headers */,
+				7C605E760B4B65E200350479 /* IccUtil.h in Headers */,
+				7C605E770B4B65E200350479 /* icProfileHeader.h in Headers */,
+				7C605E780B4B65E200350479 /* md5.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D2AAC0600554660B00DB518D /* Headers */ = {
+		7C605EAE0B4B683200350479 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CE0F4330AF04D3F002F2A93 /* IccCmm.h in Headers */,
-				7CE0F4340AF04D3F002F2A93 /* IccDefs.h in Headers */,
-				7CE0F4360AF04D3F002F2A93 /* IccIO.h in Headers */,
-				7CE0F4380AF04D3F002F2A93 /* IccProfile.h in Headers */,
-				7CE0F4390AF04D3F002F2A93 /* IccProfLibConf.h in Headers */,
-				7CE0F43A0AF04D3F002F2A93 /* IccTag.h in Headers */,
-				7CE0F43C0AF04D3F002F2A93 /* IccTagBasic.h in Headers */,
-				7CE0F43E0AF04D3F002F2A93 /* IccTagFactory.h in Headers */,
-				7CE0F4400AF04D3F002F2A93 /* IccTagLut.h in Headers */,
-				7CE0F4420AF04D3F002F2A93 /* IccUtil.h in Headers */,
-				7CE0F4430AF04D3F002F2A93 /* icProfileHeader.h in Headers */,
-				7CE0F4460AF04D3F002F2A93 /* md5.h in Headers */,
-				7CFB28B80B13D0230093D058 /* IccMpeACS.h in Headers */,
-				7CFB28BA0B13D0230093D058 /* IccMpeBasic.h in Headers */,
-				7CFB28BC0B13D0230093D058 /* IccMpeFactory.h in Headers */,
-				7CFB28BE0B13D0230093D058 /* IccTagMPE.h in Headers */,
+				7C605ECA0B4B68FC00350479 /* CLUTStuffer.h in Headers */,
+				7C605ECB0B4B68FC00350479 /* CAT.h in Headers */,
+				7C605ECC0B4B68FC00350479 /* CLUT.h in Headers */,
+				7C605ECD0B4B68FC00350479 /* IccToolException.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -714,11 +718,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				7C333A090B1EA92D006AB880 /* PBXTargetDependency */,
+				7C605F260B4B6BE900350479 /* PBXTargetDependency */,
 			);
 			name = iccV4ToMpe;
 			productName = iccC4ToMpe;
-			productReference = 7C333A060B1EA925006AB880 /* iccV4ToMpe */;
+			productReference = 7C333A060B1EA925006AB880 /* iccC4ToMpe */;
 			productType = "com.apple.product-type.tool";
 		};
 		7C49EA770B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */ = {
@@ -731,13 +735,50 @@
 			buildRules = (
 			);
 			dependencies = (
-				7C49EA7B0B09115400ADFFE7 /* PBXTargetDependency */,
-				7CFB291B0B14D9570093D058 /* PBXTargetDependency */,
+				7C605F1B0B4B6B8200350479 /* PBXTargetDependency */,
+				7C605F1D0B4B6B8200350479 /* PBXTargetDependency */,
 			);
 			name = iccCreateTRCMatrixDisplayProfile;
 			productName = iccCreateTRCMatrixDisplayProfile;
 			productReference = 7C49EA780B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */;
 			productType = "com.apple.product-type.tool";
+		};
+		7C605E5B0B4B65A800350479 /* SampleICC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7C605E640B4B65AB00350479 /* Build configuration list for PBXNativeTarget "SampleICC" */;
+			buildPhases = (
+				7C605E570B4B65A800350479 /* Headers */,
+				7C605E580B4B65A800350479 /* Resources */,
+				7C605E590B4B65A800350479 /* Sources */,
+				7C605E5A0B4B65A800350479 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SampleICC;
+			productName = SampleICC;
+			productReference = 7C605E5C0B4B65A900350479 /* SampleICC.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		7C605EB20B4B683200350479 /* SampleICCToolUtils */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7C605EBA0B4B683500350479 /* Build configuration list for PBXNativeTarget "SampleICCToolUtils" */;
+			buildPhases = (
+				7C605EAE0B4B683200350479 /* Headers */,
+				7C605EAF0B4B683200350479 /* Resources */,
+				7C605EB00B4B683200350479 /* Sources */,
+				7C605EB10B4B683200350479 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7C605ED30B4B692000350479 /* PBXTargetDependency */,
+			);
+			name = SampleICCToolUtils;
+			productName = SampleICCToolUtils;
+			productReference = 7C605EB30B4B683200350479 /* SampleICCToolUtils.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 		7CDB8F130B4473E0009C7341 /* iccExtractPrimaryRamps */ = {
 			isa = PBXNativeTarget;
@@ -749,8 +790,8 @@
 			buildRules = (
 			);
 			dependencies = (
-				7CDB8F170B4473E8009C7341 /* PBXTargetDependency */,
-				7CDB8F630B448186009C7341 /* PBXTargetDependency */,
+				7C605F2A0B4B6C1700350479 /* PBXTargetDependency */,
+				7C605F2C0B4B6C1700350479 /* PBXTargetDependency */,
 			);
 			name = iccExtractPrimaryRamps;
 			productName = iccExtractPrimaryRamps;
@@ -768,7 +809,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				7CE0F45A0AF04F08002F2A93 /* PBXTargetDependency */,
+				7C605F020B4B6A9100350479 /* PBXTargetDependency */,
 			);
 			name = iccApplyNamedCmm;
 			productName = iccApplyNamedCmm;
@@ -785,7 +826,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				7CE0F4610AF04F22002F2A93 /* PBXTargetDependency */,
+				7C605F0F0B4B6B1700350479 /* PBXTargetDependency */,
 			);
 			name = iccApplyProfiles;
 			productName = iccApplyProfiles;
@@ -802,8 +843,8 @@
 			buildRules = (
 			);
 			dependencies = (
-				7CE0F4680AF04F46002F2A93 /* PBXTargetDependency */,
-				7CFB291D0B14D9660093D058 /* PBXTargetDependency */,
+				7C605F150B4B6B5900350479 /* PBXTargetDependency */,
+				7C605F170B4B6B5900350479 /* PBXTargetDependency */,
 				7CE0F4E60AF0510F002F2A93 /* PBXTargetDependency */,
 			);
 			name = iccCreateCLUTInputProfile;
@@ -821,7 +862,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				7CE0F46F0AF04F5F002F2A93 /* PBXTargetDependency */,
+				7C605F200B4B6BA300350479 /* PBXTargetDependency */,
 			);
 			name = iccDumpProfile;
 			productName = iccDumpProfile;
@@ -838,7 +879,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				7CE0F4760AF04F79002F2A93 /* PBXTargetDependency */,
+				7C605F230B4B6BC800350479 /* PBXTargetDependency */,
 			);
 			name = iccProfLibTest;
 			productName = iccProfLibTest;
@@ -855,47 +896,12 @@
 			buildRules = (
 			);
 			dependencies = (
-				7CE0F4E40AF050EA002F2A93 /* PBXTargetDependency */,
+				7C605F110B4B6B2B00350479 /* PBXTargetDependency */,
 			);
 			name = iccFlattenAToBTag;
 			productName = iccFlattenAToBTag;
 			productReference = 7CE0F4E10AF050E4002F2A93 /* iccFlattenAToBTag */;
 			productType = "com.apple.product-type.tool";
-		};
-		7CFB290E0B14D8AB0093D058 /* SampleICCToolUtils */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 7CFB291E0B14D9880093D058 /* Build configuration list for PBXNativeTarget "SampleICCToolUtils" */;
-			buildPhases = (
-				7CFB290B0B14D8AB0093D058 /* Headers */,
-				7CFB290C0B14D8AB0093D058 /* Sources */,
-				7CFB290D0B14D8AB0093D058 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				7CFB29110B14D8B30093D058 /* PBXTargetDependency */,
-			);
-			name = SampleICCToolUtils;
-			productName = SampleICCToolUtils;
-			productReference = 7CFB290F0B14D8AB0093D058 /* libSampleICCToolUtils.dylib */;
-			productType = "com.apple.product-type.library.dynamic";
-		};
-		D2AAC0620554660B00DB518D /* SampleICC */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 1DEB914A08733D8E0010E9CD /* Build configuration list for PBXNativeTarget "SampleICC" */;
-			buildPhases = (
-				D2AAC0600554660B00DB518D /* Headers */,
-				D2AAC0610554660B00DB518D /* Sources */,
-				D289988505E68E00004EDB86 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = SampleICC;
-			productName = SampleICC;
-			productReference = D2AAC0630554660B00DB518D /* libSampleICC.dylib */;
-			productType = "com.apple.product-type.library.dynamic";
 		};
 /* End PBXNativeTarget section */
 
@@ -910,9 +916,9 @@
 			projectRoot = "";
 			shouldCheckCompatibility = 1;
 			targets = (
-				D2AAC0620554660B00DB518D /* SampleICC */,
-				7CFB290E0B14D8AB0093D058 /* SampleICCToolUtils */,
-				7CE0F50A0AF05322002F2A93 /* Libraries */,
+				7C605E5B0B4B65A800350479 /* SampleICC */,
+				7C605EB20B4B683200350479 /* SampleICCToolUtils */,
+				7C605EF60B4B6A4800350479 /* Frameworks */,
 				7CE0F4560AF04F02002F2A93 /* iccApplyNamedCmm */,
 				7CE0F45D0AF04F1C002F2A93 /* iccApplyProfiles */,
 				7CE0F4E00AF050E4002F2A93 /* iccFlattenAToBTag */,
@@ -926,6 +932,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7C605E580B4B65A800350479 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C605EAF0B4B683200350479 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7C333A030B1EA925006AB880 /* Sources */ = {
@@ -941,6 +964,36 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C49EA900B09122C00ADFFE7 /* iccCreateTRCMatrixDisplayProfile.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C605E590B4B65A800350479 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C605E7B0B4B661400350479 /* IccCmm.cpp in Sources */,
+				7C605E7C0B4B661400350479 /* IccIO.cpp in Sources */,
+				7C605E7D0B4B661400350479 /* IccMpeACS.cpp in Sources */,
+				7C605E7E0B4B661400350479 /* IccMpeBasic.cpp in Sources */,
+				7C605E7F0B4B661400350479 /* IccMpeFactory.cpp in Sources */,
+				7C605E800B4B661400350479 /* IccProfile.cpp in Sources */,
+				7C605E810B4B661400350479 /* IccTagBasic.cpp in Sources */,
+				7C605E820B4B661400350479 /* IccTagFactory.cpp in Sources */,
+				7C605E830B4B661400350479 /* IccTagLut.cpp in Sources */,
+				7C605E840B4B661400350479 /* IccTagMPE.cpp in Sources */,
+				7C605E850B4B661400350479 /* IccUtil.cpp in Sources */,
+				7C605E860B4B661400350479 /* md5.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C605EB00B4B683200350479 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C605ECE0B4B690E00350479 /* CLUTStuffer.cpp in Sources */,
+				7C605ECF0B4B690E00350479 /* CAT.cpp in Sources */,
+				7C605ED00B4B690E00350479 /* CLUT.cpp in Sources */,
+				7C605ED10B4B690E00350479 /* IccToolException.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1003,44 +1056,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7CFB290C0B14D8AB0093D058 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7CFB29140B14D8E20093D058 /* CAT.cpp in Sources */,
-				7CFB29150B14D8E20093D058 /* CLUT.cpp in Sources */,
-				7CFB29160B14D8E20093D058 /* CLUTStuffer.cpp in Sources */,
-				7CFB29180B14D91D0093D058 /* IccToolException.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D2AAC0610554660B00DB518D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7CE0F4320AF04D3F002F2A93 /* IccCmm.cpp in Sources */,
-				7CE0F4350AF04D3F002F2A93 /* IccIO.cpp in Sources */,
-				7CE0F4370AF04D3F002F2A93 /* IccProfile.cpp in Sources */,
-				7CE0F43B0AF04D3F002F2A93 /* IccTagBasic.cpp in Sources */,
-				7CE0F43D0AF04D3F002F2A93 /* IccTagFactory.cpp in Sources */,
-				7CE0F43F0AF04D3F002F2A93 /* IccTagLut.cpp in Sources */,
-				7CE0F4410AF04D3F002F2A93 /* IccUtil.cpp in Sources */,
-				7CE0F4450AF04D3F002F2A93 /* md5.cpp in Sources */,
-				7CFB28B70B13D0230093D058 /* IccMpeACS.cpp in Sources */,
-				7CFB28B90B13D0230093D058 /* IccMpeBasic.cpp in Sources */,
-				7CFB28BB0B13D0230093D058 /* IccMpeFactory.cpp in Sources */,
-				7CFB28BD0B13D0230093D058 /* IccTagMPE.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		7C333A090B1EA92D006AB880 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D2AAC0620554660B00DB518D /* SampleICC */;
-			targetProxy = 7C333A080B1EA92D006AB880 /* PBXContainerItemProxy */;
-		};
 		7C333A180B1EAA09006AB880 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 7C49EA770B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */;
@@ -1051,65 +1069,90 @@
 			target = 7C333A050B1EA925006AB880 /* iccV4ToMpe */;
 			targetProxy = 7C333A190B1EAA09006AB880 /* PBXContainerItemProxy */;
 		};
-		7C49EA7B0B09115400ADFFE7 /* PBXTargetDependency */ = {
+		7C605ED30B4B692000350479 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D2AAC0620554660B00DB518D /* SampleICC */;
-			targetProxy = 7C49EA7A0B09115400ADFFE7 /* PBXContainerItemProxy */;
+			target = 7C605E5B0B4B65A800350479 /* SampleICC */;
+			targetProxy = 7C605ED20B4B692000350479 /* PBXContainerItemProxy */;
+		};
+		7C605EF90B4B6A5200350479 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C605E5B0B4B65A800350479 /* SampleICC */;
+			targetProxy = 7C605EF80B4B6A5200350479 /* PBXContainerItemProxy */;
+		};
+		7C605EFB0B4B6A5200350479 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C605EB20B4B683200350479 /* SampleICCToolUtils */;
+			targetProxy = 7C605EFA0B4B6A5200350479 /* PBXContainerItemProxy */;
+		};
+		7C605F020B4B6A9100350479 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C605E5B0B4B65A800350479 /* SampleICC */;
+			targetProxy = 7C605F010B4B6A9100350479 /* PBXContainerItemProxy */;
+		};
+		7C605F0F0B4B6B1700350479 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C605E5B0B4B65A800350479 /* SampleICC */;
+			targetProxy = 7C605F0E0B4B6B1700350479 /* PBXContainerItemProxy */;
+		};
+		7C605F110B4B6B2B00350479 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C605E5B0B4B65A800350479 /* SampleICC */;
+			targetProxy = 7C605F100B4B6B2B00350479 /* PBXContainerItemProxy */;
+		};
+		7C605F150B4B6B5900350479 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C605E5B0B4B65A800350479 /* SampleICC */;
+			targetProxy = 7C605F140B4B6B5900350479 /* PBXContainerItemProxy */;
+		};
+		7C605F170B4B6B5900350479 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C605EB20B4B683200350479 /* SampleICCToolUtils */;
+			targetProxy = 7C605F160B4B6B5900350479 /* PBXContainerItemProxy */;
+		};
+		7C605F1B0B4B6B8200350479 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C605E5B0B4B65A800350479 /* SampleICC */;
+			targetProxy = 7C605F1A0B4B6B8200350479 /* PBXContainerItemProxy */;
+		};
+		7C605F1D0B4B6B8200350479 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C605EB20B4B683200350479 /* SampleICCToolUtils */;
+			targetProxy = 7C605F1C0B4B6B8200350479 /* PBXContainerItemProxy */;
+		};
+		7C605F200B4B6BA300350479 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C605E5B0B4B65A800350479 /* SampleICC */;
+			targetProxy = 7C605F1F0B4B6BA300350479 /* PBXContainerItemProxy */;
+		};
+		7C605F230B4B6BC800350479 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C605E5B0B4B65A800350479 /* SampleICC */;
+			targetProxy = 7C605F220B4B6BC800350479 /* PBXContainerItemProxy */;
+		};
+		7C605F260B4B6BE900350479 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C605E5B0B4B65A800350479 /* SampleICC */;
+			targetProxy = 7C605F250B4B6BE900350479 /* PBXContainerItemProxy */;
+		};
+		7C605F2A0B4B6C1700350479 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C605E5B0B4B65A800350479 /* SampleICC */;
+			targetProxy = 7C605F290B4B6C1700350479 /* PBXContainerItemProxy */;
+		};
+		7C605F2C0B4B6C1700350479 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C605EB20B4B683200350479 /* SampleICCToolUtils */;
+			targetProxy = 7C605F2B0B4B6C1700350479 /* PBXContainerItemProxy */;
 		};
 		7C8DF2C90B47582F0085565C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 7CDB8F130B4473E0009C7341 /* iccExtractPrimaryRamps */;
 			targetProxy = 7C8DF2C80B47582F0085565C /* PBXContainerItemProxy */;
 		};
-		7CDB8F170B4473E8009C7341 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D2AAC0620554660B00DB518D /* SampleICC */;
-			targetProxy = 7CDB8F160B4473E8009C7341 /* PBXContainerItemProxy */;
-		};
-		7CDB8F630B448186009C7341 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7CFB290E0B14D8AB0093D058 /* SampleICCToolUtils */;
-			targetProxy = 7CDB8F620B448186009C7341 /* PBXContainerItemProxy */;
-		};
-		7CE0F45A0AF04F08002F2A93 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D2AAC0620554660B00DB518D /* SampleICC */;
-			targetProxy = 7CE0F4590AF04F08002F2A93 /* PBXContainerItemProxy */;
-		};
-		7CE0F4610AF04F22002F2A93 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D2AAC0620554660B00DB518D /* SampleICC */;
-			targetProxy = 7CE0F4600AF04F22002F2A93 /* PBXContainerItemProxy */;
-		};
-		7CE0F4680AF04F46002F2A93 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D2AAC0620554660B00DB518D /* SampleICC */;
-			targetProxy = 7CE0F4670AF04F46002F2A93 /* PBXContainerItemProxy */;
-		};
-		7CE0F46F0AF04F5F002F2A93 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D2AAC0620554660B00DB518D /* SampleICC */;
-			targetProxy = 7CE0F46E0AF04F5F002F2A93 /* PBXContainerItemProxy */;
-		};
-		7CE0F4760AF04F79002F2A93 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D2AAC0620554660B00DB518D /* SampleICC */;
-			targetProxy = 7CE0F4750AF04F79002F2A93 /* PBXContainerItemProxy */;
-		};
-		7CE0F4E40AF050EA002F2A93 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D2AAC0620554660B00DB518D /* SampleICC */;
-			targetProxy = 7CE0F4E30AF050EA002F2A93 /* PBXContainerItemProxy */;
-		};
 		7CE0F4E60AF0510F002F2A93 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 7CE0F4E00AF050E4002F2A93 /* iccFlattenAToBTag */;
 			targetProxy = 7CE0F4E50AF0510F002F2A93 /* PBXContainerItemProxy */;
-		};
-		7CE0F50C0AF05327002F2A93 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D2AAC0620554660B00DB518D /* SampleICC */;
-			targetProxy = 7CE0F50B0AF05327002F2A93 /* PBXContainerItemProxy */;
 		};
 		7CE0F50F0AF0533D002F2A93 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1136,86 +1179,33 @@
 			target = 7CE0F4720AF04F73002F2A93 /* iccProfLibTest */;
 			targetProxy = 7CE0F5160AF0533D002F2A93 /* PBXContainerItemProxy */;
 		};
-		7CFB29110B14D8B30093D058 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D2AAC0620554660B00DB518D /* SampleICC */;
-			targetProxy = 7CFB29100B14D8B30093D058 /* PBXContainerItemProxy */;
-		};
-		7CFB29130B14D8C00093D058 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7CFB290E0B14D8AB0093D058 /* SampleICCToolUtils */;
-			targetProxy = 7CFB29120B14D8C00093D058 /* PBXContainerItemProxy */;
-		};
-		7CFB291B0B14D9570093D058 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7CFB290E0B14D8AB0093D058 /* SampleICCToolUtils */;
-			targetProxy = 7CFB291A0B14D9570093D058 /* PBXContainerItemProxy */;
-		};
-		7CFB291D0B14D9660093D058 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7CFB290E0B14D8AB0093D058 /* SampleICCToolUtils */;
-			targetProxy = 7CFB291C0B14D9660093D058 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		1DEB914B08733D8E0010E9CD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				EXECUTABLE_PREFIX = lib;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = /usr/local/lib;
-				PRIVATE_HEADERS_FOLDER_PATH = /usr/local/include/SampleICC;
-				PRODUCT_NAME = SampleICC;
-				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/SampleICC;
-				ZERO_LINK = YES;
-			};
-			name = Debug;
-		};
-		1DEB914C08733D8E0010E9CD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EXECUTABLE_PREFIX = lib;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/lib;
-				PRIVATE_HEADERS_FOLDER_PATH = /usr/local/include/SampleICC;
-				PRODUCT_NAME = SampleICC;
-				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/SampleICC;
-			};
-			name = Release;
-		};
 		1DEB914F08733D8E0010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_DEBUGGING_SYMBOLS = full;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SEPARATE_STRIP = YES;
+				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		1DEB915008733D8E0010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Release;
 		};
@@ -1279,6 +1269,101 @@
 				INSTALL_PATH = "$(HOME)/bin";
 				PREBINDING = NO;
 				PRODUCT_NAME = iccCreateTRCMatrixDisplayProfile;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7C605E650B4B65AB00350479 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G4;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INFOPLIST_FILE = "SampleICC-Info.plist";
+				PREBINDING = NO;
+				PRODUCT_NAME = SampleICC;
+				SKIP_INSTALL = NO;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		7C605E660B4B65AB00350479 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G4;
+				INFOPLIST_FILE = "SampleICC-Info.plist";
+				PREBINDING = NO;
+				PRODUCT_NAME = SampleICC;
+				SKIP_INSTALL = NO;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7C605EBB0B4B683500350479 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G4;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INFOPLIST_FILE = "SampleICCToolUtils-Info.plist";
+				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				PREBINDING = NO;
+				PRODUCT_NAME = SampleICCToolUtils;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		7C605EBC0B4B683500350479 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_ENABLE_SYMBOL_SEPARATION = NO;
+				GCC_MODEL_TUNING = G4;
+				INFOPLIST_FILE = "SampleICCToolUtils-Info.plist";
+				PREBINDING = NO;
+				PRODUCT_NAME = SampleICCToolUtils;
+				SKIP_INSTALL = NO;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7C605EFD0B4B6A7100350479 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = Frameworks;
+			};
+			name = Debug;
+		};
+		7C605EFE0B4B6A7100350479 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = Frameworks;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -1506,30 +1591,6 @@
 			};
 			name = Release;
 		};
-		7CE0F51A0AF05373002F2A93 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = Libraries;
-			};
-			name = Debug;
-		};
-		7CE0F51B0AF05373002F2A93 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				PRODUCT_NAME = Libraries;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		7CE0F51D0AF05373002F2A93 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1554,52 +1615,9 @@
 			};
 			name = Release;
 		};
-		7CFB291F0B14D9880093D058 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				EXECUTABLE_PREFIX = lib;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
-				PRODUCT_NAME = SampleICCToolUtils;
-				ZERO_LINK = YES;
-			};
-			name = Debug;
-		};
-		7CFB29200B14D9880093D058 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
-				PRODUCT_NAME = SampleICCToolUtils;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1DEB914A08733D8E0010E9CD /* Build configuration list for PBXNativeTarget "SampleICC" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1DEB914B08733D8E0010E9CD /* Debug */,
-				1DEB914C08733D8E0010E9CD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		1DEB914E08733D8E0010E9CD /* Build configuration list for PBXProject "SampleICC" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1623,6 +1641,33 @@
 			buildConfigurations = (
 				7C49EA810B09116B00ADFFE7 /* Debug */,
 				7C49EA820B09116B00ADFFE7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7C605E640B4B65AB00350479 /* Build configuration list for PBXNativeTarget "SampleICC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7C605E650B4B65AB00350479 /* Debug */,
+				7C605E660B4B65AB00350479 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7C605EBA0B4B683500350479 /* Build configuration list for PBXNativeTarget "SampleICCToolUtils" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7C605EBB0B4B683500350479 /* Debug */,
+				7C605EBC0B4B683500350479 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7C605EFC0B4B6A7100350479 /* Build configuration list for PBXAggregateTarget "Frameworks" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7C605EFD0B4B6A7100350479 /* Debug */,
+				7C605EFE0B4B6A7100350479 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1690,29 +1735,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7CE0F5190AF05373002F2A93 /* Build configuration list for PBXAggregateTarget "Libraries" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7CE0F51A0AF05373002F2A93 /* Debug */,
-				7CE0F51B0AF05373002F2A93 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		7CE0F51C0AF05373002F2A93 /* Build configuration list for PBXAggregateTarget "Commands" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7CE0F51D0AF05373002F2A93 /* Debug */,
 				7CE0F51E0AF05373002F2A93 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7CFB291E0B14D9880093D058 /* Build configuration list for PBXNativeTarget "SampleICCToolUtils" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7CFB291F0B14D9880093D058 /* Debug */,
-				7CFB29200B14D9880093D058 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
