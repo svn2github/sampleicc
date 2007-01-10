@@ -323,12 +323,12 @@ typedef enum {
     icSigColorantTableTag                  = 0x636C7274,  /* 'clrt' */
     icSigColorantTableOutTag               = 0x636C6F74,  /* 'clot' */
     icSigCopyrightTag                      = 0x63707274,  /* 'cprt' */
-    icSigCrdInfoTag                          = 0x63726469,  /* 'crdi' Removed in V4 */
-    icSigDataTag                             = 0x64617461,  /* 'data' Removed in V4 */
-    icSigDateTimeTag                         = 0x6474696D,  /* 'dtim' Removed in V4 */
+    icSigCrdInfoTag                        = 0x63726469,  /* 'crdi' Removed in V4 */
+    icSigDataTag                           = 0x64617461,  /* 'data' Removed in V4 */
+    icSigDateTimeTag                       = 0x6474696D,  /* 'dtim' Removed in V4 */
     icSigDeviceMfgDescTag                  = 0x646D6E64,  /* 'dmnd' */
     icSigDeviceModelDescTag                = 0x646D6464,  /* 'dmdd' */
-    icSigDeviceSettingsTag                   = 0x64657673,  /* 'devs' Removed in V4 */
+    icSigDeviceSettingsTag                 = 0x64657673,  /* 'devs' Removed in V4 */
     icSigDToB0Tag                          = 0x44324230,  /* 'D2B0' */
     icSigDToB1Tag                          = 0x44324231,  /* 'D2B1' */
     icSigDToB2Tag                          = 0x44324232,  /* 'D2B2' */
@@ -347,7 +347,7 @@ typedef enum {
     icSigMediaBlackPointTag                = 0x626B7074,  /* 'bkpt' */
     icSigMediaWhitePointTag                = 0x77747074,  /* 'wtpt' */
 #if 0
-    icSigNamedColorTag                    = 0x6E636f6C,  /* 'ncol' OBSOLETE, use ncl2 */
+    icSigNamedColorTag                     = 0x6E636f6C,  /* 'ncol' OBSOLETE, use ncl2 */
 #endif
     icSigNamedColor2Tag                    = 0x6E636C32,  /* 'ncl2' */
     icSigOutputResponseTag                 = 0x72657370,  /* 'resp' */
