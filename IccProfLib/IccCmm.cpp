@@ -1253,10 +1253,11 @@ LPIccCurve* CIccXformMatrixTRC::ExtractInputCurves()
 {
   if (m_bInput) {
     if (m_Curve[0]) {
-      LPIccCurve* Curve = m_Curve;
-      m_Curve[0] = m_Curve[1] = m_Curve[2] = NULL;
+			LPIccCurve* Curve = new LPIccCurve[3];
+			Curve[0] = (LPIccCurve)(m_Curve[0]->NewCopy());
+			Curve[1] = (LPIccCurve)(m_Curve[1]->NewCopy());
+			Curve[2] = (LPIccCurve)(m_Curve[2]->NewCopy());
       m_ApplyCurvePtr = NULL;
-      m_bFreeCurve = false;
       return Curve;
     }
   }
@@ -1282,10 +1283,11 @@ LPIccCurve* CIccXformMatrixTRC::ExtractOutputCurves()
 {
   if (!m_bInput) {
     if (m_Curve[0]) {
-      LPIccCurve* Curve = m_Curve;
-      m_Curve[0] = m_Curve[1] = m_Curve[2] = NULL;
+			LPIccCurve* Curve = new LPIccCurve[3];
+			Curve[0] = (LPIccCurve)(m_Curve[0]->NewCopy());
+			Curve[1] = (LPIccCurve)(m_Curve[1]->NewCopy());
+			Curve[2] = (LPIccCurve)(m_Curve[2]->NewCopy());
       m_ApplyCurvePtr = NULL;
-      m_bFreeCurve = false;
       return Curve;
     }
   }
@@ -1579,16 +1581,20 @@ LPIccCurve* CIccXform3DLut::ExtractInputCurves()
   if (m_bInput) {
     if (m_pTag->m_bInputMatrix) {
       if (m_pTag->m_CurvesB) {
-        LPIccCurve* Curve = m_pTag->m_CurvesB;
-        m_pTag->m_CurvesB = NULL;
+        LPIccCurve* Curve = new LPIccCurve[3];
+				Curve[0] = (LPIccCurve)(m_pTag->m_CurvesB[0]->NewCopy());
+				Curve[1] = (LPIccCurve)(m_pTag->m_CurvesB[1]->NewCopy());
+				Curve[2] = (LPIccCurve)(m_pTag->m_CurvesB[2]->NewCopy());
         m_ApplyCurvePtrB = NULL;
         return Curve;
       }
     }
     else {
       if (m_pTag->m_CurvesA) {
-        LPIccCurve* Curve = m_pTag->m_CurvesA;
-        m_pTag->m_CurvesA = NULL;
+        LPIccCurve* Curve = new LPIccCurve[3];
+				Curve[0] = (LPIccCurve)(m_pTag->m_CurvesA[0]->NewCopy());
+				Curve[1] = (LPIccCurve)(m_pTag->m_CurvesA[1]->NewCopy());
+				Curve[2] = (LPIccCurve)(m_pTag->m_CurvesA[2]->NewCopy());
         m_ApplyCurvePtrA = NULL;
         return Curve;
       }
@@ -1617,16 +1623,20 @@ LPIccCurve* CIccXform3DLut::ExtractOutputCurves()
   if (!m_bInput) {
     if (m_pTag->m_bInputMatrix) {
       if (m_pTag->m_CurvesA) {
-        LPIccCurve* Curve = m_pTag->m_CurvesA;
-        m_pTag->m_CurvesA = NULL;
+        LPIccCurve* Curve = new LPIccCurve[m_pTag->m_nOutput];
+				for (int i=0; i<m_pTag->m_nOutput; i++) {
+					Curve[i] = (LPIccCurve)(m_pTag->m_CurvesA[i]->NewCopy());
+				}
         m_ApplyCurvePtrA = NULL;
         return Curve;
       }
     }
     else {
       if (m_pTag->m_CurvesB) {
-        LPIccCurve* Curve = m_pTag->m_CurvesB;
-        m_pTag->m_CurvesB = NULL;
+        LPIccCurve* Curve = new LPIccCurve[m_pTag->m_nOutput];
+				for (int i=0; i<m_pTag->m_nOutput; i++) {
+					Curve[i] = (LPIccCurve)(m_pTag->m_CurvesB[i]->NewCopy());
+				}
         m_ApplyCurvePtrB = NULL;
         return Curve;
       }
@@ -1899,24 +1909,30 @@ void CIccXform4DLut::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixe
 */
 LPIccCurve* CIccXform4DLut::ExtractInputCurves()
 {
-  if (m_bInput) {
-    if (m_pTag->m_bInputMatrix) {
-      if (m_pTag->m_CurvesB) {
-        LPIccCurve* Curve = m_pTag->m_CurvesB;
-        m_pTag->m_CurvesB = NULL;
-        m_ApplyCurvePtrB = NULL;
-        return Curve;
-      }
-    }
-    else {
-      if (m_pTag->m_CurvesA) {
-        LPIccCurve* Curve = m_pTag->m_CurvesA;
-        m_pTag->m_CurvesA = NULL;
-        m_ApplyCurvePtrA = NULL;
-        return Curve;
-      }
-    }
-  }
+	if (m_bInput) {
+		if (m_pTag->m_bInputMatrix) {
+			if (m_pTag->m_CurvesB) {
+				LPIccCurve* Curve = new LPIccCurve[4];
+				Curve[0] = (LPIccCurve)(m_pTag->m_CurvesB[0]->NewCopy());
+				Curve[1] = (LPIccCurve)(m_pTag->m_CurvesB[1]->NewCopy());
+				Curve[2] = (LPIccCurve)(m_pTag->m_CurvesB[2]->NewCopy());
+				Curve[3] = (LPIccCurve)(m_pTag->m_CurvesB[3]->NewCopy());
+				m_ApplyCurvePtrB = NULL;
+				return Curve;
+			}
+		}
+		else {
+			if (m_pTag->m_CurvesA) {
+				LPIccCurve* Curve = new LPIccCurve[4];
+				Curve[0] = (LPIccCurve)(m_pTag->m_CurvesA[0]->NewCopy());
+				Curve[1] = (LPIccCurve)(m_pTag->m_CurvesA[1]->NewCopy());
+				Curve[2] = (LPIccCurve)(m_pTag->m_CurvesA[2]->NewCopy());
+				Curve[3] = (LPIccCurve)(m_pTag->m_CurvesA[3]->NewCopy());
+				m_ApplyCurvePtrA = NULL;
+				return Curve;
+			}
+		}
+	}
 
   return NULL;
 }
@@ -1937,24 +1953,28 @@ LPIccCurve* CIccXform4DLut::ExtractInputCurves()
 */
 LPIccCurve* CIccXform4DLut::ExtractOutputCurves()
 {
-  if (!m_bInput) {
-    if (m_pTag->m_bInputMatrix) {
-      if (m_pTag->m_CurvesA) {
-        LPIccCurve* Curve = m_pTag->m_CurvesA;
-        m_pTag->m_CurvesA = NULL;
-        m_ApplyCurvePtrA = NULL;
-        return Curve;
-      }
-    }
-    else {
-      if (m_pTag->m_CurvesB) {
-        LPIccCurve* Curve = m_pTag->m_CurvesB;
-        m_pTag->m_CurvesB = NULL;
-        m_ApplyCurvePtrB = NULL;
-        return Curve;
-      }
-    }
-  }
+	if (!m_bInput) {
+		if (m_pTag->m_bInputMatrix) {
+			if (m_pTag->m_CurvesA) {
+				LPIccCurve* Curve = new LPIccCurve[m_pTag->m_nOutput];
+				for (int i=0; i<m_pTag->m_nOutput; i++) {
+					Curve[i] = (LPIccCurve)(m_pTag->m_CurvesA[i]->NewCopy());
+				}
+				m_ApplyCurvePtrA = NULL;
+				return Curve;
+			}
+		}
+		else {
+			if (m_pTag->m_CurvesB) {
+				LPIccCurve* Curve = new LPIccCurve[m_pTag->m_nOutput];
+				for (int i=0; i<m_pTag->m_nOutput; i++) {
+					Curve[i] = (LPIccCurve)(m_pTag->m_CurvesB[i]->NewCopy());
+				}
+				m_ApplyCurvePtrB = NULL;
+				return Curve;
+			}
+		}
+	}
 
   return NULL;
 }
@@ -2235,24 +2255,28 @@ void CIccXformNDLut::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixe
 */
 LPIccCurve* CIccXformNDLut::ExtractInputCurves()
 {
-  if (m_bInput) {
-    if (m_pTag->m_bInputMatrix) {
-      if (m_pTag->m_CurvesB) {
-        LPIccCurve* Curve = m_pTag->m_CurvesB;
-        m_pTag->m_CurvesB = NULL;
-        m_ApplyCurvePtrB = NULL;
-        return Curve;
-      }
-    }
-    else {
-      if (m_pTag->m_CurvesA) {
-        LPIccCurve* Curve = m_pTag->m_CurvesA;
-        m_pTag->m_CurvesA = NULL;
-        m_ApplyCurvePtrA = NULL;
-        return Curve;
-      }
-    }
-  }
+	if (m_bInput) {
+		if (m_pTag->m_bInputMatrix) {
+			if (m_pTag->m_CurvesB) {
+				LPIccCurve* Curve = new LPIccCurve[m_pTag->m_nInput];
+				for (int i=0; i<m_pTag->m_nInput; i++) {
+					Curve[i] = (LPIccCurve)(m_pTag->m_CurvesB[i]->NewCopy());
+				}
+				m_ApplyCurvePtrB = NULL;
+				return Curve;
+			}
+		}
+		else {
+			if (m_pTag->m_CurvesA) {
+				LPIccCurve* Curve = new LPIccCurve[m_pTag->m_nInput];
+				for (int i=0; i<m_pTag->m_nInput; i++) {
+					Curve[i] = (LPIccCurve)(m_pTag->m_CurvesA[i]->NewCopy());
+				}
+				m_ApplyCurvePtrA = NULL;
+				return Curve;
+			}
+		}
+	}
 
   return NULL;
 }
@@ -2273,24 +2297,28 @@ LPIccCurve* CIccXformNDLut::ExtractInputCurves()
 */
 LPIccCurve* CIccXformNDLut::ExtractOutputCurves()
 {
-  if (!m_bInput) {
-    if (m_pTag->m_bInputMatrix) {
-      if (m_pTag->m_CurvesA) {
-        LPIccCurve* Curve = m_pTag->m_CurvesA;
-        m_pTag->m_CurvesA = NULL;
-        m_ApplyCurvePtrA = NULL;
-        return Curve;
-      }
-    }
-    else {
-      if (m_pTag->m_CurvesB) {
-        LPIccCurve* Curve = m_pTag->m_CurvesB;
-        m_pTag->m_CurvesB = NULL;
-        m_ApplyCurvePtrB = NULL;
-        return Curve;
-      }
-    }
-  }
+	if (!m_bInput) {
+		if (m_pTag->m_bInputMatrix) {
+			if (m_pTag->m_CurvesA) {
+				LPIccCurve* Curve = new LPIccCurve[m_pTag->m_nOutput];
+				for (int i=0; i<m_pTag->m_nOutput; i++) {
+					Curve[i] = (LPIccCurve)(m_pTag->m_CurvesA[i]->NewCopy());
+				}
+				m_ApplyCurvePtrA = NULL;
+				return Curve;
+			}
+		}
+		else {
+			if (m_pTag->m_CurvesB) {
+				LPIccCurve* Curve = new LPIccCurve[m_pTag->m_nOutput];
+				for (int i=0; i<m_pTag->m_nOutput; i++) {
+					Curve[i] = (LPIccCurve)(m_pTag->m_CurvesB[i]->NewCopy());
+				}
+				m_ApplyCurvePtrB = NULL;
+				return Curve;
+			}
+		}
+	}
 
   return NULL;
 }

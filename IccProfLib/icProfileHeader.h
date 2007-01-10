@@ -346,7 +346,9 @@ typedef enum {
     icSigMeasurementTag                    = 0x6D656173,  /* 'meas' */
     icSigMediaBlackPointTag                = 0x626B7074,  /* 'bkpt' */
     icSigMediaWhitePointTag                = 0x77747074,  /* 'wtpt' */
-  /*icSigNamedColorTag                    = 0x6E636f6C,  / 'ncol' OBSOLETE, use ncl2 */
+#if 0
+    icSigNamedColorTag                    = 0x6E636f6C,  /* 'ncol' OBSOLETE, use ncl2 */
+#endif
     icSigNamedColor2Tag                    = 0x6E636C32,  /* 'ncl2' */
     icSigOutputResponseTag                 = 0x72657370,  /* 'resp' */
     icSigPerceptualRenderingIntentGamutTag = 0x72696730,  /* 'rig0' */
@@ -433,7 +435,9 @@ typedef enum {
     icSigMeasurementType                = 0x6D656173,  /* 'meas' */
     icSigMultiLocalizedUnicodeType      = 0x6D6C7563,  /* 'mluc' */
     icSigMultiProcessElementType        = 0x6D706574,  /* 'mpet' */
-  /*icSigNamedColorType                 = 0x6E636f6C,  /* 'ncol' OBSOLETE, use ncl2 */
+#if 0
+    icSigNamedColorType                 = 0x6E636f6C,  /* 'ncol' OBSOLETE, use ncl2 */
+#endif
     icSigNamedColor2Type                = 0x6E636C32,  /* 'ncl2' */
     icSigParametricCurveType            = 0x70617261,  /* 'para' */
     icSigProfileSequenceDescType        = 0x70736571,  /* 'pseq' */
@@ -1424,17 +1428,17 @@ typedef struct {
 
 /** MultiLocalizedUnicodeEntry type */
 typedef struct {
-  icUInt16Number      languageCode;   /* name language code ISO-639           */
-  icUInt16Number      countryCode;    /* name country code ISO-3166           */
-  icUInt32Number      len;            /* string length in bytes               */
-  icUInt32Number      off;            /* offset in bytes from start of tag    */
+    icUInt16Number      languageCode;   /* name language code ISO-639           */
+    icUInt16Number      countryCode;    /* name country code ISO-3166           */
+    icUInt32Number      len;            /* string length in bytes               */
+    icUInt32Number      off;            /* offset in bytes from start of tag    */
 }icMultiLocalizedUnicodeEntry;
 
 /** MultiLocalizedUnicode type */
 typedef struct {
-  icTagBase           base;           /* Signature, "mluc"            */
-  icUInt32Number      count;          /* Count of name records        */
-  icUInt32Number      size;           /* name record size             */
+    icTagBase           base;           /* Signature, "mluc"            */
+    icUInt32Number      count;          /* Count of name records        */
+    icUInt32Number      size;           /* name record size             */
 }icMultiLocalizedUnicodeType;
 
 /*------------------------------------------------------------------------*/
@@ -1460,9 +1464,9 @@ typedef struct {
 
 /** Profile ID */
 typedef union {
-  icUInt8Number         ID8[16];
-  icUInt16Number        ID16[8];
-  icUInt32Number        ID32[4];
+    icUInt8Number         ID8[16];
+    icUInt16Number        ID16[8];
+    icUInt32Number        ID32[4];
 } icProfileID;
 
 /** The Profile header */
@@ -1483,7 +1487,7 @@ typedef struct {
     icUInt32Number              renderingIntent;/* Rendering intent */
     icXYZNumber                 illuminant;     /* Profile illuminant */
     icSignature                 creator;        /* Profile creator */
-  icProfileID                 profileID;      /* Profile ID using RFC 1321 MD5 128bit fingerprinting */
+    icProfileID                 profileID;      /* Profile ID using RFC 1321 MD5 128bit fingerprinting */
     icInt8Number                reserved[28];   /* Reserved for future use */
 } icHeader;
 
