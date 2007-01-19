@@ -162,7 +162,9 @@ void ICCPROFLIB_API icXyzToPcs(icFloatNumber *XYZ);
 
 void ICCPROFLIB_API icMemDump(std::string &sDump, void *pBuf, icUInt32Number nNum);
 void ICCPROFLIB_API icMatrixDump(std::string &sDump, icS15Fixed16Number *pMatrix);
-const icChar ICCPROFLIB_API *icGetSig(icChar *pBuf, icUInt32Number sig, bool bGetHexVal=true);
+const icChar* ICCPROFLIB_API icGetSig(icChar *pBuf, icUInt32Number sig, bool bGetHexVal=true);
+const icChar* ICCPROFLIB_API icGetSigStr(icChar *pBuf, icUInt32Number nSig);
+
 icUInt32Number ICCPROFLIB_API icGetSigVal(const icChar *pBuf);
 icUInt32Number ICCPROFLIB_API icGetSpaceSamples(icColorSpaceSignature sig);
 

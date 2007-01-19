@@ -714,6 +714,37 @@ const icChar *icGetSig(icChar *pBuf, icUInt32Number nSig, bool bGetHexVal)
   return pBuf;
 }
 
+const icChar *icGetSigStr(icChar *pBuf, icUInt32Number nSig)
+{
+  int i, j=-1;
+  icUInt32Number sig=nSig;
+  icUInt8Number c;
+  bool bGetHexVal = false;
+
+  for (i=0; i<4; i++) {
+    c=(icUInt8Number)(sig>>24);
+    if (!c) {
+      j=i;
+    }
+    else if (j!=-1) {
+      bGetHexVal = true;
+    }
+    else if (!isprint(c)) {
+      c='?';
+      bGetHexVal = true;
+    }
+    pBuf[i]=c;
+    sig <<=8;
+  }
+
+  if (bGetHexVal)
+    sprintf(pBuf, "%08Xh", nSig);
+  else
+    pBuf[4] = '\0';
+
+  return pBuf;
+}
+
 icUInt32Number icGetSigVal(const icChar *pBuf)
 {
   switch(strlen(pBuf)) {

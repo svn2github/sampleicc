@@ -90,6 +90,12 @@ class CIccIO;
 
 class ICCPROFLIB_API CIccProfile;
 
+class IIccExtensionTag
+{
+public:
+  virtual const char *GetClassName()=0;
+};
+
 /**
  ***********************************************************************
  * Class: CIccTag
@@ -132,6 +138,8 @@ public:
   virtual const icChar *GetClassName() { return "CIccTag"; }
 
   static CIccTag* Create(icTagTypeSignature sig);
+
+  virtual IIccExtensionTag* GetExtension() {return NULL;}
 
   /**
   * Function: IsSupported(size, pIO) - Check if tag fully

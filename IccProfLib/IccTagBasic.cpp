@@ -2757,7 +2757,7 @@ CIccTagFixedNum<T, Tsig>::~CIccTagFixedNum()
  *****************************************************************************
  */
 template <class T, icTagTypeSignature Tsig>
-const icChar *CIccTagFixedNum<T, Tsig>::GetClassName()
+const icChar* CIccTagFixedNum<T, Tsig>::GetClassName()
 {
   if (Tsig==icSigS15Fixed16ArrayType)
     return "CIccTagS15Fixed16";
