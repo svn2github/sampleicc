@@ -1,3 +1,7 @@
+2007-1-19 Max Derhak
+  * Added ability to use multiple inheritance for CIccTag co-derived on IIccExtensionTag
+    interface and accessed through a GetExtension virtual function.
+
 2006-12-06 Kevin Wheatley
   * Miscelaneouos Bug Fixes
   * Clean up of various compiler warnings
