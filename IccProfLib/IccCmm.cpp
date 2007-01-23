@@ -826,7 +826,10 @@ const icFloatNumber *CIccXform::CheckSrcAbs(const icFloatNumber *Pixel)
 void CIccXform::CheckDstAbs(icFloatNumber *Pixel)
 {
   if (m_bInput) {
-    if (m_nIntent == icAbsoluteColorimetric) {
+    if (m_nIntent == icAbsoluteColorimetric && 
+        (m_MediaXYZ.X != m_pProfile->m_Header.illuminant.X ||
+         m_MediaXYZ.Y != m_pProfile->m_Header.illuminant.Y ||
+         m_MediaXYZ.Z != m_pProfile->m_Header.illuminant.Z)) {
       icColorSpaceSignature Space = m_pProfile->m_Header.pcs;
       
       if (IsSpacePCS(Space)) {
