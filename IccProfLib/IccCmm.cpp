@@ -338,7 +338,7 @@ void CIccPCS::XyzToLab(icFloatNumber *Dst, const icFloatNumber *Src, bool bNoCli
  */
 void CIccPCS::Lab2ToXyz(icFloatNumber *Dst, const icFloatNumber *Src, bool bNoClip)
 {
-  Lab2ToLab4(Dst, Src);
+  Lab2ToLab4(Dst, Src, bNoClip);
   LabToXyz(Dst, Dst, bNoClip);
 }
 
@@ -366,11 +366,18 @@ void CIccPCS::XyzToLab2(icFloatNumber *Dst, const icFloatNumber *Src, bool bNoCl
  *  Convert version 2 Lab to version 4 Lab
  **************************************************************************
  */
-void CIccPCS::Lab2ToLab4(icFloatNumber *Dst, const icFloatNumber *Src)
+void CIccPCS::Lab2ToLab4(icFloatNumber *Dst, const icFloatNumber *Src, bool bNoClip)
 {
-  Dst[0] = UnitClip((icFloatNumber)(Src[0] * 65535.0 / 65280.0));
-  Dst[1] = UnitClip((icFloatNumber)(Src[1] * 65535.0 / 65280.0));
-  Dst[2] = UnitClip((icFloatNumber)(Src[2] * 65535.0 / 65280.0));
+  if (bNoClip) {
+    Dst[0] = (icFloatNumber)(Src[0] * 65535.0 / 65280.0);
+    Dst[1] = (icFloatNumber)(Src[1] * 65535.0 / 65280.0);
+    Dst[2] = (icFloatNumber)(Src[2] * 65535.0 / 65280.0);
+  }
+  else {
+    Dst[0] = UnitClip((icFloatNumber)(Src[0] * 65535.0 / 65280.0));
+    Dst[1] = UnitClip((icFloatNumber)(Src[1] * 65535.0 / 65280.0));
+    Dst[2] = UnitClip((icFloatNumber)(Src[2] * 65535.0 / 65280.0));
+  }
 }
 
 /**
@@ -735,35 +742,39 @@ icStatusCMM CIccXform::Begin()
 const icFloatNumber *CIccXform::CheckSrcAbs(const icFloatNumber *Pixel)
 {
   if (!m_bInput) {
-    if (m_nIntent == icAbsoluteColorimetric) {
-    icColorSpaceSignature Space = m_pProfile->m_Header.pcs;
+    if (m_nIntent == icAbsoluteColorimetric && 
+        (m_MediaXYZ.X != m_pProfile->m_Header.illuminant.X ||
+         m_MediaXYZ.Y != m_pProfile->m_Header.illuminant.Y ||
+         m_MediaXYZ.Z != m_pProfile->m_Header.illuminant.Z)) {
 
-    if (IsSpacePCS(Space)) {
-      if (Space==icSigLabData) {
-        if (UseLegacyPCS()) {
-          CIccPCS::Lab2ToXyz(m_AbsLab, Pixel, true);
+      icColorSpaceSignature Space = m_pProfile->m_Header.pcs;
+
+      if (IsSpacePCS(Space)) {
+        if (Space==icSigLabData) {
+          if (UseLegacyPCS()) {
+            CIccPCS::Lab2ToXyz(m_AbsLab, Pixel, true);
+          }
+          else
+            CIccPCS::LabToXyz(m_AbsLab, Pixel, true);
+          Pixel = m_AbsLab;
         }
-        else
-          CIccPCS::LabToXyz(m_AbsLab, Pixel, true);
-        Pixel = m_AbsLab;
+
+        m_AbsLab[0] = Pixel[0] * m_pProfile->m_Header.illuminant.X / m_MediaXYZ.X;
+        m_AbsLab[1] = Pixel[1] * m_pProfile->m_Header.illuminant.Y / m_MediaXYZ.Y;
+        m_AbsLab[2] = Pixel[2] * m_pProfile->m_Header.illuminant.Z / m_MediaXYZ.Z;
+
+        if (Space==icSigLabData) {
+          if (UseLegacyPCS()) {
+            CIccPCS::XyzToLab2(m_AbsLab, m_AbsLab, true);
+          }
+          else {
+            CIccPCS::XyzToLab(m_AbsLab, m_AbsLab, true);
+          }
+        }
+
+        return m_AbsLab;
       }
-
-      m_AbsLab[0] = Pixel[0] * m_pProfile->m_Header.illuminant.X / m_MediaXYZ.X;
-      m_AbsLab[1] = Pixel[1] * m_pProfile->m_Header.illuminant.Y / m_MediaXYZ.Y;
-      m_AbsLab[2] = Pixel[2] * m_pProfile->m_Header.illuminant.Z / m_MediaXYZ.Z;
-
-      if (Space==icSigLabData) {
-        if (UseLegacyPCS()) {
-          CIccPCS::XyzToLab2(m_AbsLab, m_AbsLab, true);
-        }
-        else {
-          CIccPCS::XyzToLab(m_AbsLab, m_AbsLab, true);
-        }
-      }
-
-      return m_AbsLab;
     }
-  }
     else if (m_nIntent == icPerceptual && IsVersion2()) {
       icColorSpaceSignature Space = m_pProfile->m_Header.pcs;
 
@@ -795,7 +806,6 @@ const icFloatNumber *CIccXform::CheckSrcAbs(const icFloatNumber *Pixel)
       }
     }
   }
-
   return Pixel;
 }
 

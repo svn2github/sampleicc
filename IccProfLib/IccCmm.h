@@ -483,7 +483,7 @@ public:
   static icFloatNumber NegClip(icFloatNumber v);
   static icFloatNumber UnitClip(icFloatNumber v);
 
-  static void Lab2ToLab4(icFloatNumber *Dst, const icFloatNumber *Src);
+  static void Lab2ToLab4(icFloatNumber *Dst, const icFloatNumber *Src, bool bNoclip=false);
   static void Lab4ToLab2(icFloatNumber *Dst, const icFloatNumber *Src);
 protected:
 
