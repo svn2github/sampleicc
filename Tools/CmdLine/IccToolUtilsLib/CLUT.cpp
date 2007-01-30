@@ -148,7 +148,8 @@ CLUT::makeAToBxTag(const unsigned int edgeN,
                    const CAT* const CATToPCS,
                    const icFloatNumber inputShaperGamma,
                    const std::string& inputShaperFilename,
-                   const icFloatNumber* const mediaWhite)
+                   const icFloatNumber* const mediaWhite,
+									 const bool LABPCS)
 {
   unsigned int i;
   CIccTagLut16* lut16 = new CIccTagLut16();
@@ -167,7 +168,8 @@ CLUT::makeAToBxTag(const unsigned int edgeN,
   
   m_innerCLUT = lut16->NewCLUT(edgeN);
 
-  CLUTStuffer stuffer(edgeN, rawXYZ, flare, illuminant[1], CATToPCS, mediaWhite);
+  CLUTStuffer stuffer(edgeN, rawXYZ, flare, illuminant[1], CATToPCS,
+											mediaWhite, LABPCS);
   m_innerCLUT->Iterate(&stuffer);
 
   LPIccCurve* oLUT = lut16->NewCurvesB();

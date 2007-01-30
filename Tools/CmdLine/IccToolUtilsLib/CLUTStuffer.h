@@ -92,7 +92,8 @@ public:
     const icFloatNumber* flare,
     const icFloatNumber illuminantY,
     const CAT* const CATToPCS,
-    const icFloatNumber* adaptedMediaWhite);
+    const icFloatNumber* adaptedMediaWhite,
+		const bool LABPCS);
   
  ~CLUTStuffer()  {}
   
@@ -105,6 +106,7 @@ private:
   icFloatNumber m_Flare[3];
   const icFloatNumber m_IlluminantY;
   const CAT* const m_CAT;
+	const bool m_LABPCS;
   icFloatNumber m_AdaptedMediaWhite[3];
 };
 

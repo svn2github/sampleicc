@@ -106,7 +106,8 @@ class CLUT
                const CAT* const CATToPCS,
                const icFloatNumber inputShaperGamma,
                const std::string& inputShaperFilename,
-               const icFloatNumber* const mediaWhite);
+               const icFloatNumber* const mediaWhite,
+							 const bool LABPCS);
   
   static
   void

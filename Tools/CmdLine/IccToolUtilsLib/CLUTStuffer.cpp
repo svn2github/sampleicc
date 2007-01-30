@@ -6,7 +6,7 @@
  
  Version:    V1
  
- Copyright:  © see below
+ Copyright:  ï¿½ see below
  */
 
 /*
@@ -79,19 +79,25 @@
 
 #include "CLUTStuffer.h"
 
+#include <iostream>
+#include <iomanip>
+
 #include "IccUtil.h"
 #include "IccTagLut.h"
+#include "IccCmm.h"
 
 CLUTStuffer::CLUTStuffer(unsigned int edgeN,
   const icFloatNumber* const measuredXYZ,
   const icFloatNumber* flare,
   const icFloatNumber illuminantY,
   const CAT* const CATToPCS,
-  const icFloatNumber* adaptedMediaWhite)
+  const icFloatNumber* adaptedMediaWhite,
+	const bool LABPCS)
   :  m_EdgeN(edgeN),
     m_MeasuredXYZ(measuredXYZ),
     m_IlluminantY(illuminantY),
-    m_CAT(CATToPCS)
+    m_CAT(CATToPCS),
+		m_LABPCS(LABPCS)
 {
     for (int i = 0; i < 3; ++i)
     {
@@ -156,11 +162,27 @@ CLUTStuffer::PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData)
     for (unsigned int i = 0; i < 3; ++i)
 			adjustedPCSXYZ[i] = adaptedXYZ[i] * icD50XYZ[i] / m_AdaptedMediaWhite[i];
 	
-		// 7. Optionally, convert the adjusted PCS XYZ coordinates to PCS L*a*b*
-		// as described in Annex A.
-    icXYZtoLab(pData, adjustedPCSXYZ, icD50XYZ);
-  
-		// 8. Encode the PCS XYZ coordinates or the PCS L*a*b* coordinates digitally
-		// in 8-bit or 16-bit representations as defined in 6.3.4.
-    icLabToPcs(pData);
-}
+		if (m_LABPCS)
+		{
+				// 7. Optionally, convert the adjusted PCS XYZ coordinates to PCS L*a*b*
+				// as described in Annex A.
+				icXYZtoLab(pData, adjustedPCSXYZ, icD50XYZ);
+	
+				// 8. Encode the PCS XYZ coordinates or the PCS L*a*b* coordinates
+				// digitally in 8-bit or 16-bit representations as defined in 6.3.4.
+				icLabToPcs(pData);
+	
+				// 8.5.
+				// Since the data type of this tag is 'lut16Type' we use the legacy
+				// encoding mentioned in 6.3.4.2 NOTE 4 and in clause 10.8.
+				// n.b. 'lut16Type' tags and 'namedColor2Type' tags are the ONLY place
+				// you will ever see this.
+				CIccPCS::Lab4ToLab2(pData, pData);
+		}
+		else
+		{
+			for(unsigned int i = 0; i < 3; ++i)
+				pData[i] = adjustedPCSXYZ[i];
+			icXyzToPcs(pData);
+		}
+	}
