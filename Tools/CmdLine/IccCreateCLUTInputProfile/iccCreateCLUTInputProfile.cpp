@@ -126,7 +126,8 @@ createProfile(const string& inFilename,
               const icFloatNumber* illuminant,
               const icFloatNumber inputShaperGamma,
               const string& inputShaperFilename,
-              const icFloatNumber* mediaWhite)
+              const icFloatNumber* mediaWhite,
+							const bool LABPCS)
 {                   
   unsigned int i;
 
@@ -154,7 +155,7 @@ createProfile(const string& inFilename,
   profile.InitHeader();
   profile.m_Header.deviceClass = icSigInputClass;
   profile.m_Header.colorSpace = icSigRgbData;
-  profile.m_Header.pcs = icSigLabData;
+  profile.m_Header.pcs = LABPCS ? icSigLabData : icSigXYZData;
   profile.m_Header.platform = icSigMacintosh;
   profile.m_Header.attributes = static_cast<icUInt64Number>(icTransparency);
   profile.m_Header.renderingIntent = icRelativeColorimetric;
@@ -227,7 +228,7 @@ createProfile(const string& inFilename,
   CLUT* AToB1CLUT = new CLUT();
   CIccTagLut16* AToB1Tag
     = AToB1CLUT->makeAToBxTag(size, measuredXYZ, flare, illuminant, CATToD50,
-      inputShaperGamma, inputShaperFilename, adaptedMediaWhite);
+      inputShaperGamma, inputShaperFilename, adaptedMediaWhite, LABPCS);
   profile.AttachTag(icSigAToB1Tag, AToB1Tag); // the A2B1 tag
 
   // We can get away with this because the Saturation Intent is so
@@ -238,7 +239,7 @@ createProfile(const string& inFilename,
   CLUT* AToB0CLUT = new CLUT();
   CIccTagLut16* AToB0Tag
     = AToB0CLUT->makeAToBxTag(size, measuredXYZ, flare, illuminant, CATToD50,
-      inputShaperGamma, inputShaperFilename, adaptedMediaWhite);
+      inputShaperGamma, inputShaperFilename, adaptedMediaWhite, LABPCS);
   BlackScaler blackScaler(size, measuredXYZ, adaptedMediaBlack, adaptedMediaWhite);
   AToB0CLUT->Iterate(&blackScaler);
   profile.AttachTag(icSigAToB0Tag, AToB0Tag); // the A2B0 tag
@@ -342,7 +343,15 @@ usage(ostream& oS, const string& myName)
      << "  values.  The first line of the file is used to normalize the contents of the rest of"      << endl
      << "  the file.  Mutually exclusive with --input-shaper-gamma option"                            << endl
                                                                                                       << endl
-     << "   -i"
+		 << "   -L"
+#if defined(HAS_GETOPT_LONG)
+		 << "   --LAB-PCS"
+#endif
+		 << " flag indicating that the profile data should be stored in the LAB PCS (default false)"      << endl
+		 << " (unless this flag is specified, profile data will be stored in the XYZ PCS)"                << endl
+		 << endl
+
+	<< "   -i"
 #if defined(HAS_GETOPT_LONG)
      << ", --illuminant"
 #endif
@@ -370,6 +379,9 @@ main(int argc, char * const argv[])
   icFloatNumber illuminant[3] = { 0, 0, 0 };
   bool sawExplicitIlluminant = false;
   
+	bool LABPCS = false;
+	bool sawExplicitLABPCS = false;
+	
   icFloatNumber inputShaperGamma = 1.0;
   bool sawInputShaperGamma = false;
   
@@ -392,6 +404,7 @@ main(int argc, char * const argv[])
   static struct option longopts[] = {
     { "flare",       optional_argument, NULL, 'f' },
     { "illuminant",  optional_argument, NULL, 'i' },
+		{ "LAB-PCS",     optional_argument, NULL, 'L' },
     { "input-shaper-gamma", optional_argument, NULL, 'g' },
     { "input-shaper-file",  optional_argument, NULL, 'n' },
     { "copyright",   optional_argument, NULL, 'c' },
@@ -404,9 +417,9 @@ main(int argc, char * const argv[])
 
   while (true) {
 #if defined(HAS_GETOPT_LONG)
-    int shortOpt = getopt_long(argc, argv, "hf:i:g:n:c:", longopts, NULL);
+    int shortOpt = getopt_long(argc, argv, "hf:i:L:g:n:c:", longopts, NULL);
 #else
-    int shortOpt = getopt(argc, argv, "hf:i:g:n:c:");
+    int shortOpt = getopt(argc, argv, "hf:i:L:g:n:c:");
 #endif
     if (shortOpt == -1)
       break;
@@ -423,6 +436,10 @@ main(int argc, char * const argv[])
   readXYZFromString(illuminant, optarg);
   sawExplicitIlluminant = true;
   break;
+			case 'L':
+	LABPCS = true;
+	sawExplicitLABPCS = true;
+	break;
       case 'g':
   inputShaperGamma = (icFloatNumber)strtod(optarg, NULL);
   sawInputShaperGamma = true;
@@ -485,7 +502,7 @@ main(int argc, char * const argv[])
     createProfile(inFilename, outFilename, size,
                   description, copyright,
                   flare, illuminant, inputShaperGamma, inputShaperFilename,
-                  mediaWhite);
+                  mediaWhite, LABPCS);
 
     return EXIT_SUCCESS;
   }
