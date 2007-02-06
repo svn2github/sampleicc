@@ -37,9 +37,9 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-bin_PROGRAMS = iccCreateCLUTInputProfile$(EXEEXT) \
+bin_PROGRAMS = iccCreateCLUTProfile$(EXEEXT) \
 	iccFlattenAToBTag$(EXEEXT)
-subdir = Tools/CmdLine/IccCreateCLUTInputProfile
+subdir = Tools/CmdLine/IccCreateCLUTProfile
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
@@ -51,12 +51,11 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
-am_iccCreateCLUTInputProfile_OBJECTS = BlackScaler.$(OBJEXT) \
-	iccCreateCLUTInputProfile.$(OBJEXT)
-iccCreateCLUTInputProfile_OBJECTS =  \
-	$(am_iccCreateCLUTInputProfile_OBJECTS)
-iccCreateCLUTInputProfile_LDADD = $(LDADD)
-iccCreateCLUTInputProfile_DEPENDENCIES =
+am_iccCreateCLUTProfile_OBJECTS = BlackScaler.$(OBJEXT) \
+	iccCreateCLUTProfile.$(OBJEXT)
+iccCreateCLUTProfile_OBJECTS = $(am_iccCreateCLUTProfile_OBJECTS)
+iccCreateCLUTProfile_LDADD = $(LDADD)
+iccCreateCLUTProfile_DEPENDENCIES =
 am_iccFlattenAToBTag_OBJECTS = iccFlattenAToBTag.$(OBJEXT)
 iccFlattenAToBTag_OBJECTS = $(am_iccFlattenAToBTag_OBJECTS)
 iccFlattenAToBTag_LDADD = $(LDADD)
@@ -80,9 +79,8 @@ LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(iccCreateCLUTInputProfile_SOURCES) \
-	$(iccFlattenAToBTag_SOURCES)
-DIST_SOURCES = $(iccCreateCLUTInputProfile_SOURCES) \
+SOURCES = $(iccCreateCLUTProfile_SOURCES) $(iccFlattenAToBTag_SOURCES)
+DIST_SOURCES = $(iccCreateCLUTProfile_SOURCES) \
 	$(iccFlattenAToBTag_SOURCES)
 ETAGS = etags
 CTAGS = ctags
@@ -209,9 +207,9 @@ INCLUDES = -I$(top_builddir) -I$(top_srcdir)/IccProfLib \
 LDADD = -L$(top_builddir)/IccProfLib -lSampleICC \
 	-L$(top_builddir)/Tools/CmdLine/IccToolUtilsLib -lSampleICCToolUtils
 
-iccCreateCLUTInputProfile_SOURCES = \
+iccCreateCLUTProfile_SOURCES = \
 	BlackScaler.h BlackScaler.cpp \
-	iccCreateCLUTInputProfile.cpp
+	iccCreateCLUTProfile.cpp
 
 iccFlattenAToBTag_SOURCES = \
 	iccFlattenAToBTag.cpp
@@ -229,9 +227,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  Tools/CmdLine/IccCreateCLUTInputProfile/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  Tools/CmdLine/IccCreateCLUTProfile/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  Tools/CmdLine/IccCreateCLUTInputProfile/Makefile
+	  $(AUTOMAKE) --gnu  Tools/CmdLine/IccCreateCLUTProfile/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -277,9 +275,9 @@ clean-binPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-iccCreateCLUTInputProfile$(EXEEXT): $(iccCreateCLUTInputProfile_OBJECTS) $(iccCreateCLUTInputProfile_DEPENDENCIES) 
-	@rm -f iccCreateCLUTInputProfile$(EXEEXT)
-	$(CXXLINK) $(iccCreateCLUTInputProfile_LDFLAGS) $(iccCreateCLUTInputProfile_OBJECTS) $(iccCreateCLUTInputProfile_LDADD) $(LIBS)
+iccCreateCLUTProfile$(EXEEXT): $(iccCreateCLUTProfile_OBJECTS) $(iccCreateCLUTProfile_DEPENDENCIES) 
+	@rm -f iccCreateCLUTProfile$(EXEEXT)
+	$(CXXLINK) $(iccCreateCLUTProfile_LDFLAGS) $(iccCreateCLUTProfile_OBJECTS) $(iccCreateCLUTProfile_LDADD) $(LIBS)
 iccFlattenAToBTag$(EXEEXT): $(iccFlattenAToBTag_OBJECTS) $(iccFlattenAToBTag_DEPENDENCIES) 
 	@rm -f iccFlattenAToBTag$(EXEEXT)
 	$(CXXLINK) $(iccFlattenAToBTag_LDFLAGS) $(iccFlattenAToBTag_OBJECTS) $(iccFlattenAToBTag_LDADD) $(LIBS)
@@ -291,7 +289,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BlackScaler.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iccCreateCLUTInputProfile.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iccCreateCLUTProfile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iccFlattenAToBTag.Po@am__quote@
 
 .cpp.o:

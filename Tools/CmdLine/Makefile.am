@@ -1,21 +1,23 @@
 ## Process this file with automake to produce Makefile.in
 
 SUBDIRS = IccApplyNamedCmm \
+	@SICC_ICC_APPLY_PROFILES@ \
+	IccCreateCLUTProfile \
+	IccCreateTRCMatrixDisplayProfile \
 	IccDumpProfile \
 	IccProfLibTest \
+	IccReconstructMeasurements \
 	IccStripUnknownTags \
 	IccV4ToMPE \
-	@SICC_ICC_APPLY_PROFILES@ \
-	IccToolUtilsLib \
-	IccCreateCLUTInputProfile \
-	IccCreateTRCMatrixDisplayProfile
+	IccToolUtilsLib
 
 DIST_SUBDIRS = IccApplyNamedCmm \
+	IccApplyProfiles \
+	IccCreateCLUTProfile \
+	IccCreateTRCMatrixDisplayProfile \
 	IccDumpProfile \
 	IccProfLibTest \
+	IccReconstructMeasurements \
 	IccStripUnknownTags \
 	IccV4ToMPE \
-	IccApplyProfiles \
-	IccToolUtilsLib \
-	IccCreateCLUTInputProfile \
-	IccCreateTRCMatrixDisplayProfile
+	IccToolUtilsLib

@@ -184,10 +184,11 @@ Tools/CmdLine/Makefile
 Tools/CmdLine/IccToolUtilsLib/Makefile
 Tools/CmdLine/IccApplyNamedCmm/Makefile
 Tools/CmdLine/IccApplyProfiles/Makefile
+Tools/CmdLine/IccCreateCLUTProfile/Makefile
+Tools/CmdLine/IccCreateTRCMatrixDisplayProfile/Makefile
 Tools/CmdLine/IccDumpProfile/Makefile
 Tools/CmdLine/IccProfLibTest/Makefile
-Tools/CmdLine/IccV4ToMPE/Makefile
+Tools/CmdLine/IccReconstructMeasurements/Makefile
 Tools/CmdLine/IccStripUnknownTags/Makefile
-Tools/CmdLine/IccCreateCLUTInputProfile/Makefile
-Tools/CmdLine/IccCreateTRCMatrixDisplayProfile/Makefile
+Tools/CmdLine/IccV4ToMPE/Makefile
 ])
