@@ -120,6 +120,7 @@ void
 createProfile(const string& inFilename,
               const string& outFilename,
               const int size,
+	      const icProfileClassSignature profileClass,
               const string& description,
               const string& copyright,
               const icFloatNumber* flare,
@@ -153,7 +154,7 @@ createProfile(const string& inFilename,
   }
   CIccProfile profile;
   profile.InitHeader();
-  profile.m_Header.deviceClass = icSigInputClass;
+  profile.m_Header.deviceClass = profileClass;
   profile.m_Header.colorSpace = icSigRgbData;
   profile.m_Header.pcs = LABPCS ? icSigLabData : icSigXYZData;
   profile.m_Header.platform = icSigMacintosh;
@@ -379,8 +380,8 @@ main(int argc, char * const argv[])
   icFloatNumber illuminant[3] = { 0, 0, 0 };
   bool sawExplicitIlluminant = false;
   
-	bool LABPCS = false;
-	bool sawExplicitLABPCS = false;
+  bool LABPCS = false;
+  bool sawExplicitLABPCS = false;
 	
   icFloatNumber inputShaperGamma = 1.0;
   bool sawInputShaperGamma = false;
@@ -390,6 +391,9 @@ main(int argc, char * const argv[])
 
   string copyright("");
 
+  string profileType("input");
+  bool sawProfileType = false;
+  
   string description("");
 
   icFloatNumber mediaWhite[3] = { 0, 0, 0 };
@@ -404,10 +408,11 @@ main(int argc, char * const argv[])
   static struct option longopts[] = {
     { "flare",       optional_argument, NULL, 'f' },
     { "illuminant",  optional_argument, NULL, 'i' },
-		{ "LAB-PCS",     optional_argument, NULL, 'L' },
+    { "LAB-PCS",     optional_argument, NULL, 'L' },
     { "input-shaper-gamma", optional_argument, NULL, 'g' },
     { "input-shaper-file",  optional_argument, NULL, 'n' },
     { "copyright",   optional_argument, NULL, 'c' },
+    { "type",        optional_argument, NULL, 't' },
     { "description", required_argument, NULL, 'd' },
     { "mediaWhite",  required_argument, NULL, 'w' },
     { "size",        required_argument, NULL, 's' },
@@ -417,54 +422,58 @@ main(int argc, char * const argv[])
 
   while (true) {
 #if defined(HAS_GETOPT_LONG)
-    int shortOpt = getopt_long(argc, argv, "hf:i:L:g:n:c:", longopts, NULL);
+    int shortOpt = getopt_long(argc, argv, "hf:i:L:g:n:c:t:", longopts, NULL);
 #else
-    int shortOpt = getopt(argc, argv, "hf:i:L:g:n:c:");
+    int shortOpt = getopt(argc, argv, "hf:i:L:g:n:c:t:");
 #endif
     if (shortOpt == -1)
       break;
     switch (shortOpt) 
       {
       case 'h':
-  usage(cout, argv[0]);
-  return EXIT_SUCCESS;
+	usage(cout, argv[0]);
+	return EXIT_SUCCESS;
       case 'f':
-  readXYZFromString(flare, optarg);
-  sawExplicitFlare = true;
-  break;
+	readXYZFromString(flare, optarg);
+	sawExplicitFlare = true;
+	break;
       case 'i':
-  readXYZFromString(illuminant, optarg);
-  sawExplicitIlluminant = true;
-  break;
-			case 'L':
+	readXYZFromString(illuminant, optarg);
+	sawExplicitIlluminant = true;
+	break;
+      case 'L':
 	LABPCS = true;
 	sawExplicitLABPCS = true;
 	break;
       case 'g':
-  inputShaperGamma = (icFloatNumber)strtod(optarg, NULL);
-  sawInputShaperGamma = true;
-  break;
+	inputShaperGamma = (icFloatNumber)strtod(optarg, NULL);
+	sawInputShaperGamma = true;
+	break;
       case 'n':
-  inputShaperFilename = optarg;
-  sawInputShaperFilename = true;
-  break;
+	inputShaperFilename = optarg;
+	sawInputShaperFilename = true;
+	break;
       case 'c':
-  copyright = optarg;
-  break;
+	copyright = optarg;
+	break;
+      case 't':
+	profileType = optarg;
+	sawProfileType = true;
+	break;
       default:
-  usage(cout, argv[0]);
-  return EXIT_FAILURE;
+	usage(cout, argv[0]);
+	return EXIT_FAILURE;
       }
-    }
+  }
 
   argc -= optind;
   argv += optind;
 
   if (argc != 5)
-  {
-    usage(cout, myName.c_str());
-    return EXIT_FAILURE;
-  }
+    {
+      usage(cout, myName.c_str());
+      return EXIT_FAILURE;
+    }
   
   description                 = argv[0];
   readXYZFromString(mediaWhite, argv[1]);
@@ -473,42 +482,51 @@ main(int argc, char * const argv[])
   outFilename                 = argv[4];
 
   try
-  {
-    // check for obvious problems
-    if (sawInputShaperGamma && sawInputShaperFilename)
-      throw IccToolException("both --inputShaperGamma (-g) and"
-        " --inputShaperFilename (-n) specified, but the two options are"
-        " mutually exclusive");
-    
-    if (! sawExplicitIlluminant)
-      for (unsigned int i = 0; i < 3; ++i)
-        illuminant[i] = mediaWhite[i];
+    {
+      // check for obvious problems
 
-    clog << "creating " << size << "x" << size << "x" << size
-         << " CLUT-based ICC input profile `" << outFilename << "'" << endl
-         << " from data in file " << inFilename << endl
-         << " with an explicitly-specified media white point of "
-         << mediaWhite[0] << " " << mediaWhite[1] << " " << mediaWhite[2] << endl
-         << " an " << (sawExplicitIlluminant ? "explicit" : "implicit") << " illuminant of "
-         << illuminant[0] << " " << illuminant[1] << " " << illuminant[2] << endl
-         << " an " << (sawExplicitFlare ? "explicit" : "implicit") << " measurement flare level of "
-         << flare[0] << " " << flare[1] << " " << flare[2] << endl;
-    if (copyright == "")
-      clog << " no copyright" << endl;
-    else
-      clog << " a copyright '" << copyright << "'" << endl;
-    clog << " and the description `" << description << "'" << endl;
 
-    createProfile(inFilename, outFilename, size,
-                  description, copyright,
-                  flare, illuminant, inputShaperGamma, inputShaperFilename,
-                  mediaWhite, LABPCS);
+      if (sawInputShaperGamma && sawInputShaperFilename)
+	throw IccToolException("both --inputShaperGamma (-g) and"
+			       " --inputShaperFilename (-n) specified, but the two options are"
+			       " mutually exclusive");
 
-    return EXIT_SUCCESS;
-  }
+      if (! (profileType == "input" || profileType == "display"))
+	throw IccToolException("profile type specified, but was neither"
+			       " input nor display");
+
+    icProfileClassSignature profileClass
+		= (profileType == "input") ? icSigInputClass : icSigDisplayClass;
+
+      if (! sawExplicitIlluminant)
+	for (unsigned int i = 0; i < 3; ++i)
+	  illuminant[i] = mediaWhite[i];
+
+      clog << "creating " << size << "x" << size << "x" << size
+	   << " CLUT-based ICC input profile `" << outFilename << "'" << endl
+	   << " from data in file " << inFilename << endl
+	   << " with an explicitly-specified media white point of "
+	   << mediaWhite[0] << " " << mediaWhite[1] << " " << mediaWhite[2] << endl
+	   << " an " << (sawExplicitIlluminant ? "explicit" : "implicit") << " illuminant of "
+	   << illuminant[0] << " " << illuminant[1] << " " << illuminant[2] << endl
+	   << " an " << (sawExplicitFlare ? "explicit" : "implicit") << " measurement flare level of "
+	   << flare[0] << " " << flare[1] << " " << flare[2] << endl;
+      if (copyright == "")
+	clog << " no copyright" << endl;
+      else
+	clog << " a copyright '" << copyright << "'" << endl;
+      clog << " and the description `" << description << "'" << endl;
+
+      createProfile(inFilename, outFilename, size, profileClass,
+		    description, copyright,
+		    flare, illuminant, inputShaperGamma, inputShaperFilename,
+		    mediaWhite, LABPCS);
+
+      return EXIT_SUCCESS;
+    }
   catch (const exception& e)
-  {
-    cerr << myName << ": error: " << e.what() << endl;
-    return EXIT_FAILURE;
-  }
+    {
+      cerr << myName << ": error: " << e.what() << endl;
+      return EXIT_FAILURE;
+    }
 }
