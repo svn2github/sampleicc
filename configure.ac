@@ -189,6 +189,7 @@ Tools/CmdLine/IccCreateTRCMatrixDisplayProfile/Makefile
 Tools/CmdLine/IccDumpProfile/Makefile
 Tools/CmdLine/IccProfLibTest/Makefile
 Tools/CmdLine/IccReconstructMeasurements/Makefile
+Tools/CmdLine/IccReconstructMeasurements/deviceCodeGenerators/Makefile
 Tools/CmdLine/IccStripUnknownTags/Makefile
 Tools/CmdLine/IccV4ToMPE/Makefile
 ])
