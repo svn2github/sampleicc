@@ -119,39 +119,39 @@ int
 main(int argc, char* argv[])
 {
   try
-    {
-      char* RGBStimuliFilename = argv[1];
-      ifstream in_s(RGBStimuliFilename);
-      if (! in_s)
 	{
-	  ostringstream s;
-	  s << "Could not open file `" << RGBStimuliFilename << "'";
-	  throw IccToolException(s.str());
+		char* RGBStimuliFilename = argv[1];
+		ifstream in_s(RGBStimuliFilename);
+		if (! in_s)
+		{
+			ostringstream s;
+			s << "Could not open file `" << RGBStimuliFilename << "'";
+			throw IccToolException(s.str());
+		}
+		char* ICCProfileFilename = argv[2];
+		icFloatNumber flare[3] = {0, 0, 0};
+		
+		if (argc == 5)
+		{
+			icFloatNumber illuminantY = atof(argv[3]);
+			char* XYZMeasurementsFilename = argv[4];
+			MeasurementExtractor extractor(ICCProfileFilename,
+																		 illuminantY,
+																		 flare);
+			processMeasurements(in_s, extractor, XYZMeasurementsFilename);
+		}
+		else
+		{
+			char* XYZMeasurementsFilename = argv[3];
+			MeasurementExtractor extractor(ICCProfileFilename,
+																		 flare);
+			processMeasurements(in_s, extractor, XYZMeasurementsFilename);
+		}
+		return EXIT_SUCCESS;
 	}
-      char* ICCProfileFilename = argv[2];
-      icFloatNumber flare[3] = {0, 0, 0};
-      
-      if (argc == 5)
-	{
-	  icFloatNumber illuminantY = atof(argv[3]);
-	  char* XYZMeasurementsFilename = argv[4];
-	  MeasurementExtractor extractor(ICCProfileFilename,
-					 illuminantY,
-					 flare);
-	  processMeasurements(in_s, extractor, XYZMeasurementsFilename);
-	}
-      else
-	{
-	  char* XYZMeasurementsFilename = argv[3];
-	  MeasurementExtractor extractor(ICCProfileFilename,
-					 flare);
-	  processMeasurements(in_s, extractor, XYZMeasurementsFilename);
-	}
-      return EXIT_SUCCESS;
-    }
   catch (const exception& e)
-    {
-      cerr << "Error: " << e.what() << endl;
-      return EXIT_FAILURE;
-    }
+	{
+		cerr << "Error: " << e.what() << endl;
+		return EXIT_FAILURE;
+	}
 }
