@@ -120,7 +120,7 @@ void
 createProfile(const string& inFilename,
               const string& outFilename,
               const int size,
-	      const icProfileClassSignature profileClass,
+              const icProfileClassSignature profileClass,
               const string& description,
               const string& copyright,
               const icFloatNumber* flare,
