@@ -33,6 +33,7 @@
 				7CE0F5170AF0533D002F2A93 /* PBXTargetDependency */,
 				7C333A1A0B1EAA09006AB880 /* PBXTargetDependency */,
 				7CF6A6A70B555F470077F8CF /* PBXTargetDependency */,
+				7C64B7350B928567000A88D2 /* PBXTargetDependency */,
 			);
 			name = Commands;
 			productName = Commands;
@@ -102,6 +103,9 @@
 		7C605F210B4B6BB400350479 /* SampleICC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605E5C0B4B65A900350479 /* SampleICC.framework */; };
 		7C605F240B4B6BD700350479 /* SampleICC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605E5C0B4B65A900350479 /* SampleICC.framework */; };
 		7C6291FF0AFEC69C002D7386 /* BlackScaler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C6291FE0AFEC69C002D7386 /* BlackScaler.cpp */; };
+		7C64B7390B928584000A88D2 /* iccCreateProbeImages.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C64B7380B928584000A88D2 /* iccCreateProbeImages.cpp */; };
+		7C64B74A0B9287D1000A88D2 /* iccCreateProbeImages.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C64B7380B928584000A88D2 /* iccCreateProbeImages.cpp */; };
+		7C64B7750B928A2E000A88D2 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C64B7710B928A2E000A88D2 /* ApplicationServices.framework */; };
 		7C8B00180B5725F200889B00 /* SampleICC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605E5C0B4B65A900350479 /* SampleICC.framework */; };
 		7C8B00190B5725F200889B00 /* SampleICCToolUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605EB30B4B683200350479 /* SampleICCToolUtils.framework */; };
 		7C8BFFFD0B5725E300889B00 /* roundTripThroughPcsLabEncoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFFFC0B5725E300889B00 /* roundTripThroughPcsLabEncoding.cpp */; };
@@ -231,6 +235,13 @@
 			remoteGlobalIDString = 7C605E5B0B4B65A800350479;
 			remoteInfo = SampleICC;
 		};
+		7C64B7340B928567000A88D2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C64B5EE0B9284D2000A88D2;
+			remoteInfo = iccCreateProbeImages;
+		};
 		7C8BFFF00B57257800889B00 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
@@ -343,7 +354,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		7C333A060B1EA925006AB880 /* iccC4ToMpe */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccC4ToMpe; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C333A060B1EA925006AB880 /* iccV4ToMpe */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccV4ToMpe; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C333A0F0B1EA99D006AB880 /* iccV4ToMPE.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = iccV4ToMPE.cpp; path = Tools/CmdLine/IccV4ToMPE/iccV4ToMPE.cpp; sourceTree = "<group>"; };
 		7C49EA780B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccCreateTRCMatrixDisplayProfile; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C49EA8F0B09122C00ADFFE7 /* iccCreateTRCMatrixDisplayProfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = iccCreateTRCMatrixDisplayProfile.cpp; path = Tools/CmdLine/IccCreateTRCMatrixDisplayProfile/iccCreateTRCMatrixDisplayProfile.cpp; sourceTree = "<group>"; };
@@ -355,10 +366,13 @@
 		7C6291120AFEAD9C002D7386 /* CLUTStuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CLUTStuffer.cpp; path = ../Tools/CmdLine/IccToolUtilsLib/CLUTStuffer.cpp; sourceTree = "<group>"; };
 		7C6291FE0AFEC69C002D7386 /* BlackScaler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlackScaler.cpp; sourceTree = "<group>"; };
 		7C6292E80AFFEC19002D7386 /* BlackScaler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlackScaler.h; sourceTree = "<group>"; };
+		7C64B5EF0B9284D2000A88D2 /* iccCreateProbeImages */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccCreateProbeImages; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C64B7380B928584000A88D2 /* iccCreateProbeImages.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = iccCreateProbeImages.cpp; sourceTree = "<group>"; };
+		7C64B7710B928A2E000A88D2 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
 		7C732D880B0E3746006A574A /* IccToolException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IccToolException.h; path = ../Tools/CmdLine/IccToolUtilsLib/IccToolException.h; sourceTree = "<group>"; };
 		7C732D890B0E3746006A574A /* IccToolException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IccToolException.cpp; path = ../Tools/CmdLine/IccToolUtilsLib/IccToolException.cpp; sourceTree = "<group>"; };
 		7C8BFFEA0B57256500889B00 /* roundTripThroughPcsLabEncoding */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = roundTripThroughPcsLabEncoding; sourceTree = BUILT_PRODUCTS_DIR; };
-		7C8BFFFC0B5725E300889B00 /* roundTripThroughPcsLabEncoding.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = roundTripThroughPcsLabEncoding.cpp; path = Tools/CmdLine/IccReconstructMeasurements/roundTripThroughPcsLabEncoding.cpp; sourceTree = "<group>"; };
+		7C8BFFFC0B5725E300889B00 /* roundTripThroughPcsLabEncoding.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = roundTripThroughPcsLabEncoding.cpp; path = Tools/CmdLine/IccReconstructMeasurements/examples/roundTripThroughPcsLabEncoding.cpp; sourceTree = "<group>"; };
 		7CE0F4160AF04D3F002F2A93 /* IccCmm.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = IccCmm.cpp; sourceTree = "<group>"; };
 		7CE0F4170AF04D3F002F2A93 /* IccCmm.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccCmm.h; sourceTree = "<group>"; };
 		7CE0F4180AF04D3F002F2A93 /* IccDefs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccDefs.h; sourceTree = "<group>"; };
@@ -381,7 +395,7 @@
 		7CE0F4300AF04D3F002F2A93 /* md5.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = md5.h; sourceTree = "<group>"; };
 		7CE0F4570AF04F02002F2A93 /* iccApplyNamedCmm */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccApplyNamedCmm; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CE0F45E0AF04F1C002F2A93 /* iccApplyProfiles */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccApplyProfiles; sourceTree = BUILT_PRODUCTS_DIR; };
-		7CE0F4650AF04F3C002F2A93 /* iccCreateCLUTInputProfile */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccCreateCLUTInputProfile; sourceTree = BUILT_PRODUCTS_DIR; };
+		7CE0F4650AF04F3C002F2A93 /* iccCreateCLUTProfile */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccCreateCLUTProfile; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CE0F46C0AF04F59002F2A93 /* iccDumpProfile */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccDumpProfile; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CE0F4730AF04F73002F2A93 /* iccProfLibTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccProfLibTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CE0F4790AF04F9B002F2A93 /* cmyk16bit.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = cmyk16bit.txt; sourceTree = "<group>"; };
@@ -453,6 +467,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C605EF20B4B6A1C00350479 /* SampleICC.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C64B5ED0B9284D2000A88D2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C64B7750B928A2E000A88D2 /* ApplicationServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -530,6 +552,7 @@
 			isa = PBXGroup;
 			children = (
 				08FB7795FE84155DC02AAC07 /* Source */,
+				7C64B76E0B9289E4000A88D2 /* Existing frameworks and libraries */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
 				7C605E5D0B4B65A900350479 /* SampleICC-Info.plist */,
 				7C605EB40B4B683200350479 /* SampleICCToolUtils-Info.plist */,
@@ -545,11 +568,12 @@
 				7CE0F4770AF04F9B002F2A93 /* IccApplyNamedCmm */,
 				7CE0F4BC0AF05033002F2A93 /* IccApplyProfiles */,
 				7CE0F4C90AF05090002F2A93 /* IccCreateCLUTProfile */,
+				7C64B73C0B928602000A88D2 /* IccCreateProbeImages */,
 				7C49EA7F0B09116A00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */,
 				7CE0F4EC0AF0517D002F2A93 /* IccDumpProfile */,
 				7CE0F4FE0AF052BA002F2A93 /* IccProfLibTest */,
-				7C333A0B0B1EA951006AB880 /* iccV4ToMpe */,
-				7CF6A6A80B555F750077F8CF /* iccReconstructMeasurement */,
+				7C333A0B0B1EA951006AB880 /* IccV4ToMpe */,
+				7CF6A6A80B555F750077F8CF /* IccReconstructMeasurement */,
 				7C8BFFFB0B57259800889B00 /* roundTripThroughPcsLabEncoding */,
 			);
 			name = Source;
@@ -563,23 +587,24 @@
 				7CE0F4570AF04F02002F2A93 /* iccApplyNamedCmm */,
 				7CE0F45E0AF04F1C002F2A93 /* iccApplyProfiles */,
 				7CE0F4E10AF050E4002F2A93 /* iccFlattenAToBTag */,
-				7CE0F4650AF04F3C002F2A93 /* iccCreateCLUTInputProfile */,
+				7CE0F4650AF04F3C002F2A93 /* iccCreateCLUTProfile */,
 				7CE0F46C0AF04F59002F2A93 /* iccDumpProfile */,
 				7CE0F4730AF04F73002F2A93 /* iccProfLibTest */,
 				7C49EA780B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */,
-				7C333A060B1EA925006AB880 /* iccC4ToMpe */,
+				7C333A060B1EA925006AB880 /* iccV4ToMpe */,
 				7CF6A6900B555F0D0077F8CF /* iccReconstructMeasurements */,
 				7C8BFFEA0B57256500889B00 /* roundTripThroughPcsLabEncoding */,
+				7C64B5EF0B9284D2000A88D2 /* iccCreateProbeImages */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		7C333A0B0B1EA951006AB880 /* iccV4ToMpe */ = {
+		7C333A0B0B1EA951006AB880 /* IccV4ToMpe */ = {
 			isa = PBXGroup;
 			children = (
 				7C333A0F0B1EA99D006AB880 /* iccV4ToMPE.cpp */,
 			);
-			name = iccV4ToMpe;
+			name = IccV4ToMpe;
 			sourceTree = "<group>";
 		};
 		7C49EA7F0B09116A00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */ = {
@@ -588,6 +613,22 @@
 				7C49EA8F0B09122C00ADFFE7 /* iccCreateTRCMatrixDisplayProfile.cpp */,
 			);
 			name = iccCreateTRCMatrixDisplayProfile;
+			sourceTree = "<group>";
+		};
+		7C64B73C0B928602000A88D2 /* IccCreateProbeImages */ = {
+			isa = PBXGroup;
+			children = (
+				7C64B7380B928584000A88D2 /* iccCreateProbeImages.cpp */,
+			);
+			name = IccCreateProbeImages;
+			sourceTree = "<group>";
+		};
+		7C64B76E0B9289E4000A88D2 /* Existing frameworks and libraries */ = {
+			isa = PBXGroup;
+			children = (
+				7C64B7710B928A2E000A88D2 /* ApplicationServices.framework */,
+			);
+			name = "Existing frameworks and libraries";
 			sourceTree = "<group>";
 		};
 		7C8BFFFB0B57259800889B00 /* roundTripThroughPcsLabEncoding */ = {
@@ -711,14 +752,14 @@
 			path = Release;
 			sourceTree = "<group>";
 		};
-		7CF6A6A80B555F750077F8CF /* iccReconstructMeasurement */ = {
+		7CF6A6A80B555F750077F8CF /* IccReconstructMeasurement */ = {
 			isa = PBXGroup;
 			children = (
 				7CF6A67D0B5554B90077F8CF /* MeasurementExtractor.h */,
 				7CF6A67E0B5554B90077F8CF /* MeasurementExtractor.cpp */,
 				7CF6A6FC0B556F6D0077F8CF /* iccReconstructMeasurements.cpp */,
 			);
-			name = iccReconstructMeasurement;
+			name = IccReconstructMeasurement;
 			sourceTree = "<group>";
 		};
 		7CFB29210B14D9920093D058 /* IccToolUtils */ = {
@@ -791,7 +832,7 @@
 			);
 			name = iccV4ToMpe;
 			productName = iccC4ToMpe;
-			productReference = 7C333A060B1EA925006AB880 /* iccC4ToMpe */;
+			productReference = 7C333A060B1EA925006AB880 /* iccV4ToMpe */;
 			productType = "com.apple.product-type.tool";
 		};
 		7C49EA770B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */ = {
@@ -849,6 +890,22 @@
 			productReference = 7C605EB30B4B683200350479 /* SampleICCToolUtils.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		7C64B5EE0B9284D2000A88D2 /* iccCreateProbeImages */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7C64B60A0B9284F1000A88D2 /* Build configuration list for PBXNativeTarget "iccCreateProbeImages" */;
+			buildPhases = (
+				7C64B5EC0B9284D2000A88D2 /* Sources */,
+				7C64B5ED0B9284D2000A88D2 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = iccCreateProbeImages;
+			productName = iccCreateProbeImages;
+			productReference = 7C64B5EF0B9284D2000A88D2 /* iccCreateProbeImages */;
+			productType = "com.apple.product-type.tool";
+		};
 		7C8BFFE90B57256500889B00 /* roundTripThroughPcsLabEncoding */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7C8BFFF80B57257B00889B00 /* Build configuration list for PBXNativeTarget "roundTripThroughPcsLabEncoding" */;
@@ -902,9 +959,9 @@
 			productReference = 7CE0F45E0AF04F1C002F2A93 /* iccApplyProfiles */;
 			productType = "com.apple.product-type.tool";
 		};
-		7CE0F4640AF04F3C002F2A93 /* iccCreateCLUTInputProfile */ = {
+		7CE0F4640AF04F3C002F2A93 /* iccCreateCLUTProfile */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7CE0F48C0AF04F9B002F2A93 /* Build configuration list for PBXNativeTarget "iccCreateCLUTInputProfile" */;
+			buildConfigurationList = 7CE0F48C0AF04F9B002F2A93 /* Build configuration list for PBXNativeTarget "iccCreateCLUTProfile" */;
 			buildPhases = (
 				7CE0F4620AF04F3C002F2A93 /* Sources */,
 				7CE0F4630AF04F3C002F2A93 /* Frameworks */,
@@ -916,9 +973,9 @@
 				7C605F170B4B6B5900350479 /* PBXTargetDependency */,
 				7CE0F4E60AF0510F002F2A93 /* PBXTargetDependency */,
 			);
-			name = iccCreateCLUTInputProfile;
+			name = iccCreateCLUTProfile;
 			productName = iccCreateCLUTInputProfile;
-			productReference = 7CE0F4650AF04F3C002F2A93 /* iccCreateCLUTInputProfile */;
+			productReference = 7CE0F4650AF04F3C002F2A93 /* iccCreateCLUTProfile */;
 			productType = "com.apple.product-type.tool";
 		};
 		7CE0F46B0AF04F59002F2A93 /* iccDumpProfile */ = {
@@ -996,12 +1053,10 @@
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 1DEB914E08733D8E0010E9CD /* Build configuration list for PBXProject "SampleICC" */;
-			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 08FB7794FE84155DC02AAC07 /* SampleICC */;
 			projectDirPath = "";
 			projectRoot = "";
-			shouldCheckCompatibility = 1;
 			targets = (
 				7C605E5B0B4B65A800350479 /* SampleICC */,
 				7C605EB20B4B683200350479 /* SampleICCToolUtils */,
@@ -1009,7 +1064,8 @@
 				7CE0F4560AF04F02002F2A93 /* iccApplyNamedCmm */,
 				7CE0F45D0AF04F1C002F2A93 /* iccApplyProfiles */,
 				7CE0F4E00AF050E4002F2A93 /* iccFlattenAToBTag */,
-				7CE0F4640AF04F3C002F2A93 /* iccCreateCLUTInputProfile */,
+				7CE0F4640AF04F3C002F2A93 /* iccCreateCLUTProfile */,
+				7C64B5EE0B9284D2000A88D2 /* iccCreateProbeImages */,
 				7C49EA770B09114D00ADFFE7 /* iccCreateTRCMatrixDisplayProfile */,
 				7CE0F46B0AF04F59002F2A93 /* iccDumpProfile */,
 				7CE0F4720AF04F73002F2A93 /* iccProfLibTest */,
@@ -1072,6 +1128,7 @@
 				7C605E840B4B661400350479 /* IccTagMPE.cpp in Sources */,
 				7C605E850B4B661400350479 /* IccUtil.cpp in Sources */,
 				7C605E860B4B661400350479 /* md5.cpp in Sources */,
+				7C64B7390B928584000A88D2 /* iccCreateProbeImages.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1083,6 +1140,14 @@
 				7C605ECF0B4B690E00350479 /* CAT.cpp in Sources */,
 				7C605ED00B4B690E00350479 /* CLUT.cpp in Sources */,
 				7C605ED10B4B690E00350479 /* IccToolException.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C64B5EC0B9284D2000A88D2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C64B74A0B9287D1000A88D2 /* iccCreateProbeImages.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1232,6 +1297,11 @@
 			target = 7C605E5B0B4B65A800350479 /* SampleICC */;
 			targetProxy = 7C605F250B4B6BE900350479 /* PBXContainerItemProxy */;
 		};
+		7C64B7350B928567000A88D2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C64B5EE0B9284D2000A88D2 /* iccCreateProbeImages */;
+			targetProxy = 7C64B7340B928567000A88D2 /* PBXContainerItemProxy */;
+		};
 		7C8BFFF10B57257800889B00 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 7C605E5B0B4B65A800350479 /* SampleICC */;
@@ -1259,7 +1329,7 @@
 		};
 		7CE0F5130AF0533D002F2A93 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7CE0F4640AF04F3C002F2A93 /* iccCreateCLUTInputProfile */;
+			target = 7CE0F4640AF04F3C002F2A93 /* iccCreateCLUTProfile */;
 			targetProxy = 7CE0F5120AF0533D002F2A93 /* PBXContainerItemProxy */;
 		};
 		7CE0F5150AF0533D002F2A93 /* PBXTargetDependency */ = {
@@ -1440,9 +1510,9 @@
 				GCC_MODEL_TUNING = G4;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = "SampleICCToolUtils-Info.plist";
-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
 				PREBINDING = NO;
 				PRODUCT_NAME = SampleICCToolUtils;
+				SKIP_INSTALL = NO;
 				ZERO_LINK = YES;
 			};
 			name = Debug;
@@ -1482,6 +1552,36 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = Frameworks;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7C64B60B0B9284F1000A88D2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = iccCreateProbeImages;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		7C64B60C0B9284F1000A88D2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = iccCreateProbeImages;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -1588,9 +1688,9 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = "$(HOME)/bin";
 				PREBINDING = NO;
-				PRODUCT_NAME = iccCreateCLUTInputProfile;
+				PRODUCT_NAME = iccCreateCLUTProfile;
+				SKIP_INSTALL = NO;
 				ZERO_LINK = YES;
 			};
 			name = Debug;
@@ -1603,9 +1703,9 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = "$(HOME)/bin";
 				PREBINDING = NO;
-				PRODUCT_NAME = iccCreateCLUTInputProfile;
+				PRODUCT_NAME = iccCreateCLUTProfile;
+				SKIP_INSTALL = NO;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -1750,6 +1850,7 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/bin;
@@ -1837,6 +1938,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		7C64B60A0B9284F1000A88D2 /* Build configuration list for PBXNativeTarget "iccCreateProbeImages" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7C64B60B0B9284F1000A88D2 /* Debug */,
+				7C64B60C0B9284F1000A88D2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		7C8BFFF80B57257B00889B00 /* Build configuration list for PBXNativeTarget "roundTripThroughPcsLabEncoding" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1864,7 +1974,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7CE0F48C0AF04F9B002F2A93 /* Build configuration list for PBXNativeTarget "iccCreateCLUTInputProfile" */ = {
+		7CE0F48C0AF04F9B002F2A93 /* Build configuration list for PBXNativeTarget "iccCreateCLUTProfile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7CE0F48D0AF04F9B002F2A93 /* Debug */,

@@ -164,7 +164,7 @@ MeasurementExtractor::MeasurementExtractor(const char * const profileFilename,
 	for (unsigned int i = 0; i < 3; ++i)
 		flare_[i] = flare[i];
 	getAdaptedMediaWhite(adaptedMediaWhite_, profile_);
-	if (cmm_.AddXform(profileFilename, icAbsoluteColorimetric))
+	if (cmm_.AddXform(profileFilename, icAbsoluteColorimetric) != icCmmStatOk)
 	{
 		ostringstream s;
 		s << "Can't set profile `" << profileFilename
@@ -188,25 +188,23 @@ MeasurementExtractor::reconstructMeasurement(icFloatNumber* measuredXYZ,
 {
 	icFloatNumber PCSPixel[3];
 	cmm_.Apply(PCSPixel, RGBStimulus);
-	cout << "raw PCS Pixel for RGB("
-		<< RGBStimulus[0] << ","
-		<< RGBStimulus[1] << ","
-		<< RGBStimulus[2] << ") -> ("
-		<< hex << static_cast<unsigned short>(PCSPixel[0]) << ", "
-		<< hex << static_cast<unsigned short>(PCSPixel[1]) << ", "
-		<< hex << static_cast<unsigned short>(PCSPixel[2]) << ")";
+//	cout << "raw PCS Pixel for RGB("
+//		<< RGBStimulus[0] << "," << RGBStimulus[1] << "," << RGBStimulus[2]
+//		<< ") -> PCS XYZ("
+//		<< PCSPixel[0] << ", " << PCSPixel[1] << ", " << PCSPixel[2]
+//		<< ")";
 	icFloatNumber adjustedPCSXYZ[3];
 	if (isLabPCS_)
 	{
-		cout << "enc("
-		<< PCSPixel[0] << ","
-		<< PCSPixel[1] << ","
-		<< PCSPixel[2] << ") then ";
+//		cout << "enc("
+//		<< PCSPixel[0] << ","
+//		<< PCSPixel[1] << ","
+//		<< PCSPixel[2] << ") then ";
 		icLabFromPcs(PCSPixel);
-		cout << "decoded("
-		<< PCSPixel[0] << ","
-		<< PCSPixel[1] << ","
-		<< PCSPixel[2] << endl;
+//		cout << "decoded("
+//		<< PCSPixel[0] << ","
+//		<< PCSPixel[1] << ","
+//		<< PCSPixel[2] << ")";
 		icLabtoXYZ(adjustedPCSXYZ, PCSPixel, icD50XYZ);
 	}
 	else
@@ -214,7 +212,8 @@ MeasurementExtractor::reconstructMeasurement(icFloatNumber* measuredXYZ,
 		for (unsigned int i = 0; i < 3; ++i)
 			adjustedPCSXYZ[i] = PCSPixel[i];
 		icXyzFromPcs(adjustedPCSXYZ);
-	}				
+	}
+//	cout << endl;	
 	icFloatNumber adaptedXYZ[3];
 	for (unsigned int i = 0; i < 3; ++i)
 		adaptedXYZ[i] = adjustedPCSXYZ[i] * adaptedMediaWhite_[i] / icD50XYZ[i];
