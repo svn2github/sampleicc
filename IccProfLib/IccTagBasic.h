@@ -994,9 +994,10 @@ public:
   virtual bool Read(icUInt32Number size, CIccIO *pIO);
   virtual bool Write(CIccIO *pIO);
 
+  bool m_bNeedsPading;
+
 protected:
   CIccTag *m_pTag;  //either a CIccTagTextDescription or a CIccTagMultiLocalizedUnicode  
-
 };
 
 

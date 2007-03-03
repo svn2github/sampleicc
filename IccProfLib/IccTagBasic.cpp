@@ -5297,6 +5297,7 @@ icValidateStatus CIccTagViewingConditions::Validate(icTagSignature sig, std::str
 CIccProfileDescText::CIccProfileDescText()
 {
   m_pTag = NULL;
+  m_bNeedsPading = false;
 }
 
 
@@ -5318,6 +5319,7 @@ CIccProfileDescText::CIccProfileDescText(const CIccProfileDescText &IPDC)
     if (m_pTag) {
       m_pTag = IPDC.m_pTag->NewCopy();
     }
+    m_bNeedsPading = IPDC.m_bNeedsPading;
   }
 }
 
@@ -5346,6 +5348,7 @@ CIccProfileDescText &CIccProfileDescText::operator=(const CIccProfileDescText &P
     if (m_pTag) {
       m_pTag = ProfDescText.m_pTag->NewCopy();
     }
+    m_bNeedsPading = ProfDescText.m_bNeedsPading;
   }
 
   return *this;
@@ -5455,19 +5458,33 @@ bool CIccProfileDescText::Read(icUInt32Number size, CIccIO *pIO)
   icTagTypeSignature sig;
   icUInt32Number nPos;
 
+  //Check for description tag type signature
   nPos = pIO->Tell();
+
+  if ((nPos&0x03) != 0)
+    m_bNeedsPading = true;
+
   if (!pIO->Read32(&sig))
     return false;
   pIO->Seek(nPos, icSeekSet);
 
-  if (!SetType(sig))
-    return false;
+  if (!SetType(sig)) {
+    //We couldn't find it, but we may be looking in the wrong place
+    //Re-Syncronize on a 4 byte boundary
+    pIO->Sync32();
+
+    nPos = pIO->Tell();
+    if (!pIO->Read32(&sig))
+      return false;
+    pIO->Seek(nPos, icSeekSet);
+
+    if (!SetType(sig)) {
+      return false;
+    }
+  }
 
   if (m_pTag) {
-
-    if (m_pTag->Read(size, pIO)) {
-      return pIO->Sync32();
-    }
+    return m_pTag->Read(size, pIO);
   }
  
   return false;
@@ -5646,7 +5663,9 @@ CIccTagProfileSeqDesc::~CIccTagProfileSeqDesc()
 bool CIccTagProfileSeqDesc::Read(icUInt32Number size, CIccIO *pIO)
 {
   icTagTypeSignature sig;
-  icUInt32Number nCount;
+  icUInt32Number nCount, nEnd;
+
+  nEnd = pIO->Tell() + size;
 
   if (sizeof(icTagTypeSignature) + 
       sizeof(icUInt32Number)*2 > size)
@@ -5669,7 +5688,7 @@ bool CIccTagProfileSeqDesc::Read(icUInt32Number size, CIccIO *pIO)
     sizeof(CIccProfileDescStruct) > size)
     return false;
 
-  icUInt32Number i; 
+  icUInt32Number i, nPos; 
   CIccProfileDescStruct ProfileDescStruct;
 
   for (i=0; i<nCount; i++) {
@@ -5680,8 +5699,13 @@ bool CIccTagProfileSeqDesc::Read(icUInt32Number size, CIccIO *pIO)
         !pIO->Read32(&ProfileDescStruct.m_technology))
       return false;
 
-    if (!ProfileDescStruct.m_deviceMfgDesc.Read(size, pIO) ||
-        !ProfileDescStruct.m_deviceModelDesc.Read(size, pIO))
+    nPos = pIO->Tell();
+
+    if (!ProfileDescStruct.m_deviceMfgDesc.Read(nEnd - nPos, pIO))
+      return false;
+    
+    nPos = pIO->Tell();
+    if (!ProfileDescStruct.m_deviceModelDesc.Read(nEnd - nPos, pIO))
       return false;
 
     m_Descriptions->push_back(ProfileDescStruct);
@@ -5810,6 +5834,7 @@ icValidateStatus CIccTagProfileSeqDesc::Validate(icTagSignature sig, std::string
   CIccProfileSeqDesc::iterator i;
   for (i=m_Descriptions->begin(); i!=m_Descriptions->end(); i++) {
     switch(i->m_technology) {
+    case 0x00000000:  //Technology not defined
     case icSigFilmScanner:
     case icSigDigitalCamera:
     case icSigReflectiveScanner:
@@ -5842,6 +5867,24 @@ icValidateStatus CIccTagProfileSeqDesc::Validate(icTagSignature sig, std::string
         sReport += buf;
         rv = icMaxStatus(rv, icValidateNonCompliant);
       }
+    }
+
+    if (i->m_deviceMfgDesc.m_bNeedsPading) {
+      sReport += icValidateNonCompliantMsg;
+      sReport += sSigName;
+
+      sReport += " Contains non-aligned deviceMfgDesc text tag information\r\n";
+
+      rv = icMaxStatus(rv, icValidateNonCompliant);
+    }
+
+    if (i->m_deviceModelDesc.m_bNeedsPading) {
+      sReport += icValidateNonCompliantMsg;
+      sReport += sSigName;
+
+      sReport += " Contains non-aligned deviceModelDesc text tag information\r\n";
+
+      rv = icMaxStatus(rv, icValidateNonCompliant);
     }
 
     rv = icMaxStatus(rv, i->m_deviceMfgDesc.GetTag()->Validate(sig, sReport, pProfile));
