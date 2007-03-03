@@ -660,6 +660,7 @@ CIccTagParametricCurve::CIccTagParametricCurve(const CIccTagParametricCurve &ITP
 
   m_Param = new icS15Fixed16Number[m_nNumParam];
   memcpy(m_Param, ITPC.m_Param, sizeof(m_Param));  
+  m_dParam = NULL;
 }
 
 
@@ -686,6 +687,8 @@ CIccTagParametricCurve &CIccTagParametricCurve::operator=(const CIccTagParametri
   m_Param = new icS15Fixed16Number[m_nNumParam];
   memcpy(m_Param, ParamCurveTag.m_Param, sizeof(m_Param));  
 
+  m_dParam = NULL;
+
   return *this;
 
 }
@@ -703,6 +706,9 @@ CIccTagParametricCurve::~CIccTagParametricCurve()
 {
   if (m_Param)
     delete [] m_Param;
+
+  if (m_dParam)
+    delete [] m_dParam;
 }
 
 
@@ -998,7 +1004,7 @@ bool CIccTagParametricCurve::IsIdentity()
 {
   switch(m_nFunctionType) {
     case 0x0000:
-      return IsUnity(m_dParam[0]);
+      return IsUnity(icFtoD(m_Param[0]));
 
     case 0x0001:
     case 0x0002:

@@ -42,13 +42,13 @@ bool CIccProfileXml::ToXml(std::string &xml)
   xml += line;
   sprintf(line, "  attributes=\"%08X\"\n", m_Header.attributes);
   xml += line;
-  sprintf(line, "  suggestedIntent=\"%08X\n", m_Header.renderingIntent);
+  sprintf(line, "  suggestedIntent=\"%08X\"\n", m_Header.renderingIntent);
   xml += line;
   sprintf(line, "  illuminant=\"X=%.8f, Y=%.8f, Z=%.8f\"\n", (float)icFtoD(m_Header.illuminant.X),
                                                              (float)icFtoD(m_Header.illuminant.Y),
                                                              (float)icFtoD(m_Header.illuminant.Z));
   xml += line;
-  sprintf(line, "  creator=\"%s\"", icFixXml(fix, icGetSigStr(buf, m_Header.deviceClass)));
+  sprintf(line, "  creator=\"%s\"", icFixXml(fix, icGetSigStr(buf, m_Header.creator)));
   xml += line;
 
   if (m_Header.profileID.ID32[0] || m_Header.profileID.ID32[1] || 
