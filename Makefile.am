@@ -1,6 +1,9 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = IccProfLib Tools
+SUBDIRS = \
+	IccProfLib \
+	Tools \
+	Contrib
 
 EXTRA_DIST = bootstrap README.OSX
 

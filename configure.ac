@@ -6,7 +6,7 @@ AC_CANONICAL_TARGET
 
 SAMPLEICC_MAJOR_VERSION=1
 SAMPLEICC_MINOR_VERSION=2
-SAMPLEICC_MICRO_VERSION=8
+SAMPLEICC_MICRO_VERSION=9
 
 SAMPLEICC_VERSION=$SAMPLEICC_MAJOR_VERSION.$SAMPLEICC_MINOR_VERSION.${SAMPLEICC_MICRO_VERSION}
 AC_SUBST(SAMPLEICC_VERSION)
@@ -181,15 +181,26 @@ Makefile
 IccProfLib/Makefile
 Tools/Makefile
 Tools/CmdLine/Makefile
-Tools/CmdLine/IccToolUtilsLib/Makefile
 Tools/CmdLine/IccApplyNamedCmm/Makefile
 Tools/CmdLine/IccApplyProfiles/Makefile
-Tools/CmdLine/IccCreateCLUTProfile/Makefile
-Tools/CmdLine/IccCreateTRCMatrixDisplayProfile/Makefile
 Tools/CmdLine/IccDumpProfile/Makefile
 Tools/CmdLine/IccProfLibTest/Makefile
-Tools/CmdLine/IccReconstructMeasurements/Makefile
-Tools/CmdLine/IccReconstructMeasurements/deviceCodeGenerators/Makefile
 Tools/CmdLine/IccStripUnknownTags/Makefile
 Tools/CmdLine/IccV4ToMPE/Makefile
+Contrib/Makefile
+Contrib/CmdLine/Makefile
+Contrib/CmdLine/create_CLUT_profile/Makefile
+Contrib/CmdLine/create_CLUT_profile_from_probe/Makefile
+Contrib/CmdLine/create_display_profile/Makefile
+Contrib/ICC_utils/Makefile
+Contrib/Mac_OS_X/Makefile
+Contrib/Mac_OS_X/create_probe/Makefile
+Contrib/Mac_OS_X/extract_probe_data/Makefile
+Contrib/examples/Makefile
+Contrib/examples/RSR/Makefile
+Contrib/tests/Makefile
+Contrib/tests/flatten_AToB_tag/Makefile
+Contrib/tests/generate_device_codes/Makefile
+Contrib/tests/reconstruct_measurements/Makefile
+Contrib/tests/round_trip_PCS_LAB/Makefile
 ])
