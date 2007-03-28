@@ -104,7 +104,8 @@ usage(ostream& s, const char* const myName)
 {
   s << myName << ": usage is `" << myName
     << " <N> <grabbed_probe_RGB_values_path> <monitor_profile_path>"
-    << " <input_profile_description> <input_profile_path>" << endl;
+    << " <input_profile_description> <input_profile_path>"
+    << " [<pretransform_path>]" << endl;
 }
 
 vector<DeviceRGB>

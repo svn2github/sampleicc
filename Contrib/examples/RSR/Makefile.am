@@ -11,3 +11,11 @@ LDADD = -L$(top_builddir)/IccProfLib -lSampleICC \
 
 create_pretransform_curve_SOURCES = \
 	create_pretransform_curve.cpp
+
+EXTRA_DIST = \
+	01_make_probe_image.sh \
+	ConversionProject.aep \
+	pretransform.txt \
+	02_make_input_profile_from_probe.sh \
+	README
+

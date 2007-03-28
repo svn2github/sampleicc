@@ -116,6 +116,14 @@ LDADD = -L$(top_builddir)/IccProfLib -lSampleICC \
 create_pretransform_curve_SOURCES = \
 	create_pretransform_curve.cpp
 
+
+EXTRA_DIST = \
+	01_make_probe_image.sh \
+	ConversionProject.aep \
+	pretransform.txt \
+	02_make_input_profile_from_probe.sh \
+	README
+
 subdir = Contrib/examples/RSR
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =
@@ -148,7 +156,7 @@ CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CXXFLAGS = @CXXFLAGS@
 DIST_SOURCES = $(create_pretransform_curve_SOURCES)
-DIST_COMMON = Makefile.am Makefile.in
+DIST_COMMON = README Makefile.am Makefile.in
 SOURCES = $(create_pretransform_curve_SOURCES)
 
 all: all-am
