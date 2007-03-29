@@ -1250,6 +1250,7 @@ BOOL WINAPI CMTranslateColors(
         srcPixel[0] = (icFloatNumber)(lpaInputColors->XYZ.X) / 65535.0f;
         srcPixel[1] = (icFloatNumber)(lpaInputColors->XYZ.Y) / 65535.0f;
         srcPixel[2] = (icFloatNumber)(lpaInputColors->XYZ.Z) / 65535.0f;
+
         break;
 
       case COLOR_Yxy:
@@ -1262,6 +1263,9 @@ BOOL WINAPI CMTranslateColors(
         srcPixel[0] = (icFloatNumber)(lpaInputColors->Lab.L) / 65535.0f;
         srcPixel[1] = (icFloatNumber)(lpaInputColors->Lab.a) / 65535.0f;
         srcPixel[2] = (icFloatNumber)(lpaInputColors->Lab.b) / 65535.0f;
+        if (pCmm->GetFirstXformSource()!=icSigDevLabData) { //
+          CIccPCS::Lab2ToLab4(srcPixel, srcPixel);
+        }
         break;
 
       case COLOR_3_CHANNEL:        // WORD per channel
@@ -1333,6 +1337,9 @@ BOOL WINAPI CMTranslateColors(
         break;
 
       case COLOR_Lab:
+        if (pCmm->GetLastXformDest()!=icSigDevLabData) {
+          CIccPCS::Lab4ToLab2(destPixel, destPixel);
+        }
         lpaOutputColors->Lab.L = (icUInt16Number)(UnitClip(destPixel[0]) * 65535.0 + 0.5);
         lpaOutputColors->Lab.a = (icUInt16Number)(UnitClip(destPixel[1]) * 65535.0 + 0.5);
         lpaOutputColors->Lab.b = (icUInt16Number)(UnitClip(destPixel[2]) * 65535.0 + 0.5);
@@ -1473,6 +1480,21 @@ BOOL WINAPI CMTranslateRGBsExt(
     for (i=0; i<dwWidth; i++) {
       switch(bmInput) {
         case BM_x555Lab:
+          {
+            icUInt16Number bits = *((icUInt16Number*)lpSrcBits);
+
+            srcPixel[0] = (icFloatNumber)((bits&0x7C00)>>10) / 31.0f;
+            srcPixel[1] = (icFloatNumber)((bits&0x03E0)>>5) / 31.0f;
+            srcPixel[2] = (icFloatNumber)(bits&0x001F) / 31.0f;
+
+            if (pCmm->GetSourceSpace()!=icSigDevLabData) {
+              CIccPCS::Lab2ToLab4(srcPixel, srcPixel);
+            }
+
+            lpSrcBits += 2;
+          }
+          break;
+
         case BM_x555RGB:
         case BM_x555XYZ:
         case BM_x555Yxy:
@@ -1494,6 +1516,22 @@ BOOL WINAPI CMTranslateRGBsExt(
           //
 
         case BM_LabTRIPLETS:
+          {
+            icUInt8Number *bits = (icUInt8Number*)lpSrcBits;
+
+            srcPixel[0] = (icFloatNumber)bits[0] / 255.0f;
+            srcPixel[1] = (icFloatNumber)bits[1] / 255.0f;
+            srcPixel[2] = (icFloatNumber)bits[2] / 255.0f;
+
+            if (pCmm->GetSourceSpace()!=icSigDevLabData) {
+              CIccPCS::Lab2ToLab4(srcPixel, srcPixel);
+            }
+
+            lpSrcBits += 3;
+
+          }
+          break;
+
         case BM_RGBTRIPLETS:
         case BM_XYZTRIPLETS:
         case BM_YxyTRIPLETS:
@@ -1666,6 +1704,21 @@ BOOL WINAPI CMTranslateRGBsExt(
           //
 
         case BM_10b_Lab:
+          {
+            icUInt32Number bits = *((icUInt32Number*)lpSrcBits);
+
+            srcPixel[0] = (icFloatNumber)((bits&0x3FF00000)>>20) / 1023.0f;
+            srcPixel[1] = (icFloatNumber)((bits&0x000FFC00)>>10) / 1023.0f;
+            srcPixel[2] = (icFloatNumber)(bits&0x000003FF) / 1023.0f;
+
+            if (pCmm->GetSourceSpace()!=icSigDevLabData) {
+              CIccPCS::Lab2ToLab4(srcPixel, srcPixel);
+            }
+
+            lpSrcBits += 4;
+          }
+          break;
+
         case BM_10b_RGB:
         case BM_10b_XYZ:
         case BM_10b_Yxy:
@@ -1693,6 +1746,10 @@ BOOL WINAPI CMTranslateRGBsExt(
             srcPixel[0] = (icFloatNumber)bits[0] / 65535.0f;
             srcPixel[1] = (icFloatNumber)bits[1] / 65535.0f;
             srcPixel[2] = (icFloatNumber)bits[2] / 65535.0f;
+
+            if (pCmm->GetSourceSpace()!=icSigDevLabData) {
+              CIccPCS::Lab2ToLab4(srcPixel, srcPixel);
+            }
 
             lpSrcBits += 6;
           }
@@ -1757,6 +1814,18 @@ BOOL WINAPI CMTranslateRGBsExt(
 
       switch(bmOutput) {
         case BM_x555Lab:
+          {
+            if (pCmm->GetDestSpace()!=icSigDevLabData) {
+              CIccPCS::Lab4ToLab2(destPixel, destPixel);
+            }
+            *((icUInt16Number*)lpDestBits) = ((icUInt16Number)(UnitClip(destPixel[0]) * 31.0 + 0.5) << 10) + 
+              ((icUInt16Number)(UnitClip(destPixel[1]) * 31.0 + 0.5) << 5) +
+              (icUInt16Number)(UnitClip(destPixel[2]) * 31.0 + 0.5);
+
+            lpDestBits += 2;
+          }
+          break;
+
         case BM_x555RGB:
         case BM_x555XYZ:
         case BM_x555Yxy:
@@ -1776,6 +1845,16 @@ BOOL WINAPI CMTranslateRGBsExt(
           //
 
         case BM_LabTRIPLETS:
+          {
+            if (pCmm->GetDestSpace()!=icSigDevLabData) {
+              CIccPCS::Lab4ToLab2(destPixel, destPixel);
+            }
+            *lpDestBits++ = (icUInt8Number)(UnitClip(destPixel[0]) * 255.0 + 0.5);
+            *lpDestBits++ = (icUInt8Number)(UnitClip(destPixel[1]) * 255.0 + 0.5);
+            *lpDestBits++ = (icUInt8Number)(UnitClip(destPixel[2]) * 255.0 + 0.5);
+          }
+          break;
+
         case BM_RGBTRIPLETS:
         case BM_XYZTRIPLETS:
         case BM_YxyTRIPLETS:
@@ -1896,6 +1975,18 @@ BOOL WINAPI CMTranslateRGBsExt(
           //
 
         case BM_10b_Lab:
+          {
+            if (pCmm->GetDestSpace()!=icSigDevLabData) {
+              CIccPCS::Lab4ToLab2(destPixel, destPixel);
+            }
+            *((icUInt32Number*)lpDestBits) = ((icUInt32Number)(UnitClip(destPixel[0]) * 1023.0 + 0.5) << 20) + 
+              ((icUInt32Number)(UnitClip(destPixel[1]) * 1023.0 + 0.5) << 10) +
+              (icUInt32Number)(UnitClip(destPixel[2]) *  1023.0 + 0.5);
+
+            lpDestBits += 4;
+          }
+          break;
+
         case BM_10b_RGB:
         case BM_10b_XYZ:
         case BM_10b_Yxy:
@@ -1915,6 +2006,20 @@ BOOL WINAPI CMTranslateRGBsExt(
           //
 
         case BM_16b_Lab:
+          {
+            if (pCmm->GetDestSpace()!=icSigDevLabData) {
+              CIccPCS::Lab4ToLab2(destPixel, destPixel);
+            }
+            icUInt16Number *bits = (icUInt16Number*)lpDestBits;
+
+            *bits++ = (icUInt8Number)(UnitClip(destPixel[0]) * 255.0 + 0.5);
+            *bits++ = (icUInt8Number)(UnitClip(destPixel[1]) * 255.0 + 0.5);
+            *bits   = (icUInt8Number)(UnitClip(destPixel[2]) * 255.0 + 0.5);
+
+            lpDestBits += 6;
+          }
+          break;
+
         case BM_16b_RGB:
         case BM_16b_XYZ:
         case BM_16b_Yxy:

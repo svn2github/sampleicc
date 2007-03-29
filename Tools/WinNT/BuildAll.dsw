@@ -47,6 +47,18 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name iccProflibTest
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name iccCreateCLUTInputProfile
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name iccCreateTRCMatrixDisplayProfile
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name wxProfileDump
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name iccFlattenAToBTag
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -69,7 +81,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "IccCreateCLUTInputProfile"="..\CmdLine\IccCreateCLUTInputProfile\IccCreateCLUTInputProfile.dsp" - Package Owner=<4>
+Project: "IccProfLib"="..\..\IccProfLib\IccProfLib.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -77,14 +89,23 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name IccProfLib
-    End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "IccProfLib"="..\..\IccProfLib\IccProfLib.dsp" - Package Owner=<4>
+Project: "IccProfLib_CRTDLL"="..\..\IccProfLib\IccProfLib_CRTDLL.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "IccToolUtilsLib"="..\CmdLine\IccToolUtilsLib\IccToolUtilsLib.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -159,7 +180,73 @@ Package=<4>
 
 ###############################################################################
 
+Project: "iccCreateCLUTInputProfile"="..\CmdLine\IccCreateCLUTInputProfile\IccCreateCLUTInputProfile.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name IccToolUtilsLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "iccCreateTRCMatrixDisplayProfile"="..\CmdLine\IccCreateTRCMatrixDisplayProfile\IccCreateTRCMatrixDisplayProfile.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name IccProfLib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name IccToolUtilsLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "iccDumpProfile"="..\CmdLine\IccDumpProfile\iccDumpProfile.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name IccProfLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "iccFlattenAToBTag"="..\CmdLine\IccCreateCLUTInputProfile\IccFlattenAToBTag.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name IccProfLib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name IccToolUtilsLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "iccProflibTest"="..\CmdLine\IccProfLibTest\iccProfLibTest.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -189,21 +276,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "iccProflibTest"="..\CmdLine\IccProfLibTest\iccProfLibTest.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name IccProfLib
-    End Project Dependency
-}}}
-
-###############################################################################
-
 Project: "libtiff"=".\BuildLibTiff\libtiff.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -212,6 +284,21 @@ Package=<5>
 
 Package=<4>
 {{{
+}}}
+
+###############################################################################
+
+Project: "wxProfileDump"="..\wxWidget\wxProfileDump\wxProfileDump.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name IccProfLib_CRTDLL
+    End Project Dependency
 }}}
 
 ###############################################################################
