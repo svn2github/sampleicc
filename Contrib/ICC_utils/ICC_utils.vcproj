@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="IccToolUtilsLib"
+	Name="IccUtilsLib"
 	ProjectGUID="{938C1BE6-F759-44BB-85C2-60FC413D5AD2}"
 	Keyword="Win32Proj">
 	<Platforms>
@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\IccProfLib"
+				AdditionalIncludeDirectories="..\..\IccProfLib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -32,7 +32,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/IccToolUtilsLib.lib"/>
+				OutputFile="$(OutDir)/IccUtilsLib.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -60,7 +60,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\IccProfLib"
+				AdditionalIncludeDirectories="..\..\IccProfLib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -71,7 +71,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/IccToolUtilsLib.lib"/>
+				OutputFile="$(OutDir)/IccUtilsLib.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -106,10 +106,13 @@
 				RelativePath=".\CLUT.cpp">
 			</File>
 			<File
-				RelativePath=".\CLUTStuffer.cpp">
+				RelativePath=".\CLUT_stuffer.cpp">
 			</File>
 			<File
-				RelativePath=".\IccToolException.cpp">
+				RelativePath=".\ICC_tool_exception.cpp">
+			</File>
+			<File
+				RelativePath=".\Stubs.cpp">
 			</File>
 		</Filter>
 		<Filter
@@ -123,10 +126,13 @@
 				RelativePath=".\CLUT.h">
 			</File>
 			<File
-				RelativePath=".\CLUTStuffer.h">
+				RelativePath=".\CLUT_stuffer.h">
 			</File>
 			<File
-				RelativePath=".\IccToolException.h">
+				RelativePath=".\ICC_tool_exception.h">
+			</File>
+			<File
+				RelativePath=".\Stubs.h">
 			</File>
 		</Filter>
 		<Filter

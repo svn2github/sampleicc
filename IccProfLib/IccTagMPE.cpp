@@ -998,6 +998,31 @@ bool CIccTagMultiProcessElement::Write(CIccIO *pIO)
   return true;
 }
 
+/**
+******************************************************************************
+* Name: CIccTagMultiProcessElement::GetElement
+* 
+* Purpose: 
+* 
+* Args: 
+* 
+* Return: 
+******************************************************************************/
+CIccMultiProcessElement *CIccTagMultiProcessElement::GetElement(int nIndex)
+{
+  if (!m_list)
+    return NULL;
+
+  CIccMultiProcessElementList::iterator i;
+  int j;
+
+  for(i=m_list->begin(), j=0; j<nIndex && i!=m_list->end(); i++, j++);
+
+  if (i!=m_list->end())
+    return i->ptr;
+
+  return NULL;
+}
 
 /**
 ******************************************************************************

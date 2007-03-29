@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="iccFlattenAToBTag"
+	Name="flatten_AToB_tag"
 	ProjectGUID="{EDC0A2BE-50FE-4DE2-ADD6-DC87F4FBCDCC}"
 	SccProjectName=""
 	SccLocalPath="">
@@ -23,13 +23,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="winGetOpt,..\..\..\IccProfLib,..\IccToolUtilsLib"
+				AdditionalIncludeDirectories="winGetOpt,..\..\..\IccProfLib,..\..\ICC_utils"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\Release/iccFlattenAToBTag.pch"
+				PrecompiledHeaderFile=".\Release/flatten_AToB_tag.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -40,15 +40,15 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\Release/iccFlattenAToBTag.exe"
+				OutputFile=".\Release/flatten_AToB_tag.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\Release/iccFlattenAToBTag.pdb"
+				ProgramDatabaseFile=".\Release/flatten_AToB_tag.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Release/iccFlattenAToBTag.tlb"
+				TypeLibraryName=".\Release/flatten_AToB_tag.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -82,12 +82,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="winGetOpt,..\..\..\IccProfLib,..\IccToolUtilsLib"
+				AdditionalIncludeDirectories="winGetOpt,..\..\..\IccProfLib,..\..\ICC_utils"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\Debug/iccFlattenAToBTag.pch"
+				PrecompiledHeaderFile=".\Debug/flatten_AToB_tag.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
@@ -99,16 +99,16 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\Debug/iccFlattenAToBTag.exe"
+				OutputFile=".\Debug/flatten_AToB_tag.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\Debug/iccFlattenAToBTag.pdb"
+				ProgramDatabaseFile=".\Debug/flatten_AToB_tag.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Debug/iccFlattenAToBTag.tlb"
+				TypeLibraryName=".\Debug/flatten_AToB_tag.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -139,7 +139,7 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
-				RelativePath="iccFlattenAToBTag.cpp">
+				RelativePath="flatten_AToB_tag.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -167,15 +167,6 @@
 			Name="Library Files"
 			Filter="lib">
 			<File
-				RelativePath="..\..\..\IccProfLib\Release\IccProfLib.lib">
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCCustomBuildTool"/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\IccProfLib\Debug\IccProfLib.lib">
 				<FileConfiguration
 					Name="Release|Win32"
@@ -185,18 +176,27 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\icctoolutilslib\debug\IccToolUtilsLib.lib">
+				RelativePath="..\..\..\IccProfLib\Release\IccProfLib.lib">
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="TRUE">
 					<Tool
 						Name="VCCustomBuildTool"/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\icctoolutilslib\release\IccToolUtilsLib.lib">
+				RelativePath="..\..\ICC_utils\release\IccUtilsLib.lib">
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCustomBuildTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ICC_utils\debug\IccUtilsLib.lib">
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">
 					<Tool
 						Name="VCCustomBuildTool"/>

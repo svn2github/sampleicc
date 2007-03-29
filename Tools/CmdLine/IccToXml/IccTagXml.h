@@ -86,7 +86,7 @@ class CIccTagXml : public IIccExtensionTag
 public:
   virtual ~CIccTagXml(void) {}
 
-  virtual const char *GetClassName() { return "IIccExtensionTag"; }
+  virtual const char *GetExtClassName() { return "IIccExtensionTag"; }
 
   virtual bool ToXml(std::string &xml, std::string blanks="") = 0;
 };

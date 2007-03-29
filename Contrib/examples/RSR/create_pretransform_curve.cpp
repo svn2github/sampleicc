@@ -104,7 +104,7 @@ main(int argc, char* argv[])
 	double film_gamma = 0.6;
 	double enc_gamma = 2.2;
 	double K = (0.002 / film_gamma) * (1.7 / dGamma);
-	double A = 1 / (pow(10, K * (cineon_white - cineon_black)) - 1);
+	double A = 1 / (pow(10.0, K * (cineon_white - cineon_black)) - 1);
 	
 	if (argc != 3)
 	{

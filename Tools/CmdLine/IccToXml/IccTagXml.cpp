@@ -471,7 +471,7 @@ bool icProfDescToXml(std::string &xml, CIccProfileDescStruct &p, std::string bla
 
   CIccTagXml *pExt = (CIccTagXml*)(pTag->GetExtension());
 
-  if (!pExt || !pExt->GetClassName() || strcmp(pExt->GetClassName(), "CIccTagExt"))
+  if (!pExt || !pExt->GetExtClassName() || strcmp(pExt->GetExtClassName(), "CIccTagExt"))
     return false;
 
   sprintf(buf, "  <DeviceMfgDesc type=\"%s\">\n", pTag->GetType());
@@ -489,7 +489,7 @@ bool icProfDescToXml(std::string &xml, CIccProfileDescStruct &p, std::string bla
 
   pExt = (CIccTagXml*)(pTag->GetExtension());
 
-  if (!pExt || !pExt->GetClassName() || strcmp(pExt->GetClassName(), "CIccTagExt"))
+  if (!pExt || !pExt->GetExtClassName() || strcmp(pExt->GetExtClassName(), "CIccTagExt"))
     return false;
 
   sprintf(buf, "  <DeviceModelDesc type=\"%s\">\n", pTag->GetType());
@@ -608,47 +608,202 @@ bool CIccTagXmlParametricCurve::ToXml(std::string &xml, std::string blanks/* = "
 typedef enum {
   icConvert8Bit=0,
   icConvert16Bit,
-  icConvertFloat
+  icConvertFloat,
+  icConvertVariable
 } icConvertType;
 
-bool icCLUTToXml(std::string xml, CIccCLUT *pCLUT, icConvertType nType)
+class CIccDumpXmlCLUT : public IIccCLUTExec
 {
+public:
+  CIccDumpXmlCLUT(std::string *xml, icConvertType nType, std::string blanks, icUInt8Number nSamples)
+  {
+    m_xml = xml;
+    m_nType = nType;
+    m_blanks = blanks;
+    m_nSamples = nSamples;
+  }
+
+  virtual void PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData)
+  {
+    int i;
+    char buf[128];
+
+    switch(m_nType) {
+      case icConvert8Bit:
+        *m_xml += m_blanks;
+        for (i=0; i<m_nSamples; i++) {
+          sprintf(buf, "<N>%d</N>", (icUInt8Number)(pData[i]*255.0 + 0.5));
+          *m_xml += buf;
+        }
+        *m_xml += "\n";
+        break;
+      case icConvert16Bit:
+        *m_xml += m_blanks;
+        for (i=0; i<m_nSamples; i++) {
+          sprintf(buf, "<N>%d</N>", (icUInt8Number)(pData[i]*65535.0 + 0.5));
+          *m_xml += buf;
+        }
+        *m_xml += "\n";
+        break;
+      case icConvertFloat:
+      default:
+        *m_xml += m_blanks;
+        for (i=0; i<m_nSamples; i++) {
+          sprintf(buf, "<F>%.8f</F>", pData[i]);
+          *m_xml += buf;
+        }
+        *m_xml += "\n";
+        break;
+    }
+  }
+
+  std::string *m_xml;
+  icConvertType m_nType;
+  std::string m_blanks;
+  icUInt8Number m_nSamples;
+};
+
+bool icCLUTToXml(std::string &xml, CIccCLUT *pCLUT, icConvertType nType, std::string blanks, bool bSaveGridPrecision=false)
+{
+  char buf[128];
+  if (nType == icConvertVariable) {
+    nType = pCLUT->GetPrecision()==1 ? icConvert8Bit : icConvert16Bit;
+  }
+
+  xml += blanks + "<CLUT\n";
+
+  switch (nType) 
+  {
+    case icConvert8Bit:
+      xml += blanks + "  Type=\"8Bit\"\n";
+      break;
+
+    case icConvert16Bit:
+      xml += blanks + "  Type=\"16Bit\"\n";
+      break;
+
+    case icConvertFloat:
+      xml += blanks + "  Type=\"Float\"\n";
+      break;
+
+    default:
+      break;
+  }
+
+  sprintf(buf, "  InputChannels=\"%d\"\n", pCLUT->GetInputDim());
+  xml += blanks + buf;
+
+  sprintf(buf, "  OutputChannels=\"%d\"/>\n", pCLUT->GetOutputChannels());
+  xml += blanks + buf;
+
+  if (bSaveGridPrecision) {
+    xml += blanks + "  <GridPoints>";
+    int i;
+
+    for (i=0; i<pCLUT->GetInputDim(); i++) {
+      if (i)
+        xml += " ";
+      sprintf(buf, "%d", pCLUT->GridPoint(i));
+      xml += buf;
+    }
+    xml += "</GridPoints>\n";
+  }
+  
+  CIccDumpXmlCLUT dumper(&xml, nType, blanks + "    ", pCLUT->GetOutputChannels());
+  
+  xml += "  <TableData>\n";
+  pCLUT->Iterate(&dumper);
+  xml += "  </TableData\n";
+
+  xml += blanks + "</CLUT>\n";
   return true;
 }
 
-bool icCurvesToXml(std::string xml, const char *szName, CIccCurve **pCurves, int numCurve, icConvertType nType, std::string blanks)
+bool icCurvesToXml(std::string &xml, const char *szName, CIccCurve **pCurves, int numCurve, icConvertType nType, std::string blanks)
 {
   if (pCurves) {
     int i;
     
-    xml += blanks + "<" + szName + ">";
+    xml += blanks + "<" + szName + ">\n";
     for (i=0; i<numCurve; i++) {
       IIccExtensionTag *pTag = pCurves[i]->GetExtension();
-      if (!pTag || strcmp(pTag->GetClassName(), "IIccExtensionTag"))
+      if (!pTag || strcmp(pTag->GetExtClassName(), "IIccExtensionTag"))
         return false;
 
       if (!((CIccTagXml *)pTag)->ToXml(xml, blanks + "  "))
         return false;
     }
-    xml += blanks + "</" + szName + ">";
+    xml += blanks + "</" + szName + ">\n";
   }
   return true;
 }
 
-bool icMatrixToXml(std::string xml, CIccMatrix *pMatrix)
+bool icMatrixToXml(std::string &xml, CIccMatrix *pMatrix, std::string blanks)
 {
+  char buf[128];
+  xml += blanks + "<Matrix\n";
 
+  sprintf(buf, "  e00=\"%.8f\" e01=\"%.8f\" e02=\"%.8f\"\n", pMatrix->m_e[0], pMatrix->m_e[1], pMatrix->m_e[2]);
+  xml += blanks + buf;
+
+  sprintf(buf, "  e10=\"%.8f\" e11=\"%.8f\" e12=\"%.8f\"\n", pMatrix->m_e[3], pMatrix->m_e[4], pMatrix->m_e[5]);
+  xml += blanks + buf;
+
+  sprintf(buf, "  e20=\"%.8f\" e21=\"%.8f\" e22=\"%.8f\"/>\n", pMatrix->m_e[6], pMatrix->m_e[7], pMatrix->m_e[8]);
+  xml += blanks + buf;
+
+  if (pMatrix->m_bUseConstants) {
+    sprintf(buf, "</MatrixConstants c0=\"%.8f\" c1=\"%.8f\" c2=\"%.8f\"/>\n", pMatrix->m_e[9], pMatrix->m_e[10], pMatrix->m_e[11]);
+    xml += blanks + buf;
+
+  }
   return true;
 }
 
-bool icMBBToXml(std::string xml, CIccMBB *pMBB, icConvertType nType, std::string blanks="")
+bool icMBBToXml(std::string &xml, CIccMBB *pMBB, icConvertType nType, std::string blanks="", bool bSaveGridPrecision=false)
 {
+  blanks += "  ";
   if (pMBB->IsInputMatrix()) {
+    if (pMBB->GetCurvesB()) {
+      icCurvesToXml(xml, "BCurves", pMBB->GetCurvesB(), 3, nType, blanks);
+    }
 
+    if (pMBB->GetMatrix()) {
+      icMatrixToXml(xml, pMBB->GetMatrix(), blanks);
+    }
 
+    if (pMBB->GetCurvesM()) {
+      icCurvesToXml(xml, "MCurves", pMBB->GetCurvesM(), 3, nType, blanks);
+    }
+
+    if (pMBB->GetCLUT()) {
+      icCLUTToXml(xml, pMBB->GetCLUT(), nType, blanks, bSaveGridPrecision);
+    }
+
+    if (pMBB->GetCurvesA()) {
+      icCurvesToXml(xml, "ACurves", pMBB->GetCurvesA(), pMBB->OutputChannels(), nType, blanks);
+    }
   }
   else {
+    if (pMBB->GetCurvesA()) {
+      icCurvesToXml(xml, "ACurves", pMBB->GetCurvesA(), pMBB->InputChannels(), nType, blanks);
+    }
 
+    if (pMBB->GetMatrix()) {
+      icMatrixToXml(xml, pMBB->GetMatrix(), blanks);
+    }
+
+    if (pMBB->GetCurvesM()) {
+      icCurvesToXml(xml, "MCurves", pMBB->GetCurvesM(), 3, nType, blanks);
+    }
+
+    if (pMBB->GetCLUT()) {
+      icCLUTToXml(xml, pMBB->GetCLUT(), nType, blanks, bSaveGridPrecision);
+    }
+
+    if (pMBB->GetCurvesB()) {
+      icCurvesToXml(xml, "BCurves", pMBB->GetCurvesB(), 3, nType, blanks);
+    }
   }
   return true;
 }
@@ -656,33 +811,53 @@ bool icMBBToXml(std::string xml, CIccMBB *pMBB, icConvertType nType, std::string
 bool CIccTagXmlLutAtoB::ToXml(std::string &xml, std::string blanks/* = ""*/)
 {
   std::string info;
+  
+  xml += blanks + "<LutAtoB>\n";
 
-  xml += blanks + "<Class name=\"" + GetClassName() + "\"/>\n";
-  return true;
+  bool rv = icMBBToXml(xml, this, icConvertVariable, blanks + "  ", true);
+
+  xml += blanks + "</LutAtoB>\n";
+
+  return rv;
 }
 
 bool CIccTagXmlLutBtoA::ToXml(std::string &xml, std::string blanks/* = ""*/)
 {
   std::string info;
 
-  xml += blanks + "<Class name=\"" + GetClassName() + "\"/>\n";
-  return true;
+  xml += blanks + "<LutBtoA>\n";
+
+  bool rv = icMBBToXml(xml, this, icConvertVariable, blanks + "  ", true);
+
+  xml += blanks + "</LutBtoA>\n";
+
+  return rv;
 }
 
 bool CIccTagXmlLut8::ToXml(std::string &xml, std::string blanks/* = ""*/)
 {
   std::string info;
 
-  xml += blanks + "<Class name=\"" + GetClassName() + "\"/>\n";
-  return true;
+  xml += blanks + "<Lut8>\n";
+
+  bool rv = icMBBToXml(xml, this, icConvert8Bit, blanks + "  ");
+
+  xml += blanks + "</Lut8>\n";
+
+  return rv;
 }
 
 bool CIccTagXmlLut16::ToXml(std::string &xml, std::string blanks/* = ""*/)
 {
   std::string info;
 
-  xml += blanks + "<Class name=\"" + GetClassName() + "\"/>\n";
-  return true;
+  xml += blanks + "<Lut16>\n";
+
+  bool rv = icMBBToXml(xml, this, icConvert16Bit, blanks + "  ");
+
+  xml += blanks + "</Lut16>\n";
+
+  return rv;
 }
 
 bool CIccTagXmlMultiProcessElement::ToXml(std::string &xml, std::string blanks/* = ""*/)

@@ -3045,12 +3045,12 @@ icStatusCMM CIccCmm::AddXform(CIccProfile *pProfile,
         if (pProfile->m_Header.deviceClass == icSigLinkClass) {
           return icCmmStatBadSpaceLink;
         }
+        nSrcSpace = pProfile->m_Header.pcs;
+        nDstSpace = pProfile->m_Header.colorSpace;
         if (pProfile->m_Header.deviceClass == icSigAbstractClass) {
           bInput = true;
           nIntent = icPerceptual; // Note: icPerceptualIntent = 0
         }
-        nSrcSpace = pProfile->m_Header.pcs;
-        nDstSpace = pProfile->m_Header.colorSpace;
       }
     }
     break;
@@ -3876,6 +3876,44 @@ icUInt32Number CIccCmm::GetNumXforms() const
   return m_Xforms->size();
 }
 
+
+/**
+**************************************************************************
+* Name: CIccCmm::GetFirstXformSource
+* 
+* Purpose: 
+*  Get source colorspace of first transform (similar to m_nSrcSpace with differences in dev colorimetric spaces)
+*  
+* Return:
+* colorspace
+**************************************************************************
+*/
+icColorSpaceSignature CIccCmm::GetFirstXformSource()
+{
+  if (!m_Xforms->size())
+    return m_nSrcSpace;
+
+  return m_Xforms->begin()->ptr->GetSrcSpace();
+}
+
+/**
+**************************************************************************
+* Name: CIccCmm::GetNumXforms
+* 
+* Purpose: 
+*  Get source colorspace of last transform (similar to m_nSrcSpace with differences in dev colorimetric spaces)
+*  
+* Return:
+* colorspace
+**************************************************************************
+*/
+icColorSpaceSignature CIccCmm::GetLastXformDest()
+{
+  if (!m_Xforms->size())
+    return m_nDestSpace;
+
+  return m_Xforms->rbegin()->ptr->GetDstSpace();
+}
 
 /**
  **************************************************************************
@@ -4715,7 +4753,7 @@ bool CIccMruCmm::Init(CIccCmm *pCmm, icUInt8Number nCacheSize)
 
   m_nSrcSamples = GetSourceSamples();
   m_nSrcSize = m_nSrcSamples * sizeof(icFloatNumber);
-  m_nDstSize = m_nSrcSamples * sizeof(icFloatNumber);
+  m_nDstSize = GetDestSamples() * sizeof(icFloatNumber);
 
   m_nTotalSamples = m_nSrcSamples + GetDestSamples();
 

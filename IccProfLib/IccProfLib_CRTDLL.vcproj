@@ -199,9 +199,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="IccTagBasic.h">
-			</File>
-			<File
 				RelativePath="IccTagFactory.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -236,9 +233,6 @@
 						Optimization="2"
 						PreprocessorDefinitions=""/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="IccTagLut.h">
 			</File>
 			<File
 				RelativePath=".\IccTagMPE.cpp">
@@ -311,7 +305,13 @@
 				RelativePath="IccTag.h">
 			</File>
 			<File
+				RelativePath="IccTagBasic.h">
+			</File>
+			<File
 				RelativePath=".\IccTagFactory.h">
+			</File>
+			<File
+				RelativePath="IccTagLut.h">
 			</File>
 			<File
 				RelativePath=".\IccTagMPE.h">

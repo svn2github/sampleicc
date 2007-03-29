@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="iccCreateCLUTInputProfile"
+	Name="create_CLUT_profile"
 	ProjectGUID="{16326F94-522C-4C2A-9FCE-56828AF23C8B}"
 	SccProjectName=""
 	SccLocalPath="">
@@ -23,13 +23,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="winGetOpt,..\..\..\IccProfLib,..\IccToolUtilsLib"
+				AdditionalIncludeDirectories="winGetOpt,..\..\..\IccProfLib,..\..\ICC_utils"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\Release/IccCreateCLUTInputProfile.pch"
+				PrecompiledHeaderFile=".\Release/create_CLUT_profile.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -40,15 +40,15 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\Release/IccCreateCLUTInputProfile.exe"
+				OutputFile=".\Release/create_CLUT_profile.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\Release/IccCreateCLUTInputProfile.pdb"
+				ProgramDatabaseFile=".\Release/create_CLUT_profile.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Release/IccCreateCLUTInputProfile.tlb"
+				TypeLibraryName=".\Release/create_CLUT_profile.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -82,12 +82,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="winGetOpt,..\..\..\IccProfLib,..\IccToolUtilsLib"
+				AdditionalIncludeDirectories="winGetOpt,..\..\..\IccProfLib,..\..\ICC_utils"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\Debug/IccCreateCLUTInputProfile.pch"
+				PrecompiledHeaderFile=".\Debug/create_CLUT_profile.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
@@ -99,16 +99,16 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\Debug/IccCreateCLUTInputProfile.exe"
+				OutputFile=".\Debug/create_CLUT_profile.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\Debug/IccCreateCLUTInputProfile.pdb"
+				ProgramDatabaseFile=".\Debug/create_CLUT_profile.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Debug/IccCreateCLUTInputProfile.tlb"
+				TypeLibraryName=".\Debug/create_CLUT_profile.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -139,10 +139,10 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
-				RelativePath=".\BlackScaler.cpp">
+				RelativePath=".\Black_scaler.cpp">
 			</File>
 			<File
-				RelativePath="winGetOpt\getopt.cpp">
+				RelativePath="create_CLUT_profile.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -162,7 +162,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="iccCreateCLUTInputProfile.cpp">
+				RelativePath="winGetOpt\getopt.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -186,7 +186,7 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
 			<File
-				RelativePath=".\BlackScaler.h">
+				RelativePath=".\Black_scaler.h">
 			</File>
 			<File
 				RelativePath="winGetOpt\getopt.h">
@@ -199,15 +199,6 @@
 			Name="Library Files"
 			Filter="lib">
 			<File
-				RelativePath="..\..\..\IccProfLib\Debug\IccProfLib.lib">
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCCustomBuildTool"/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\IccProfLib\Release\IccProfLib.lib">
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -217,18 +208,27 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\icctoolutilslib\release\IccToolUtilsLib.lib">
+				RelativePath="..\..\..\IccProfLib\Debug\IccProfLib.lib">
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">
 					<Tool
 						Name="VCCustomBuildTool"/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\icctoolutilslib\debug\IccToolUtilsLib.lib">
+				RelativePath="..\..\ICC_utils\debug\IccUtilsLib.lib">
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCustomBuildTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ICC_utils\release\IccUtilsLib.lib">
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="TRUE">
 					<Tool
 						Name="VCCustomBuildTool"/>

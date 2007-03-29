@@ -624,6 +624,9 @@ public:
   static const icChar *GetFloatColorEncoding(icFloatColorEncoding val);
   static icFloatColorEncoding GetFloatColorEncoding(const icChar* val);
 
+  virtual icColorSpaceSignature GetFirstXformSource();
+  virtual icColorSpaceSignature GetLastXformDest();
+
 protected:
   bool m_bValid;
 
@@ -676,7 +679,7 @@ public:
   ///Returns the type of interface that will be applied
   icApplyInterface GetInterface() const {return m_nApplyInterface;}
 
-  icStatusCMM SetLastXformDest(icColorSpaceSignature nDestSpace);  
+  icStatusCMM SetLastXformDest(icColorSpaceSignature nDestSpace); 
 
 protected:
   icApplyInterface m_nApplyInterface;
@@ -731,6 +734,9 @@ public:
   virtual icStatusCMM RemoveAllIO() { return m_pCmm->RemoveAllIO(); }
   virtual CIccPCS *GetPCS() { return m_pCmm->GetPCS(); }
   virtual icUInt32Number GetNumXforms() const { return m_pCmm->GetNumXforms(); }
+
+  virtual icColorSpaceSignature GetFirstXformSource() { return m_pCmm->GetFirstXformSource(); }
+  virtual icColorSpaceSignature GetLastXformDest() { return m_pCmm->GetLastXformDest(); }
 
 protected:
   bool Init(CIccCmm *pCmm, icUInt8Number nCacheSize);

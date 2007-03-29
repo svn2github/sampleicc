@@ -93,7 +93,7 @@ class ICCPROFLIB_API CIccProfile;
 class IIccExtensionTag
 {
 public:
-  virtual const char *GetClassName()=0;
+  virtual const char *GetExtClassName()=0;
 };
 
 /**

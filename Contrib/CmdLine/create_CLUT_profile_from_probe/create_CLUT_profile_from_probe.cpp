@@ -89,6 +89,7 @@
 #include <sstream>
 #include <exception>
 #include <stdexcept>
+#include <limits>
 using namespace std;
 
 #include "Stubs.h"
