@@ -133,7 +133,7 @@ main(int argc, char* argv[])
 		
 		if (argc == 5)
 		{
-			icFloatNumber illuminantY = atof(argv[3]);
+			icFloatNumber illuminantY = (icFloatNumber)atof(argv[3]);
 			char* XYZMeasurementsFilename = argv[4];
 			Measurement_extractor extractor(ICCProfileFilename,
 																		 illuminantY,

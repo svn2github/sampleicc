@@ -185,9 +185,9 @@ loadInputShaperLUTs(CIccTagCurve** inputShaperLUTs,
    blueCurve->SetSize(numEntries, icInitIdentity);
   for (unsigned int j = 0, N = numEntries; j < N; ++j)
   {
-    (  *redCurve)[j] = (icFloatNumber)(  redVals[j] / maxChannelValue);
-    (*greenCurve)[j] = (icFloatNumber)(greenVals[j] / maxChannelValue);
-    ( *blueCurve)[j] = (icFloatNumber)( blueVals[j] / maxChannelValue);
+    (  *redCurve)[j] = static_cast<icFloatNumber>(  redVals[j] / maxChannelValue);
+    (*greenCurve)[j] = static_cast<icFloatNumber>(greenVals[j] / maxChannelValue);
+    ( *blueCurve)[j] = static_cast<icFloatNumber>( blueVals[j] / maxChannelValue);
   }
 }
 
@@ -206,9 +206,9 @@ public:
     int g_idx = static_cast<int>(pGridAdr[1] * (edge_N_ - 1) + 0.5);
     int b_idx = static_cast<int>(pGridAdr[2] * (edge_N_ - 1) + 0.5);
     int flat_idx = r_idx * edge_N_ * edge_N_ + g_idx * edge_N_ + b_idx;
-		pData[0] = PCS_XYZs_[flat_idx].X();
-		pData[1] = PCS_XYZs_[flat_idx].Y();
-		pData[2] = PCS_XYZs_[flat_idx].Z();
+		pData[0] = static_cast<icFloatNumber>(PCS_XYZs_[flat_idx].X());
+		pData[1] = static_cast<icFloatNumber>(PCS_XYZs_[flat_idx].Y());
+		pData[2] = static_cast<icFloatNumber>(PCS_XYZs_[flat_idx].Z());
 //		cout << "r_idx " << r_idx << " g_idx " << g_idx << " b_idx " << b_idx 
 //			<< " flat_idx " << flat_idx
 //			<< " CIEXYZ(" << pData[0] << ", " << pData[1] << ", " << pData[2] << ")\n";
@@ -280,9 +280,9 @@ XYZs_from_monitor_RGBs(const vector<DeviceRGB>& RGBs, CIccCmm* cmm)
 		iter = RGBs.begin(), end_iter = RGBs.end(); iter != end_iter; ++iter)
 	{
 		icFloatNumber RGB[3];
-		RGB[0] = iter->R();
-		RGB[1] = iter->G();
-		RGB[2] = iter->B();
+		RGB[0] = static_cast<icFloatNumber>(iter->R());
+		RGB[1] = static_cast<icFloatNumber>(iter->G());
+		RGB[2] = static_cast<icFloatNumber>(iter->B());
 		icFloatNumber XYZ[3];
 		cmm->Apply(XYZ, RGB);
 		icXyzFromPcs(XYZ);

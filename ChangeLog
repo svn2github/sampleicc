@@ -1,3 +1,9 @@
+2007-3-29 Max Derhak
+  * Deprecated Tools\Winnt\ApplyCmm.  Use SampleIccCmm instead.
+
+2007-3-29 Joseph Goldstone
+  * Moved tools and extensions from Tools\CmdLine folder to Contrib Folder
+
 2007-1-19 Max Derhak
   * Added ability to use multiple inheritance for CIccTag co-derived on IIccExtensionTag
     interface and accessed through a GetExtension() virtual function.
