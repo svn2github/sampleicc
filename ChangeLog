@@ -1,21 +1,39 @@
 2007-3-29 Max Derhak
   * Deprecated Tools\Winnt\ApplyCmm.  Use SampleIccCmm instead.
+  * Deprecated Tools\Winnt\ProfileDump.  Use wxProfileDump instead.
 
 2007-3-29 Joseph Goldstone
   * Moved tools and extensions from Tools\CmdLine folder to Contrib Folder
-
+  
+2007-2-15 Max Derhak
+  * Fixed bug with reading Profile Sequence Description tag.
+  * Added accessor to CIccCLUT m_nPrecision member variable.
+  * Added accessor to elements attached to a CIccTagMPE object.
+  * Added utiltity function icGetSigStr() that displays a signature as a 4 characher
+    string or as an 8 character hex number if the signature contains non alpha-numeric
+    characters.
+  * Minor formating changes to icProfileHeader.  Commented enums modified to eliminate
+    compiler warnings.
+      
 2007-1-19 Max Derhak
   * Added ability to use multiple inheritance for CIccTag co-derived on IIccExtensionTag
     interface and accessed through a GetExtension() virtual function.
+  * Various bug fixes when using Matrix/TRC profiles
+  * Fixed various bugs with extracting tone curves from transforms attached to a CMM.
+  * Added option to allow V2 to V4 encoding without clipping.
 
 2006-12-29
   * Added CIccCmmMru extension CMM class which provides limited caching of last few unique
     color transforms.  This is a limited performance improvement for SampleIccCmm.
-	
+  * Added ability to detach IO operations to all profiles associated with a CMM.  This allows
+    a tranform to be loaded an initialized and disconnect from the source before applying
+    transforms.
+  
 2006-12-28
   * Created SampleIccCmm for Windows platforms.  This allows Windows applications to make use
     SampleICC's proflib through Windows ICM API.
-	
+  * Added ability to get access to the colorspaces of the first and last transform attached to a CMM.
+  
 2006-12-06 Kevin Wheatley
   * Miscelaneouos Bug Fixes
   * Clean up of various compiler warnings
