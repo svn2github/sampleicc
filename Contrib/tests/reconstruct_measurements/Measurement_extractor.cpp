@@ -9,7 +9,7 @@
  
   Version:    V1
  
-  Copyright:  (c) see below
+  Copyright:  © see below
 */
 
 /*
