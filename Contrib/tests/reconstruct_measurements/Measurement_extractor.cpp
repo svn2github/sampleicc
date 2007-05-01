@@ -1,16 +1,16 @@
 /*
- File:       Measurement_extractor.cpp
+  File:       Measurement_extractor.cpp
  
- Contains:   Definitions for class to extract from a profile measurements
-						 that could have been used to create that same profile.
-						 Requires caller to have chromatic adaptation matrix (usually
-						 obtained from 'chad' tag) and absolute luminance information
-						 usually obtained from 'lumi' tag).
+  Contains:   Definitions for class to extract from a profile measurements
+  that could have been used to create that same profile.
+  Requires caller to have chromatic adaptation matrix (usually
+  obtained from 'chad' tag) and absolute luminance information
+  usually obtained from 'lumi' tag).
  
- Version:    V1
+  Version:    V1
  
- Copyright:  (c) see below
- */
+  Copyright:  (c) see below
+*/
 
 /*
  * The ICC Software License, Version 0.1
@@ -92,131 +92,131 @@ using namespace std;
 icColorSpaceSignature
 Measurement_extractor::getPCSSpace(CIccProfile* profile)
 {
-	return profile->m_Header.pcs;
+  return profile->m_Header.pcs;
 }
 
 icFloatNumber
 Measurement_extractor::getIlluminantY(CIccProfile* profile)
 {
-	CIccTagXYZ* luminanceTag
-		= static_cast<CIccTagXYZ*>(profile->FindTag(icSigLuminanceTag));
-	if (! luminanceTag)
-		throw ICC_tool_exception("No luminance tag found");
-	return icFtoD((*luminanceTag)[0].Y);
+  CIccTagXYZ* luminanceTag
+    = static_cast<CIccTagXYZ*>(profile->FindTag(icSigLuminanceTag));
+  if (! luminanceTag)
+    throw ICC_tool_exception("No luminance tag found");
+  return icFtoD((*luminanceTag)[0].Y);
 }
 
 CAT*
 Measurement_extractor::getInverseCAT(CIccProfile* profile)
 {
-	CIccTagS15Fixed16* CATTag = static_cast<CIccTagS15Fixed16*>
-		(profile->FindTag(icSigChromaticAdaptationTag));
-	if (! CATTag)
-		throw ICC_tool_exception("No chromaticAdaptation tag found");
-	icFloatNumber CATContents[9];
-	for(int i = 0; i < 9; ++i)
-		CATContents[i] = icFtoD((*CATTag)[i]);
-	CAT forward(CATContents);
-	return forward.Inverse();
+  CIccTagS15Fixed16* CATTag = static_cast<CIccTagS15Fixed16*>
+    (profile->FindTag(icSigChromaticAdaptationTag));
+  if (! CATTag)
+    throw ICC_tool_exception("No chromaticAdaptation tag found");
+  icFloatNumber CATContents[9];
+  for(int i = 0; i < 9; ++i)
+    CATContents[i] = icFtoD((*CATTag)[i]);
+  CAT forward(CATContents);
+  return forward.Inverse();
 }
 
 void
 Measurement_extractor::getAdaptedMediaWhite(icFloatNumber* white, CIccProfile* profile)
 {
-	CIccTagXYZ* mediaWhiteTag
-		= static_cast<CIccTagXYZ*>(profile->FindTag(icSigMediaWhitePointTag));
-	if (! mediaWhiteTag)
-		throw ICC_tool_exception("No media white point tag found");
-	white[0] = icFtoD((*mediaWhiteTag)[0].X);
-	white[1] = icFtoD((*mediaWhiteTag)[0].Y);
-	white[2] = icFtoD((*mediaWhiteTag)[0].Z);
+  CIccTagXYZ* mediaWhiteTag
+    = static_cast<CIccTagXYZ*>(profile->FindTag(icSigMediaWhitePointTag));
+  if (! mediaWhiteTag)
+    throw ICC_tool_exception("No media white point tag found");
+  white[0] = icFtoD((*mediaWhiteTag)[0].X);
+  white[1] = icFtoD((*mediaWhiteTag)[0].Y);
+  white[2] = icFtoD((*mediaWhiteTag)[0].Z);
 }
 
 Measurement_extractor::Measurement_extractor(const char * const profileFilename,
-																					 const icFloatNumber* flare)
-	: profile_    (ReadIccProfile(profileFilename)),
-		isLabPCS_   (getPCSSpace(profile_) == icSigLabData),
-		illuminantY_(getIlluminantY(profile_)),
-		inverseCAT_ (getInverseCAT(profile_))
+                                             const icFloatNumber* flare)
+  : profile_    (ReadIccProfile(profileFilename)),
+    isLabPCS_   (getPCSSpace(profile_) == icSigLabData),
+    illuminantY_(getIlluminantY(profile_)),
+    inverseCAT_ (getInverseCAT(profile_))
 {
-	for (unsigned int i = 0; i < 3; ++i)
-		flare_[i] = flare[i];
-	getAdaptedMediaWhite(adaptedMediaWhite_, profile_);
-	if (cmm_.AddXform(profileFilename, icAbsoluteColorimetric))
-	{
-		ostringstream s;
-		s << "Can't set profile `" << profileFilename
-		<< "' as initial CMM profile";
-		throw ICC_tool_exception(s.str());
-	}
-	
-	if (cmm_.Begin() != icCmmStatOk)
-		throw ICC_tool_exception("Error starting CMM");
+  for (unsigned int i = 0; i < 3; ++i)
+    flare_[i] = flare[i];
+  getAdaptedMediaWhite(adaptedMediaWhite_, profile_);
+  if (cmm_.AddXform(profileFilename, icAbsoluteColorimetric))
+  {
+    ostringstream s;
+    s << "Can't set profile `" << profileFilename
+      << "' as initial CMM profile";
+    throw ICC_tool_exception(s.str());
+  }
+  
+  if (cmm_.Begin() != icCmmStatOk)
+    throw ICC_tool_exception("Error starting CMM");
 }
 
 Measurement_extractor::Measurement_extractor(const char * const profileFilename,
-																					 icFloatNumber illuminantY,
-																					 const icFloatNumber* flare)
-	: profile_    (ReadIccProfile(profileFilename)),
-		isLabPCS_   (getPCSSpace(profile_) == icSigLabData),
-		illuminantY_(illuminantY),
-		inverseCAT_ (getInverseCAT(profile_))
+                                             icFloatNumber illuminantY,
+                                             const icFloatNumber* flare)
+  : profile_    (ReadIccProfile(profileFilename)),
+    isLabPCS_   (getPCSSpace(profile_) == icSigLabData),
+    illuminantY_(illuminantY),
+    inverseCAT_ (getInverseCAT(profile_))
 {
-	for (unsigned int i = 0; i < 3; ++i)
-		flare_[i] = flare[i];
-	getAdaptedMediaWhite(adaptedMediaWhite_, profile_);
-	if (cmm_.AddXform(profileFilename, icAbsoluteColorimetric) != icCmmStatOk)
-	{
-		ostringstream s;
-		s << "Can't set profile `" << profileFilename
-		<< "' as initial CMM profile";
-		throw ICC_tool_exception(s.str());
-	}
-	
-	if (cmm_.Begin() != icCmmStatOk)
-		throw ICC_tool_exception("Error starting CMM");
+  for (unsigned int i = 0; i < 3; ++i)
+    flare_[i] = flare[i];
+  getAdaptedMediaWhite(adaptedMediaWhite_, profile_);
+  if (cmm_.AddXform(profileFilename, icAbsoluteColorimetric) != icCmmStatOk)
+  {
+    ostringstream s;
+    s << "Can't set profile `" << profileFilename
+      << "' as initial CMM profile";
+    throw ICC_tool_exception(s.str());
+  }
+  
+  if (cmm_.Begin() != icCmmStatOk)
+    throw ICC_tool_exception("Error starting CMM");
 }
 
 Measurement_extractor::~Measurement_extractor()
 {
-	delete profile_;
-	delete inverseCAT_;
+  delete profile_;
+  delete inverseCAT_;
 }
 
 void
 Measurement_extractor::reconstructMeasurement(icFloatNumber* measuredXYZ,
-																						 icFloatNumber* RGBStimulus)
+                                              icFloatNumber* RGBStimulus)
 {
-	icFloatNumber PCSPixel[3];
-	cmm_.Apply(PCSPixel, RGBStimulus);
-//	cout << "raw PCS Pixel for RGB("
-//		<< RGBStimulus[0] << "," << RGBStimulus[1] << "," << RGBStimulus[2]
-//		<< ") -> PCS XYZ("
-//		<< PCSPixel[0] << ", " << PCSPixel[1] << ", " << PCSPixel[2]
-//		<< ")";
-	icFloatNumber adjustedPCSXYZ[3];
-	if (isLabPCS_)
-	{
-//		cout << "enc("
-//		<< PCSPixel[0] << ","
-//		<< PCSPixel[1] << ","
-//		<< PCSPixel[2] << ") then ";
-		icLabFromPcs(PCSPixel);
-//		cout << "decoded("
-//		<< PCSPixel[0] << ","
-//		<< PCSPixel[1] << ","
-//		<< PCSPixel[2] << ")";
-		icLabtoXYZ(adjustedPCSXYZ, PCSPixel, icD50XYZ);
-	}
-	else
-	{
-		for (unsigned int i = 0; i < 3; ++i)
-			adjustedPCSXYZ[i] = PCSPixel[i];
-		icXyzFromPcs(adjustedPCSXYZ);
-	}
-//	cout << endl;	
-	icFloatNumber adaptedXYZ[3];
-	for (unsigned int i = 0; i < 3; ++i)
-		adaptedXYZ[i] = adjustedPCSXYZ[i] * adaptedMediaWhite_[i] / icD50XYZ[i];
-	CLUT::adaptedXYZToMeasuredXYZ(measuredXYZ, adaptedXYZ, flare_, illuminantY_,
-																inverseCAT_);
+  icFloatNumber PCSPixel[3];
+  cmm_.Apply(PCSPixel, RGBStimulus);
+  //  cout << "raw PCS Pixel for RGB("
+  //    << RGBStimulus[0] << "," << RGBStimulus[1] << "," << RGBStimulus[2]
+  //    << ") -> PCS XYZ("
+  //    << PCSPixel[0] << ", " << PCSPixel[1] << ", " << PCSPixel[2]
+  //    << ")";
+  icFloatNumber adjustedPCSXYZ[3];
+  if (isLabPCS_)
+  {
+    //    cout << "enc("
+    //    << PCSPixel[0] << ","
+    //    << PCSPixel[1] << ","
+    //    << PCSPixel[2] << ") then ";
+    icLabFromPcs(PCSPixel);
+    //    cout << "decoded("
+    //    << PCSPixel[0] << ","
+    //    << PCSPixel[1] << ","
+    //    << PCSPixel[2] << ")";
+    icLabtoXYZ(adjustedPCSXYZ, PCSPixel, icD50XYZ);
+  }
+  else
+  {
+    for (unsigned int i = 0; i < 3; ++i)
+      adjustedPCSXYZ[i] = PCSPixel[i];
+    icXyzFromPcs(adjustedPCSXYZ);
+  }
+  //  cout << endl; 
+  icFloatNumber adaptedXYZ[3];
+  for (unsigned int i = 0; i < 3; ++i)
+    adaptedXYZ[i] = adjustedPCSXYZ[i] * adaptedMediaWhite_[i] / icD50XYZ[i];
+  CLUT::adaptedXYZToMeasuredXYZ(measuredXYZ, adaptedXYZ, flare_, illuminantY_,
+                                inverseCAT_);
 }

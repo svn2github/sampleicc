@@ -1,12 +1,12 @@
 /*
-    File:       CLUT.cpp
+  File:       CLUT.cpp
 
-    Contains:   originally part of iccCreateCLUTProfile command-line tool:
-                create and write CLUT tag data
+  Contains:   originally part of iccCreateCLUTProfile command-line tool:
+  create and write CLUT tag data
 
-    Version:    V1
+  Version:    V1
 
-    Copyright:  © see below
+  Copyright:  © see below
 */
 
 /*
@@ -112,7 +112,7 @@ CLUT::loadInputShaperLUTs(CIccTagCurve** inputShaperLUTs,
   while (getline(s, line))
   {
     if (line == "")
-        continue;
+      continue;
     double redVal;
     double greenVal;
     double blueVal;
@@ -129,9 +129,9 @@ CLUT::loadInputShaperLUTs(CIccTagCurve** inputShaperLUTs,
   CIccTagCurve*   redCurve = inputShaperLUTs[0];
   CIccTagCurve* greenCurve = inputShaperLUTs[1];
   CIccTagCurve*  blueCurve = inputShaperLUTs[2];
-    redCurve->SetSize(numEntries, icInitIdentity);
+  redCurve->SetSize(numEntries, icInitIdentity);
   greenCurve->SetSize(numEntries, icInitIdentity);
-   blueCurve->SetSize(numEntries, icInitIdentity);
+  blueCurve->SetSize(numEntries, icInitIdentity);
   for (unsigned int j = 0, N = numEntries; j < N; ++j)
   {
     (  *redCurve)[j] = (icFloatNumber)(  redVals[j] / maxChannelValue);
@@ -149,7 +149,7 @@ CLUT::makeAToBxTag(const unsigned int edgeN,
                    const icFloatNumber inputShaperGamma,
                    const std::string& inputShaperFilename,
                    const icFloatNumber* const mediaWhite,
-									 const bool LABPCS)
+                   const bool LABPCS)
 {
   unsigned int i;
   CIccTagLut16* lut16 = new CIccTagLut16();
@@ -169,7 +169,7 @@ CLUT::makeAToBxTag(const unsigned int edgeN,
   m_innerCLUT = lut16->NewCLUT(edgeN);
 
   CLUT_stuffer stuffer(edgeN, rawXYZ, flare, illuminant[1], CATToPCS,
-											mediaWhite, LABPCS);
+                       mediaWhite, LABPCS);
   m_innerCLUT->Iterate(&stuffer);
 
   LPIccCurve* oLUT = lut16->NewCurvesB();
@@ -199,9 +199,9 @@ CLUT::makeAToBxTag(const unsigned int edgeN,
   {
     if (inputShaperFilename != "")
       throw ICC_tool_exception("input shaper LUT gamma and input shaper LUT"
-        " filename both specified, but they are mutually exclusive");
+                               " filename both specified, but they are mutually exclusive");
     cerr << "------- where we should be -------, gamma is " 
-      << inputShaperGamma << endl;
+         << inputShaperGamma << endl;
     for (i = 0; i < 3; ++i)
     {
       CIccTagCurve* pCurve = new CIccTagCurve(0);
@@ -216,10 +216,10 @@ CLUT::makeAToBxTag(const unsigned int edgeN,
 
 void
 CLUT::measuredXYZToAdaptedXYZ(icFloatNumber* const adaptedXYZ,
-  const icFloatNumber* const measuredXYZ,
-  const icFloatNumber* const flare,
-  const icFloatNumber illuminantY,
-  const CAT* CATToPCS)
+                              const icFloatNumber* const measuredXYZ,
+                              const icFloatNumber* const flare,
+                              const icFloatNumber illuminantY,
+                              const CAT* CATToPCS)
 {
   icFloatNumber flarelessMeasuredXYZ[3];
   icFloatNumber illuminantRelativeXYZ[3];
@@ -233,10 +233,10 @@ CLUT::measuredXYZToAdaptedXYZ(icFloatNumber* const adaptedXYZ,
 
 void
 CLUT::adaptedXYZToMeasuredXYZ(icFloatNumber* const measuredXYZ,
-															const icFloatNumber* const adaptedXYZ,
-															const icFloatNumber* const flare,
-															const icFloatNumber illuminantY,
-															const CAT* invCATToPCS)
+                              const icFloatNumber* const adaptedXYZ,
+                              const icFloatNumber* const flare,
+                              const icFloatNumber illuminantY,
+                              const CAT* invCATToPCS)
 {
   icFloatNumber illuminantRelativeXYZ[3];
   invCATToPCS->Apply(illuminantRelativeXYZ, adaptedXYZ);
@@ -244,7 +244,7 @@ CLUT::adaptedXYZToMeasuredXYZ(icFloatNumber* const measuredXYZ,
   for (unsigned int i = 0; i < 3; ++i)
   {
     flarelessMeasuredXYZ[i] = illuminantRelativeXYZ[i] * illuminantY;
-		measuredXYZ[i] = flarelessMeasuredXYZ[i] + flare[i];
+    measuredXYZ[i] = flarelessMeasuredXYZ[i] + flare[i];
   }
 }
 

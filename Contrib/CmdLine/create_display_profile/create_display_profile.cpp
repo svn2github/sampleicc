@@ -1,14 +1,14 @@
 /*
- File:       iccCreateTRCMatrixDisplayProfile.cpp
+  File:       create_display_profile.cpp
  
- Contains:   Command-line app that takes external primary and TRC data and
- creates a display profile with that data stuffed into matrix column tags
- and TRCs.
+  Contains:   Command-line app that takes external primary and TRC data and
+  creates a display profile with that data stuffed into matrix column tags
+  and TRCs.
  
- Version:    V1
+  Version:    V1
  
- Copyright:  © see below
- */
+  Copyright:  © see below
+*/
 
 /*
  * The ICC Software License, Version 0.1
@@ -92,20 +92,20 @@ void
 usage(const char* my_name)
 {
   cerr << my_name << ": usage is " << my_name << " IN.txt N description"
-    << " copyright out.ICC" << endl
-    << " where IN.txt is a file whose contents are:" << endl
-    << "  red XYZ primary (triplet of floats)" << endl
-    << "  green XYZ primary (triplet of floats)" << endl
-    << "  blue XYZ primary (triplet of floats)" << endl
-    << "  N lines being the tone curve for red (floats)" << endl
-    << "  N lines being the tone curve for green (floats)" << endl
-    << "  N lines being the tone curve for blue (floats)" << endl
-    << " N is the number of sample points per tone curve," << endl
-    << " description is a string which will be used to identify the profile,"
-    << " copyright is a string identifying the profile content owner,"
-    << " and" << endl
-    << " out.ICC is the file which will contain the created monitor profile"
-    << endl;
+       << " copyright out.ICC" << endl
+       << " where IN.txt is a file whose contents are:" << endl
+       << "  red XYZ primary (triplet of floats)" << endl
+       << "  green XYZ primary (triplet of floats)" << endl
+       << "  blue XYZ primary (triplet of floats)" << endl
+       << "  N lines being the tone curve for red (floats)" << endl
+       << "  N lines being the tone curve for green (floats)" << endl
+       << "  N lines being the tone curve for blue (floats)" << endl
+       << " N is the number of sample points per tone curve," << endl
+       << " description is a string which will be used to identify the profile,"
+       << " copyright is a string identifying the profile content owner,"
+       << " and" << endl
+       << " out.ICC is the file which will contain the created monitor profile"
+       << endl;
 }
 
 int
@@ -150,7 +150,7 @@ main(int argc, char* argv[])
     for (i = 0; i < N; ++i)
       in >> redTRC[i] >> greenTRC[i] >> blueTRC[i];
     
-		CIccProfile profile;
+    CIccProfile profile;
     profile.InitHeader();
     profile.m_Header.deviceClass = icSigDisplayClass;
     profile.m_Header.colorSpace = icSigRgbData;
@@ -203,7 +203,7 @@ main(int argc, char* argv[])
     CIccTagXYZ* whitePointTag = new CIccTagXYZ;
     icFloatNumber adaptedMediaWhite[3];
     CLUT::measuredXYZToAdaptedXYZ(adaptedMediaWhite, measuredWhite,
-      flare, illuminantY, CATToD50);
+                                  flare, illuminantY, CATToD50);
     (*whitePointTag)[0].X = icDtoF(adaptedMediaWhite[0]);
     (*whitePointTag)[0].Y = icDtoF(adaptedMediaWhite[1]);
     (*whitePointTag)[0].Z = icDtoF(adaptedMediaWhite[2]);
@@ -213,7 +213,7 @@ main(int argc, char* argv[])
     CIccTagXYZ* blackPointTag = new CIccTagXYZ;
     icFloatNumber adaptedMediaBlack[3];
     CLUT::measuredXYZToAdaptedXYZ(adaptedMediaBlack, measuredBlack,
-      flare, illuminantY, CATToD50);
+                                  flare, illuminantY, CATToD50);
     (*blackPointTag)[0].X = icDtoF(adaptedMediaBlack[0]);
     (*blackPointTag)[0].Y = icDtoF(adaptedMediaBlack[1]);
     (*blackPointTag)[0].Z = icDtoF(adaptedMediaBlack[2]);
@@ -226,7 +226,7 @@ main(int argc, char* argv[])
     CIccTagXYZ* redMatrixColumnTag = new CIccTagXYZ;
     icFloatNumber adaptedRed[3];
     CLUT::measuredXYZToAdaptedXYZ(adaptedRed, measuredRed,
-      flare, illuminantY, CATToD50);
+                                  flare, illuminantY, CATToD50);
     (*redMatrixColumnTag)[0].X = icDtoF(adaptedRed[0]);
     (*redMatrixColumnTag)[0].Y = icDtoF(adaptedRed[1]);
     (*redMatrixColumnTag)[0].Z = icDtoF(adaptedRed[2]);
@@ -235,7 +235,7 @@ main(int argc, char* argv[])
     CIccTagXYZ* greenMatrixColumnTag = new CIccTagXYZ;
     icFloatNumber adaptedGreen[3];
     CLUT::measuredXYZToAdaptedXYZ(adaptedGreen, measuredGreen,
-      flare, illuminantY, CATToD50);
+                                  flare, illuminantY, CATToD50);
     (*greenMatrixColumnTag)[0].X = icDtoF(adaptedGreen[0]);
     (*greenMatrixColumnTag)[0].Y = icDtoF(adaptedGreen[1]);
     (*greenMatrixColumnTag)[0].Z = icDtoF(adaptedGreen[2]);
@@ -244,34 +244,34 @@ main(int argc, char* argv[])
     CIccTagXYZ* blueMatrixColumnTag = new CIccTagXYZ;
     icFloatNumber adaptedBlue[3];
     CLUT::measuredXYZToAdaptedXYZ(adaptedBlue, measuredBlue,
-      flare, illuminantY, CATToD50);
+                                  flare, illuminantY, CATToD50);
     (*blueMatrixColumnTag)[0].X = icDtoF(adaptedBlue[0]);
     (*blueMatrixColumnTag)[0].Y = icDtoF(adaptedBlue[1]);
     (*blueMatrixColumnTag)[0].Z = icDtoF(adaptedBlue[2]);
     profile.AttachTag(icSigBlueMatrixColumnTag, blueMatrixColumnTag);
     
     CIccTagCurve* redTRCTag = new CIccTagCurve(N);
-		if (N == 1)
-			redTRCTag->SetGamma(redTRC[0]);
-		else
-			for (i = 0; i < N; ++i)
-				(*redTRCTag)[i] = redTRC[i];
+    if (N == 1)
+      redTRCTag->SetGamma(redTRC[0]);
+    else
+      for (i = 0; i < N; ++i)
+        (*redTRCTag)[i] = redTRC[i];
     profile.AttachTag(icSigRedTRCTag, redTRCTag);
     
     CIccTagCurve* greenTRCTag = new CIccTagCurve(N);
-		if (N == 1)
-			greenTRCTag->SetGamma(greenTRC[0]);
-		else
-			for (i = 0; i < N; ++i)
-				(*greenTRCTag)[i] = greenTRC[i];
+    if (N == 1)
+      greenTRCTag->SetGamma(greenTRC[0]);
+    else
+      for (i = 0; i < N; ++i)
+        (*greenTRCTag)[i] = greenTRC[i];
     profile.AttachTag(icSigGreenTRCTag, greenTRCTag);
     
     CIccTagCurve* blueTRCTag = new CIccTagCurve(N);
-		if (N == 1)
-			blueTRCTag->SetGamma(blueTRC[0]);
-		else
-			for (i = 0; i < N; ++i)
-				(*blueTRCTag)[i] = blueTRC[i];
+    if (N == 1)
+      blueTRCTag->SetGamma(blueTRC[0]);
+    else
+      for (i = 0; i < N; ++i)
+        (*blueTRCTag)[i] = blueTRC[i];
     profile.AttachTag(icSigBlueTRCTag, blueTRCTag);
     
     //Verify things
@@ -280,23 +280,23 @@ main(int argc, char* argv[])
     
     switch (validationStatus)
     {
-    case icValidateOK:
-      break;
+      case icValidateOK:
+        break;
       
-    case icValidateWarning:
-      clog << "Profile validation warning" << endl
-      << validationReport;
-      break;
+      case icValidateWarning:
+        clog << "Profile validation warning" << endl
+             << validationReport;
+        break;
       
-    case icValidateNonCompliant:
-      clog << "Profile non compliancy" << endl
-      << validationReport;
-      break;
+      case icValidateNonCompliant:
+        clog << "Profile non compliancy" << endl
+             << validationReport;
+        break;
       
-    case icValidateCriticalError:
-    default:
-      clog << "Profile Error" << endl
-      << validationReport;
+      case icValidateCriticalError:
+      default:
+        clog << "Profile Error" << endl
+             << validationReport;
     }
     
     // Out it goes

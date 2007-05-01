@@ -1,12 +1,12 @@
 /*
-    File:       iccCreateCLUTInputProfile.cpp
+  File:       create_CLUT_profile.cpp
 
-    Contains:   Command-line app that takes external CLUT data and creates
-                an input profile with that CLUT data stuffed into an A2B0 tag.
+  Contains:   Command-line app that takes external CLUT data and creates
+  an input profile with that CLUT data stuffed into an A2B0 tag.
 
-    Version:    V1
+  Version:    V1
 
-    Copyright:  © see below
+  Copyright:  © see below
 */
 
 /*
@@ -128,29 +128,29 @@ createProfile(const string& inFilename,
               const icFloatNumber inputShaperGamma,
               const string& inputShaperFilename,
               const icFloatNumber* mediaWhite,
-							const bool LABPCS)
+              const bool LABPCS)
 {                   
   unsigned int i;
 
   ifstream iFS(inFilename.c_str());
-	if (! iFS)
-	{
-		ostringstream s;
-		s << "Could not open data file `" << inFilename << "'";
-		throw ICC_tool_exception(s.str());
-	}
+  if (! iFS)
+  {
+    ostringstream s;
+    s << "Could not open data file `" << inFilename << "'";
+    throw ICC_tool_exception(s.str());
+  }
   unsigned int numData = 3 * size * size * size;
   icFloatNumber* measuredXYZ = new icFloatNumber[numData];
   for (i = 0; i < numData; ++i)
-	{
+  {
     iFS >> measuredXYZ[i];
-		if (iFS.eof())
-		{
-			ostringstream s;
-			s << "Could not read " << numData << " entries from file `"
-				<< inFilename << "': premature end-of-file";
-			throw ICC_tool_exception(s.str());
-		}
+    if (iFS.eof())
+    {
+      ostringstream s;
+      s << "Could not read " << numData << " entries from file `"
+        << inFilename << "': premature end-of-file";
+      throw ICC_tool_exception(s.str());
+    }
   }
   CIccProfile profile;
   profile.InitHeader();
@@ -205,7 +205,7 @@ createProfile(const string& inFilename,
   CIccTagXYZ* whitePointTag = new CIccTagXYZ;
   icFloatNumber adaptedMediaWhite[3];
   CLUT::measuredXYZToAdaptedXYZ(adaptedMediaWhite, measuredWhite,
-    flare, illuminantY, CATToD50);
+                                flare, illuminantY, CATToD50);
   (*whitePointTag)[0].X = icDtoF(adaptedMediaWhite[0]);
   (*whitePointTag)[0].Y = icDtoF(adaptedMediaWhite[1]);
   (*whitePointTag)[0].Z = icDtoF(adaptedMediaWhite[2]);
@@ -215,7 +215,7 @@ createProfile(const string& inFilename,
   CIccTagXYZ* blackPointTag = new CIccTagXYZ;
   icFloatNumber adaptedMediaBlack[3];
   CLUT::measuredXYZToAdaptedXYZ(adaptedMediaBlack, measuredBlack,
-    flare, illuminantY, CATToD50);
+                                flare, illuminantY, CATToD50);
   (*blackPointTag)[0].X = icDtoF(adaptedMediaBlack[0]);
   (*blackPointTag)[0].Y = icDtoF(adaptedMediaBlack[1]);
   (*blackPointTag)[0].Z = icDtoF(adaptedMediaBlack[2]);
@@ -229,7 +229,7 @@ createProfile(const string& inFilename,
   CLUT* AToB1CLUT = new CLUT();
   CIccTagLut16* AToB1Tag
     = AToB1CLUT->makeAToBxTag(size, measuredXYZ, flare, illuminant, CATToD50,
-      inputShaperGamma, inputShaperFilename, adaptedMediaWhite, LABPCS);
+                              inputShaperGamma, inputShaperFilename, adaptedMediaWhite, LABPCS);
   profile.AttachTag(icSigAToB1Tag, AToB1Tag); // the A2B1 tag
 
   // We can get away with this because the Saturation Intent is so
@@ -240,7 +240,7 @@ createProfile(const string& inFilename,
   CLUT* AToB0CLUT = new CLUT();
   CIccTagLut16* AToB0Tag
     = AToB0CLUT->makeAToBxTag(size, measuredXYZ, flare, illuminant, CATToD50,
-      inputShaperGamma, inputShaperFilename, adaptedMediaWhite, LABPCS);
+                              inputShaperGamma, inputShaperFilename, adaptedMediaWhite, LABPCS);
   Black_scaler black_scaler(size, measuredXYZ, adaptedMediaBlack, adaptedMediaWhite);
   AToB0CLUT->Iterate(&black_scaler);
   profile.AttachTag(icSigAToB0Tag, AToB0Tag); // the A2B0 tag
@@ -251,23 +251,23 @@ createProfile(const string& inFilename,
 
   switch (validationStatus)
   {
-  case icValidateOK:
-    break;
+    case icValidateOK:
+      break;
 
-  case icValidateWarning:
-    clog << "Profile validation warning" << endl
-         << validationReport;
-    break;
+    case icValidateWarning:
+      clog << "Profile validation warning" << endl
+           << validationReport;
+      break;
 
-  case icValidateNonCompliant:
-    clog << "Profile non compliancy" << endl
-         << validationReport;
-    break;
+    case icValidateNonCompliant:
+      clog << "Profile non compliancy" << endl
+           << validationReport;
+      break;
 
-  case icValidateCriticalError:
-  default:
-    clog << "Profile Error" << endl
-         << validationReport;
+    case icValidateCriticalError:
+    default:
+      clog << "Profile Error" << endl
+           << validationReport;
   }
 
   // Out it goes
@@ -293,31 +293,31 @@ usage(ostream& oS, const string& myName)
   }
   oS << "Usage: " << myShortName
      << " [OPTION]... DESCRIPTION MEDIA_WHITE SIZE IN_FILE OUT_FILE"                                  << endl
-                                                                                                      << endl
+     << endl
      << "Examples:"                                                                                   << endl
-     << "  iccCreateCLUTInputProfile \"sample profile\" \"0.21 0.24 0.52\" 11"
+     << "  create_CLUT_profile \"sample profile\" \"0.21 0.24 0.52\" 11"
      << " /tmp/in.txt /tmp/out.icc"                                                                   << endl
-     << "  iccCreateCLUTInputProfile -f \"0.01 0.005 0.02\" \"sample profile\" \"0.21 0.24 0.52\" 11"
+     << "  create_CLUT_profile -f \"0.01 0.005 0.02\" \"sample profile\" \"0.21 0.24 0.52\" 11"
      << " /tmp/in.txt /tmp/out.icc"                                                                   << endl
-                                                                                                      << endl
+     << endl
      << "where"                                                                                       << endl
      << "  DESCRIPTION is a string used to identify the profile, often set to the same as the"        << endl
      << "    filename of the profile less any trailing extension,"                                    << endl
-                                                                                                      << endl
+     << endl
      << "  MEDIA_WHITE is a string containing the CIE XYZ coordinates of the media white point"       << endl
      << "    with embedded spaces between the X, Y and Z components"                                  << endl
-                                                                                                      << endl
+     << endl
      << "  SIZE is an unsigned integer indicating the number of samples along each edge of the"       << endl
      << "    3D lookup table being loaded into the profile"                                           << endl
-                                                                                                      << endl
+     << endl
      << "and where the OPTION values are as follows:"                                                 << endl
      << "   -h"
 #if defined(HAS_GETOPT_LONG)
      << ", --help"
 #endif
-                                                                                                      << endl
+     << endl
      << " (prints this help text and exits)"                                                          << endl
-                                                                                                      << endl
+     << endl
      << "   -f"
 #if defined(HAS_GETOPT_LONG)
      << ", --flare"
@@ -325,7 +325,7 @@ usage(ostream& oS, const string& myName)
      << " \"Xf Yf Zf\" (default \"0 0 0\")"                                                           << endl
      << " (indicates flare to be subtracted from measurements as a first stage in converting raw"     << endl
      << "  XYZ measurements to the ICC PCS)"                                                          << endl
-                                                                                                      << endl
+     << endl
      << "   -g"
 #if defined(HAS_GETOPT_LONG)
      << "   --input-shaper-gamma"
@@ -333,7 +333,7 @@ usage(ostream& oS, const string& myName)
      << " g (default 1.0)"                                                                            << endl
      << " (indicates value of gamma to be used to populate input shaper LUTs -- mutually exclusive"    << endl
      << "  with --input-shaper-file option)"                                                          << endl
-                                                                                                      << endl
+     << endl
      << "   -n"
 #if defined(HAS_GETOPT_LONG)
      << "   --input-shaper-file"
@@ -343,16 +343,16 @@ usage(ostream& oS, const string& myName)
      << "  lines comprising the remainder of the file, each of which contains three floating-point"    << endl
      << "  values.  The first line of the file is used to normalize the contents of the rest of"      << endl
      << "  the file.  Mutually exclusive with --input-shaper-gamma option"                            << endl
-                                                                                                      << endl
-		 << "   -L"
+     << endl
+     << "   -L"
 #if defined(HAS_GETOPT_LONG)
-		 << "   --LAB-PCS"
+     << "   --LAB-PCS"
 #endif
-		 << " flag indicating that the profile data should be stored in the LAB PCS (default false)"      << endl
-		 << " (unless this flag is specified, profile data will be stored in the XYZ PCS)"                << endl
-		 << endl
+     << " flag indicating that the profile data should be stored in the LAB PCS (default false)"      << endl
+     << " (unless this flag is specified, profile data will be stored in the XYZ PCS)"                << endl
+     << endl
 
-	<< "   -i"
+     << "   -i"
 #if defined(HAS_GETOPT_LONG)
      << ", --illuminant"
 #endif
@@ -360,7 +360,7 @@ usage(ostream& oS, const string& myName)
      << " (indicates illuminant used in converting raw XYZ measurements to the ICC PCS -- for"        << endl
      << "  projection displays, this usually has a value identical to that of the mandatory"          << endl
      << "  MEDIA_WHITE argument)"                                                                     << endl
-                                                                                                      << endl
+     << endl
      << "   -c"
 #if defined(HAS_GETOPT_LONG)
      << ", --copyright"
@@ -382,7 +382,7 @@ main(int argc, char * const argv[])
   
   bool LABPCS = false;
   bool sawExplicitLABPCS = false;
-	
+  
   icFloatNumber inputShaperGamma = 1.0;
   bool sawInputShaperGamma = false;
   
@@ -429,51 +429,51 @@ main(int argc, char * const argv[])
     if (shortOpt == -1)
       break;
     switch (shortOpt) 
-      {
+    {
       case 'h':
-	usage(cout, argv[0]);
-	return EXIT_SUCCESS;
+        usage(cout, argv[0]);
+        return EXIT_SUCCESS;
       case 'f':
-	readXYZFromString(flare, optarg);
-	sawExplicitFlare = true;
-	break;
+        readXYZFromString(flare, optarg);
+        sawExplicitFlare = true;
+        break;
       case 'i':
-	readXYZFromString(illuminant, optarg);
-	sawExplicitIlluminant = true;
-	break;
+        readXYZFromString(illuminant, optarg);
+        sawExplicitIlluminant = true;
+        break;
       case 'L':
-	LABPCS = true;
-	sawExplicitLABPCS = true;
-	break;
+        LABPCS = true;
+        sawExplicitLABPCS = true;
+        break;
       case 'g':
-	inputShaperGamma = (icFloatNumber)strtod(optarg, NULL);
-	sawInputShaperGamma = true;
-	break;
+        inputShaperGamma = (icFloatNumber)strtod(optarg, NULL);
+        sawInputShaperGamma = true;
+        break;
       case 'n':
-	inputShaperFilename = optarg;
-	sawInputShaperFilename = true;
-	break;
+        inputShaperFilename = optarg;
+        sawInputShaperFilename = true;
+        break;
       case 'c':
-	copyright = optarg;
-	break;
+        copyright = optarg;
+        break;
       case 't':
-	profileType = optarg;
-	sawProfileType = true;
-	break;
+        profileType = optarg;
+        sawProfileType = true;
+        break;
       default:
-	usage(cout, argv[0]);
-	return EXIT_FAILURE;
-      }
+        usage(cout, argv[0]);
+        return EXIT_FAILURE;
+    }
   }
 
   argc -= optind;
   argv += optind;
 
   if (argc != 5)
-    {
-      usage(cout, myName.c_str());
-      return EXIT_FAILURE;
-    }
+  {
+    usage(cout, myName.c_str());
+    return EXIT_FAILURE;
+  }
   
   description                 = argv[0];
   readXYZFromString(mediaWhite, argv[1]);
@@ -482,51 +482,51 @@ main(int argc, char * const argv[])
   outFilename                 = argv[4];
 
   try
-    {
-      // check for obvious problems
+  {
+    // check for obvious problems
 
 
-      if (sawInputShaperGamma && sawInputShaperFilename)
-	throw ICC_tool_exception("both --inputShaperGamma (-g) and"
-			       " --inputShaperFilename (-n) specified, but the two options are"
-			       " mutually exclusive");
+    if (sawInputShaperGamma && sawInputShaperFilename)
+      throw ICC_tool_exception("both --inputShaperGamma (-g) and"
+                               " --inputShaperFilename (-n) specified, but the two options are"
+                               " mutually exclusive");
 
-      if (! (profileType == "input" || profileType == "display"))
-	throw ICC_tool_exception("profile type specified, but was neither"
-			       " input nor display");
+    if (! (profileType == "input" || profileType == "display"))
+      throw ICC_tool_exception("profile type specified, but was neither"
+                               " input nor display");
 
     icProfileClassSignature profileClass
-		= (profileType == "input") ? icSigInputClass : icSigDisplayClass;
+      = (profileType == "input") ? icSigInputClass : icSigDisplayClass;
 
-      if (! sawExplicitIlluminant)
-	for (unsigned int i = 0; i < 3; ++i)
-	  illuminant[i] = mediaWhite[i];
+    if (! sawExplicitIlluminant)
+      for (unsigned int i = 0; i < 3; ++i)
+        illuminant[i] = mediaWhite[i];
 
-      clog << "creating " << size << "x" << size << "x" << size
-	   << " CLUT-based ICC input profile `" << outFilename << "'" << endl
-	   << " from data in file " << inFilename << endl
-	   << " with an explicitly-specified media white point of "
-	   << mediaWhite[0] << " " << mediaWhite[1] << " " << mediaWhite[2] << endl
-	   << " an " << (sawExplicitIlluminant ? "explicit" : "implicit") << " illuminant of "
-	   << illuminant[0] << " " << illuminant[1] << " " << illuminant[2] << endl
-	   << " an " << (sawExplicitFlare ? "explicit" : "implicit") << " measurement flare level of "
-	   << flare[0] << " " << flare[1] << " " << flare[2] << endl;
-      if (copyright == "")
-	clog << " no copyright" << endl;
-      else
-	clog << " a copyright '" << copyright << "'" << endl;
-      clog << " and the description `" << description << "'" << endl;
+    clog << "creating " << size << "x" << size << "x" << size
+         << " CLUT-based ICC input profile `" << outFilename << "'" << endl
+         << " from data in file " << inFilename << endl
+         << " with an explicitly-specified media white point of "
+         << mediaWhite[0] << " " << mediaWhite[1] << " " << mediaWhite[2] << endl
+         << " an " << (sawExplicitIlluminant ? "explicit" : "implicit") << " illuminant of "
+         << illuminant[0] << " " << illuminant[1] << " " << illuminant[2] << endl
+         << " an " << (sawExplicitFlare ? "explicit" : "implicit") << " measurement flare level of "
+         << flare[0] << " " << flare[1] << " " << flare[2] << endl;
+    if (copyright == "")
+      clog << " no copyright" << endl;
+    else
+      clog << " a copyright '" << copyright << "'" << endl;
+    clog << " and the description `" << description << "'" << endl;
 
-      createProfile(inFilename, outFilename, size, profileClass,
-		    description, copyright,
-		    flare, illuminant, inputShaperGamma, inputShaperFilename,
-		    mediaWhite, LABPCS);
+    createProfile(inFilename, outFilename, size, profileClass,
+                  description, copyright,
+                  flare, illuminant, inputShaperGamma, inputShaperFilename,
+                  mediaWhite, LABPCS);
 
-      return EXIT_SUCCESS;
-    }
+    return EXIT_SUCCESS;
+  }
   catch (const exception& e)
-    {
-      cerr << myName << ": error: " << e.what() << endl;
-      return EXIT_FAILURE;
-    }
+  {
+    cerr << myName << ": error: " << e.what() << endl;
+    return EXIT_FAILURE;
+  }
 }

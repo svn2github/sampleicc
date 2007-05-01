@@ -1,15 +1,15 @@
 /*
-    File:       ICC_tool_exception.cpp
+  File:       ICC_tool_exception.cpp
 
-    Contains:   Part of SampleICCToolUtils library:
-                Provide for the basics of an exception model of use for icc*
-                tools (as opposed to the return values used within SampleICC
-                itself).  Not so much a pedagogical tool as a difference in 
-                style between library implementor and tool implementor.
+  Contains:   Part of SampleICCToolUtils library:
+  Provide for the basics of an exception model of use for icc*
+  tools (as opposed to the return values used within SampleICC
+  itself).  Not so much a pedagogical tool as a difference in 
+  style between library implementor and tool implementor.
 
-    Version:    V1
+  Version:    V1
 
-    Copyright:  © see below
+  Copyright:  © see below
 */
 
 /*

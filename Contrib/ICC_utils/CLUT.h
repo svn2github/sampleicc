@@ -1,12 +1,12 @@
 /*
-    File:       CLUT.cpp
+  File:       CLUT.cpp
 
-    Contains:   originally part of iccCreateCLUTProfile command-line tool:
-                create and write CLUT tag data
+  Contains:   originally part of iccCreateCLUTProfile command-line tool:
+  create and write CLUT tag data
 
-    Version:    V1
+  Version:    V1
 
-    Copyright:  © see below
+  Copyright:  © see below
 */
 
 /*
@@ -90,7 +90,7 @@
 
 class CLUT
 {
- public:
+public:
 
   CLUT() {}
  
@@ -107,23 +107,23 @@ class CLUT
                const icFloatNumber inputShaperGamma,
                const std::string& inputShaperFilename,
                const icFloatNumber* const mediaWhite,
-							 const bool LABPCS);
+               const bool LABPCS);
   
   static
   void
   measuredXYZToAdaptedXYZ(icFloatNumber* const adaptedXYZ,
-													const icFloatNumber* const measuredXYZ,
-													const icFloatNumber* const flare,
-													const icFloatNumber illuminantY,
-													const CAT* CATToPCS);
+                          const icFloatNumber* const measuredXYZ,
+                          const icFloatNumber* const flare,
+                          const icFloatNumber illuminantY,
+                          const CAT* CATToPCS);
   
-	static
+  static
   void
   adaptedXYZToMeasuredXYZ(icFloatNumber* const measuredXYZ,
-													const icFloatNumber* const adaptedXYZ,
-													const icFloatNumber* const flare,
-													const icFloatNumber illuminantY,
-													const CAT* invCATToPCS);
+                          const icFloatNumber* const adaptedXYZ,
+                          const icFloatNumber* const flare,
+                          const icFloatNumber illuminantY,
+                          const CAT* invCATToPCS);
   
   void
   Iterate(IIccCLUTExec* pExec);

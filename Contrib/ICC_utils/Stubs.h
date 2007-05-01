@@ -1,11 +1,11 @@
 /*
-    File:       Stubs.h
+  File:       Stubs.h
  
-    Contains:   Useful classes and functions for profile creation utilities.
+  Contains:   Useful classes and functions for profile creation utilities.
  
-    Version:    V1
+  Version:    V1
  
-    Copyright:  © see below
+  Copyright:  © see below
 */
 
 /*
@@ -80,118 +80,118 @@
 class CIEXYZ
 {
 public:
-	CIEXYZ() : X_(0), Y_(0), Z_(0) {}
-	CIEXYZ(double X, double Y, double Z) : X_(X), Y_(Y), Z_(Z) {}
+  CIEXYZ() : X_(0), Y_(0), Z_(0) {}
+  CIEXYZ(double X, double Y, double Z) : X_(X), Y_(Y), Z_(Z) {}
 
-	double X() const { return X_; }
-	double Y() const { return Y_; }
-	double Z() const { return Z_; }
+  double X() const { return X_; }
+  double Y() const { return Y_; }
+  double Z() const { return Z_; }
 
-	friend
-	std::ostream&
-	operator<<(std::ostream& stream, const CIEXYZ& val);
-	
+  friend
+  std::ostream&
+  operator<<(std::ostream& stream, const CIEXYZ& val);
+  
 private:
-	double X_;
-	double Y_;
-	double Z_;
+  double X_;
+  double Y_;
+  double Z_;
 };
 
 // stub for relevant parts of LP LLC color/DeviceRGB.{h, cpp}
 class DeviceRGB
 {
 public:
-	DeviceRGB(double r, double g, double b) : r_(r), g_(g), b_(b) {}
+  DeviceRGB(double r, double g, double b) : r_(r), g_(g), b_(b) {}
 
-	virtual
- ~DeviceRGB() {}
+  virtual
+  ~DeviceRGB() {}
 
-	double R() const { return r_; }
-	double G() const { return g_; }
-	double B() const { return b_; }
-	
+  double R() const { return r_; }
+  double G() const { return g_; }
+  double B() const { return b_; }
+  
 protected:
-	double r_;
-	double g_;
-	double b_;
+  double r_;
+  double g_;
+  double b_;
 };
 
 // stub for relevant parts of LP LLC color/DPX.{h, cpp}
 class DPX : public DeviceRGB
 {
 public:
-	DPX() : DeviceRGB(0, 0, 0) {}
-	DPX(double r, double g, double b) : DeviceRGB(r, g, b) {}
-	
-	friend
-	std::ostream& operator<<(std::ostream& stream, const DPX& val);
+  DPX() : DeviceRGB(0, 0, 0) {}
+  DPX(double r, double g, double b) : DeviceRGB(r, g, b) {}
+  
+  friend
+  std::ostream& operator<<(std::ostream& stream, const DPX& val);
 
-	// use one of these to force desired sort order in assoc. containers of DPX
-	bool
-	DPX::operator<(const DPX& p) const
-	{
-		return (r_ != p.r_)	? (r_ < p.r_)	: ((g_ != p.g_)	?	(g_ < p.g_)	: (b_ < p.b_));
-	}
+  // use one of these to force desired sort order in assoc. containers of DPX
+  bool
+  DPX::operator<(const DPX& p) const
+  {
+    return (r_ != p.r_) ? (r_ < p.r_) : ((g_ != p.g_) ? (g_ < p.g_) : (b_ < p.b_));
+  }
 };
 
 class Vector3d
 {
 public:
-	Vector3d() : X_(0), Y_(0), Z_(0) {};
-	Vector3d(double X, double Y, double Z) : X_(X), Y_(Y), Z_(Z) {}
-	
-	double
-	X() const { return X_; }
-	
-	double
-	Y() const { return Y_; }
-	
-	double
-	Z() const { return Z_; }
-	
+  Vector3d() : X_(0), Y_(0), Z_(0) {};
+  Vector3d(double X, double Y, double Z) : X_(X), Y_(Y), Z_(Z) {}
+  
+  double
+  X() const { return X_; }
+  
+  double
+  Y() const { return Y_; }
+  
+  double
+  Z() const { return Z_; }
+  
 private:
-	double X_;
-	double Y_;
-	double Z_;
+  double X_;
+  double Y_;
+  double Z_;
 };
 
 class Matrix3d
 {
 public:
-	Matrix3d();
-	Matrix3d
-		(	double m00, double m01, double m02,
-			double m10, double m11, double m12,
-			double m20, double m21, double m22);
-	
-//	// copy ctor and assignment operator
-//	Matrix3d(const Matrix3d& other);
-//	
-//	Matrix3d&
-//	operator=(const Matrix3d& rhs);
-	
-	Matrix3d
-	operator*(double s) const;	
-	
-	double
-	Determinant() const;
-	
-	Matrix3d
-	Inverse() const;
+  Matrix3d();
+  Matrix3d
+  ( double m00, double m01, double m02,
+    double m10, double m11, double m12,
+    double m20, double m21, double m22);
+  
+  //  // copy ctor and assignment operator
+  //  Matrix3d(const Matrix3d& other);
+  //  
+  //  Matrix3d&
+  //  operator=(const Matrix3d& rhs);
+  
+  Matrix3d
+  operator*(double s) const;  
+  
+  double
+  Determinant() const;
+  
+  Matrix3d
+  Inverse() const;
 
-	Vector3d
-	operator*(const Vector3d& v) const;
-	
+  Vector3d
+  operator*(const Vector3d& v) const;
+  
 private:
-	double m00_;
-	double m01_;
-	double m02_;
-	double m10_;
-	double m11_;
-	double m12_;
-	double m20_;
-	double m21_;
-	double m22_;
+  double m00_;
+  double m01_;
+  double m02_;
+  double m10_;
+  double m11_;
+  double m12_;
+  double m20_;
+  double m21_;
+  double m22_;
 };
 
 #pragma GCC visibility pop

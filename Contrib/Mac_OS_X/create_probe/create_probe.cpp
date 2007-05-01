@@ -1,36 +1,36 @@
 /*
- File:       iccCreateProbeImages.cpp
+  File:       iccCreateProbeImages.cpp
  
- Contains:   Command-line app that takes the pathname of a directory
-             and creates two images in it, the pixels of which are
-             a flattened 52 x 52 x 52 cube.  The content of the images
-             differs only in that one is 8-bit-integer-per-component TIFF,
-             and the other is 32-bit-floating-point-per-component TIFF.
+  Contains:   Command-line app that takes the pathname of a directory
+  and creates two images in it, the pixels of which are
+  a flattened 52 x 52 x 52 cube.  The content of the images
+  differs only in that one is 8-bit-integer-per-component TIFF,
+  and the other is 32-bit-floating-point-per-component TIFF.
  
-             These images can be scaled up or down, respectively, to the
-             bit depth appropriate for the application (e.g. one could
-             read a 32-bit TIFF into Adobe After Effects and write it out as
-             a 10-bit-per-component Kodak Cineon or SMPTE DPX file.)
+  These images can be scaled up or down, respectively, to the
+  bit depth appropriate for the application (e.g. one could
+  read a 32-bit TIFF into Adobe After Effects and write it out as
+  a 10-bit-per-component Kodak Cineon or SMPTE DPX file.)
  
-             The intent is that these images will be taken through the
-             normal path through the non-ICC color management system which
-             is being probed; the displayed images will be screen-grabbed;
-             and the screen grab will be analyzed with a companion
-             program included with this package, allowing for the creation
-             of an input profile for those (e.g) Cineon or DPX files
-             which when assigned in an ICC-compliant application such
-             as Adobe Photoshop will yield a color appearance match to
-             the same image displayed in the non-ICC color management system.
+  The intent is that these images will be taken through the
+  normal path through the non-ICC color management system which
+  is being probed; the displayed images will be screen-grabbed;
+  and the screen grab will be analyzed with a companion
+  program included with this package, allowing for the creation
+  of an input profile for those (e.g) Cineon or DPX files
+  which when assigned in an ICC-compliant application such
+  as Adobe Photoshop will yield a color appearance match to
+  the same image displayed in the non-ICC color management system.
  
-             At the moment this code is specific to Mac OS X 10.4 and up.
-             Contributions of counterpart code for linux and/or Windows
-             would be very seriously considered for inclusion here, including
-             cross-platform versions using libtiff.
+  At the moment this code is specific to Mac OS X 10.4 and up.
+  Contributions of counterpart code for linux and/or Windows
+  would be very seriously considered for inclusion here, including
+  cross-platform versions using libtiff.
  
- Version:    V1
+  Version:    V1
  
- Copyright:  © see below
- */
+  Copyright:  © see below
+*/
 
 /*
  * The ICC Software License, Version 0.1
@@ -105,10 +105,10 @@
 CGColorSpaceRef
 getDeviceRGBColorSpace()
 {
-	static CGColorSpaceRef deviceRGB = NULL;
-	if (deviceRGB == NULL)
-		deviceRGB = CGColorSpaceCreateDeviceRGB();
-	return deviceRGB;
+  static CGColorSpaceRef deviceRGB = NULL;
+  if (deviceRGB == NULL)
+    deviceRGB = CGColorSpaceCreateDeviceRGB();
+  return deviceRGB;
 }
 
 #define BEST_BYTE_ALIGNMENT 16
@@ -118,113 +118,113 @@ getDeviceRGBColorSpace()
 CGContextRef
 createRGBBitmapContext(size_t width, size_t height, bool deep)
 {
-	CGContextRef context;
-	
-	float black[4] = { 0.0, 0.0, 0.0, 1.0 };
-	size_t bitsPerComponent = deep ? 32 : 8;
-	// somewhat problematic: will fail for "thousands of colors" but who uses that these days?
-	size_t bytesPerRow = COMPUTE_BEST_BYTES_PER_ROW(width * 4 * bitsPerComponent / 8);
-	CGBitmapInfo bitmapInfo = kCGImageAlphaNoneSkipLast | (deep ? kCGBitmapFloatComponents : 0);
-	
-	unsigned char* data;
-	data = static_cast<unsigned char*>(calloc(1, bytesPerRow * height));
-	if (data == NULL)
-	{
-		fprintf(stderr, "Couldn't allocate memory for RGB bitmap context\n");
-		return NULL;
-	}
-	
-	context = CGBitmapContextCreate(data, width, height, bitsPerComponent,
-																	bytesPerRow, getDeviceRGBColorSpace(),
-																	bitmapInfo);
-	if (context == NULL)
-	{
-		free(data);
-		fprintf(stderr, "Couldn't create RGB bitmap context\n");
-		return NULL;
-	}
-	
-	CGColorRef blackColor = CGColorCreate(getDeviceRGBColorSpace(), black);
-	CGContextSaveGState(context);
-	CGContextSetFillColorWithColor(context, blackColor);
-	CGContextFillRect(context, CGRectMake(0, 0, width, height));
-	CGContextRestoreGState(context);
-	
-	return context;
+  CGContextRef context;
+  
+  float black[4] = { 0.0, 0.0, 0.0, 1.0 };
+  size_t bitsPerComponent = deep ? 32 : 8;
+  // somewhat problematic: will fail for "thousands of colors" but who uses that these days?
+  size_t bytesPerRow = COMPUTE_BEST_BYTES_PER_ROW(width * 4 * bitsPerComponent / 8);
+  CGBitmapInfo bitmapInfo = kCGImageAlphaNoneSkipLast | (deep ? kCGBitmapFloatComponents : 0);
+  
+  unsigned char* data;
+  data = static_cast<unsigned char*>(calloc(1, bytesPerRow * height));
+  if (data == NULL)
+  {
+    fprintf(stderr, "Couldn't allocate memory for RGB bitmap context\n");
+    return NULL;
+  }
+  
+  context = CGBitmapContextCreate(data, width, height, bitsPerComponent,
+                                  bytesPerRow, getDeviceRGBColorSpace(),
+                                  bitmapInfo);
+  if (context == NULL)
+  {
+    free(data);
+    fprintf(stderr, "Couldn't create RGB bitmap context\n");
+    return NULL;
+  }
+  
+  CGColorRef blackColor = CGColorCreate(getDeviceRGBColorSpace(), black);
+  CGContextSaveGState(context);
+  CGContextSetFillColorWithColor(context, blackColor);
+  CGContextFillRect(context, CGRectMake(0, 0, width, height));
+  CGContextRestoreGState(context);
+  
+  return context;
 }
 
 void
 drawBoundary(CGContextRef context, size_t width, size_t height)
 {
-	CGContextSetFillColorSpace(context, getDeviceRGBColorSpace());
-	CGRect rect;
-	rect.origin.x = 0;
-	rect.origin.y = 0;
-	rect.size.width = width;
-	rect.size.height = height;
-	CGContextSetRGBFillColor(context, 0.0, 0.0, 0.0, 1.0);
-	CGContextFillRect(context, rect);
-	rect.origin.x++;
-	rect.origin.y++;
-	rect.size.width -= 2;
-	rect.size.height -= 2;
-	CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
-	CGContextFillRect(context, rect);
-	rect.origin.x++;
-	rect.origin.y++;
-	rect.size.width -= 2;
-	rect.size.height -= 2;
-	CGContextSetRGBFillColor(context, 0.0, 0.0, 0.0, 1.0);
-	CGContextFillRect(context, rect);
+  CGContextSetFillColorSpace(context, getDeviceRGBColorSpace());
+  CGRect rect;
+  rect.origin.x = 0;
+  rect.origin.y = 0;
+  rect.size.width = width;
+  rect.size.height = height;
+  CGContextSetRGBFillColor(context, 0.0, 0.0, 0.0, 1.0);
+  CGContextFillRect(context, rect);
+  rect.origin.x++;
+  rect.origin.y++;
+  rect.size.width -= 2;
+  rect.size.height -= 2;
+  CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
+  CGContextFillRect(context, rect);
+  rect.origin.x++;
+  rect.origin.y++;
+  rect.size.width -= 2;
+  rect.size.height -= 2;
+  CGContextSetRGBFillColor(context, 0.0, 0.0, 0.0, 1.0);
+  CGContextFillRect(context, rect);
 }
 
 void
 drawContents(CGContextRef context, CGRect contentRect, size_t edgeSize)
 {
-	CGContextSetFillColorSpace(context, getDeviceRGBColorSpace());
-	int r = 0;
-	int g = 0;
-	int b = 0;
-	CGRect pixelRect;
-	pixelRect.origin.x = contentRect.origin.x;
-	pixelRect.origin.y = contentRect.origin.y;
-	pixelRect.size.width = 1.0;
-	pixelRect.size.height = 1.0;
-	for (r = 0; r < edgeSize; ++r)
-	{
-		float rFrac = r / (edgeSize - 1.0);
-		for (g = 0; g < edgeSize; ++g)
-		{
-			float gFrac = g / (edgeSize - 1.0);
-			for (b = 0; b < edgeSize; ++b)
-			{
-				float bFrac = b / (edgeSize - 1.0);
-				CGContextSetRGBFillColor(context, rFrac, gFrac, bFrac, 1.0);
-				CGContextFillRect(context, pixelRect);
-				++pixelRect.origin.x;
-				if (pixelRect.origin.x - contentRect.origin.x >= contentRect.size.width)
-				{
-					pixelRect.origin.x = contentRect.origin.x;
-					pixelRect.origin.y++;
-				}
-			}
-		}
-	}
+  CGContextSetFillColorSpace(context, getDeviceRGBColorSpace());
+  int r = 0;
+  int g = 0;
+  int b = 0;
+  CGRect pixelRect;
+  pixelRect.origin.x = contentRect.origin.x;
+  pixelRect.origin.y = contentRect.origin.y;
+  pixelRect.size.width = 1.0;
+  pixelRect.size.height = 1.0;
+  for (r = 0; r < edgeSize; ++r)
+  {
+    float rFrac = r / (edgeSize - 1.0);
+    for (g = 0; g < edgeSize; ++g)
+    {
+      float gFrac = g / (edgeSize - 1.0);
+      for (b = 0; b < edgeSize; ++b)
+      {
+        float bFrac = b / (edgeSize - 1.0);
+        CGContextSetRGBFillColor(context, rFrac, gFrac, bFrac, 1.0);
+        CGContextFillRect(context, pixelRect);
+        ++pixelRect.origin.x;
+        if (pixelRect.origin.x - contentRect.origin.x >= contentRect.size.width)
+        {
+          pixelRect.origin.x = contentRect.origin.x;
+          pixelRect.origin.y++;
+        }
+      }
+    }
+  }
 }
 
 void
 exportImage(CGImageRef image, CFURLRef url, CFStringRef outputFormat)
 {
-	CGImageDestinationRef imageDestination
-	= CGImageDestinationCreateWithURL(url, outputFormat, 1, NULL);
-	if (imageDestination == NULL)
-	{
-		fprintf(stderr, "Couldn't create image destination.\n");
-		return;
-	}
-	CGImageDestinationAddImage(imageDestination, image, NULL);
-	CGImageDestinationFinalize(imageDestination);
-	CFRelease(imageDestination);
+  CGImageDestinationRef imageDestination
+    = CGImageDestinationCreateWithURL(url, outputFormat, 1, NULL);
+  if (imageDestination == NULL)
+  {
+    fprintf(stderr, "Couldn't create image destination.\n");
+    return;
+  }
+  CGImageDestinationAddImage(imageDestination, image, NULL);
+  CGImageDestinationFinalize(imageDestination);
+  CFRelease(imageDestination);
 }
 
 void
@@ -242,41 +242,41 @@ usage()
 int
 main(int argc, char* argv[])
 {
-	if (argc != 1)
-	{
-		usage();
-		return EXIT_FAILURE;
-	}
-	bool deep = false;
-	
-	size_t borderSize = 3;
-	size_t contentWidth = 560;
-	size_t contentHeight = 280;
-	//	size_t edgeSize = deep ? 52 : 22;
-	size_t edgeSize = 52;
-	
-	size_t bitmapWidth = contentWidth + 2 * borderSize;
-	size_t bitmapHeight = contentHeight + 2 * borderSize;
-	
-	CGContextRef bitmapContext = createRGBBitmapContext(bitmapWidth, bitmapHeight, deep);
-	if (bitmapContext == NULL)
-	{
-		fprintf(stderr, "Couldn't create bitmapContext.\n");
-		return EXIT_FAILURE;
-	}
-	
-	CGContextSetAllowsAntialiasing(bitmapContext, false);
-	drawBoundary(bitmapContext, bitmapWidth, bitmapHeight);
-	CGRect contentRect = CGRectMake(borderSize, borderSize, contentWidth, contentHeight);
-	drawContents(bitmapContext, contentRect, edgeSize);
-	
-	CGImageRef image = CGBitmapContextCreateImage(bitmapContext);
-	CFStringRef    deepURLString = CFSTR("file:///var/tmp/32bpcProbe.tiff");
-	CFStringRef shallowURLString = CFSTR("file:///var/tmp/8bpcProbe.tiff");
-	CFURLRef    deepURL = CFURLCreateWithString(NULL,    deepURLString, NULL);
-	CFURLRef shallowURL = CFURLCreateWithString(NULL, shallowURLString, NULL);
-	exportImage(image,    deepURL, kUTTypeTIFF);
-	exportImage(image, shallowURL, kUTTypeTIFF);
-	return EXIT_SUCCESS;
+  if (argc != 1)
+  {
+    usage();
+    return EXIT_FAILURE;
+  }
+  bool deep = false;
+  
+  size_t borderSize = 3;
+  size_t contentWidth = 560;
+  size_t contentHeight = 280;
+  //  size_t edgeSize = deep ? 52 : 22;
+  size_t edgeSize = 52;
+  
+  size_t bitmapWidth = contentWidth + 2 * borderSize;
+  size_t bitmapHeight = contentHeight + 2 * borderSize;
+  
+  CGContextRef bitmapContext = createRGBBitmapContext(bitmapWidth, bitmapHeight, deep);
+  if (bitmapContext == NULL)
+  {
+    fprintf(stderr, "Couldn't create bitmapContext.\n");
+    return EXIT_FAILURE;
+  }
+  
+  CGContextSetAllowsAntialiasing(bitmapContext, false);
+  drawBoundary(bitmapContext, bitmapWidth, bitmapHeight);
+  CGRect contentRect = CGRectMake(borderSize, borderSize, contentWidth, contentHeight);
+  drawContents(bitmapContext, contentRect, edgeSize);
+  
+  CGImageRef image = CGBitmapContextCreateImage(bitmapContext);
+  CFStringRef    deepURLString = CFSTR("file:///var/tmp/32bpcProbe.tiff");
+  CFStringRef shallowURLString = CFSTR("file:///var/tmp/8bpcProbe.tiff");
+  CFURLRef    deepURL = CFURLCreateWithString(NULL,    deepURLString, NULL);
+  CFURLRef shallowURL = CFURLCreateWithString(NULL, shallowURLString, NULL);
+  exportImage(image,    deepURL, kUTTypeTIFF);
+  exportImage(image, shallowURL, kUTTypeTIFF);
+  return EXIT_SUCCESS;
 }
 

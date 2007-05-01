@@ -1,12 +1,12 @@
 /*
- File:       reconstruct_measurements.cpp
+  File:       reconstruct_measurements.cpp
  
- Contains:   .
+  Contains:   .
  
- Version:    V1
+  Version:    V1
  
- Copyright:  (c) see below
- */
+  Copyright:  (c) see below
+*/
 
 /*
  * The ICC Software License, Version 0.1
@@ -87,71 +87,71 @@ using namespace std;
 
 void
 processMeasurements(istream& in_s,
-		    Measurement_extractor& extractor,
-		    const char* const XYZMeasurementsFilename)
+                    Measurement_extractor& extractor,
+                    const char* const XYZMeasurementsFilename)
 {
   ofstream out_s(XYZMeasurementsFilename);
   if (! out_s)
-    {
-      ostringstream s;
-      s << "Could not open file `" << XYZMeasurementsFilename << "' for output";
-      throw ICC_tool_exception(s.str());
-    }
+  {
+    ostringstream s;
+    s << "Could not open file `" << XYZMeasurementsFilename << "' for output";
+    throw ICC_tool_exception(s.str());
+  }
   
   while (! in_s.eof())
-    {
-      string line("");
-      getline(in_s, line);
-      if (line == "")
-	break;
-      istringstream l_s(line);
-      icFloatNumber RGBStimulus[3];
-      l_s >> RGBStimulus[0] >> RGBStimulus[1] >> RGBStimulus[2];
-      icFloatNumber measuredXYZ[3];
-      extractor.reconstructMeasurement(measuredXYZ, RGBStimulus);
-      out_s << measuredXYZ[0] << " "
-	    << measuredXYZ[1] << " "
-	    << measuredXYZ[2] << endl;
-    }
+  {
+    string line("");
+    getline(in_s, line);
+    if (line == "")
+      break;
+    istringstream l_s(line);
+    icFloatNumber RGBStimulus[3];
+    l_s >> RGBStimulus[0] >> RGBStimulus[1] >> RGBStimulus[2];
+    icFloatNumber measuredXYZ[3];
+    extractor.reconstructMeasurement(measuredXYZ, RGBStimulus);
+    out_s << measuredXYZ[0] << " "
+          << measuredXYZ[1] << " "
+          << measuredXYZ[2] << endl;
+  }
 }
 
 int
 main(int argc, char* argv[])
 {
   try
-	{
-		char* RGBStimuliFilename = argv[1];
-		ifstream in_s(RGBStimuliFilename);
-		if (! in_s)
-		{
-			ostringstream s;
-			s << "Could not open file `" << RGBStimuliFilename << "'";
-			throw ICC_tool_exception(s.str());
-		}
-		char* ICCProfileFilename = argv[2];
-		icFloatNumber flare[3] = {0, 0, 0};
-		
-		if (argc == 5)
-		{
-			icFloatNumber illuminantY = (icFloatNumber)atof(argv[3]);
-			char* XYZMeasurementsFilename = argv[4];
-			Measurement_extractor extractor(ICCProfileFilename,
-																		 illuminantY,
-																		 flare);
-			processMeasurements(in_s, extractor, XYZMeasurementsFilename);
-		}
-		else
-		{
-			char* XYZMeasurementsFilename = argv[3];
-			Measurement_extractor extractor(ICCProfileFilename,
-																		 flare);
-			processMeasurements(in_s, extractor, XYZMeasurementsFilename);
-		}
-		return EXIT_SUCCESS;
-	}
+  {
+    char* RGBStimuliFilename = argv[1];
+    ifstream in_s(RGBStimuliFilename);
+    if (! in_s)
+    {
+      ostringstream s;
+      s << "Could not open file `" << RGBStimuliFilename << "'";
+      throw ICC_tool_exception(s.str());
+    }
+    char* ICCProfileFilename = argv[2];
+    icFloatNumber flare[3] = {0, 0, 0};
+    
+    if (argc == 5)
+    {
+      icFloatNumber illuminantY = (icFloatNumber)atof(argv[3]);
+      char* XYZMeasurementsFilename = argv[4];
+      Measurement_extractor extractor(ICCProfileFilename,
+                                      illuminantY,
+                                      flare);
+      processMeasurements(in_s, extractor, XYZMeasurementsFilename);
+    }
+    else
+    {
+      char* XYZMeasurementsFilename = argv[3];
+      Measurement_extractor extractor(ICCProfileFilename,
+                                      flare);
+      processMeasurements(in_s, extractor, XYZMeasurementsFilename);
+    }
+    return EXIT_SUCCESS;
+  }
   catch (const exception& e)
-	{
-		cerr << "Error: " << e.what() << endl;
-		return EXIT_FAILURE;
-	}
+  {
+    cerr << "Error: " << e.what() << endl;
+    return EXIT_FAILURE;
+  }
 }

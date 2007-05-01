@@ -1,16 +1,16 @@
 /*
- File:       Measurement_extractor.cpp
+  File:       Measurement_extractor.cpp
  
- Contains:   Declarations for class to extract from a profile measurements
-             that could have been used to create that same profile.
-             Requires caller to have chromatic adaptation matrix (usually
-             obtained from 'chad' tag) and absolute luminance information
-             usually obtained from 'lumi' tag).
+  Contains:   Declarations for class to extract from a profile measurements
+  that could have been used to create that same profile.
+  Requires caller to have chromatic adaptation matrix (usually
+  obtained from 'chad' tag) and absolute luminance information
+  usually obtained from 'lumi' tag).
  
- Version:    V1
+  Version:    V1
  
- Copyright:  (c) see below
- */
+  Copyright:  (c) see below
+*/
 
 /*
  * The ICC Software License, Version 0.1
@@ -87,45 +87,45 @@
 class Measurement_extractor
 {
 public:
-	
-	static
-	icColorSpaceSignature
-	getPCSSpace(CIccProfile* profile);
-	
-	static
-	icFloatNumber
-	getIlluminantY(CIccProfile* profile);
-	
-	static
-	CAT*
-	getInverseCAT(CIccProfile* profile);
-	
-	static
-	void
-	getAdaptedMediaWhite(icFloatNumber* white, CIccProfile* profile);
-	
-	// This one requires a luminanceTag to be in the profile
-	Measurement_extractor(const char * const profileName,
-			     const icFloatNumber* flare);
-	
-	// This one does not, but you still have to know what the illuminant Y
-	// value was, and supply it here.
-	Measurement_extractor(const char * const profileName,
-			     icFloatNumber illuminantY,
-			     const icFloatNumber* flare);
-	
- ~Measurement_extractor();
-	
-	void
-	reconstructMeasurement(icFloatNumber* measuredXYZ,
-			       icFloatNumber* RGBStimulus);
+  
+  static
+  icColorSpaceSignature
+  getPCSSpace(CIccProfile* profile);
+  
+  static
+  icFloatNumber
+  getIlluminantY(CIccProfile* profile);
+  
+  static
+  CAT*
+  getInverseCAT(CIccProfile* profile);
+  
+  static
+  void
+  getAdaptedMediaWhite(icFloatNumber* white, CIccProfile* profile);
+  
+  // This one requires a luminanceTag to be in the profile
+  Measurement_extractor(const char * const profileName,
+                        const icFloatNumber* flare);
+  
+  // This one does not, but you still have to know what the illuminant Y
+  // value was, and supply it here.
+  Measurement_extractor(const char * const profileName,
+                        icFloatNumber illuminantY,
+                        const icFloatNumber* flare);
+  
+  ~Measurement_extractor();
+  
+  void
+  reconstructMeasurement(icFloatNumber* measuredXYZ,
+                         icFloatNumber* RGBStimulus);
 
 private:
-	CIccProfile*	profile_;
-	bool		isLabPCS_;
-	icFloatNumber	flare_[3];
-	icFloatNumber	illuminantY_;
-	CAT*		inverseCAT_;
-	icFloatNumber	adaptedMediaWhite_[3];
-	CIccCmm		cmm_;
+  CIccProfile*  profile_;
+  bool    isLabPCS_;
+  icFloatNumber flare_[3];
+  icFloatNumber illuminantY_;
+  CAT*    inverseCAT_;
+  icFloatNumber adaptedMediaWhite_[3];
+  CIccCmm   cmm_;
 };

@@ -1,16 +1,16 @@
 /*
- File:       iccFlattenAToB0Tag.cpp
+  File:       iccFlattenAToB0Tag.cpp
  
- Contains:   Utility to flatten out AToB0 contents into a file, suitable as
-             the input file to iccCreateCLUTInputProfile.  This is pretty much
-             scaffolding for the creation & debugging of
-             iccCreateCLUTInputProfile for the moment, but is also not a bad way
-             to see how one would probe the CMM.
+  Contains:   Utility to flatten out AToB0 contents into a file, suitable as
+  the input file to iccCreateCLUTInputProfile.  This is pretty much
+  scaffolding for the creation & debugging of
+  iccCreateCLUTInputProfile for the moment, but is also not a bad way
+  to see how one would probe the CMM.
  
- Version:    V1
+  Version:    V1
  
- Copyright:  © see ICC Software License
- */
+  Copyright:  © see ICC Software License
+*/
 
 /*
  * The ICC Software License, Version 0.1
@@ -101,7 +101,7 @@ void
 printTuples(ostream& oS, const ResultTuples& tuples)
 {
   for (ResultTuples::const_iterator
-       iter = tuples.begin(), endIter = tuples.end();
+         iter = tuples.begin(), endIter = tuples.end();
        iter != endIter; ++iter)
     oS << (*iter)[0] << " " << (*iter)[1] << " " << (*iter)[2] << endl;
 }
@@ -112,8 +112,8 @@ main(const int argc, const char* argv[])
   if (argc != 4)
   {  
     cout << "iccFlattenAToBTag: usage is"
-   << " iccFlattenAToBTag src_profile granularity results_file"
-   << endl;
+         << " iccFlattenAToBTag src_profile granularity results_file"
+         << endl;
     return EXIT_FAILURE;
   }
 
@@ -132,8 +132,8 @@ main(const int argc, const char* argv[])
     = static_cast<CIccTagXYZ*>(srcProfile->FindTag(icSigMediaWhitePointTag));
   if (mediaWhitePointTag == NULL)
   {
-      cerr  << "no white point tag found in source profile `" << srcProfile
-            << "'" << endl;
+    cerr  << "no white point tag found in source profile `" << srcProfile
+          << "'" << endl;
     return EXIT_FAILURE;
   }
   icFloatNumber whiteXYZ[3];
@@ -154,23 +154,23 @@ main(const int argc, const char* argv[])
   for (unsigned int i = 0; i < N; ++i)
     for (unsigned int j = 0; j < N; ++j)
       for (unsigned int k = 0; k < N; ++k)
+      {
+        icFloatNumber dstPixel[3];
+        icFloatNumber srcPixel[3];
+        srcPixel[0] = (icFloatNumber) (i / (N - 1.0));
+        srcPixel[1] = (icFloatNumber) (j / (N - 1.0));
+        srcPixel[2] = (icFloatNumber) (k / (N - 1.0));
+        cmm.Apply(dstPixel, srcPixel);
+        if (srcProfile->m_Header.pcs == icSigLabData)
         {
-          icFloatNumber dstPixel[3];
-          icFloatNumber srcPixel[3];
-          srcPixel[0] = (icFloatNumber) (i / (N - 1.0));
-          srcPixel[1] = (icFloatNumber) (j / (N - 1.0));
-          srcPixel[2] = (icFloatNumber) (k / (N - 1.0));
-          cmm.Apply(dstPixel, srcPixel);
-          if (srcProfile->m_Header.pcs == icSigLabData)
-          {
-            icLabFromPcs(dstPixel);
-            icLabtoXYZ(dstPixel, NULL, whiteXYZ);
-          }
-          else
-            icXyzFromPcs(dstPixel);
-          ResultTuple resultTuple(dstPixel, dstPixel + 3);
-          resultTuples[i * N * N + j * N + k] = resultTuple;
+          icLabFromPcs(dstPixel);
+          icLabtoXYZ(dstPixel, NULL, whiteXYZ);
         }
+        else
+          icXyzFromPcs(dstPixel);
+        ResultTuple resultTuple(dstPixel, dstPixel + 3);
+        resultTuples[i * N * N + j * N + k] = resultTuple;
+      }
 
   if (flattenedContentsPath == "-")
     printTuples(cout, resultTuples);

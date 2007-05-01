@@ -1,12 +1,12 @@
 /*
-    File:       CLUT_stuffer.h
+  File:       CLUT_stuffer.h
  
-    Contains:   originally part of iccCreateCLUTProfile command-line tool:
-                create CLUT tag data
+  Contains:   originally part of iccCreateCLUTProfile command-line tool:
+  create CLUT tag data
  
-    Version:    V1
+  Version:    V1
  
-    Copyright:  © see below
+  Copyright:  © see below
 */
 
 /*
@@ -88,14 +88,14 @@ class CLUT_stuffer : public IIccCLUTExec
 {
 public:
   CLUT_stuffer(unsigned int edgeN,
-    const icFloatNumber* const measuredXYZ,
-    const icFloatNumber* flare,
-    const icFloatNumber illuminantY,
-    const CAT* const CATToPCS,
-    const icFloatNumber* adaptedMediaWhite,
-		const bool LABPCS);
+               const icFloatNumber* const measuredXYZ,
+               const icFloatNumber* flare,
+               const icFloatNumber illuminantY,
+               const CAT* const CATToPCS,
+               const icFloatNumber* adaptedMediaWhite,
+               const bool LABPCS);
   
- ~CLUT_stuffer()  {}
+  ~CLUT_stuffer()  {}
   
   void
   PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData);
@@ -106,7 +106,7 @@ private:
   icFloatNumber m_Flare[3];
   const icFloatNumber m_IlluminantY;
   const CAT* const m_CAT;
-	const bool m_LABPCS;
+  const bool m_LABPCS;
   icFloatNumber m_AdaptedMediaWhite[3];
 };
 

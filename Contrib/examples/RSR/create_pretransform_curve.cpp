@@ -1,17 +1,17 @@
 /*
- File:	createRSRPretransformCurve.cpp
+  File:  createRSRPretransformCurve.cpp
  
- Contains:   Command-line app that writes to standard output a 'pre-transform'
-						 curve using formulae and parameters typical for a facility that
- 						 might be trying to work with an 8-bit-TIFF pipeline that must
- 						 handle 10-bit-log data as best it can, by some lossy compression
- 						 and imperfectly reversible function.  This is example code;
- 						 any facility using this will probably need to copy it and work
- 						 to make that copy reflect the realities of their production.
+  Contains:   Command-line app that writes to standard output a 'pre-transform'
+  curve using formulae and parameters typical for a facility that
+  might be trying to work with an 8-bit-TIFF pipeline that must
+  handle 10-bit-log data as best it can, by some lossy compression
+  and imperfectly reversible function.  This is example code;
+  any facility using this will probably need to copy it and work
+  to make that copy reflect the realities of their production.
  
- Version:    V1
+  Version:    V1
  
- Copyright:  © see below
+  Copyright:  © see below
 */
 
 /*
@@ -90,40 +90,40 @@ using namespace std;
 void
 usage(char* my_name)
 {
-	cerr << my_name << ": usage is " << my_name << " N OUT.txt"<< endl
-	<< " where N is the number of curve samples to generate and OUT.txt" << endl
-	<< " is the file into which they will be written." << endl;
+  cerr << my_name << ": usage is " << my_name << " N OUT.txt"<< endl
+       << " where N is the number of curve samples to generate and OUT.txt" << endl
+       << " is the file into which they will be written." << endl;
 }
 
 int
 main(int argc, char* argv[])
 {
-	double cineon_black = 95;
-	double cineon_white = 685;
-	double dGamma = 1.7;
-	double film_gamma = 0.6;
-	double enc_gamma = 2.2;
-	double K = (0.002 / film_gamma) * (1.7 / dGamma);
-	double A = 1 / (pow(10.0, K * (cineon_white - cineon_black)) - 1);
-	
-	if (argc != 3)
-	{
-		usage(argv[0]);
-		return EXIT_FAILURE;
-	}
-	int N = atoi(argv[1]);
-	ofstream s(argv[2]);
-	
-	s << 1023 << endl;
-	for (int in = 0; in < N; ++in)
-	{
-		double stim = static_cast<double>(in) / (N - 1);
-		double gammaed_stim = pow(stim, enc_gamma);
-		// double out = (cineon_black + log10((gammaed_stim + A) / A) / K) * (255.0 / 1023.0);
-		double out = cineon_black + log10((gammaed_stim + A) / A) / K;
-		s << out << " " << out << " " << out << endl;
-	}
-	return EXIT_SUCCESS;
+  double cineon_black = 95;
+  double cineon_white = 685;
+  double dGamma = 1.7;
+  double film_gamma = 0.6;
+  double enc_gamma = 2.2;
+  double K = (0.002 / film_gamma) * (1.7 / dGamma);
+  double A = 1 / (pow(10.0, K * (cineon_white - cineon_black)) - 1);
+  
+  if (argc != 3)
+  {
+    usage(argv[0]);
+    return EXIT_FAILURE;
+  }
+  int N = atoi(argv[1]);
+  ofstream s(argv[2]);
+  
+  s << 1023 << endl;
+  for (int in = 0; in < N; ++in)
+  {
+    double stim = static_cast<double>(in) / (N - 1);
+    double gammaed_stim = pow(stim, enc_gamma);
+    // double out = (cineon_black + log10((gammaed_stim + A) / A) / K) * (255.0 / 1023.0);
+    double out = cineon_black + log10((gammaed_stim + A) / A) / K;
+    s << out << " " << out << " " << out << endl;
+  }
+  return EXIT_SUCCESS;
 }
 
 

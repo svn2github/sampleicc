@@ -1,12 +1,12 @@
 /*
-    File:       CLUT.cpp
+  File:       CLUT.cpp
 
-    Contains:   originally part of iccCreateCLUTProfile command-line tool:
-                chromatic adaptation transforms
+  Contains:   originally part of iccCreateCLUTProfile command-line tool:
+  chromatic adaptation transforms
 
-    Version:    V1
+  Version:    V1
 
-    Copyright:  © see below
+  Copyright:  © see below
 */
 
 /*
@@ -83,26 +83,26 @@
 CAT*
 CAT::Inverse() const
 {
-	icFloatNumber contents[9];
-	for (unsigned int i = 0; i < 9; ++i)
-		contents[i] = m_CAT[i];
-	icMatrixInvert3x3(contents);
-	return new CAT(contents);
+  icFloatNumber contents[9];
+  for (unsigned int i = 0; i < 9; ++i)
+    contents[i] = m_CAT[i];
+  icMatrixInvert3x3(contents);
+  return new CAT(contents);
 }
 
 void
 CAT::Apply(icFloatNumber * const product, const icFloatNumber * const multiplicand) const
 {
-    product[0] = m_CAT[0] * multiplicand[0] + m_CAT[1] * multiplicand[1] + m_CAT[2] * multiplicand[2];
-    product[1] = m_CAT[3] * multiplicand[0] + m_CAT[4] * multiplicand[1] + m_CAT[5] * multiplicand[2];
-    product[2] = m_CAT[6] * multiplicand[0] + m_CAT[7] * multiplicand[1] + m_CAT[8] * multiplicand[2];
+  product[0] = m_CAT[0] * multiplicand[0] + m_CAT[1] * multiplicand[1] + m_CAT[2] * multiplicand[2];
+  product[1] = m_CAT[3] * multiplicand[0] + m_CAT[4] * multiplicand[1] + m_CAT[5] * multiplicand[2];
+  product[2] = m_CAT[6] * multiplicand[0] + m_CAT[7] * multiplicand[1] + m_CAT[8] * multiplicand[2];
 }
 
 CIccTagS15Fixed16*
 CAT::makeChromaticAdaptationTag() const
 {
-    CIccTagS15Fixed16* tag = new CIccTagS15Fixed16(9);
-    for (unsigned int i = 0; i < 9; ++i)
-        (*tag)[i] = icDtoF(m_CAT[i]);
-    return tag;
+  CIccTagS15Fixed16* tag = new CIccTagS15Fixed16(9);
+  for (unsigned int i = 0; i < 9; ++i)
+    (*tag)[i] = icDtoF(m_CAT[i]);
+  return tag;
 }

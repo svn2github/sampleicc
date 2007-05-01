@@ -1,13 +1,13 @@
 /*
- File:       Black_scaler.h
+  File:       Black_scaler.h
  
- Contains:   part of iccCreateCLUTInputProfile command-line tool:
- scale A2B0 data to mimic A2B1
+  Contains:   part of create_CLUT_profile command-line tool:
+  scale A2B0 data to mimic A2B1
  
- Version:    V1
+  Version:    V1
  
- Copyright:  (c) see below
- */
+  Copyright:  (c) see below
+*/
 
 /*
  * The ICC Software License, Version 0.1
@@ -84,12 +84,12 @@
 using namespace std;
 
 Black_scaler::Black_scaler(const unsigned int edgeN,
-  const icFloatNumber* const rawXYZ,
-  const icFloatNumber* const adaptedMediaBlack,
-  const icFloatNumber* const adaptedMediaWhite)
+                           const icFloatNumber* const rawXYZ,
+                           const icFloatNumber* const adaptedMediaBlack,
+                           const icFloatNumber* const adaptedMediaWhite)
   : m_EdgeN(edgeN), m_rawXYZ(rawXYZ)
 {
-	unsigned int i;
+  unsigned int i;
   for (i = 0; i < 3; ++i)
   {
     m_A2B1BlackXYZ[i] = adaptedMediaBlack[i];
@@ -149,7 +149,7 @@ void Black_scaler::PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData)
   
   icFloatNumber A2B1StimulusLab[3];
   icFloatNumber A2B1StimulusXYZ[3];
-	unsigned int i;
+  unsigned int i;
   
   // 1. Extract the PCS colorimetry
   for (i = 0; i < 3; ++i)
@@ -186,6 +186,6 @@ void Black_scaler::PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData)
   
   // 7. Inject the modified PCS colorimetry
   for (i = 0; i < 3; ++i)
-     pData[i] = A2B0StimulusLab[i];
+    pData[i] = A2B0StimulusLab[i];
 }
 

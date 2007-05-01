@@ -1,14 +1,14 @@
 /*
- File:       Black_scaler.h
+  File:       Black_scaler.h
  
- Contains:   part of iccCreateCLUTInputProfile command-line tool:
- take relative colorimetric CLUT contents suitable for an A2B1 tag
- and scale its black to make it more suitable for an A2B0 tag
+  Contains:   part of create_CLUT_profile command-line tool:
+  take relative colorimetric CLUT contents suitable for an A2B1 tag
+  and scale its black to make it more suitable for an A2B0 tag
  
- Version:    V1
+  Version:    V1
  
- Copyright:  © see below
- */
+  Copyright:  © see below
+*/
 
 /*
  * The ICC Software License, Version 0.1
@@ -90,11 +90,11 @@ class Black_scaler : public IIccCLUTExec
 {
 public:
   Black_scaler(const unsigned int edgeN,
-              const icFloatNumber* const rawXYZ,
-              const icFloatNumber* const adaptedMediaBlack,
-              const icFloatNumber* const adaptedMediaWhite);
+               const icFloatNumber* const rawXYZ,
+               const icFloatNumber* const adaptedMediaBlack,
+               const icFloatNumber* const adaptedMediaWhite);
   
- ~Black_scaler() {}
+  ~Black_scaler() {}
   
   void
   PixelOp(icFloatNumber* pGridAdr, icFloatNumber* pData);
