@@ -74,7 +74,9 @@
 
 #include <iosfwd>
 
+#ifndef _MSC_VER
 #pragma GCC visibility push(default)
+#endif
 
 // stub for relevant parts of LP LLC color/CIEXYZ.{h, cpp}
 class CIEXYZ
@@ -194,6 +196,8 @@ private:
   double m22_;
 };
 
+#ifndef _MSC_VER
 #pragma GCC visibility pop
+#endif
 
 #endif

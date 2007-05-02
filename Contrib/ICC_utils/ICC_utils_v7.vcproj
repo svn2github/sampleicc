@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="IccToXml"
-	ProjectGUID="{7F7A836B-C5DC-4CF1-95E6-2D5F6212ABE8}"
+	Name="IccUtilsLib"
+	ProjectGUID="{938C1BE6-F759-44BB-85C2-60FC413D5AD2}"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -14,13 +14,13 @@
 			Name="Debug|Win32"
 			OutputDirectory="Debug"
 			IntermediateDirectory="Debug"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\IccProfLib"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="..\..\IccProfLib"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -31,13 +31,8 @@
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/IccToXml.exe"
-				LinkIncremental="2"
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/IccToXml.pdb"
-				SubSystem="1"
-				TargetMachine="1"/>
+				Name="VCLibrarianTool"
+				OutputFile="Debug/IccUtilsLib.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -52,8 +47,6 @@
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
 			<Tool
 				Name="VCManagedWrapperGeneratorTool"/>
 			<Tool
@@ -63,28 +56,22 @@
 			Name="Release|Win32"
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
-				AdditionalIncludeDirectories="..\..\..\IccProfLib"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="..\..\IccProfLib"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="0"
-				UsePrecompiledHeader="3"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/IccToXml.exe"
-				LinkIncremental="1"
-				GenerateDebugInformation="TRUE"
-				SubSystem="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="1"/>
+				Name="VCLibrarianTool"
+				OutputFile="Release/IccUtilsLib.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -99,8 +86,6 @@
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
 			<Tool
 				Name="VCManagedWrapperGeneratorTool"/>
 			<Tool
@@ -115,49 +100,19 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\IccProfileXml.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
-						UsePrecompiledHeader="0"/>
-				</FileConfiguration>
+				RelativePath=".\CAT.cpp">
 			</File>
 			<File
-				RelativePath=".\IccTagXml.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
-						UsePrecompiledHeader="0"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
-						UsePrecompiledHeader="0"/>
-				</FileConfiguration>
+				RelativePath=".\CLUT.cpp">
 			</File>
 			<File
-				RelativePath=".\IccTagXmlFactory.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
-						UsePrecompiledHeader="0"/>
-				</FileConfiguration>
+				RelativePath=".\CLUT_stuffer.cpp">
 			</File>
 			<File
-				RelativePath=".\IccToXml.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
-						UsePrecompiledHeader="0"/>
-				</FileConfiguration>
+				RelativePath=".\ICC_tool_exception.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\IccProfLib\MainPage.h">
+				RelativePath=".\Stubs.cpp">
 			</File>
 		</Filter>
 		<Filter
@@ -165,13 +120,19 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\IccProfileXml.h">
+				RelativePath=".\CAT.h">
 			</File>
 			<File
-				RelativePath=".\IccTagXml.h">
+				RelativePath=".\CLUT.h">
 			</File>
 			<File
-				RelativePath=".\IccTagXmlFactory.h">
+				RelativePath=".\CLUT_stuffer.h">
+			</File>
+			<File
+				RelativePath=".\ICC_tool_exception.h">
+			</File>
+			<File
+				RelativePath=".\Stubs.h">
 			</File>
 		</Filter>
 		<Filter

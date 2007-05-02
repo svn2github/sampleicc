@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="IccToXml"
-	ProjectGUID="{7F7A836B-C5DC-4CF1-95E6-2D5F6212ABE8}"
+	Name="round_trip_PCS_LAB"
+	ProjectGUID="{52496ADB-E7DD-4518-9BDF-BE8D5D7AC316}"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\IccProfLib"
+				AdditionalIncludeDirectories="..\..\..\IccProfLib,..\..\ICC_Utils"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -32,10 +32,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/IccToXml.exe"
+				OutputFile="$(OutDir)/round_trip_PCS_LAB.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/IccToXml.pdb"
+				ProgramDatabaseFile="$(OutDir)/round_trip_PCS_LAB.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
@@ -67,10 +67,10 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
-				AdditionalIncludeDirectories="..\..\..\IccProfLib"
+				AdditionalIncludeDirectories="..\..\..\IccProfLib,..\..\ICC_Utils"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="0"
-				UsePrecompiledHeader="3"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="3"/>
@@ -78,7 +78,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/IccToXml.exe"
+				OutputFile="$(OutDir)/round_trip_PCS_LAB.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
@@ -115,63 +115,52 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\IccProfileXml.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
-						UsePrecompiledHeader="0"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\IccTagXml.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
-						UsePrecompiledHeader="0"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
-						UsePrecompiledHeader="0"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\IccTagXmlFactory.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
-						UsePrecompiledHeader="0"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\IccToXml.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
-						UsePrecompiledHeader="0"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\IccProfLib\MainPage.h">
+				RelativePath=".\round_trip_PCS_LAB.cpp">
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+		</Filter>
+		<Filter
+			Name="Library Files"
+			Filter="lib">
 			<File
-				RelativePath=".\IccProfileXml.h">
+				RelativePath="..\..\..\IccProfLib\Release\IccProfLib.lib">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCustomBuildTool"/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\IccTagXml.h">
+				RelativePath="..\..\..\IccProfLib\Debug\IccProfLib.lib">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCustomBuildTool"/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\IccTagXmlFactory.h">
+				RelativePath="..\..\ICC_utils\debug\IccUtilsLib.lib">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCustomBuildTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ICC_utils\release\IccUtilsLib.lib">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCustomBuildTool"/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -179,9 +168,6 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
 		</Filter>
-		<File
-			RelativePath=".\ReadMe.txt">
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
