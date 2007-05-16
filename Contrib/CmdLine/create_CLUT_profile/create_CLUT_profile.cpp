@@ -87,8 +87,9 @@
 #include <exception>
 using namespace std;
 
-#include "getopt.h" // for getopt_long
+#include <getopt.h> // for getopt_long
 #include "ICC_tool_exception.h"
+#include "Vetters.h"
 
 // At the moment this is a hack; later we will figure out how to set HAS_GETOPT_LONG
 // in the configure script.  Feel free to extend this to support your favorite platform.
@@ -372,7 +373,7 @@ usage(ostream& oS, const string& myName)
 int
 main(int argc, char * const argv[])
 {
-  string myName(argv[0]);
+  const char* const myName = path_tail(argv[0]);
   
   icFloatNumber flare[3] = { 0, 0, 0 };
   bool sawExplicitFlare = false;
@@ -386,7 +387,7 @@ main(int argc, char * const argv[])
   icFloatNumber inputShaperGamma = 1.0;
   bool sawInputShaperGamma = false;
   
-  string inputShaperFilename("");
+  const char* inputShaperFilename = "";
   bool sawInputShaperFilename = false;
 
   string copyright("");
@@ -400,9 +401,9 @@ main(int argc, char * const argv[])
 
   int size = 0;
 
-  string inFilename("");
+  const char* inFilename = "";
 
-  string outFilename("");
+  const char* outFilename = "";
   
 #if defined(HAS_GETOPT_LONG)
   static struct option longopts[] = {
@@ -431,7 +432,7 @@ main(int argc, char * const argv[])
     switch (shortOpt) 
     {
       case 'h':
-        usage(cout, argv[0]);
+        usage(cout, myName);
         return EXIT_SUCCESS;
       case 'f':
         readXYZFromString(flare, optarg);
@@ -446,10 +447,22 @@ main(int argc, char * const argv[])
         sawExplicitLABPCS = true;
         break;
       case 'g':
+        vet_as_float(optarg, "input_shaper_gamma", "a floating-point number"
+                     " indicating an exponent (a video-style 'gamma' value)"
+                     " for an input shaper curve, e.g. 2.2");
         inputShaperGamma = (icFloatNumber)strtod(optarg, NULL);
         sawInputShaperGamma = true;
         break;
       case 'n':
+        vet_input_file_pathname(optarg, "shaper_LUT_as_text",
+                                "the pathname of a file containing three 1D"
+                                " LUTs, with the first line being a single"
+                                " positive integer (typically 1023) indicating"
+                                " the maximum channel value, and then all the"
+                                " following lines until the end of the file"
+                                " being whitespace-seperated triplets of"
+                                " successive entries of red, green and blue"
+                                " shaper LUT entries");
         inputShaperFilename = optarg;
         sawInputShaperFilename = true;
         break;
@@ -461,7 +474,7 @@ main(int argc, char * const argv[])
         sawProfileType = true;
         break;
       default:
-        usage(cout, argv[0]);
+        usage(cout, myName);
         return EXIT_FAILURE;
     }
   }
@@ -471,18 +484,31 @@ main(int argc, char * const argv[])
 
   if (argc != 5)
   {
-    usage(cout, myName.c_str());
+    usage(cout, myName);
     return EXIT_FAILURE;
   }
   
-  description                 = argv[0];
-  readXYZFromString(mediaWhite, argv[1]);
-  size                   = atoi(argv[2]);
-  inFilename                  = argv[3];
-  outFilename                 = argv[4];
-
   try
   {
+    description                 = argv[0];
+    readXYZFromString(mediaWhite, argv[1]);
+    
+    const char* const size_string = argv[2];
+    vet_as_int(size_string, "size", "length of the sides of the 3D LUT, the"
+               " elements of which are in the input file");
+    size = atoi(size_string);
+    
+    inFilename = argv[3];
+    vet_input_file_pathname(inFilename, "3DLUT_as_text", "the pathname of a"
+                            " flattened 3D cube where each line is a"
+                            " whitespace-seperated XYZ triplet");
+    
+    outFilename = argv[4];
+    vet_output_file_pathname(outFilename, "profile_pathname", "the pathname of"
+                             " the file to which the created ICC profile will"
+                             " be written, with the directory component of that"
+                             " pathname being writable by the current user");
+    
     // check for obvious problems
 
 
@@ -526,7 +552,7 @@ main(int argc, char * const argv[])
   }
   catch (const exception& e)
   {
-    cerr << myName << ": error: " << e.what() << endl;
+    cout << myName << ": error: " << e.what() << endl;
     return EXIT_FAILURE;
   }
 }

@@ -100,6 +100,10 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#include <iostream>
+using namespace std;
+#include "Vetters.h"
+
 #include "ApplicationServices/ApplicationServices.h"
 
 CGColorSpaceRef
@@ -228,23 +232,30 @@ exportImage(CGImageRef image, CFURLRef url, CFStringRef outputFormat)
 }
 
 void
-usage()
+usage(ostream& s, const char* const myName, unsigned int N)
 {
-  fprintf(stdout, "create_probe: usage is\n");
-  fprintf(stdout, "  create_probe\n");
-  fprintf(stdout, "which creates two files in /var/tmp:\n");
-  fprintf(stdout, "  32bpcProbe.tiff (32-bit-per-component unwrapped 52x52x52 cube)\n");
-  fprintf(stdout, "  8bpcProbe.tiff (8-bit-per-component unwrapped 52x52x52 cube)\n");
-  fprintf(stdout, "A simple After Effects script, or some other tested tool, should be\n");
-  fprintf(stdout, "used to turn TIFF file of your choice into 10-bit log.");
+  cout << myName << ": usage is " << myName << " [N]\n"
+       << "where N is an optional argument indicating the number of"
+       << " points along the edge of the color cube being flattened into the"
+       << " probe image; if not specified, N defaults to " << N << "\n"
+       << "Two files are created in /var/tmp:\n"
+       << "  32bpcProbe.tiff (32-bit-per-component unwrapped NxNxN cube)\n"
+       << "and\n"
+       << "  8bpcProbe.tiff (8-bit-per-component unwrapped NxNxN cube)\n"
+       << "A simple After Effects script, or some other tested tool, should"
+       << " be used to turn one of these into a 10-bit log DPX or Cineon file."
+       << endl;
 }
 
 int
 main(int argc, char* argv[])
 {
-  if (argc != 1)
+  const unsigned int DEFAULT_N = 52;
+  
+  const char* const myName = path_tail(argv[0]);
+  if (argc < 2 || argc > 3)
   {
-    usage();
+    usage(cout, myName, DEFAULT_N);
     return EXIT_FAILURE;
   }
   bool deep = false;

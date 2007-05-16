@@ -83,6 +83,7 @@ using namespace std;
 
 #include "IccUtil.h"
 #include "ICC_tool_exception.h"
+#include "Vetters.h"
 
 icFloatNumber
 deltaE(icFloatNumber* first_LAB, icFloatNumber* second_LAB)
@@ -93,15 +94,34 @@ deltaE(icFloatNumber* first_LAB, icFloatNumber* second_LAB)
   return sqrt(dL * dL + da * da + db * db);
 }
 
+void
+usage(ostream& s, const char* const my_name)
+{
+  s << my_name << ": usage is " << my_name << " file\n"
+  " where file is the pathname of a file containing whitespace-seperated"
+  " triplets of CIE LAB data.  For each triplet a line summarizing the"
+  " CIE 1976 delta E of that triplet and its round-tripped value through"
+  " the CIE LAB PCS is printed on standard output";
+}
+
 int
 main(int argc, char* argv[])
 {
+  const char* const my_name = path_tail(argv[0]);
+  if (argc != 2)
+  {
+    usage(cout, my_name);
+    return EXIT_FAILURE;
+  }
   char* LAB_pre_encoding_filename = argv[1];
+  vet_input_file_pathname(LAB_pre_encoding_filename, "file", "the pathname of a"
+                          " file containing whitespace-seperated triplets of"
+                          " CIE LAB data");
   ifstream in_s(LAB_pre_encoding_filename);
   if (! in_s)
   {
     ostringstream s;
-    s << "Could not open file `" << LAB_pre_encoding_filename << "' for output";
+    s << "Could not open file `" << LAB_pre_encoding_filename << "' for input";
     throw ICC_tool_exception(s.str());
   }
   

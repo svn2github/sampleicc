@@ -1,12 +1,13 @@
 /*
-  File:       generate_device_codes.cpp
+ File:       Vetters.cpp
  
-  Contains:   
+ Contains:   Utility functions to handle common argument-checking tasks, in a 
+             way that hides platform-specific details from higher-level code.
  
-  Version:    V1
+ Version:    V1
  
-  Copyright:  © see ICC Software License
-*/
+ Copyright:  Â© see below
+ */
 
 /*
  * The ICC Software License, Version 0.1
@@ -34,10 +35,11 @@
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. In the absence of prior written permission, the names "ICC" and "The
- *    International Color Consortium" must not be used to imply that the
- *    ICC organization endorses or promotes products derived from this
- *    software.
+ * 4. The names "ICC" and "The International Color Consortium" must
+ *    not be used to imply that the ICC organization endorses or
+ *    promotes products derived from this software without prior
+ *    written permission. For written permission, please see
+ *    <http://www.color.org/>.
  *
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -71,77 +73,49 @@
 ////////////////////////////////////////////////////////////////////// 
 // HISTORY:
 //
-// -Initial implementation by Joseph Goldstone late spring 2006
+// -Initial implementation by Joseph Goldstone summer 2007
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <limits>
-using namespace std;
+#ifndef __DEFINED_PATHNAME_H__
+#define __DEFINED_PATHNAME_H__
 
-#include "Vetters.h"
+#include <string>
+#include <sys/types.h>
+#include <sys/stat.h>
+
+const char*
+path_tail(const char* const s);
 
 void
-usage(ostream& s, const char* const myName)
-{
-  s << myName << ": usage is " << myName << " -lattice|-r|-g|-b|-w N" << endl;
-}
+vet_as_int(const char* const s, const std::string& name,
+           const std::string& description);
 
-int
-main(int argc, char* argv[])
-{
-  const char* const myName = path_tail(argv[0]);
-  if (argc != 3)
-  {
-    usage(cout, myName);
-    return EXIT_FAILURE;
-  }
-  string pattern(argv[1]);
-  if (pattern != "-lattice"
-      && pattern != "-r"
-      && pattern != "-g"
-      && pattern != "-b"
-      && pattern != "-w")
-  {
-    usage(cout, myName);
-    return EXIT_FAILURE;
-  }
-  const char* const N_chars = argv[2];
-  vet_as_int(N_chars, "N", "number of points along line or edge");
-  int N = atoi(N_chars);
+void
+vet_as_float(const char* const s, const std::string& name,
+             const std::string& description);
 
-  if (pattern == "-lattice")
-  {
-    for (int i = 0; i < N; ++i)
-      for (int j = 0; j < N; ++j)
-        for (int k = 0; k < N; ++k)
-          cout << static_cast<float>(i) / (N - 1) << " "
-               << static_cast<float>(j) / (N - 1) << " "
-               << static_cast<float>(k) / (N - 1) << endl;
+off_t
+get_size(const char* const s);
 
-  }
-  else if (pattern == "-r")
-    for (int i = 0; i < N; ++i)
-      cout << static_cast<float>(i) / (N - 1) << " 0 0" << endl;
-  else if (pattern == "-g")
-    for (int i = 0; i < N; ++i)
-      cout << "0 " << static_cast<float>(i) / (N - 1) << " 0" << endl;
-  else if (pattern == "-b")
-    for (int i = 0; i < N; ++i)
-      cout << "0 0 " << static_cast<float>(i) / (N - 1) << endl;
-  else if (pattern == "-w")
-    for (int i = 0; i < N; ++i)
-      cout << static_cast<float>(i) / (N - 1) << " "
-           << static_cast<float>(i) / (N - 1) << " "
-           << static_cast<float>(i) / (N - 1) << endl;
-  else
-  {
-    cout << "Error: request to generate device codes in pattern other than"
-         << " -lattice, -r, -g, -b or -w" << endl;
-    return EXIT_FAILURE;
-  }
+bool
+check_mode(const char* const s, mode_t mode);
 
-  return EXIT_SUCCESS;
-}
+bool
+is_plain_file_pathname(const char* const s);
+
+bool
+is_readable_pathname(const char* const s);
+
+bool
+is_pathname_of_empty_file(const char* const s);
+
+void
+vet_input_file_pathname(const char* const s, const std::string& name,
+                        const std::string& description);
+
+void
+vet_output_file_pathname(const char* const s, const std::string& name,
+                         const std::string& description,
+                         bool silent_overwrite_OK = false);
+#endif

@@ -107,7 +107,8 @@ libICC_utils_la_SOURCES = Stubs.cpp \
 	CAT.cpp \
 	CLUT.cpp \
 	CLUT_stuffer.cpp \
-	ICC_tool_exception.cpp
+	ICC_tool_exception.cpp \
+	Vetters.cpp
 
 
 libICC_utils_la_LDFLAGS = -version-info @LIBTOOL_VERSION@
@@ -118,7 +119,8 @@ libICC_utils_include_HEADERS = Stubs.h \
 	CAT.h \
 	CLUT.h \
 	CLUT_stuffer.h \
-	ICC_tool_exception.h
+	ICC_tool_exception.h \
+	Vetters.h
 
 
 INCLUDES = -I$(top_builddir) -I$(top_srcdir)/IccProfLib \
@@ -133,7 +135,7 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 
 libICC_utils_la_LIBADD =
 am_libICC_utils_la_OBJECTS = Stubs.lo CAT.lo CLUT.lo CLUT_stuffer.lo \
-	ICC_tool_exception.lo
+	ICC_tool_exception.lo Vetters.lo
 libICC_utils_la_OBJECTS = $(am_libICC_utils_la_OBJECTS)
 
 DEFS = @DEFS@
@@ -146,7 +148,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/CAT.Plo ./$(DEPDIR)/CLUT.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/CLUT_stuffer.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/ICC_tool_exception.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/Stubs.Plo
+@AMDEP_TRUE@	./$(DEPDIR)/Stubs.Plo ./$(DEPDIR)/Vetters.Plo
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -213,6 +215,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CLUT_stuffer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ICC_tool_exception.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Stubs.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Vetters.Plo@am__quote@
 
 distclean-depend:
 	-rm -rf ./$(DEPDIR)

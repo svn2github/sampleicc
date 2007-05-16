@@ -200,7 +200,7 @@ CLUT::makeAToBxTag(const unsigned int edgeN,
     if (inputShaperFilename != "")
       throw ICC_tool_exception("input shaper LUT gamma and input shaper LUT"
                                " filename both specified, but they are mutually exclusive");
-    cerr << "------- where we should be -------, gamma is " 
+    cout << "------- where we should be -------, gamma is " 
          << inputShaperGamma << endl;
     for (i = 0; i < 3; ++i)
     {

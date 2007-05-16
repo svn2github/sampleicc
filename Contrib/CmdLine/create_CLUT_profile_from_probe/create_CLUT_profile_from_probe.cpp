@@ -82,6 +82,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#include <sys/time.h>
 
 #include <iostream>
 #include <fstream>
@@ -92,7 +93,9 @@
 #include <limits>
 using namespace std;
 
+#include "ICC_tool_exception.h"
 #include "Stubs.h"
+#include "Vetters.h"
 
 #include "IccDefs.h"
 #include "IccProfile.h"
@@ -100,17 +103,8 @@ using namespace std;
 #include "IccUtil.h"
 #include "IccCmm.h"
 
-void
-usage(ostream& s, const char* const myName)
-{
-  s << myName << ": usage is `" << myName
-    << " <N> <grabbed_probe_RGB_values_path> <monitor_profile_path>"
-    << " <input_profile_description> <input_profile_path>"
-    << " <copyright_holder> [<pretransform_path>]" << endl;
-}
-
 vector<DeviceRGB>
-RGBs_from_probe(const char* const grabbed_probe_RGB_values_path)
+RGBs_from_probe_pathname(const char* const grabbed_probe_RGB_values_path)
 {
   ifstream iS(grabbed_probe_RGB_values_path);
   if (! iS)
@@ -293,40 +287,105 @@ XYZs_from_monitor_RGBs(const vector<DeviceRGB>& RGBs, CIccCmm* cmm)
   return XYZs;
 }
 
+void
+usage(ostream& s, const char* const myName)
+{
+  s << myName << ": usage is " << myName
+  << " N probe monitor description path copyright [pretransform]\n"
+  << "where\n"
+  << " N is the length of the sides of the flattened probe cube\n"
+  << " probe is the pathname of the readable, "
+  << " nonzero-length file containing the screen grab of the flattened"
+  << " probe cube\n"
+  << " monitor is the pathname of the ICC profile which was"
+  << " active for the screen on which the flattened probe cube screen grab"
+  << " was made\n"
+  << " description is a text description of the profile that"
+  << " will be used to populate profile menus in applications, e.g. "
+  << " in Photoshop - remember, if there are spaces embedded in your"
+  << " description, then your description should be in quotes\n"
+  << " path is the pathname to which the created CLUT input"
+  << " profile will be written\n"
+  << " copyright is a string to be embedded in the profile indicating"
+  << " ownership - remember, if it contains spaces, the string must be in"
+  << " quotes\n"
+  << " pretransform, an optional argument, is a pathname containing"
+  << " pretransform curve expressed as lines of triplets of shaper LUT"
+  << " contents in the [0, 1024) range\n";
+}
+
 int
 main(int argc, char* argv[])
 {
+  const char* const my_name = path_tail(argv[0]);
   if (argc < 7 || argc > 8)
   {
-    usage(cout, argv[0]);
+    usage(cout, my_name);
     return EXIT_FAILURE;
   }
   try
   {
-    int N = atoi(argv[1]);
-    const char* const grabbed_probe_values_path = argv[2];
-    vector<DeviceRGB> device_RGBs(RGBs_from_probe(grabbed_probe_values_path));
-    const char* const monitor_profile_path = argv[3];
-    const char* const input_profile_description = argv[4];
-    const char* const input_profile_path = argv[5];
-    const char* const copyright_holder = argv[6];
-    const char* const copyright_pattern("copyright (c) %s 2007");
-    char copyright[256];
-    sprintf(copyright, copyright_pattern, copyright_holder);
-    char* pretransform_path = "";
-    if (argc == 8)
-      pretransform_path = argv[7];
+    const char* const edge_size_string = argv[1];
+    vet_as_int(edge_size_string, "N", "the length of the sides of the"
+      " flattened probe cube");
+    int N = atoi(edge_size_string);
+    if (N < 1)
+      throw ICC_tool_exception("length of the sides of the flattened probe must"
+                               " be positive (and really should be at least 11,"
+                               " preferably considerably more than that.)");
     
-    CIccProfile* monitor_profile = ReadIccProfile(monitor_profile_path);
+    const char * const grabbed_probe_values_pathname = argv[2];
+    vet_input_file_pathname(grabbed_probe_values_pathname,
+      "probe", "the pathname of the readable,"
+      " nonzero-length text file containing the values extracted from the"
+      " screen grab of the flattened probe cube");
+    vector<DeviceRGB> device_RGBs
+      (RGBs_from_probe_pathname(grabbed_probe_values_pathname));
+    
+    const char* const monitor_profile_pathname = argv[3];
+    vet_input_file_pathname(monitor_profile_pathname,
+      "monitor", "the pathname of the ICC profile which was active"
+      " for the screen on which the flattened probe cube screen grab"
+      " was made");
+                                                               
+    const char* const input_profile_description = argv[4];
+    
+    const char* const input_profile_pathname = argv[5];
+    vet_output_file_pathname(input_profile_pathname,
+      "path", "the pathname of the file to which the created CLUT input"
+      " profile will be written, with the directory component of that"
+      " pathname being writable by the current user");
+
+    const char* const copyright_holder = argv[6];
+    char year[5];
+    const time_t now = time(NULL);
+    strftime(year, 5, "%G", localtime(&now));
+    const char* const copyright_pattern("copyright (c) %s %s");
+    char copyright[256];
+    sprintf(copyright, copyright_pattern, copyright_holder, year);
+    
+    bool pretransform_pathname_specified = argc == 8;
+    const char* pretransform_pathname = "";
+    if (pretransform_pathname_specified)
+    {
+      pretransform_pathname = argv[7];
+      vet_input_file_pathname(pretransform_pathname,
+        "pretransform",
+        "pathname containing pretransform curve expressed as lines of triplets"
+        " of shaper LUT contents in [0, 1024)");
+    }
+    
+    CIccProfile* monitor_profile = ReadIccProfile(monitor_profile_pathname);
     // +++ check result here
     
     CIccCmm* cmm = new CIccCmm();
     icRenderingIntent monitor_rendering_intent
       = static_cast<icRenderingIntent>(monitor_profile->m_Header.renderingIntent);
-    if (cmm->AddXform(monitor_profile_path, monitor_rendering_intent) != icCmmStatOk)
+    if (cmm->AddXform(monitor_profile_pathname,
+                      monitor_rendering_intent) != icCmmStatOk)
     {
       ostringstream s;
-      s << "Can't set profile `" << monitor_profile_path
+      s << "Can't set profile `" << monitor_profile_pathname
         << "' as initial CMM profile";
       throw runtime_error(s.str());
     }
@@ -403,7 +462,7 @@ main(int argc, char* argv[])
     }
     // +++ input shaper LUT someday
     CIccTagLut16* A2B0_tag = make_A2Bx_tag(N, PCS_XYZs_from_probe,
-                                           pretransform_path);
+                                           pretransform_pathname);
     input_profile.AttachTag(icSigAToB0Tag, A2B0_tag);
     
     
@@ -443,14 +502,14 @@ main(int argc, char* argv[])
     
     // Out it goes
     CIccFileIO out;
-    out.Open(input_profile_path, "w+");
+    out.Open(input_profile_pathname, "w+");
     input_profile.Write(&out);
     out.Close();
     return EXIT_SUCCESS;
   }
   catch (const exception& e)
   {
-    cerr << "error: " << e.what() << endl;
+    cout << "error: " << e.what() << endl;
     return EXIT_FAILURE;
   }
 }

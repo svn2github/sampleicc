@@ -87,6 +87,11 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#include <iostream>
+using namespace std;
+
+#include "Vetters.h"
+
 #include <CoreFoundation/CoreFoundation.h>
 #include <ApplicationServices/ApplicationServices.h>
 
@@ -144,15 +149,77 @@ getTheDisplayColorSpace()
 #define COMPUTE_BEST_BYTES_PER_ROW(bpr)\
 ( ( (bpr) + (BEST_BYTE_ALIGNMENT-1) ) & ~(BEST_BYTE_ALIGNMENT-1) )
 
+void
+usage(ostream& s, const char* const myName)
+{
+  s << myName << ": usage is " << myName << " image extracted_data N"
+       << " white_left white_right white_bottom white_top\n"
+  << " where\n"
+  << "image is the pathname of the file containing the grabbed probe"
+  << " frame\n"
+  << "extracted_data is the pathname to which the extracted data will"
+  << " be written\n"
+  << "N is the number of samples per edge of the probe cube\n"
+  << "white_left is the pixel coordinate, relative to the lower left corner"
+  << " of the image being (0, 0), of the leftmost content pixel\n"
+  << "white_right is the pixel coordinate, relative to the red line"
+  << " around the image, of the rightmost content pixel\n"
+  << "white_bottom is the pixel coordinate, relative to the red line"
+  << " around the image, of the bottommost content pixel\n"
+  << "white_top is the pixel coordinate, relative to the red line"
+  << " around the image, of the topmost content pixel\n"
+  << "\n"
+  << "example:\n"
+  << " extract_probe_data grabbed_frame.tiff extracted_data.txt 52"
+  << " 2 565 2 285"
+  << endl;
+}
+
 int
 main(int argc, const char * argv[]) {
-  const char* inputImagePath = argv[1];
-  const char* outputTextPath = argv[2];
-  int  N = atoi(argv[3]);
-  int whiteLeft = atoi(argv[4]);
-  int whiteRight = atoi(argv[5]);
-  int whiteBottom = atoi(argv[6]);
-  int whiteTop = atoi(argv[7]);
+  const char* const my_name = path_tail(argv[0]);
+  if (argc != 8)
+  {
+    usage(cout, my_name);
+    return EXIT_FAILURE;
+  }
+  const char* const inputImagePath = argv[1];
+  vet_input_file_pathname(inputImagePath, "image", "the pathname of a file"
+                          " containing the grabbed image of the probe frame");
+  
+  const char* const outputTextPath = argv[2];
+  vet_output_file_pathname(outputTextPath, "extracted_data", "the pathanme of a"
+                           " file to which the data extracted from the image"
+                           " will be written");
+  
+  const char* const NChars = argv[3];
+  vet_as_int(NChars, "N", "the number of samples per edge of the probe cube,"
+             " typically 52");
+  int  N = atoi(NChars);
+  
+  const char* const whiteLeftChars = argv[4];
+  vet_as_int(whiteLeftChars, "white_left", "an integer which is the offset"
+             " from the lower left pixel (at 0,0) of the leftmost pixel in"
+             " the content area");
+  int whiteLeft = atoi(whiteLeftChars);
+
+  const char* const whiteRightChars = argv[5];
+  vet_as_int(whiteRightChars, "white_right", "an integer which is the offset"
+             " from the lower left pixel (at 0,0) of the rightmost pixel in"
+             " the content area");
+  int whiteRight = atoi(whiteRightChars);
+  
+  const char* const whiteBottomChars = argv[6];
+  vet_as_int(whiteBottomChars, "white_bottom", "an integer which is the offset"
+             " from the lower left pixel (at 0,0) of the bottommost pixel in"
+             " the content area");
+  int whiteBottom = atoi(whiteBottomChars);
+  
+  const char* const whiteTopChars = argv[7];
+  vet_as_int(whiteTopChars, "white_top", "an integer which is the offset"
+             " from the lower left pixel (at 0,0) of the topmost pixel in"
+             " the content area");
+  int whiteTop = atoi(whiteTopChars);
   
   // first arg is name of probe frame file
   // if it's not there, error out.
@@ -260,7 +327,7 @@ main(int argc, const char * argv[]) {
   FILE* file = fopen(outputTextPath, "w");
   if (file == NULL)
   {
-    fprintf(stderr, "error: %s: %s\n", argv[0], strerror(errno));
+    fprintf(stderr, "error: %s: %s\n", my_name, strerror(errno));
     return EXIT_FAILURE;
   }
   
@@ -290,7 +357,7 @@ main(int argc, const char * argv[]) {
   int closeStatus = fclose(file);
   if (closeStatus != 0)
   {
-    fprintf(stderr, "%s: error: %s.\n", argv[0], strerror(errno));
+    fprintf(stderr, "%s: error: %s.\n", my_name, strerror(errno));
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

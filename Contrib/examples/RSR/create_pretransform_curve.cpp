@@ -87,17 +87,37 @@
 #include <cmath>
 using namespace std;
 
+#include "Vetters.h"
+
 void
-usage(char* my_name)
+usage(ostream& s, const char* const my_name)
 {
-  cerr << my_name << ": usage is " << my_name << " N OUT.txt"<< endl
-       << " where N is the number of curve samples to generate and OUT.txt" << endl
-       << " is the file into which they will be written." << endl;
+  cout << my_name << ": usage is " << my_name << " N output_file\n"
+       << " where N is the number of curve samples to generate and\n"
+       << " output_file is the file into which they will be written.\n"
+       << "\n"
+       << "The transform curve math is taken from a spreadsheet provided by"
+       << " kind courtesy of Rising Sun Research." << endl;
 }
 
 int
 main(int argc, char* argv[])
 {
+  const char* const my_name = path_tail(argv[0]);
+  if (argc != 3)
+  {
+    usage(cout, my_name);
+    return EXIT_FAILURE;
+  }
+    
+  const char* const N_chars = argv[1];
+  vet_as_int(N_chars, "N", "the number of curve samples to generate");
+  
+  const char* output_file_pathname = argv[2];
+  vet_output_file_pathname(output_file_pathname, "output_file", "the pathname"
+                           " of the file into which the pretransform curve"
+                           " will be written");
+  
   double cineon_black = 95;
   double cineon_white = 685;
   double dGamma = 1.7;
@@ -106,13 +126,8 @@ main(int argc, char* argv[])
   double K = (0.002 / film_gamma) * (1.7 / dGamma);
   double A = 1 / (pow(10.0, K * (cineon_white - cineon_black)) - 1);
   
-  if (argc != 3)
-  {
-    usage(argv[0]);
-    return EXIT_FAILURE;
-  }
-  int N = atoi(argv[1]);
-  ofstream s(argv[2]);
+  int N = atoi(N_chars);
+  ofstream s(output_file_pathname);
   
   s << 1023 << endl;
   for (int in = 0; in < N; ++in)

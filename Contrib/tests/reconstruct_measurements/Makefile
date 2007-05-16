@@ -60,7 +60,7 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = 
-host_triplet = i386-apple-darwin8.8.5
+host_triplet = i386-apple-darwin8.9.1
 
 EXEEXT = 
 OBJEXT = o

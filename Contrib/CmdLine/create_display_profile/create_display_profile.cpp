@@ -85,57 +85,79 @@ using namespace std;
 #include "IccUtil.h"
 #include "IccProfile.h"
 
+#include "Vetters.h"
 #include "CAT.h"
 #include "CLUT.h"
 
 void
-usage(const char* my_name)
+usage(ostream& s, const char* my_name)
 {
-  cerr << my_name << ": usage is " << my_name << " IN.txt N description"
-       << " copyright out.ICC" << endl
-       << " where IN.txt is a file whose contents are:" << endl
-       << "  red XYZ primary (triplet of floats)" << endl
-       << "  green XYZ primary (triplet of floats)" << endl
-       << "  blue XYZ primary (triplet of floats)" << endl
-       << "  N lines being the tone curve for red (floats)" << endl
-       << "  N lines being the tone curve for green (floats)" << endl
-       << "  N lines being the tone curve for blue (floats)" << endl
-       << " N is the number of sample points per tone curve," << endl
-       << " description is a string which will be used to identify the profile,"
-       << " copyright is a string identifying the profile content owner,"
-       << " and" << endl
-       << " out.ICC is the file which will contain the created monitor profile"
-       << endl;
+  s << my_name << ": usage is " << my_name << " input_file N description"
+    << " copyright output_file\n"
+    << " where IN.txt is a file whose contents are:\n"
+    << "  red XYZ primary (triplet of floats)\n"
+    << "  green XYZ primary (triplet of floats)\n"
+    << "  blue XYZ primary (triplet of floats)\n"
+    << "  N lines being the tone curve for red (floats)\n"
+    << "  N lines being the tone curve for green (floats)\n"
+    << "  N lines being the tone curve for blue (floats)\n"
+    << " N is the number of sample points per tone curve,\n"
+    << " description is a string which will be used to identify the profile,"
+    << " copyright is a string identifying the profile content owner,"
+    << " and\n"
+    << " output_file is the file which will contain the created monitor"
+    << " profile\n"
+    << "\n"
+    << "example:\n"
+    << my_name << " matrix_trc_input.txt 42 \"my TRC/Matrix profile\""
+    << " \"Copyright (c) 2007 My Little Company - All Rights Reserved\""
+    << " matrix_trc.icc" << endl;
 }
 
 int
 main(int argc, char* argv[])
 {
-  const char* myName = argv[0];
+  const char* myName = path_tail(argv[0]);
   
   if (argc != 6)
   {
-    usage(myName);
+    usage(cout, myName);
     return EXIT_FAILURE;
   }
   
   try
   {
-    string inFilename(argv[1]);
+    const char* const in_file_pathname = argv[1];
+    vet_input_file_pathname(in_file_pathname, "input_file",
+                            "the pathname of a file"
+                            " whose contents are lines with five XYZ triplets"
+                            " representing red, green, blue, black and white,"
+                            " then N lines of tone reproduction curve info for"
+                            " the red, green and blue channels");
+
+    const char* const N_chars = argv[2];
+    
+    vet_as_int(N_chars, "N", "number of lines of normalized TRC triplets in"
+               " file (immediately following the five lines containing triplets"
+               " of red, green, blue, white and black XYZs");
     int N = atoi(argv[2]);
-    string description(argv[3]);
-    string copyright(argv[4]);
-    string outFilename(argv[5]);
+    
+    const char* const description = argv[3];
+    const char* const copyright = argv[4];
+    
+    const char* const out_file_pathname = argv[5];
+    vet_output_file_pathname(out_file_pathname, "out_file", "the pathname of"
+                             " the ICC profile to be written");
 
     icFloatNumber measuredRed[3];
     icFloatNumber measuredGreen[3];
     icFloatNumber measuredBlue[3];
     icFloatNumber measuredBlack[3];
     icFloatNumber measuredWhite[3];
-    ifstream in(inFilename.c_str());
+    ifstream in(in_file_pathname);
     if (! in)
     {
-      cerr << "Can't open input file `" << inFilename << "'" << endl;
+      cout << "Can't open input file `" << in_file_pathname << "'" << endl;
       return EXIT_FAILURE;
     }
     in >>   measuredRed[0] >>   measuredRed[1] >>   measuredRed[2];
@@ -174,7 +196,7 @@ main(int argc, char* argv[])
     
     // profileDescriptionTag
     CIccLocalizedUnicode USAEnglishDesc;
-    USAEnglishDesc.SetText(description.c_str());
+    USAEnglishDesc.SetText(description);
     CIccTagMultiLocalizedUnicode* descriptionTag = new CIccTagMultiLocalizedUnicode;
     descriptionTag->m_Strings = new CIccMultiLocalizedUnicode; // dtor does deletion
     descriptionTag->m_Strings->push_back(USAEnglishDesc);
@@ -182,7 +204,7 @@ main(int argc, char* argv[])
     
     // copyrightTag
     CIccLocalizedUnicode USAEnglishCopyright;
-    USAEnglishCopyright.SetText(copyright.c_str());
+    USAEnglishCopyright.SetText(copyright);
     CIccTagMultiLocalizedUnicode* copyrightTag = new CIccTagMultiLocalizedUnicode;
     copyrightTag->m_Strings = new CIccMultiLocalizedUnicode; // dtor does deletion
     copyrightTag->m_Strings->push_back(USAEnglishCopyright);
@@ -301,7 +323,7 @@ main(int argc, char* argv[])
     
     // Out it goes
     CIccFileIO out;
-    out.Open(outFilename.c_str(), "w+");
+    out.Open(out_file_pathname, "w+");
     profile.Write(&out);
     out.Close();
     
@@ -309,7 +331,7 @@ main(int argc, char* argv[])
   }
   catch (const exception& e)
   {
-    cerr << myName << ": error: " << e.what() << endl;
+    cout << myName << ": error: " << e.what() << endl;
     return EXIT_FAILURE;
   }
   

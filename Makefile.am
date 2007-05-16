@@ -5,7 +5,11 @@ SUBDIRS = \
 	Tools \
 	Contrib
 
-EXTRA_DIST = bootstrap README.OSX
+EXTRA_DIST = bootstrap \
+	README.OSX \
+	ICC_utils-Info.plist \
+	SampleICC-Info.plist \
+	SampleICC.xcodeproj
 
 dist-hook:
 	rm -fr `find $(distdir) -name .DS_Store -or -name .svn`

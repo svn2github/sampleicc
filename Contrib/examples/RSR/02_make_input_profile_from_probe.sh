@@ -2,14 +2,15 @@
 
 my_name=$0
 
-if [[ $# < 3 || $# > 4 ]]; then
-  echo "{$my_name:t} : usage is $my_name:t grabbed_probe_image.tiff profile_description profile_path.icc"
+if [[ $# < 4 || $# > 5 ]]; then
+  echo "{$my_name:t} : usage is $my_name:t grabbed_probe_image.tiff profile_description copyright_holder profile_path.icc"
   exit 1
 fi
 
 grabbed_probe_image=$1
 profile_description=$2
-profile_path=$3
+copyright_holder=$3
+profile_path=$4
 extracted_probe_values=/tmp/probe_extraction.$$.txt
 
 N=52
@@ -39,6 +40,7 @@ create_CLUT_profile_from_probe \
     $extracted_probe_values \
     $MONITOR_PROFILE_PATH \
     "(probed) $profile_description" \
+    $copyright_holder \
     $profile_path $PRETRANSFORM_PATH
 creation_status=$?
 if [ $creation_status != 0 ] ; then

@@ -84,6 +84,7 @@ using namespace std;
 
 #include "ICC_tool_exception.h"
 #include "Measurement_extractor.h"
+#include "Vetters.h"
 
 void
 processMeasurements(istream& in_s,
@@ -115,12 +116,36 @@ processMeasurements(istream& in_s,
   }
 }
 
+void
+usage(ostream& s, const char* const myName)
+{
+  s << myName << ": usage is " << myName <<
+    " stimuli profile measurements [Y]\n"
+  << "where\n"
+  << " stimuli is the set of RGB values for which you wish to reconstruct"
+  << " measurements\n"
+  << " profile is the ICC Profile from which the measurements will be"
+  << " reconstructed\n"
+  << " measurements is the pathname of the file into which the reconstructed"
+  << " measurements will be written\n"
+  << " Y, if given, will be the Y value of the reconstructed illuminant\n"
+  << endl;
+}
+
 int
 main(int argc, char* argv[])
 {
   try
   {
-    char* RGBStimuliFilename = argv[1];
+    const char* const myName = path_tail(argv[0]);
+    if (argc < 4 || argc > 5)
+    {
+      usage(cout, myName);
+      return EXIT_FAILURE;
+    }
+    const char* const RGBStimuliFilename = argv[1];
+    vet_input_file_pathname(RGBStimuliFilename, "stimuli", "the pathname of"
+                            " a file containing RGB stimuli");
     ifstream in_s(RGBStimuliFilename);
     if (! in_s)
     {
@@ -128,13 +153,22 @@ main(int argc, char* argv[])
       s << "Could not open file `" << RGBStimuliFilename << "'";
       throw ICC_tool_exception(s.str());
     }
-    char* ICCProfileFilename = argv[2];
+    const char* const ICCProfileFilename = argv[2];
+    vet_input_file_pathname(ICCProfileFilename, "profile", "the pathname of an"
+                            " ICC profile from which measurements will be"
+                            " extracted which could reconstruct that profile");
     icFloatNumber flare[3] = {0, 0, 0};
     
+    char* XYZMeasurementsFilename = argv[3];
+    vet_output_file_pathname(XYZMeasurementsFilename, "measurements",
+                             "the pathname of the file into which the"
+                             " reconstructed XYZ measurements will be written");
     if (argc == 5)
     {
-      icFloatNumber illuminantY = (icFloatNumber)atof(argv[3]);
-      char* XYZMeasurementsFilename = argv[4];
+      const char* const Y_chars = argv[4];
+      vet_as_float(Y_chars, "Y", "desired Y value of the reconstructed"
+                   " illuminant");
+      icFloatNumber illuminantY = (icFloatNumber)atof(Y_chars);
       Measurement_extractor extractor(ICCProfileFilename,
                                       illuminantY,
                                       flare);
@@ -142,7 +176,6 @@ main(int argc, char* argv[])
     }
     else
     {
-      char* XYZMeasurementsFilename = argv[3];
       Measurement_extractor extractor(ICCProfileFilename,
                                       flare);
       processMeasurements(in_s, extractor, XYZMeasurementsFilename);
@@ -151,7 +184,7 @@ main(int argc, char* argv[])
   }
   catch (const exception& e)
   {
-    cerr << "Error: " << e.what() << endl;
+    cout << "Error: " << e.what() << endl;
     return EXIT_FAILURE;
   }
 }

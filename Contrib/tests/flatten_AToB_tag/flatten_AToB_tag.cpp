@@ -94,6 +94,8 @@ using namespace std;
 #include "IccCmm.h"
 // CIccCmm
 
+#include "Vetters.h"
+
 typedef vector<icFloatNumber> ResultTuple;
 typedef vector<ResultTuple> ResultTuples;
 
@@ -106,25 +108,44 @@ printTuples(ostream& oS, const ResultTuples& tuples)
     oS << (*iter)[0] << " " << (*iter)[1] << " " << (*iter)[2] << endl;
 }
 
+void
+usage(ostream& s, const char* const my_name)
+{
+  s << my_name << ": usage is " << my_name
+  << " profile sampling flattened_contents"
+  << endl;
+}
+  
 int
 main(const int argc, const char* argv[])
 {
+  const char* const my_name = path_tail(argv[0]);
   if (argc != 4)
   {  
-    cout << "iccFlattenAToBTag: usage is"
-         << " iccFlattenAToBTag src_profile granularity results_file"
-         << endl;
+    usage(cout, my_name);
     return EXIT_FAILURE;
   }
 
-  string srcProfilePath(argv[1]);
-  unsigned int N = atoi(argv[2]);
-  string flattenedContentsPath(argv[3]);
+  const char* const profile_path = argv[1];
+  vet_input_file_pathname(profile_path, "profile", "the pathname of an ICC"
+                          " profile which contains an AToB tag");
+  
+  const char* const sampling_string = argv[2];
+  vet_as_int(sampling_string, "granularity", "the edge sampling of the"
+             "3D LUT, e.g. 4 would produce a 4x4x4 sampling resulting in a file"
+             " with 64 lines of recovered data");
+  unsigned int sampling = atoi(argv[2]);
+  
+  const char* flattened_contents_path = argv[3];
+  vet_output_file_pathname(flattened_contents_path, "flattened_contents",
+                           "the pathname of the file that will be created to"
+                           " hold the flattened 3D LUT from the supplied"
+                           " ICC profile");
 
-  CIccProfile* srcProfile = OpenIccProfile(srcProfilePath.c_str());
+  CIccProfile* srcProfile = OpenIccProfile(profile_path);
   if (srcProfile == NULL)
   {
-    cerr << "Error opening source profile `" << srcProfile << "'" << endl;
+    cout << "Error opening source profile `" << profile_path << "'" << endl;
     return EXIT_FAILURE;
   }
   
@@ -132,7 +153,7 @@ main(const int argc, const char* argv[])
     = static_cast<CIccTagXYZ*>(srcProfile->FindTag(icSigMediaWhitePointTag));
   if (mediaWhitePointTag == NULL)
   {
-    cerr  << "no white point tag found in source profile `" << srcProfile
+    cout  << "no white point tag found in source profile `" << profile_path
           << "'" << endl;
     return EXIT_FAILURE;
   }
@@ -141,25 +162,25 @@ main(const int argc, const char* argv[])
   whiteXYZ[1] = icFtoD((*mediaWhitePointTag)[0].Y);
   whiteXYZ[2] = icFtoD((*mediaWhitePointTag)[0].Z);
   
-  ResultTuples resultTuples(N * N * N);
+  ResultTuples resultTuples(sampling * sampling * sampling);
 
   CIccCmm cmm;
 
   cmm.AddXform(srcProfile, icAbsoluteColorimetric);
   if (cmm.Begin() != icCmmStatOk) {
-    cerr << "error initializing CMM" << endl;
+    cout << "error initializing CMM" << endl;
     return EXIT_FAILURE;
   }
   
-  for (unsigned int i = 0; i < N; ++i)
-    for (unsigned int j = 0; j < N; ++j)
-      for (unsigned int k = 0; k < N; ++k)
+  for (unsigned int i = 0; i < sampling; ++i)
+    for (unsigned int j = 0; j < sampling; ++j)
+      for (unsigned int k = 0; k < sampling; ++k)
       {
         icFloatNumber dstPixel[3];
         icFloatNumber srcPixel[3];
-        srcPixel[0] = (icFloatNumber) (i / (N - 1.0));
-        srcPixel[1] = (icFloatNumber) (j / (N - 1.0));
-        srcPixel[2] = (icFloatNumber) (k / (N - 1.0));
+        srcPixel[0] = (icFloatNumber) (i / (sampling - 1.0));
+        srcPixel[1] = (icFloatNumber) (j / (sampling - 1.0));
+        srcPixel[2] = (icFloatNumber) (k / (sampling - 1.0));
         cmm.Apply(dstPixel, srcPixel);
         if (srcProfile->m_Header.pcs == icSigLabData)
         {
@@ -169,14 +190,14 @@ main(const int argc, const char* argv[])
         else
           icXyzFromPcs(dstPixel);
         ResultTuple resultTuple(dstPixel, dstPixel + 3);
-        resultTuples[i * N * N + j * N + k] = resultTuple;
+        resultTuples[i * sampling * sampling + j * sampling + k] = resultTuple;
       }
 
-  if (flattenedContentsPath == "-")
+  if (flattened_contents_path == "-")
     printTuples(cout, resultTuples);
   else
   {
-    ofstream oFS(flattenedContentsPath.c_str());
+    ofstream oFS(flattened_contents_path);
     printTuples(oFS, resultTuples);
   }
 
