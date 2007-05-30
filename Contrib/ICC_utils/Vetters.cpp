@@ -82,7 +82,23 @@
 #include <sstream>
 using namespace std;
 
+#ifndef WIN32
 #include <sys/errno.h>
+#else
+#include <string.h>
+int strerror_r(int errnum, char *str, int strsize)
+{
+  const char *errstr = strerror(errnum);
+
+  if (errstr) {
+    strncpy(str, errstr, strsize);
+    return 0;
+  }
+
+  return -1;
+}
+#define stat _stat
+#endif
 
 #include "ICC_tool_exception.h"
 
@@ -164,7 +180,7 @@ check_mode(const char* const s, mode_t mode)
       << strerror_buf;
     throw ICC_tool_exception(oss.str());
   }
-  return sb.st_mode & mode;
+  return (sb.st_mode & mode) != 0;
 }
 
 bool

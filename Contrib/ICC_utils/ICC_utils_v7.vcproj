@@ -17,7 +17,7 @@
 			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
-				Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\IccProfLib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
@@ -27,7 +27,8 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="4"/>
+				DebugInformationFormat="4"
+				DisableSpecificWarnings="4996"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -59,14 +60,15 @@
 			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
-				Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..\..\IccProfLib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"/>
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4996"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -114,6 +116,9 @@
 			<File
 				RelativePath=".\Stubs.cpp">
 			</File>
+			<File
+				RelativePath=".\Vetters.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -133,6 +138,9 @@
 			</File>
 			<File
 				RelativePath=".\Stubs.h">
+			</File>
+			<File
+				RelativePath=".\vetters.h">
 			</File>
 		</Filter>
 		<Filter

@@ -172,6 +172,10 @@
 				RelativePath=".\Stubs.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\Vetters.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -196,6 +200,10 @@
 			</File>
 			<File
 				RelativePath=".\Stubs.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Vetters.h"
 				>
 			</File>
 		</Filter>

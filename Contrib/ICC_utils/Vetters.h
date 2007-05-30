@@ -84,6 +84,16 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#ifdef WIN32
+typedef unsigned short mode_t;
+#define S_IRUSR S_IREAD
+#define S_IRGRP S_IREAD
+#define S_IROTH S_IREAD
+#define S_IWUSR S_IWRITE
+#define S_IWGRP S_IWRITE
+#define S_IWOTH S_IWRITE
+#endif
+
 const char*
 path_tail(const char* const s);
 

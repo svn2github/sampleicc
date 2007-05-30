@@ -5,20 +5,24 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "create_CLUT_profile_from_probe", "..\CmdLine\create_CLUT_profile_from_probe\create_CLUT_profile_from_probe.vcproj", "{663208AE-BA89-4C2D-BC91-12FB1D000585}"
 	ProjectSection(ProjectDependencies) = postProject
 		{938C1BE6-F759-44BB-85C2-60FC413D5AD2} = {938C1BE6-F759-44BB-85C2-60FC413D5AD2}
+		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "create_CLUT_profile", "E:\AccuRevWS\pshop-dev-eng\Color\SampleICC\Contrib\CmdLine\create_CLUT_profile\create_CLUT_profile.vcproj", "{16326F94-522C-4C2A-9FCE-56828AF23C8B}"
 	ProjectSection(ProjectDependencies) = postProject
+		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
 		{938C1BE6-F759-44BB-85C2-60FC413D5AD2} = {938C1BE6-F759-44BB-85C2-60FC413D5AD2}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "create_display_profile", "E:\AccuRevWS\pshop-dev-eng\Color\SampleICC\Contrib\CmdLine\create_display_profile\create_display_profile.vcproj", "{45AFC99C-232B-45F6-B0D8-6697D4306366}"
 	ProjectSection(ProjectDependencies) = postProject
+		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
 		{938C1BE6-F759-44BB-85C2-60FC413D5AD2} = {938C1BE6-F759-44BB-85C2-60FC413D5AD2}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "flatten_AToB_tag", "..\tests\flatten_AToB_tag\flatten_AToB_tag.vcproj", "{EDC0A2BE-50FE-4DE2-ADD6-DC87F4FBCDCC}"
 	ProjectSection(ProjectDependencies) = postProject
+		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
 		{938C1BE6-F759-44BB-85C2-60FC413D5AD2} = {938C1BE6-F759-44BB-85C2-60FC413D5AD2}
 	EndProjectSection
 EndProject
@@ -30,16 +34,19 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "reconstruct_measurements", "..\tests\reconstruct_measurements\reconstruct_measurements.vcproj", "{130CC431-5239-445E-AB84-942153A5262D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{938C1BE6-F759-44BB-85C2-60FC413D5AD2} = {938C1BE6-F759-44BB-85C2-60FC413D5AD2}
+		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "round_trip_PCS_LAB", "..\tests\round_trip_PCS_LAB\round_trip_PCS_LAB.vcproj", "{52496ADB-E7DD-4518-9BDF-BE8D5D7AC316}"
 	ProjectSection(ProjectDependencies) = postProject
+		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
 		{938C1BE6-F759-44BB-85C2-60FC413D5AD2} = {938C1BE6-F759-44BB-85C2-60FC413D5AD2}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "create_pretransform_curve", "..\examples\RSR\create_pretransform_curve.vcproj", "{FCF6D538-EE93-4EA4-B895-B54FB966A5EA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{938C1BE6-F759-44BB-85C2-60FC413D5AD2} = {938C1BE6-F759-44BB-85C2-60FC413D5AD2}
+		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IccUtilsLib", "..\ICC_utils\ICC_utils.vcproj", "{938C1BE6-F759-44BB-85C2-60FC413D5AD2}"

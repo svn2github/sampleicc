@@ -1202,7 +1202,7 @@ CIccTagXYZ *CIccXformMatrixTRC::GetColumn(icSignature sig) const
 {
   CIccTag *pTag = m_pProfile->FindTag(sig);
 
-  if (pTag->GetType()!=icSigXYZType) {
+  if (!pTag || pTag->GetType()!=icSigXYZType) {
     return NULL;
   }
 
