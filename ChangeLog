@@ -1,3 +1,7 @@
+2007-6-4 max Derhak
+  * Added I/O support for ProfileSequenceId tags using CIccTagProfSeqId class.
+  * Added I/O support for Colorimetric Intent Image State tag.
+
 2007-3-29 Max Derhak
   * Deprecated Tools\Winnt\ApplyCmm.  Use SampleIccCmm instead.
   * Deprecated Tools\Winnt\ProfileDump.  Use wxProfileDump instead.
