@@ -172,6 +172,9 @@ CIccTag* CIccSpecTagFactory::CreateTag(icTagTypeSignature tagSig)
     case icSigResponseCurveSet16Type:
       return new CIccTagResponseCurveSet16;
 
+    case icSigProfileSequceIdType:
+      return new CIccTagProfileSequenceId();
+
     case icSigScreeningType:
     case icSigUcrBgType:
     case icSigCrdInfoType:
@@ -300,6 +303,9 @@ const icChar* CIccSpecTagFactory::GetTagSigName(icTagSignature tagSig)
 
   case icSigProfileSequenceDescTag:
     return "profileSequenceDescTag";
+
+  case icSigProfileSequceIdTag:
+    return "profileSequenceIdentifierTag";
 
   case icSigPs2CRD0Tag:
     return "ps2CRD0Tag";
@@ -469,6 +475,9 @@ const icChar* CIccSpecTagFactory::GetTagTypeSigName(icTagTypeSignature tagSig)
 
   case icSigXYZArrayType:
     return "XYZ Type";
+
+  case icSigProfileSequceIdType:
+    return "profileSequenceIdentifierType";
 
   default:
     return NULL;

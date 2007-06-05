@@ -22,7 +22,7 @@
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="2">
 			<Tool
-				Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
@@ -34,7 +34,8 @@
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
-				SuppressStartupBanner="TRUE"/>
+				SuppressStartupBanner="TRUE"
+				DisableSpecificWarnings="4996"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -71,7 +72,7 @@
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="2">
 			<Tool
-				Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+				Name="VCCLCompilerTool"
 				Optimization="0"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				BasicRuntimeChecks="3"
@@ -82,7 +83,8 @@
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="4"/>
+				DebugInformationFormat="4"
+				DisableSpecificWarnings="4996"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -122,17 +124,19 @@
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="2"
-						PreprocessorDefinitions=""/>
+						PreprocessorDefinitions=""
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+						BasicRuntimeChecks="3"
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -140,17 +144,19 @@
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="2"
-						PreprocessorDefinitions=""/>
+						PreprocessorDefinitions=""
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+						BasicRuntimeChecks="3"
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -167,17 +173,19 @@
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="2"
-						PreprocessorDefinitions=""/>
+						PreprocessorDefinitions=""
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+						BasicRuntimeChecks="3"
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -185,17 +193,19 @@
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="2"
-						PreprocessorDefinitions=""/>
+						PreprocessorDefinitions=""
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+						BasicRuntimeChecks="3"
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -203,17 +213,19 @@
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="2"
-						PreprocessorDefinitions=""/>
+						PreprocessorDefinitions=""
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+						BasicRuntimeChecks="3"
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -221,38 +233,45 @@
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="2"
-						PreprocessorDefinitions=""/>
+						PreprocessorDefinitions=""
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+						BasicRuntimeChecks="3"
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\IccTagMPE.cpp">
 			</File>
 			<File
+				RelativePath=".\IccTagProfSeqId.cpp">
+			</File>
+			<File
 				RelativePath="IccUtil.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="2"
-						PreprocessorDefinitions=""/>
+						PreprocessorDefinitions=""
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+						BasicRuntimeChecks="3"
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -260,17 +279,19 @@
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="2"
-						PreprocessorDefinitions=""/>
+						PreprocessorDefinitions=""
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+						BasicRuntimeChecks="3"
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 			</File>
 		</Filter>
@@ -315,6 +336,9 @@
 			</File>
 			<File
 				RelativePath=".\IccTagMPE.h">
+			</File>
+			<File
+				RelativePath=".\IccTagProfSeqId.h">
 			</File>
 			<File
 				RelativePath="IccUtil.h">

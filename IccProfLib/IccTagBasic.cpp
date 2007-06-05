@@ -1338,6 +1338,25 @@ icValidateStatus CIccTagSignature::Validate(icTagSignature sig, std::string &sRe
       }
     }
   }
+  else if (sig==icSigColorimetricIntentImageStateTag) {
+    switch(m_nSig) {
+      case icSigSceneColorimetryEstimates:
+      case icSigSceneAppearanceEstimates:
+      case icSigFocalPlaneColorimetryEstimates:
+      case icSigReflectionHardcopyOriginalColorimetry:
+      case icSigReflectionPrintOutputColorimetry:
+        break;
+
+      default:
+      {
+        sReport += icValidateNonCompliantMsg;
+        sReport += sSigName;
+        sprintf(buf, " - %s: Unknown Colorimetric Intent Image State.\r\n", Info.GetSigName(m_nSig));
+        sReport += buf;
+        rv = icMaxStatus(rv, icValidateNonCompliant);
+      }
+    }
+  }
 
 
   return rv;

@@ -59,6 +59,17 @@
  *   the configuration paramaters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
+ * - June 2007
+ *  - Added support for optional ProfileSequenceId tags.  These tags provide contents of 
+ *    profile description tags and id's for profiles used to create an device link profile.  The
+ *    CIccTagProfileSequeceId class implements these objects.
+ *  - Added support for optional colorimetric Intent Image State tags.  This tag provides information
+ *    about the image state implied by the use of a profile containg this tag.
+ *
+ * - Febrary 2007
+ *  - Added a CIccMruCmm class that keeps track of the last 5 pixels that were applied.  Used by the
+ *    SampleIccCmm Windows CMM DLL project.
+ *
  * - November 2006
  *  - Added support for optional multiProcessingElementType tags.  These tags provide
  *    an arbitrary order of curves, matricies, and N-D luts encoded using floating

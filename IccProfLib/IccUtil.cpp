@@ -1151,6 +1151,30 @@ const icChar *CIccInfo::GetReferenceMediumGamutSigNameName(icReferenceMediumGamu
 }
 
 
+const icChar *CIccInfo::GetColorimetricIntentImageStateName(icColorimetricIntentImageStateSignature sig)
+{
+  switch (sig) {
+  case icSigSceneColorimetryEstimates:
+    return "Scene Colorimetry Estimates";
+
+  case icSigSceneAppearanceEstimates:
+    return "Scene Appearance Estimates";
+
+  case icSigFocalPlaneColorimetryEstimates:
+    return "Focal Plane Colorimetry Estimates";
+
+  case icSigReflectionHardcopyOriginalColorimetry:
+    return "Reflection Hardcopy Original Colorimetry";
+
+  case icSigReflectionPrintOutputColorimetry:
+    return "Reflection Print Output Colorimetry";
+
+  default:
+    return GetUnknownName(sig);
+  }
+}
+
+
 const icChar *CIccInfo::GetSigName(icUInt32Number sig)
 {
   const icChar *rv;
@@ -1179,7 +1203,11 @@ const icChar *CIccInfo::GetSigName(icUInt32Number sig)
   if (rv != m_szStr)
     return rv;
 
-  return GetReferenceMediumGamutSigNameName((icReferenceMediumGamutSignature)sig);
+  rv = GetReferenceMediumGamutSigNameName((icReferenceMediumGamutSignature)sig);
+  if (rv != m_szStr)
+    return rv;
+
+  return GetColorimetricIntentImageStateName((icColorimetricIntentImageStateSignature)sig);
 }
 
 

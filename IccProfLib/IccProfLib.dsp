@@ -127,6 +127,10 @@ SOURCE=.\IccTagMPE.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\IccTagProfSeqId.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\IccUtil.cpp
 # End Source File
 # Begin Source File
@@ -188,6 +192,10 @@ SOURCE=.\IccTagLut.h
 # Begin Source File
 
 SOURCE=.\IccTagMPE.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\IccTagProfSeqId.h
 # End Source File
 # Begin Source File
 

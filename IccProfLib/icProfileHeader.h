@@ -322,6 +322,7 @@ typedef enum {
     icSigColorantOrderTag                  = 0x636C726F,  /* 'clro' */
     icSigColorantTableTag                  = 0x636C7274,  /* 'clrt' */
     icSigColorantTableOutTag               = 0x636C6F74,  /* 'clot' */
+    icSigColorimetricIntentImageStateTag   = 0x63696973,  /* 'ciis' */
     icSigCopyrightTag                      = 0x63707274,  /* 'cprt' */
     icSigCrdInfoTag                        = 0x63726469,  /* 'crdi' Removed in V4 */
     icSigDataTag                           = 0x64617461,  /* 'data' Removed in V4 */
@@ -357,6 +358,7 @@ typedef enum {
     icSigPreview2Tag                       = 0x70726532,  /* 'pre2' */
     icSigProfileDescriptionTag             = 0x64657363,  /* 'desc' */
     icSigProfileSequenceDescTag            = 0x70736571,  /* 'pseq' */
+    icSigProfileSequceIdTag                = 0x70736964,  /* 'psid' */
     icSigPs2CRD0Tag                        = 0x70736430,  /* 'psd0' Removed in V4 */
     icSigPs2CRD1Tag                        = 0x70736431,  /* 'psd1' Removed in V4 */
     icSigPs2CRD2Tag                        = 0x70736432,  /* 'psd2' Removed in V4 */
@@ -441,6 +443,7 @@ typedef enum {
     icSigNamedColor2Type                = 0x6E636C32,  /* 'ncl2' */
     icSigParametricCurveType            = 0x70617261,  /* 'para' */
     icSigProfileSequenceDescType        = 0x70736571,  /* 'pseq' */
+    icSigProfileSequceIdType            = 0x70736964,  /* 'psid' */
     icSigResponseCurveSet16Type         = 0x72637332,  /* 'rcs2' */
     icSigS15Fixed16ArrayType            = 0x73663332,  /* 'sf32' */
     icSigScreeningType                  = 0x7363726E,  /* 'scrn' Removed in V4 */
@@ -579,6 +582,19 @@ typedef enum {
 
 /** Convenience Enum Definition - Not defined in ICC specification*/
 #define icMaxEnumReferenceMediumGamut ((icReferenceMediumGamutSignature 0xFFFFFFFF)
+
+
+/** Colorimetric Intent Image State Gamut Signatures */
+typedef enum {
+  icSigSceneColorimetryEstimates             = 0x73636F65,  /* 'scoe' */
+  icSigSceneAppearanceEstimates              = 0x73617065,  /* 'sape' */
+  icSigFocalPlaneColorimetryEstimates        = 0x66706365,  /* 'fpce' */
+  icSigReflectionHardcopyOriginalColorimetry = 0x72686F63,  /* 'rhoc' */
+  icSigReflectionPrintOutputColorimetry      = 0x72706F63,  /* 'rpoc' */
+} icColorimetricIntentImageStateSignature;
+
+/** Convenience Enum Definition - Not defined in ICC specification*/
+#define icMaxEnumColorimetricIntentImageState ((icColorimetricIntentImageStateSignature 0xFFFFFFFF)
 
 
 /**

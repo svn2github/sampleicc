@@ -135,6 +135,10 @@ SOURCE=.\IccTagMPE.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\IccTagProfSeqId.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\IccUtil.cpp
 # End Source File
 # Begin Source File
@@ -180,6 +184,10 @@ SOURCE=.\IccProfLib_CRTDLLConf.h
 # Begin Source File
 
 SOURCE=.\IccTag.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\IccTagProfSeqId.h
 # End Source File
 # Begin Source File
 
