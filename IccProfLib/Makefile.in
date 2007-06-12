@@ -105,8 +105,8 @@ lib_LTLIBRARIES = libSampleICC.la
 
 libSampleICC_la_SOURCES = IccCmm.cpp IccIO.cpp IccProfile.cpp \
 	IccMpeACS.cpp IccMpeBasic.cpp IccMpeFactory.cpp IccTagMPE.cpp \
-	IccTagBasic.cpp IccTagFactory.cpp IccTagLut.cpp IccUtil.cpp \
-	md5.cpp
+	IccTagBasic.cpp IccTagFactory.cpp IccTagLut.cpp \
+	IccTagProfSeqId.cpp IccUtil.cpp md5.cpp
 
 
 libSampleICC_la_LDFLAGS = -version-info @LIBTOOL_VERSION@
@@ -117,7 +117,7 @@ libSampleICCinclude_HEADERS = IccCmm.h IccDefs.h IccIO.h \
 	IccProfLibConf.h IccProfile.h \
 	IccMpeACS.h IccMpeBasic.h IccMpeFactory.h IccTagMPE.h \
 	IccTag.h IccTagBasic.h IccTagFactory.h IccTagLut.h \
-	IccUtil.h MainPage.h \
+	IccTagProfSeqId.h IccUtil.h MainPage.h \
 	icProfileHeader.h \
 	md5.h
 
@@ -131,7 +131,8 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libSampleICC_la_LIBADD =
 am_libSampleICC_la_OBJECTS = IccCmm.lo IccIO.lo IccProfile.lo \
 	IccMpeACS.lo IccMpeBasic.lo IccMpeFactory.lo IccTagMPE.lo \
-	IccTagBasic.lo IccTagFactory.lo IccTagLut.lo IccUtil.lo md5.lo
+	IccTagBasic.lo IccTagFactory.lo IccTagLut.lo IccTagProfSeqId.lo \
+	IccUtil.lo md5.lo
 libSampleICC_la_OBJECTS = $(am_libSampleICC_la_OBJECTS)
 
 DEFS = @DEFS@
@@ -149,6 +150,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/IccTagBasic.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/IccTagFactory.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/IccTagLut.Plo ./$(DEPDIR)/IccTagMPE.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/IccTagProfSeqId.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/IccUtil.Plo ./$(DEPDIR)/md5.Plo
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -221,6 +223,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IccTagFactory.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IccTagLut.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IccTagMPE.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IccTagProfSeqId.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IccUtil.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/md5.Plo@am__quote@
 
