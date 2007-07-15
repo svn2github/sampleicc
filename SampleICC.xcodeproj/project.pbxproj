@@ -70,6 +70,8 @@
 		7C49ED1D0BADDD740014FD12 /* create_pretransform_curve.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C49ED1C0BADDD740014FD12 /* create_pretransform_curve.cpp */; };
 		7C49ED300BADDF8E0014FD12 /* flatten_AToB_tag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C49ED2F0BADDF8E0014FD12 /* flatten_AToB_tag.cpp */; };
 		7C49ED4D0BADE0410014FD12 /* generate_device_codes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C49ED4C0BADE0410014FD12 /* generate_device_codes.cpp */; };
+		7C52B2320C3896E500EFE647 /* IccTagProfSeqId.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C52B2300C3896E500EFE647 /* IccTagProfSeqId.cpp */; };
+		7C52B2330C3896E500EFE647 /* IccTagProfSeqId.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C52B2310C3896E500EFE647 /* IccTagProfSeqId.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7C605E690B4B65E200350479 /* IccCmm.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4170AF04D3F002F2A93 /* IccCmm.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7C605E6A0B4B65E200350479 /* IccDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F4180AF04D3F002F2A93 /* IccDefs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7C605E6B0B4B65E200350479 /* IccIO.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CE0F41A0AF04D3F002F2A93 /* IccIO.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -319,28 +321,28 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 7C605EB20B4B683200350479 /* ICC_utils */;
+			remoteGlobalIDString = 7C605EB20B4B683200350479;
 			remoteInfo = ICC_utils;
 		};
 		7C8DAA5A0BF95F9D006D9E23 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 7C605EB20B4B683200350479 /* ICC_utils */;
+			remoteGlobalIDString = 7C605EB20B4B683200350479;
 			remoteInfo = ICC_utils;
 		};
 		7C8DAC090BFB70F9006D9E23 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 7C605EB20B4B683200350479 /* ICC_utils */;
+			remoteGlobalIDString = 7C605EB20B4B683200350479;
 			remoteInfo = ICC_utils;
 		};
 		7C8DAC9A0BFBA725006D9E23 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 7C605EB20B4B683200350479 /* ICC_utils */;
+			remoteGlobalIDString = 7C605EB20B4B683200350479;
 			remoteInfo = ICC_utils;
 		};
 		7CE0F4E50AF0510F002F2A93 /* PBXContainerItemProxy */ = {
@@ -445,7 +447,7 @@
 		7C1BD0A70B93AEC900FF4AAE /* extract_probe_data */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = extract_probe_data; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C1BD1890B93B0F000FF4AAE /* Stubs.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = Stubs.cpp; path = Contrib/ICC_utils/Stubs.cpp; sourceTree = SOURCE_ROOT; };
 		7C1BD18A0B93B0F000FF4AAE /* Stubs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Stubs.h; path = Contrib/ICC_utils/Stubs.h; sourceTree = SOURCE_ROOT; };
-		7C333A060B1EA925006AB880 /* iccC4ToMpe */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccC4ToMpe; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C333A060B1EA925006AB880 /* iccV4ToMpe */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccV4ToMpe; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C333A0F0B1EA99D006AB880 /* iccV4ToMPE.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = iccV4ToMPE.cpp; path = Tools/CmdLine/IccV4ToMPE/iccV4ToMPE.cpp; sourceTree = "<group>"; };
 		7C49EA780B09114D00ADFFE7 /* create_display_profile */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = create_display_profile; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C49EA8F0B09122C00ADFFE7 /* create_display_profile.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = create_display_profile.cpp; sourceTree = "<group>"; };
@@ -457,6 +459,8 @@
 		7C49ED2F0BADDF8E0014FD12 /* flatten_AToB_tag.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = flatten_AToB_tag.cpp; path = Contrib/tests/flatten_AToB_tag/flatten_AToB_tag.cpp; sourceTree = "<group>"; };
 		7C49ED340BADDFA20014FD12 /* generate_device_codes */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = generate_device_codes; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C49ED4C0BADE0410014FD12 /* generate_device_codes.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = generate_device_codes.cpp; path = Contrib/tests/generate_device_codes/generate_device_codes.cpp; sourceTree = "<group>"; };
+		7C52B2300C3896E500EFE647 /* IccTagProfSeqId.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = IccTagProfSeqId.cpp; sourceTree = "<group>"; };
+		7C52B2310C3896E500EFE647 /* IccTagProfSeqId.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccTagProfSeqId.h; sourceTree = "<group>"; };
 		7C605E5C0B4B65A900350479 /* SampleICC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SampleICC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C605E5D0B4B65A900350479 /* SampleICC-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "SampleICC-Info.plist"; sourceTree = "<group>"; };
 		7C605EB30B4B683200350479 /* ICC_utils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ICC_utils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -494,7 +498,7 @@
 		7CE0F42B0AF04D3F002F2A93 /* icProfileHeader.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = icProfileHeader.h; sourceTree = "<group>"; };
 		7CE0F42F0AF04D3F002F2A93 /* md5.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = md5.cpp; sourceTree = "<group>"; };
 		7CE0F4300AF04D3F002F2A93 /* md5.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = md5.h; sourceTree = "<group>"; };
-		7CE0F4570AF04F02002F2A93 /* iccApplyNamedCmm */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccApplyNamedCmm; sourceTree = BUILT_PRODUCTS_DIR; };
+		7CE0F4570AF04F02002F2A93 /* iccApplyNamedCmm */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "compiled.mach-o.executable"; path = iccApplyNamedCmm; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CE0F45E0AF04F1C002F2A93 /* iccApplyProfiles */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccApplyProfiles; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CE0F4650AF04F3C002F2A93 /* create_CLUT_profile */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = create_CLUT_profile; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CE0F46C0AF04F59002F2A93 /* iccDumpProfile */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccDumpProfile; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -720,7 +724,7 @@
 				7CE0F45E0AF04F1C002F2A93 /* iccApplyProfiles */,
 				7CE0F46C0AF04F59002F2A93 /* iccDumpProfile */,
 				7CE0F4730AF04F73002F2A93 /* iccProfLibTest */,
-				7C333A060B1EA925006AB880 /* iccC4ToMpe */,
+				7C333A060B1EA925006AB880 /* iccV4ToMpe */,
 				7CE0F4650AF04F3C002F2A93 /* create_CLUT_profile */,
 				7C49ECE40BADDC430014FD12 /* create_CLUT_profile_from_probe */,
 				7C49EA780B09114D00ADFFE7 /* create_display_profile */,
@@ -889,6 +893,8 @@
 		7CE0F4120AF04D3F002F2A93 /* IccProfLib */ = {
 			isa = PBXGroup;
 			children = (
+				7C52B2300C3896E500EFE647 /* IccTagProfSeqId.cpp */,
+				7C52B2310C3896E500EFE647 /* IccTagProfSeqId.h */,
 				7CFB28AF0B13D0230093D058 /* IccMpeACS.cpp */,
 				7CFB28B00B13D0230093D058 /* IccMpeACS.h */,
 				7CFB28B10B13D0230093D058 /* IccMpeBasic.cpp */,
@@ -1048,6 +1054,7 @@
 				7C605E730B4B65E200350479 /* IccTagFactory.h in Headers */,
 				7C605E740B4B65E200350479 /* IccTagLut.h in Headers */,
 				7C605E750B4B65E200350479 /* IccTagMPE.h in Headers */,
+				7C52B2330C3896E500EFE647 /* IccTagProfSeqId.h in Headers */,
 				7C605E760B4B65E200350479 /* IccUtil.h in Headers */,
 				7C605E770B4B65E200350479 /* icProfileHeader.h in Headers */,
 				7C605E780B4B65E200350479 /* md5.h in Headers */,
@@ -1100,7 +1107,7 @@
 			);
 			name = iccV4ToMpe;
 			productName = iccC4ToMpe;
-			productReference = 7C333A060B1EA925006AB880 /* iccC4ToMpe */;
+			productReference = 7C333A060B1EA925006AB880 /* iccV4ToMpe */;
 			productType = "com.apple.product-type.tool";
 		};
 		7C49EA770B09114D00ADFFE7 /* create_display_profile */ = {
@@ -1482,6 +1489,7 @@
 				7C605E820B4B661400350479 /* IccTagFactory.cpp in Sources */,
 				7C605E830B4B661400350479 /* IccTagLut.cpp in Sources */,
 				7C605E840B4B661400350479 /* IccTagMPE.cpp in Sources */,
+				7C52B2320C3896E500EFE647 /* IccTagProfSeqId.cpp in Sources */,
 				7C605E850B4B661400350479 /* IccUtil.cpp in Sources */,
 				7C605E860B4B661400350479 /* md5.cpp in Sources */,
 			);
@@ -1775,274 +1783,166 @@
 		1DEB914F08733D8E0010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_DEBUGGING_SYMBOLS = full;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_ENABLE_SYMBOL_SEPARATION = NO;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				OBJROOT = "$(SRCROOT)/../../object_files";
 				PREBINDING = NO;
 				SEPARATE_STRIP = YES;
+				SYMROOT = "$(SRCROOT)/../../built_products";
+				WARNING_CFLAGS = "-Wall";
 			};
 			name = Debug;
 		};
 		1DEB915008733D8E0010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_OPTIMIZATION_LEVEL = 3;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_SYMBOL_SEPARATION = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				OBJROOT = "$(SRCROOT)/../../object_files";
 				PREBINDING = NO;
+				SEPARATE_STRIP = YES;
+				SYMROOT = "$(SRCROOT)/../../built_products";
+				WARNING_CFLAGS = "-Wall";
 			};
 			name = Release;
 		};
 		7C1BD1800B93AF3100FF4AAE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PREBINDING = NO;
 				PRODUCT_NAME = extract_probe_data;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		7C1BD1810B93AF3100FF4AAE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				PREBINDING = NO;
 				PRODUCT_NAME = extract_probe_data;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		7C333A0D0B1EA952006AB880 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = "$(HOME)/bin";
-				PREBINDING = NO;
 				PRODUCT_NAME = iccV4ToMpe;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		7C333A0E0B1EA952006AB880 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = "$(HOME)/bin";
-				PREBINDING = NO;
-				PRODUCT_NAME = iccC4ToMpe;
-				ZERO_LINK = NO;
+				PRODUCT_NAME = iccV4ToMpe;
 			};
 			name = Release;
 		};
 		7C49EA810B09116B00ADFFE7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PREBINDING = NO;
 				PRODUCT_NAME = create_display_profile;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		7C49EA820B09116B00ADFFE7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				PREBINDING = NO;
 				PRODUCT_NAME = create_display_profile;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		7C49ECEE0BADDC880014FD12 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PREBINDING = NO;
 				PRODUCT_NAME = create_CLUT_profile_from_probe;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		7C49ECEF0BADDC880014FD12 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				PREBINDING = NO;
 				PRODUCT_NAME = create_CLUT_profile_from_probe;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		7C49ED0E0BADDD2D0014FD12 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = "$(HOME)/bin";
-				PREBINDING = NO;
 				PRODUCT_NAME = create_pretransform_curve;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		7C49ED0F0BADDD2D0014FD12 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = "$(HOME)/bin";
-				PREBINDING = NO;
 				PRODUCT_NAME = create_pretransform_curve;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		7C49ED3A0BADDFC50014FD12 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PREBINDING = NO;
 				PRODUCT_NAME = generate_device_codes;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		7C49ED3B0BADDFC50014FD12 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				PREBINDING = NO;
 				PRODUCT_NAME = generate_device_codes;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		7C605E650B4B65AB00350479 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G4;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = "SampleICC-Info.plist";
-				PREBINDING = NO;
 				PRODUCT_NAME = SampleICC;
-				SKIP_INSTALL = NO;
 			};
 			name = Debug;
 		};
 		7C605E660B4B65AB00350479 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G4;
 				INFOPLIST_FILE = "SampleICC-Info.plist";
-				PREBINDING = NO;
 				PRODUCT_NAME = SampleICC;
-				SKIP_INSTALL = NO;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		7C605EBB0B4B683500350479 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G4;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = "ICC_utils-Info.plist";
-				PREBINDING = NO;
 				PRODUCT_NAME = ICC_utils;
-				SKIP_INSTALL = NO;
 			};
 			name = Debug;
 		};
 		7C605EBC0B4B683500350479 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_SYMBOL_SEPARATION = NO;
-				GCC_MODEL_TUNING = G4;
 				INFOPLIST_FILE = "ICC_utils-Info.plist";
-				PREBINDING = NO;
 				PRODUCT_NAME = ICC_utils;
-				SKIP_INSTALL = NO;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -2070,246 +1970,112 @@
 		7C64B60B0B9284F1000A88D2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PREBINDING = NO;
 				PRODUCT_NAME = create_probe;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		7C64B60C0B9284F1000A88D2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				PREBINDING = NO;
 				PRODUCT_NAME = create_probe;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		7C8BFFF90B57257B00889B00 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = /usr/local/bin;
-				PREBINDING = NO;
 				PRODUCT_NAME = round_trip_PCS_LAB;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		7C8BFFFA0B57257B00889B00 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/bin;
-				PREBINDING = NO;
 				PRODUCT_NAME = round_trip_PCS_LAB;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		7CE0F4870AF04F9B002F2A93 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = "$(HOME)/bin";
-				PREBINDING = NO;
 				PRODUCT_NAME = iccApplyNamedCmm;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		7CE0F4880AF04F9B002F2A93 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = "$(HOME)/bin";
-				PREBINDING = NO;
 				PRODUCT_NAME = iccApplyNamedCmm;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		7CE0F48A0AF04F9B002F2A93 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = "$(HOME)/bin";
-				PREBINDING = NO;
 				PRODUCT_NAME = iccApplyProfiles;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		7CE0F48B0AF04F9B002F2A93 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = "$(HOME)/bin";
-				PREBINDING = NO;
 				PRODUCT_NAME = iccApplyProfiles;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		7CE0F48D0AF04F9B002F2A93 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PREBINDING = NO;
 				PRODUCT_NAME = create_CLUT_profile;
-				SKIP_INSTALL = NO;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		7CE0F48E0AF04F9B002F2A93 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				PREBINDING = NO;
 				PRODUCT_NAME = create_CLUT_profile;
-				SKIP_INSTALL = NO;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		7CE0F4900AF04F9B002F2A93 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = "$(HOME)/bin";
-				PREBINDING = NO;
 				PRODUCT_NAME = iccDumpProfile;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		7CE0F4910AF04F9B002F2A93 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = "$(HOME)/bin";
-				PREBINDING = NO;
 				PRODUCT_NAME = iccDumpProfile;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		7CE0F4930AF04F9B002F2A93 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = "$(HOME)/bin";
-				PREBINDING = NO;
 				PRODUCT_NAME = iccProfLibTest;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		7CE0F4940AF04F9B002F2A93 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = "$(HOME)/bin";
-				PREBINDING = NO;
 				PRODUCT_NAME = iccProfLibTest;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		7CE0F4EA0AF05161002F2A93 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PREBINDING = NO;
 				PRODUCT_NAME = flatten_AToB_tag;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		7CE0F4EB0AF05161002F2A93 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				PREBINDING = NO;
 				PRODUCT_NAME = flatten_AToB_tag;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -2340,30 +2106,14 @@
 		7CF6A6A40B555F390077F8CF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = /usr/local/bin;
-				PREBINDING = NO;
 				PRODUCT_NAME = reconstruct_measurements;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		7CF6A6A50B555F390077F8CF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/bin;
-				PREBINDING = NO;
 				PRODUCT_NAME = reconstruct_measurements;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
