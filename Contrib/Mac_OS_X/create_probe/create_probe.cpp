@@ -102,7 +102,7 @@
 
 #include <iostream>
 using namespace std;
-#include "Vetters.h"
+#include <ICC_utils/Vetters.h>
 
 #include "ApplicationServices/ApplicationServices.h"
 
@@ -116,7 +116,7 @@ getDeviceRGBColorSpace()
 }
 
 #define BEST_BYTE_ALIGNMENT 16
-#define COMPUTE_BEST_BYTES_PER_ROW(bpr)\
+#define BEST_BYTES_PER_ROW(bpr)\
 ( ( (bpr) + (BEST_BYTE_ALIGNMENT-1) ) & ~(BEST_BYTE_ALIGNMENT-1) )
 
 CGContextRef
@@ -126,9 +126,11 @@ createRGBBitmapContext(size_t width, size_t height, bool deep)
   
   float black[4] = { 0.0, 0.0, 0.0, 1.0 };
   size_t bitsPerComponent = deep ? 32 : 8;
-  // somewhat problematic: will fail for "thousands of colors" but who uses that these days?
-  size_t bytesPerRow = COMPUTE_BEST_BYTES_PER_ROW(width * 4 * bitsPerComponent / 8);
-  CGBitmapInfo bitmapInfo = kCGImageAlphaNoneSkipLast | (deep ? kCGBitmapFloatComponents : 0);
+  // somewhat problematic: will fail for "thousands of colors" but who uses
+  // that setting, these days?
+  size_t bytesPerRow  = BEST_BYTES_PER_ROW(width * 4 * bitsPerComponent / 8);
+  CGBitmapInfo bitmapInfo = kCGImageAlphaNoneSkipLast
+                          | (deep ? kCGBitmapFloatComponents : 0);
   
   unsigned char* data;
   data = static_cast<unsigned char*>(calloc(1, bytesPerRow * height));
@@ -183,6 +185,21 @@ drawBoundary(CGContextRef context, size_t width, size_t height)
 }
 
 void
+drawBackground(CGContextRef context, size_t width, size_t height)
+{
+  CGContextSetFillColorSpace(context, getDeviceRGBColorSpace());
+  CGRect rect;
+  rect.origin.x = 0;
+  rect.origin.y = 0;
+  rect.size.width = width;
+  rect.size.height = height;
+  // Why Magenta? Because it's not a commonly-used UI color on the Mac.
+  // (I almost said the same thing about cyan, but consider Aqua UI controls.)
+  CGContextSetRGBFillColor(context, 1.0, 0.0, 1.0, 1.0);
+  CGContextFillRect(context, rect);
+}
+
+void
 drawContents(CGContextRef context, CGRect contentRect, size_t edgeSize)
 {
   CGContextSetFillColorSpace(context, getDeviceRGBColorSpace());
@@ -191,7 +208,7 @@ drawContents(CGContextRef context, CGRect contentRect, size_t edgeSize)
   int b = 0;
   CGRect pixelRect;
   pixelRect.origin.x = contentRect.origin.x;
-  pixelRect.origin.y = contentRect.origin.y;
+  pixelRect.origin.y = contentRect.origin.y + contentRect.size.height - 1;
   pixelRect.size.width = 1.0;
   pixelRect.size.height = 1.0;
   for (r = 0; r < edgeSize; ++r)
@@ -209,10 +226,19 @@ drawContents(CGContextRef context, CGRect contentRect, size_t edgeSize)
         if (pixelRect.origin.x - contentRect.origin.x >= contentRect.size.width)
         {
           pixelRect.origin.x = contentRect.origin.x;
-          pixelRect.origin.y++;
+          --pixelRect.origin.y;
         }
       }
     }
+  }
+  // Now leave a marker showing the length of the (now flattened) cube
+  pixelRect.origin.x = contentRect.origin.x;
+  --pixelRect.origin.y;
+  for (size_t x = 0; x < edgeSize; ++x)
+  {
+    CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
+    CGContextFillRect(context, pixelRect);
+    ++pixelRect.origin.x;
   }
 }
 
@@ -253,23 +279,23 @@ main(int argc, char* argv[])
   const unsigned int DEFAULT_N = 52;
   
   const char* const myName = path_tail(argv[0]);
-  if (argc < 2 || argc > 3)
+  if (argc > 2)
   {
     usage(cout, myName, DEFAULT_N);
     return EXIT_FAILURE;
   }
   bool deep = false;
   
-  size_t borderSize = 3;
+  size_t borderSize = 20;
   size_t contentWidth = 560;
   size_t contentHeight = 280;
-  //  size_t edgeSize = deep ? 52 : 22;
-  size_t edgeSize = 52;
+  size_t edgeSize = argc == 3 ? atoi(argv[2]) : 52;
   
   size_t bitmapWidth = contentWidth + 2 * borderSize;
   size_t bitmapHeight = contentHeight + 2 * borderSize;
   
-  CGContextRef bitmapContext = createRGBBitmapContext(bitmapWidth, bitmapHeight, deep);
+  CGContextRef bitmapContext = createRGBBitmapContext(bitmapWidth,
+                                                      bitmapHeight, deep);
   if (bitmapContext == NULL)
   {
     fprintf(stderr, "Couldn't create bitmapContext.\n");
@@ -277,8 +303,10 @@ main(int argc, char* argv[])
   }
   
   CGContextSetAllowsAntialiasing(bitmapContext, false);
-  drawBoundary(bitmapContext, bitmapWidth, bitmapHeight);
-  CGRect contentRect = CGRectMake(borderSize, borderSize, contentWidth, contentHeight);
+//  drawBoundary(bitmapContext, bitmapWidth, bitmapHeight);
+  drawBackground(bitmapContext, bitmapWidth, bitmapHeight);
+  CGRect contentRect = CGRectMake(borderSize, borderSize, contentWidth,
+                                  contentHeight);
   drawContents(bitmapContext, contentRect, edgeSize);
   
   CGImageRef image = CGBitmapContextCreateImage(bitmapContext);

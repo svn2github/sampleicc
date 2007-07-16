@@ -90,10 +90,14 @@
 #include <iostream>
 using namespace std;
 
-#include "Vetters.h"
+#include <ICC_Utils/Vetters.h>
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <ApplicationServices/ApplicationServices.h>
+
+// ------- Mac-specific color space hackery, so that we don't end up having
+// the system distort the colors we are reading out of the image in the name
+// of its own 'color management'.
 
 CGColorSpaceRef
 getDeviceRGBColorSpace()
@@ -135,6 +139,139 @@ getTheDisplayColorSpace()
   return displayCS;
 }
 
+// ------- Utilities for finding horizontal or vertical bands of continuous
+// pixels. The presumption is that the user, when they grab the probe image,
+// has managed to have the grab outline completely within the magenta image
+// border region. This should be easy as it is 20 pixels wide...
+
+bool
+equalPixels(const unsigned char* const firstPixel,
+            const unsigned char* const secondPixel)
+{
+  return firstPixel[0] == secondPixel[0]
+      && firstPixel[1] == secondPixel[1]
+      && firstPixel[2] == secondPixel[2];
+}
+
+void
+getPixel(unsigned const char* const data, size_t fullImageWidth,
+         size_t fullImageHeight, size_t bytesPerRow,
+         size_t bytesPerPixel, size_t x, size_t y, unsigned char* pixel)
+{
+  const unsigned char* const p = data + y * bytesPerRow + x * bytesPerPixel;
+  pixel[0] = p[0];
+  pixel[1] = p[1];
+  pixel[2] = p[2];
+}
+
+bool
+isHorizontalBorderRow(const unsigned char* const data, size_t fullImageWidth,
+                      size_t fullImageHeight, size_t bytesPerRow,
+                      size_t bytesPerPixel, unsigned char* const borderPixel,
+                      size_t y)
+{
+  unsigned char pixel[3];
+  for (int x = 0; x < fullImageWidth; ++x)
+  {
+    getPixel(data, fullImageWidth, fullImageHeight, bytesPerRow, bytesPerPixel,
+             x, y, pixel);
+    if (! equalPixels(pixel, borderPixel))
+      return false;
+  }
+  return true;
+}
+
+bool
+isVerticalBorderRow(const unsigned char* const data, size_t fullImageWidth,
+                    size_t fullImageHeight, size_t bytesPerRow,
+                    size_t bytesPerPixel, unsigned char* const borderPixel,
+                    size_t x)
+{
+  unsigned char pixel[3];
+  for (int y = 0; y < fullImageHeight; ++y)
+  {
+    getPixel(data, fullImageWidth, fullImageHeight, bytesPerRow,
+             bytesPerPixel, x, y, pixel);
+    if (! equalPixels(pixel, borderPixel))
+      return false;
+  }
+  return true;
+}
+
+// the bitmap data are arrayed such that lower-index data are at the top
+// of the image, and higher-index data at the bottom. So increasing Y values
+// from 0 help us find the start of the content, and decreasing Y values from
+// fullImageHeight - 1 helps us find the last of the content.
+
+// The last line of the content is not part of the flattened cube, but rather
+// is a white strip whose length is the same as the edge size. This lets us
+// deduce edge size rather than passing it as a command-line parameter.
+
+void
+getContentBoundaries(const unsigned char* const data, size_t fullImageWidth,
+                     size_t fullImageHeight, size_t bytesPerRow,
+                     size_t bytesPerPixel, size_t* firstContentRow,
+                     size_t* lastContentRow, size_t* firstContentColumn,
+                     size_t* lastContentColumn)
+{
+  unsigned char borderPixel[3];
+  getPixel(data, fullImageWidth, fullImageHeight, bytesPerRow,
+           bytesPerPixel, 0, 0, borderPixel);
+
+  size_t y = 0;
+  while (isHorizontalBorderRow(data, fullImageWidth, fullImageHeight,
+                               bytesPerRow, bytesPerPixel, borderPixel, y)
+         && y < fullImageHeight - 1)
+    ++y;
+  *firstContentRow = y;
+  
+  y = fullImageHeight - 1;
+  while (isHorizontalBorderRow(data, fullImageWidth, fullImageHeight,
+                               bytesPerRow, bytesPerPixel, borderPixel, y)
+         && y > 0)
+    --y;
+  *lastContentRow = y;
+  
+  size_t x = 0;
+  while (isVerticalBorderRow(data, fullImageWidth, fullImageHeight,
+                             bytesPerRow, bytesPerPixel, borderPixel, x)
+         && x < fullImageWidth - 1)
+    ++x;
+  *firstContentColumn = x;
+  
+  x = fullImageWidth - 1;
+  while (isVerticalBorderRow(data, fullImageWidth, fullImageHeight,
+                             bytesPerRow, bytesPerPixel, borderPixel, x)
+         && x > 0)
+    --x;
+  *lastContentColumn = x;
+}
+
+size_t
+getEdgeSize(const unsigned char* const data, size_t fullImageWidth,
+            size_t fullImageHeight, size_t bytesPerRow, size_t bytesPerPixel,
+            size_t firstContentColumn, size_t lastContentColumn,
+            size_t lastContentRow)
+{
+  // not necc. (1.0, 1.0, 1.0) after any color transform
+  unsigned char whitePixel[3];
+  getPixel(data, fullImageWidth, fullImageHeight, bytesPerRow,
+           bytesPerPixel, firstContentColumn, lastContentRow, whitePixel);
+  size_t N = 0;
+  for (size_t x = firstContentColumn; x <= lastContentColumn; ++x)
+  {
+    unsigned char pixel[3];
+    getPixel(data, fullImageWidth, fullImageHeight, bytesPerRow, bytesPerPixel,
+             x, lastContentRow, pixel);
+    if (equalPixels(pixel, whitePixel))
+      ++N;
+    else
+      break;
+  }
+  return N;
+}
+
+  
 // best would be...
 
 // CGColorSpaceRef
@@ -178,7 +315,7 @@ usage(ostream& s, const char* const myName)
 int
 main(int argc, const char * argv[]) {
   const char* const my_name = path_tail(argv[0]);
-  if (argc != 8)
+  if (argc != 3)
   {
     usage(cout, my_name);
     return EXIT_FAILURE;
@@ -192,6 +329,7 @@ main(int argc, const char * argv[]) {
                            " file to which the data extracted from the image"
                            " will be written");
   
+  /*
   const char* const NChars = argv[3];
   vet_as_int(NChars, "N", "the number of samples per edge of the probe cube,"
              " typically 52");
@@ -220,6 +358,7 @@ main(int argc, const char * argv[]) {
              " from the lower left pixel (at 0,0) of the topmost pixel in"
              " the content area");
   int whiteTop = atoi(whiteTopChars);
+   */
   
   // first arg is name of probe frame file
   // if it's not there, error out.
@@ -258,18 +397,21 @@ main(int argc, const char * argv[]) {
   size_t fullImageWidth  = CGImageGetWidth(fullImage);
   size_t fullImageHeight = CGImageGetHeight(fullImage);
   size_t bitsPerComponent = CGImageGetBitsPerComponent(fullImage);
+  size_t bytesPerPixel = 4;
   CGBitmapInfo bitmapInfo = CGImageGetBitmapInfo(fullImage);
 
   // This is in the Photoshop or Shake-style coordinate system with
   // the origin at the lower left.  According to Gelphman & Laden's
   // "Programming with Quartz", p. 349 bottom, this is also the initial
   // coordinate system of a bitmap context.
+  /*
   size_t contentLeft = whiteLeft + 2;
   size_t contentRight = whiteRight - 2;
   size_t contentBottom = whiteBottom + 2;
   size_t contentTop = whiteTop - 2;
   size_t contentWidth = (contentRight - contentLeft) + 1;
   size_t contentHeight = (contentTop - contentBottom) + 1;
+  */
 
   size_t fullImageBytesPerRow;
   switch (bitmapInfo)
@@ -289,14 +431,11 @@ main(int argc, const char * argv[]) {
       fullImageBytesPerRow = COMPUTE_BEST_BYTES_PER_ROW(16 * fullImageHeight);
       break;
     default:
-      fprintf(stderr, "Unknown bitmap info - unable to figure out optimal bytes per full row.\n");
+      fprintf(stderr, "Unknown bitmap info - unable to figure out optimal bytes"
+              " per full row.\n");
   }
     
   double maxValue = (1 << bitsPerComponent) - 1.0;
-  fprintf(stderr, "full width %d, full height %d, bpc %d, full bytes per row %d, maxValue %f, contentWidth %d, contentHeight %d\n",
-          fullImageWidth, fullImageHeight,
-          bitsPerComponent, fullImageBytesPerRow, maxValue,
-          contentWidth, contentHeight);
   
   //  CGColorSpaceRef colorSpace = getDeviceRGBColorSpace();
   CGColorSpaceRef colorSpace = getTheDisplayColorSpace();
@@ -323,7 +462,26 @@ main(int argc, const char * argv[]) {
   
   CGRect fullImageRect = CGRectMake(0, 0, fullImageWidth, fullImageHeight);
   CGContextDrawImage(bitmapContext, fullImageRect, fullImage);
-
+  
+  size_t firstContentRow;
+  size_t lastContentRow;
+  size_t firstContentColumn;
+  size_t lastContentColumn;
+  getContentBoundaries(data, fullImageWidth, fullImageHeight,
+                       fullImageBytesPerRow, bytesPerPixel, &firstContentRow,
+                       &lastContentRow, &firstContentColumn,
+                       &lastContentColumn);
+  if (! (lastContentRow - firstContentRow > 0 &&
+         lastContentColumn - firstContentColumn > 0))
+  {
+    fprintf(stderr, "%s: error: could not find borders of probe content\n");
+    return EXIT_FAILURE;
+  }
+  
+  size_t N = getEdgeSize(data, fullImageWidth, fullImageHeight,
+                         fullImageBytesPerRow, bytesPerPixel,
+                         firstContentColumn, lastContentColumn, lastContentRow);
+  
   FILE* file = fopen(outputTextPath, "w");
   if (file == NULL)
   {
@@ -331,8 +489,8 @@ main(int argc, const char * argv[]) {
     return EXIT_FAILURE;
   }
   
-  int x = contentLeft;
-  int y = contentBottom;
+  int x = firstContentColumn;
+  int y = firstContentRow;
   int r;
   int g;
   int b;
@@ -340,16 +498,16 @@ main(int argc, const char * argv[]) {
     for (g = 0; g < N; ++g)
       for (b = 0; b < N; ++b)
       {
-        unsigned char* row = data + ((fullImageHeight - 1) - y) * fullImageBytesPerRow;
+        unsigned char* row = data + y * fullImageBytesPerRow;
         unsigned char* pixel = row + x * 4;
         fprintf(file, "%f %f %f\n",
                 *(pixel + 0) / maxValue,
                 *(pixel + 1) / maxValue,
                 *(pixel + 2) / maxValue);
         ++x;
-        if (x > contentRight)
+        if (x > lastContentColumn)
         {
-          x = contentLeft;
+          x = firstContentColumn;
           ++y;
         }
       }
