@@ -63,6 +63,8 @@
 		7C1BD18B0B93B0F000FF4AAE /* Stubs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C1BD1890B93B0F000FF4AAE /* Stubs.cpp */; };
 		7C1BD18C0B93B0F000FF4AAE /* Stubs.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C1BD18A0B93B0F000FF4AAE /* Stubs.h */; };
 		7C333A100B1EA99D006AB880 /* iccV4ToMPE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C333A0F0B1EA99D006AB880 /* iccV4ToMPE.cpp */; };
+		7C3DF2180C4AFAF0006CFE0E /* IccTagProfSeqId.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C3DF2160C4AFAF0006CFE0E /* IccTagProfSeqId.cpp */; };
+		7C3DF2190C4AFAF0006CFE0E /* IccTagProfSeqId.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C3DF2170C4AFAF0006CFE0E /* IccTagProfSeqId.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7C49EA900B09122C00ADFFE7 /* create_display_profile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C49EA8F0B09122C00ADFFE7 /* create_display_profile.cpp */; };
 		7C49ECF10BADDCAA0014FD12 /* create_CLUT_profile_from_probe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C49ECF00BADDCAA0014FD12 /* create_CLUT_profile_from_probe.cpp */; };
 		7C49ECF20BADDCC00014FD12 /* ICC_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605EB30B4B683200350479 /* ICC_utils.framework */; };
@@ -449,6 +451,8 @@
 		7C1BD18A0B93B0F000FF4AAE /* Stubs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Stubs.h; path = Contrib/ICC_utils/Stubs.h; sourceTree = SOURCE_ROOT; };
 		7C333A060B1EA925006AB880 /* iccV4ToMpe */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccV4ToMpe; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C333A0F0B1EA99D006AB880 /* iccV4ToMPE.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = iccV4ToMPE.cpp; path = Tools/CmdLine/IccV4ToMPE/iccV4ToMPE.cpp; sourceTree = "<group>"; };
+		7C3DF2160C4AFAF0006CFE0E /* IccTagProfSeqId.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = IccTagProfSeqId.cpp; sourceTree = "<group>"; };
+		7C3DF2170C4AFAF0006CFE0E /* IccTagProfSeqId.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccTagProfSeqId.h; sourceTree = "<group>"; };
 		7C49EA780B09114D00ADFFE7 /* create_display_profile */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = create_display_profile; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C49EA8F0B09122C00ADFFE7 /* create_display_profile.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = create_display_profile.cpp; sourceTree = "<group>"; };
 		7C49ECCE0BADDABA0014FD12 /* SampleICCProfileCreationUtils-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "SampleICCProfileCreationUtils-Info.plist"; sourceTree = "<group>"; };
@@ -893,8 +897,13 @@
 		7CE0F4120AF04D3F002F2A93 /* IccProfLib */ = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< .mine
+				7C3DF2160C4AFAF0006CFE0E /* IccTagProfSeqId.cpp */,
+				7C3DF2170C4AFAF0006CFE0E /* IccTagProfSeqId.h */,
+=======
 				7C52B2300C3896E500EFE647 /* IccTagProfSeqId.cpp */,
 				7C52B2310C3896E500EFE647 /* IccTagProfSeqId.h */,
+>>>>>>> .r156
 				7CFB28AF0B13D0230093D058 /* IccMpeACS.cpp */,
 				7CFB28B00B13D0230093D058 /* IccMpeACS.h */,
 				7CFB28B10B13D0230093D058 /* IccMpeBasic.cpp */,
@@ -1058,6 +1067,7 @@
 				7C605E760B4B65E200350479 /* IccUtil.h in Headers */,
 				7C605E770B4B65E200350479 /* icProfileHeader.h in Headers */,
 				7C605E780B4B65E200350479 /* md5.h in Headers */,
+				7C3DF2190C4AFAF0006CFE0E /* IccTagProfSeqId.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1492,6 +1502,7 @@
 				7C52B2320C3896E500EFE647 /* IccTagProfSeqId.cpp in Sources */,
 				7C605E850B4B661400350479 /* IccUtil.cpp in Sources */,
 				7C605E860B4B661400350479 /* md5.cpp in Sources */,
+				7C3DF2180C4AFAF0006CFE0E /* IccTagProfSeqId.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
