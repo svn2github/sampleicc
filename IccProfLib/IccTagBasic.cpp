@@ -1310,6 +1310,10 @@ icValidateStatus CIccTagSignature::Validate(icTagSignature sig, std::string &sRe
     case icSigOffsetLithography:
     case icSigSilkscreen:
     case icSigFlexography:
+    case icSigMotionPictureFilmScanner:
+    case icSigMotionPictureFilmRecorder:
+    case icSigDigitalMotionPictureCamera:
+    case icSigDigitalCinemaProjector:
       break;
 
     default:

@@ -105,6 +105,7 @@ namespace sampleICC {
 CIccFormulaCurveSegment::CIccFormulaCurveSegment(icFloatNumber start, icFloatNumber end)
 {
   m_nReserved = 0;
+  m_nReserved2 = 0;
   m_startPoint = start;
   m_endPoint = end;
 
@@ -126,6 +127,7 @@ CIccFormulaCurveSegment::CIccFormulaCurveSegment(icFloatNumber start, icFloatNum
 CIccFormulaCurveSegment::CIccFormulaCurveSegment(const CIccFormulaCurveSegment &seg)
 {
   m_nReserved = seg.m_nReserved;
+  m_nReserved2 = seg.m_nReserved2;
   m_startPoint = seg.m_startPoint;
   m_endPoint = seg.m_endPoint;
 
@@ -156,6 +158,7 @@ CIccFormulaCurveSegment &CIccFormulaCurveSegment::operator=(const CIccFormulaCur
     free(m_params);
 
   m_nReserved = seg.m_nReserved;
+  m_nReserved2 = seg.m_nReserved2;
   m_startPoint = seg.m_startPoint;
   m_endPoint = seg.m_endPoint;
 
@@ -317,11 +320,25 @@ bool CIccFormulaCurveSegment::Read(icUInt32Number size, CIccIO *pIO)
   if (!pIO->Read16(&m_nFunctionType))
     return false;
 
-  if (!pIO->Read16(&m_nParameters))
+  if (!pIO->Read16(&m_nReserved2))
     return false;
 
   if (m_params) {
     free(m_params);
+  }
+
+  switch(m_nFunctionType) {
+    case 0x0000:
+      m_nParameters = 4;
+      break;
+
+    case 0x0001:
+    case 0x0002:
+      m_nParameters = 5;
+      break;
+
+    default:
+      return false;
   }
 
   if (m_nParameters) {
@@ -366,8 +383,21 @@ bool CIccFormulaCurveSegment::Write(CIccIO *pIO)
   if (!pIO->Write16(&m_nFunctionType))
     return false;
 
-  if (!pIO->Write16(&m_nParameters))
+  if (!pIO->Write16(&m_nReserved2))
     return false;
+
+  switch(m_nFunctionType) {
+    case 0x0000:
+      if (m_nParameters!=4)
+        return false;
+      break;
+
+    case 0x0001:
+    case 0x0002:
+      if (m_nParameters!=5)
+        return false;
+      break;
+  }
 
   if (m_nParameters) {
     if (pIO->WriteFloat32Float(m_params, m_nParameters)!=m_nParameters)
@@ -461,7 +491,7 @@ icValidateStatus CIccFormulaCurveSegment::Validate(icTagSignature sig, std::stri
   std::string sSigName = Info.GetSigName(sig);
 
   icValidateStatus rv = icValidateOK;
-  if (m_nReserved) {
+  if (m_nReserved || m_nReserved2) {
     sReport += icValidateWarningMsg;
     sReport += sSigName;
     sReport += " formula curve has non zero reserved data.\r\n";

@@ -122,6 +122,13 @@ typedef CIccMultiProcessElementList::iterator CIccMultiProcessElementIter;
 
 #define icSigMpeLevel0 ((icSignature)0x6D706530)  /* 'mpe0' */
 
+
+class IIccExtensionMpe
+{
+public:
+  virtual const char *GetExtClassName()=0;
+};
+
 /**
 ****************************************************************************
 * Class: CIccMultiProcessElement
@@ -132,7 +139,7 @@ typedef CIccMultiProcessElementList::iterator CIccMultiProcessElementIter;
 class CIccMultiProcessElement
 {
 public:
-  CIccMultiProcessElement() { m_sigBaseLevel = icSigMpeLevel0; }
+  CIccMultiProcessElement() {}
 
   virtual ~CIccMultiProcessElement() {}
   
@@ -158,20 +165,18 @@ public:
 
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccTagMultiProcessElement* pMPE=NULL) const = 0;
 
-  icSignature GetBaseLevel() { return m_sigBaseLevel; }
-
   //Future Acs Expansion Element Accessors
   virtual bool IsAcs() { return false; }
   virtual icAcsSignature GetBAcsSig() { return icSigAcsZero; }
   virtual icAcsSignature GetEAcsSig() { return icSigAcsZero; }
 
+  // Allow MPE objects to be extended and get extended object type.
+  virtual IIccExtensionMpe *GetExtension() { return NULL; }
+
 protected:
   icUInt32Number m_nReserved;
   icUInt16Number m_nInputChannels;
   icUInt16Number m_nOutputChannels;
-
-  //Define base signature for extension purposes
-  icSignature m_sigBaseLevel;
 };
 
 

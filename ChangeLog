@@ -1,4 +1,7 @@
-2007-6-4 max Derhak
+2007-6-19 Max Derhak
+  * Added GetExtension method to CIccMpe based tags to allow for implmentation of extended objects.
+
+2007-6-4 Max Derhak
   * Added I/O support for ProfileSequenceId tags using CIccTagProfSeqId class.
   * Added I/O support for Colorimetric Intent Image State tag.
 

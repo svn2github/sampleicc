@@ -160,6 +160,7 @@ public:
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccTagMultiProcessElement* pMPE=NULL) const;
 
 protected:
+  icUInt16Number m_nReserved2;
   icUInt8Number m_nParameters;
   icUInt16Number m_nFunctionType;
   icFloatNumber *m_params;
