@@ -103,35 +103,58 @@ install_sh = @install_sh@
 
 lib_LTLIBRARIES = libSampleICC.la
 
-libSampleICC_la_SOURCES = IccCmm.cpp IccIO.cpp IccProfile.cpp \
-	IccMpeACS.cpp IccMpeBasic.cpp IccMpeFactory.cpp IccTagMPE.cpp \
-	IccTagBasic.cpp IccTagFactory.cpp IccTagLut.cpp \
-	IccTagProfSeqId.cpp IccUtil.cpp md5.cpp
+libSampleICC_la_SOURCES = \
+	IccCmm.cpp \
+	IccIO.cpp \
+	IccMpeACS.cpp \
+	IccMpeBasic.cpp \
+	IccMpeFactory.cpp \
+	IccProfile.cpp \
+	IccTagBasic.cpp \
+	IccTagFactory.cpp \
+	IccTagLut.cpp \
+	IccTagMPE.cpp \
+	IccTagProfSeqId.cpp \
+	IccUtil.cpp \
+	md5.cpp
 
 
 libSampleICC_la_LDFLAGS = -version-info @LIBTOOL_VERSION@
 
 libSampleICCincludedir = $(includedir)/SampleICC
 
-libSampleICCinclude_HEADERS = IccCmm.h IccDefs.h IccIO.h \
-	IccProfLibConf.h IccProfile.h \
-	IccMpeACS.h IccMpeBasic.h IccMpeFactory.h IccTagMPE.h \
-	IccTag.h IccTagBasic.h IccTagFactory.h IccTagLut.h \
-	IccTagProfSeqId.h IccUtil.h MainPage.h \
+libSampleICCinclude_HEADERS = \
+	IccCmm.h \
+	IccDefs.h \
+	IccIO.h \
+	IccMpeACS.h \
+	IccMpeBasic.h \
+	IccMpeFactory.h \
+	IccProfLibConf.h \
+	IccProfile.h \
+	IccTag.h \
+	IccTagBasic.h \
+	IccTagFactory.h \
+	IccTagLut.h \
+	IccTagMPE.h \
+	IccTagProfSeqId.h \
+	IccUtil.h \
 	icProfileHeader.h \
 	md5.h
 
 
 INCLUDES = -I$(top_builddir) -I$(top_srcdir)/SampleICC
+
+EXTRA_DIST = MainPage.h
 subdir = IccProfLib
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(lib_LTLIBRARIES)
 
 libSampleICC_la_LIBADD =
-am_libSampleICC_la_OBJECTS = IccCmm.lo IccIO.lo IccProfile.lo \
-	IccMpeACS.lo IccMpeBasic.lo IccMpeFactory.lo IccTagMPE.lo \
-	IccTagBasic.lo IccTagFactory.lo IccTagLut.lo IccTagProfSeqId.lo \
+am_libSampleICC_la_OBJECTS = IccCmm.lo IccIO.lo IccMpeACS.lo \
+	IccMpeBasic.lo IccMpeFactory.lo IccProfile.lo IccTagBasic.lo \
+	IccTagFactory.lo IccTagLut.lo IccTagMPE.lo IccTagProfSeqId.lo \
 	IccUtil.lo md5.lo
 libSampleICC_la_OBJECTS = $(am_libSampleICC_la_OBJECTS)
 
