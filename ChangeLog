@@ -1,3 +1,15 @@
+
+2007-07-29 Joseph Goldstone
+  * Revised After Effects 16-bit-TIFF-to-Cineon conversion script to
+    reflect SampleICC pathnames.
+  * extract_probe_data now prints the extracted edge size.
+  * Use sips on Mac OS X to extract the embedded image profile, so user
+    need not adjust this in extraction script.
+  * Update README.OSX to reflect DarwinPorts renaming itself to MacPorts.
+  * Update README in RSR example dir to reflect simplified usage, and
+    delete the to-do list at the end of that file since those items
+    are now done.
+	
 2007-6-19 Max Derhak
   * Added GetExtension method to CIccMpe based tags to allow for implmentation of extended objects.
 
