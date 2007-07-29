@@ -99,15 +99,6 @@ using namespace std;
 // the system distort the colors we are reading out of the image in the name
 // of its own 'color management'.
 
-CGColorSpaceRef
-getDeviceRGBColorSpace()
-{
-  static CGColorSpaceRef deviceRGB = NULL;
-  if (deviceRGB == NULL)
-    deviceRGB = CGColorSpaceCreateDeviceRGB();
-  return deviceRGB;
-}
-
 // from Gelphman & Laden, pp. 390-391, Listing 12.10
 CGColorSpaceRef
 getTheDisplayColorSpace()
@@ -128,7 +119,7 @@ getTheDisplayColorSpace()
                                      &displayProfile);
     if (err || displayProfile == NULL)
     {
-      fprintf(stderr, "Got error %d when gettingprofile for main display!\n",
+      fprintf(stderr, "Got error %d when getting profile for main display!\n",
               err);
       return NULL;
     }
@@ -271,17 +262,6 @@ getEdgeSize(const unsigned char* const data, size_t fullImageWidth,
   return N;
 }
 
-  
-// best would be...
-
-// CGColorSpaceRef
-// getTheGrabbedImageColorSpace()
-// {
-//   ...
-// }
-
-// ..but one thing at a time.
-
 #define BEST_BYTE_ALIGNMENT 16
 #define COMPUTE_BEST_BYTES_PER_ROW(bpr)\
 ( ( (bpr) + (BEST_BYTE_ALIGNMENT-1) ) & ~(BEST_BYTE_ALIGNMENT-1) )
@@ -289,26 +269,14 @@ getEdgeSize(const unsigned char* const data, size_t fullImageWidth,
 void
 usage(ostream& s, const char* const myName)
 {
-  s << myName << ": usage is " << myName << " image extracted_data N"
-       << " white_left white_right white_bottom white_top\n"
+  s << myName << ": usage is " << myName << " image extracted_data"
   << " where\n"
   << "image is the pathname of the file containing the grabbed probe"
   << " frame\n"
   << "extracted_data is the pathname to which the extracted data will"
   << " be written\n"
-  << "N is the number of samples per edge of the probe cube\n"
-  << "white_left is the pixel coordinate, relative to the lower left corner"
-  << " of the image being (0, 0), of the leftmost content pixel\n"
-  << "white_right is the pixel coordinate, relative to the red line"
-  << " around the image, of the rightmost content pixel\n"
-  << "white_bottom is the pixel coordinate, relative to the red line"
-  << " around the image, of the bottommost content pixel\n"
-  << "white_top is the pixel coordinate, relative to the red line"
-  << " around the image, of the topmost content pixel\n"
-  << "\n"
   << "example:\n"
-  << " extract_probe_data grabbed_frame.tiff extracted_data.txt 52"
-  << " 2 565 2 285"
+  << " extract_probe_data grabbed_frame.tiff extracted_data.txt"
   << endl;
 }
 
@@ -329,37 +297,6 @@ main(int argc, const char * argv[]) {
                            " file to which the data extracted from the image"
                            " will be written");
   
-  /*
-  const char* const NChars = argv[3];
-  vet_as_int(NChars, "N", "the number of samples per edge of the probe cube,"
-             " typically 52");
-  int  N = atoi(NChars);
-  
-  const char* const whiteLeftChars = argv[4];
-  vet_as_int(whiteLeftChars, "white_left", "an integer which is the offset"
-             " from the lower left pixel (at 0,0) of the leftmost pixel in"
-             " the content area");
-  int whiteLeft = atoi(whiteLeftChars);
-
-  const char* const whiteRightChars = argv[5];
-  vet_as_int(whiteRightChars, "white_right", "an integer which is the offset"
-             " from the lower left pixel (at 0,0) of the rightmost pixel in"
-             " the content area");
-  int whiteRight = atoi(whiteRightChars);
-  
-  const char* const whiteBottomChars = argv[6];
-  vet_as_int(whiteBottomChars, "white_bottom", "an integer which is the offset"
-             " from the lower left pixel (at 0,0) of the bottommost pixel in"
-             " the content area");
-  int whiteBottom = atoi(whiteBottomChars);
-  
-  const char* const whiteTopChars = argv[7];
-  vet_as_int(whiteTopChars, "white_top", "an integer which is the offset"
-             " from the lower left pixel (at 0,0) of the topmost pixel in"
-             " the content area");
-  int whiteTop = atoi(whiteTopChars);
-   */
-  
   // first arg is name of probe frame file
   // if it's not there, error out.
   // from this compute minimum number of pixels required to contain data.
@@ -369,9 +306,6 @@ main(int argc, const char * argv[]) {
   CFStringRef URLString = CFStringCreateWithCString(NULL,
                                                     inputImagePath,
                                                     kCFStringEncodingASCII);
-  
-  //  CFShow(URLString);
-  //  CFShowStr(URLString);
   
   CFURLRef URL = CFURLCreateWithFileSystemPath(NULL, URLString,
                                                kCFURLPOSIXPathStyle, false);
@@ -400,19 +334,6 @@ main(int argc, const char * argv[]) {
   size_t bytesPerPixel = 4;
   CGBitmapInfo bitmapInfo = CGImageGetBitmapInfo(fullImage);
 
-  // This is in the Photoshop or Shake-style coordinate system with
-  // the origin at the lower left.  According to Gelphman & Laden's
-  // "Programming with Quartz", p. 349 bottom, this is also the initial
-  // coordinate system of a bitmap context.
-  /*
-  size_t contentLeft = whiteLeft + 2;
-  size_t contentRight = whiteRight - 2;
-  size_t contentBottom = whiteBottom + 2;
-  size_t contentTop = whiteTop - 2;
-  size_t contentWidth = (contentRight - contentLeft) + 1;
-  size_t contentHeight = (contentTop - contentBottom) + 1;
-  */
-
   size_t fullImageBytesPerRow;
   switch (bitmapInfo)
   {
@@ -437,11 +358,9 @@ main(int argc, const char * argv[]) {
     
   double maxValue = (1 << bitsPerComponent) - 1.0;
   
-  //  CGColorSpaceRef colorSpace = getDeviceRGBColorSpace();
   CGColorSpaceRef colorSpace = getTheDisplayColorSpace();
   if (colorSpace == NULL)
   {
-    //    fprintf(stderr, "Couldn't get device color space.\n");
     fprintf(stderr, "Couldn't get display color space.\n");
     return EXIT_FAILURE;
   }
@@ -518,5 +437,6 @@ main(int argc, const char * argv[]) {
     fprintf(stderr, "%s: error: %s.\n", my_name, strerror(errno));
     return EXIT_FAILURE;
   }
+  cout << N << endl;
   return EXIT_SUCCESS;
 }
