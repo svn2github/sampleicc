@@ -279,6 +279,7 @@ public:
   const icChar *GetColorSpaceSigName(icColorSpaceSignature sig);
   const icChar *GetProfileClassSigName(icProfileClassSignature sig);
   const icChar *GetPlatformSigName(icPlatformSignature sig);
+  const icChar *GetCmmSigName(icCmmSignature sig);
   const icChar *GetReferenceMediumGamutSigNameName(icReferenceMediumGamutSignature sig);
   const icChar *GetColorimetricIntentImageStateName(icColorimetricIntentImageStateSignature sig);
 

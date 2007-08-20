@@ -1063,11 +1063,39 @@ icValidateStatus CIccProfile::CheckHeader(std::string &sReport) const
   case icSigSolaris:
   case icSigSGI:
   case icSigTaligent:
+  case icSigUnkownPlatform:
+    break;
+  
+  default:
+    sReport += icValidateWarningMsg;
+    sprintf(buf, " - %s: Unknown platform signature.\r\n", Info.GetPlatformSigName(m_Header.platform));
+    sReport += buf;
+    rv = icMaxStatus(rv, icValidateWarning);
+  }
+
+
+  switch((icCmmSignature)m_Header.cmmId) {
+  //Account for registered CMM's as well:
+  case icSigAdobe:
+  case icSigApple:
+  case icSigColorGear:
+  case icSigColorGearLite:
+  case icSigFujiFilm:
+  case icSigHarlequinRIP:
+  case icSigArgyllCMS:
+  case icSigLogoSync:
+  case icSigHeidelberg:
+  case icSigLittleCMS:
+  case icSigKodak:
+  case icSigKonicaMinolta:
+  case icSigMutoh:
+  case icSigSampleICC:
+  case icSigTheImagingFactory:
     break;
 
   default:
     sReport += icValidateWarningMsg;
-    sprintf(buf, " - %s: Unknown platform signature.\r\n", Info.GetPlatformSigName(m_Header.platform));
+    sprintf(buf, " - %s: Unregisterd CMM signature.\r\n", Info.GetCmmSigName((icCmmSignature)m_Header.cmmId));
     sReport += buf;
     rv = icMaxStatus(rv, icValidateWarning);
   }

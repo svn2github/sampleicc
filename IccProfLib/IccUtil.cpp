@@ -1133,6 +1133,65 @@ const icChar *CIccInfo::GetPlatformSigName(icPlatformSignature sig)
   case icSigTaligent:
     return "Taligent";
 
+  case icSigUnkownPlatform:
+    return "Unknown";
+
+  default:
+    return GetUnknownName(sig);
+  }
+}
+
+
+//The following signatures come from the signature registry
+//Return the Description (minus CMM).
+const icChar *CIccInfo::GetCmmSigName(icCmmSignature sig)
+{
+  switch (sig) {
+  case icSigAdobe:
+    return "Adobe";
+
+  case icSigApple:
+    return "Apple";
+
+  case icSigColorGear:
+    return "ColorGear";
+
+  case icSigColorGearLite:
+    return "ColorGear Lite";
+
+  case icSigFujiFilm:
+    return "Fuji Film";
+
+  case icSigHarlequinRIP:
+    return "Harlequin RIP";
+
+  case icSigArgyllCMS:
+    return "Argyll CMS";
+
+  case icSigLogoSync:
+    return "LogoSync";
+
+  case icSigHeidelberg:
+    return "Heidelberg";
+
+  case icSigLittleCMS:
+    return "Little CMS";
+
+  case icSigKodak:
+    return "Kodak";
+
+  case icSigKonicaMinolta:
+    return "Konica Minolta";
+
+  case icSigMutoh:
+    return "Mutoh";
+
+  case icSigSampleICC:
+    return "SampleIcc";
+
+  case icSigTheImagingFactory:
+    return "the imaging factory";
+
   default:
     return GetUnknownName(sig);
   }

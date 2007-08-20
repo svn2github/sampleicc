@@ -420,7 +420,7 @@ MyChild::MyChild(wxMDIParentFrame *parent, const wxString& title, CIccProfile *p
   wxString str;
 
   m_textAttribute->SetLabel(Fmt.GetDeviceAttrName(pHdr->attributes));
-  m_textCMM->SetLabel(icGetSig(buf, pHdr->cmmId));
+  m_textCMM->SetLabel(Fmt.GetCmmSigName((icCmmSignature)pHdr->cmmId));
   m_textCreationDate->SetLabel(wxString::Format(_T("%d/%d/%d  %02u:%02u:%02u"),
     pHdr->date.month, pHdr->date.day, pHdr->date.year,
     pHdr->date.hours, pHdr->date.minutes, pHdr->date.seconds));

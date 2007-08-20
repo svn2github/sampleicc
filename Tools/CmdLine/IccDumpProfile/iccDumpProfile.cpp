@@ -148,7 +148,7 @@ print_usage:
     printf("\nHeader\n");
     printf(  "------\n");
     printf("Attributes:       %s\n", Fmt.GetDeviceAttrName(pHdr->attributes));
-    printf("Cmm:              %s\n", icGetSig(buf, pHdr->cmmId));
+    printf("Cmm:              %s\n", Fmt.GetCmmSigName((icCmmSignature)(pHdr->cmmId)));
     printf("Creation Date:    %d/%d/%d  %02u:%02u:%02u\n",
                               pHdr->date.month, pHdr->date.day, pHdr->date.year,
                               pHdr->date.hours, pHdr->date.minutes, pHdr->date.seconds);

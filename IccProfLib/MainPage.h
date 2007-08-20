@@ -59,6 +59,11 @@
  *   the configuration paramaters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
+ * - August 2007
+ *  - MPE Formula Curve bug fixes.
+ *  - Registered CMM signatures recognized and displayed correctly.
+ *  - Unknown platform signature type added (00000000h). 
+ *
  * - June 2007
  *  - Added support for optional ProfileSequenceId tags.  These tags provide contents of 
  *    profile description tags and id's for profiles used to create an device link profile.  The

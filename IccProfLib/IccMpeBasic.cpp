@@ -240,11 +240,13 @@ void CIccFormulaCurveSegment::Describe(std::string &sDescription)
     sprintf(buf, "Y = %.8f * log (%.8f * (X ^ %.8f)  + %.8f) + %.8f\r\n\r\n",
             m_params[1], m_params[2], m_params[0], m_params[3], m_params[4]);
     sDescription += buf;
+    return;
 
   case 0x0002:
     sprintf(buf, "Y = %.8f * (%.8f ^ (%.8f * X + %.8f)) + %.8f\r\n\r\n",
             m_params[0], m_params[1], m_params[2], m_params[3], m_params[4]);
     sDescription += buf;
+    return;
 
   default:
     int i;
@@ -464,7 +466,7 @@ icFloatNumber CIccFormulaCurveSegment::Apply(icFloatNumber v)
 
   case 0x0001:
     // Y = a * log (b * X^g + c) + d  : g a b c d
-    return (m_params[1] * log(m_params[2] * pow(v, m_params[0]) + m_params[3]) + m_params[4]);
+    return (m_params[1] * log10(m_params[2] * pow(v, m_params[0]) + m_params[3]) + m_params[4]);
 
   case 0x0002:
     //Y = a * b^(c*X+d) + e           : a b c d e
@@ -530,13 +532,13 @@ icValidateStatus CIccFormulaCurveSegment::Validate(icTagSignature sig, std::stri
     break;
 
   case 0x0002:
-    if (!m_params || m_nParameters<4) {
+    if (!m_params || m_nParameters<5) {
       sReport += icValidateCriticalErrorMsg;
       sReport += sSigName;
       sReport += " formula curve has Invalid formulaCurveSegment parameters.\r\n";
       rv = icValidateCriticalError;
     }
-    else if (m_nParameters > 4) {
+    else if (m_nParameters > 5) {
       sReport += icValidateWarningMsg;
       sReport += sSigName;
       sReport += " formula curve has too many formulaCurveSegment parameters.\r\n";

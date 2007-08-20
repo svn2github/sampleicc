@@ -1,3 +1,8 @@
+2007-08-20
+  * Fixed bug in MPE Formula Curve parameter checking.
+  * MPE Formula Curve type 0001h used base 10 log function.
+  * Registered CMM signatures recognized and displayed correctly.
+  * Unknown platform type added (00000000h). 
 
 2007-07-29 Joseph Goldstone
   * Revised After Effects 16-bit-TIFF-to-Cineon conversion script to

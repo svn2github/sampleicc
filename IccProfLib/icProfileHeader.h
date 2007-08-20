@@ -568,11 +568,33 @@ typedef enum {
     icSigSolaris                        = 0x53554E57,  /* 'SUNW' */
     icSigSGI                            = 0x53474920,  /* 'SGI ' */
     icSigTaligent                       = 0x54474E54,  /* 'TGNT' */
+    icSigUnkownPlatform                 = 0x00000000
 } icPlatformSignature;
 
 /** Convenience Enum Definition - Not defined in ICC specification*/
 #define icMaxEnumPlatform ((icPlatformSignature) 0xFFFFFFFF)
 
+
+/** CMM signatures from the signature registry (as of Jan 10, 2007) */
+typedef enum {
+    icSigAdobe                          = 0x41444245,  /* 'ADBE' */
+    icSigApple                          = 0x6170706C,  /* 'appl' */
+    icSigColorGear                      = 0x43434D53,  /* 'CCMS' */
+    icSigColorGearLite                  = 0x5543434D,  /* 'UCCM' */
+    icSigFujiFilm                       = 0x46462020,  /* 'FF  ' */
+    icSigHarlequinRIP                   = 0x48434d4d,  /* 'HCMM' */
+    icSigArgyllCMS                      = 0x6172676C,  /* 'argl' */
+    icSigLogoSync                       = 0x44676f53,  /* 'LgoS' */
+    icSigHeidelberg                     = 0x48444d20,  /* 'HDM ' */
+    icSigLittleCMS                      = 0x6C636d73,  /* 'lcms' */
+    icSigKodak                          = 0x4b434d53,  /* 'KCMS' */
+    icSigKonicaMinolta                  = 0x4d434d44,  /* 'MCML' */
+    icSigMutoh                          = 0x5349474E,  /* 'SIGN' */
+    icSigSampleICC                      = 0x53494343,  /* 'SICC' */
+    icSigTheImagingFactory              = 0x33324254,  /* '32BT' */
+} icCmmSignature;
+/** Convenience Enum Definition - Not defined in ICC specification*/
+#define icMaxEnumCmm ((icCmmSignature) 0xFFFFFFFF)
 
 
 /** Rendering Intent Gamut Signatures */
