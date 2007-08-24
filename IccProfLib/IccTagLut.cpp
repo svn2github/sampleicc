@@ -4333,7 +4333,7 @@ icValidateStatus CIccTagLut8::Validate(icTagSignature sig, std::string &sReport,
         for (int i=0; i<9; i++) {
           sum += m_XYZMatrix[i];
         }
-        if (m_XYZMatrix[0]!=1.0 || m_XYZMatrix[4]!=1.0 || m_XYZMatrix[9]!=1.0 || sum!=3.0) {
+        if (m_XYZMatrix[0]!=1.0 || m_XYZMatrix[4]!=1.0 || m_XYZMatrix[8]!=1.0 || sum!=3.0) {
           sReport += icValidateWarningMsg;
           sReport += sSigName;
           sReport += " - Matrix must be identity.\r\n";
@@ -4743,7 +4743,7 @@ icValidateStatus CIccTagLut16::Validate(icTagSignature sig, std::string &sReport
         for (int i=0; i<9; i++) {
           sum += m_XYZMatrix[i];
         }
-        if (m_XYZMatrix[0]!=1.0 || m_XYZMatrix[4]!=1.0 || m_XYZMatrix[9]!=1.0 || sum!=3.0) {
+        if (m_XYZMatrix[0]!=1.0 || m_XYZMatrix[4]!=1.0 || m_XYZMatrix[8]!=1.0 || sum!=3.0) {
           sReport += icValidateWarningMsg;
           sReport += sSigName;
           sReport += " - Matrix must be identity.\r\n";
