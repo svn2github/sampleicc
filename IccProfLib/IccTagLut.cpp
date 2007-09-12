@@ -2178,13 +2178,13 @@ void CIccCLUT::Interp3dTetra(icFloatNumber *destPixel, const icFloatNumber *srcP
       }
       else if (u<v) {
         destPixel[i] = UnitClip(p[n000] + t*(p[n100]-p[n000]) + 
-                                      u*(p[n110]-p[n100]) + 
-                                      v*(p[n111]-p[n110]));
+                                      u*(p[n111]-p[n101]) + 
+                                      v*(p[n101]-p[n100]));
       }
       else {
         destPixel[i] = UnitClip(p[n000] + t*(p[n100]-p[n000]) + 
-                                      u*(p[n111]-p[n101]) + 
-                                      v*(p[n101]-p[n100]));
+                                      u*(p[n110]-p[n100]) + 
+                                      v*(p[n111]-p[n110]));
       }
     }
   }
