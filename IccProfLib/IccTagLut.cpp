@@ -1420,6 +1420,7 @@ CIccCLUT::CIccCLUT(icUInt8Number nInputChannels, icUInt8Number nOutputChannels, 
   m_ig = NULL;
   m_s = NULL;
   m_df = NULL;
+  memset(&m_nReserved2, 0 , sizeof(m_nReserved2));
 
   UnitClip = ClutUnitClip;
 }
@@ -1454,6 +1455,7 @@ CIccCLUT::CIccCLUT(const CIccCLUT &ICLUT)
   memcpy(m_GridPoints, ICLUT.m_GridPoints, sizeof(m_GridPoints));
   memcpy(m_DimSize, ICLUT.m_DimSize, sizeof(m_DimSize));
   memcpy(m_GridAdr, ICLUT.m_GridAdr, sizeof(m_GridAdr));
+  memcpy(&m_nReserved2, &ICLUT.m_nReserved2, sizeof(m_nReserved2));
 
   int num = NumPoints()*m_nOutput;
   m_pData = new icFloatNumber[num];
@@ -1489,6 +1491,7 @@ CIccCLUT &CIccCLUT::operator=(const CIccCLUT &CLUTTag)
   memcpy(m_GridPoints, CLUTTag.m_GridPoints, sizeof(m_GridPoints));
   memcpy(m_DimSize, CLUTTag.m_DimSize, sizeof(m_DimSize));
   memcpy(m_GridAdr, CLUTTag.m_GridAdr, sizeof(m_GridAdr));
+  memcpy(m_nReserved2, &CLUTTag.m_nReserved2, sizeof(m_nReserved2));
 
   int num;
   if (m_pData)
@@ -1547,7 +1550,6 @@ void CIccCLUT::Init(icUInt8Number nGridPoints)
 {
   memset(&m_GridPoints, 0, sizeof(m_GridPoints));
   memset(m_GridPoints, nGridPoints, m_nInput);
-  memset(m_nReserved2, 0, sizeof(m_nReserved2));
   Init(&m_GridPoints[0]);
 }
 
@@ -1563,6 +1565,7 @@ void CIccCLUT::Init(icUInt8Number nGridPoints)
  */
 void CIccCLUT::Init(icUInt8Number *pGridPoints)
 {
+  memset(m_nReserved2, 0, sizeof(m_nReserved2));
   if (pGridPoints!=&m_GridPoints[0]) {
     memcpy(m_GridPoints, pGridPoints, m_nInput);
     if (m_nInput<16)
