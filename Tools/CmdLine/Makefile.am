@@ -3,6 +3,7 @@
 SUBDIRS = IccApplyNamedCmm \
 	@SICC_ICC_APPLY_PROFILES@ \
 	IccDumpProfile \
+	IccRoundTrip \
 	IccProfLibTest \
 	IccStripUnknownTags \
 	IccV4ToMPE
@@ -10,6 +11,7 @@ SUBDIRS = IccApplyNamedCmm \
 DIST_SUBDIRS = IccApplyNamedCmm \
 	IccApplyProfiles \
 	IccDumpProfile \
+	IccRoundTrip \
 	IccProfLibTest \
 	IccStripUnknownTags \
 	IccV4ToMPE

@@ -252,7 +252,7 @@
  *
  * <b>The ICC Software License, Version 0.1</b>
  *
- * Copyright © 2003-2006 The International Color Consortium. All rights 
+ * Copyright © 2003-2007 The International Color Consortium. All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without

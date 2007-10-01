@@ -154,6 +154,10 @@ bool MyApp::OnInit()
 
   SetTopWindow(frame);
 
+  if (argc>1) {
+    frame->OpenFile(argv[1]);
+  }
+
   return true;
 }
 
@@ -514,7 +518,7 @@ void MyChild::OnClose(wxCloseEvent& event)
 
 void MyChild::OnValidate(wxCommandEvent& WXUNUSED(event))
 {
-  MyDialog dialog(this, _T("Profile Validation Report"), m_profilePath);
+  MyValidationDialog dialog(this, _T("Profile Validation Report"), m_profilePath);
 
   dialog.ShowModal();
 }
@@ -538,7 +542,7 @@ void MyChild::OnTagClicked(wxListEvent& event)
   }
 }
 
-MyDialog::MyDialog(wxWindow *pParent, const wxString& title, wxString &profilePath) : 
+MyValidationDialog::MyValidationDialog(wxWindow *pParent, const wxString& title, wxString &profilePath) : 
 wxDialog(pParent, wxID_ANY, title,wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
   wxSizer *sizer = new wxBoxSizer(wxVERTICAL);

@@ -12,7 +12,7 @@
  * The ICC Software License, Version 0.1
  *
  *
- * Copyright (c) 2003-2006 The International Color Consortium. All rights 
+ * Copyright (c) 2003-2007 The International Color Consortium. All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -1937,14 +1937,14 @@ void CIccCLUT::Begin()
   m_nOffset = new icUInt32Number[m_nNodes];
 
   if (m_nInput==3) {
-  n000 = 0;
-    n001 = m_DimSize[0];
-    n010 = m_DimSize[1];
-    n011 = n001 + n010;
-    n100 = m_DimSize[2];
-    n101 = n100 + n001;
-    n110 = n100 + n010;
-    n111 = n110 + n001;
+    m_nOffset[0] = n000 = 0;
+    m_nOffset[1] = n001 = m_DimSize[0];
+    m_nOffset[2] = n010 = m_DimSize[1];
+    m_nOffset[3] = n011 = n001 + n010;
+    m_nOffset[4] = n100 = m_DimSize[2];
+    m_nOffset[5] = n101 = n100 + n001;
+    m_nOffset[6] = n110 = n100 + n010;
+    m_nOffset[7] = n111 = n110 + n001;
   }
   else if (m_nInput == 4) {
     m_nOffset[ 0] = 0;

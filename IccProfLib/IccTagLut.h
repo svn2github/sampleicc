@@ -291,11 +291,16 @@ public:
   icUInt32Number NumPoints() const { return m_nNumPoints; }
   icUInt8Number GridPoints() const { return m_GridPoints[0]; }
   icUInt8Number GridPoint(int index) const { return m_GridPoints[index]; }
+  icUInt32Number MaxGridPoint(int index) const { return m_MaxGridPoint[index]; }
 
   icUInt32Number GetDimSize(icUInt8Number nIndex) const { return m_DimSize[nIndex]; }
 
   icUInt8Number GetInputDim() const { return m_nInput; }
   icUInt8Number GetOutputChannels() const { return m_nOutput; }
+
+  icUInt32Number GetNumOffset() const { return m_nNodes; }
+  icUInt32Number GetOffset(int index) const { return m_nOffset ? m_nOffset[index] : 0; }
+
 
   void Begin();
   void Interp3dTetra(icFloatNumber *destPixel, const icFloatNumber *srcPixel);

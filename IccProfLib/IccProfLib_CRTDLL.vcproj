@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="IccProfLib_CRTDLL"
 	ProjectGUID="{AA703D3A-6A76-40EF-B4F2-2E3C57AF3E71}"
+	RootNamespace="IccProfLib_CRTDLL"
 	>
 	<Platforms>
 		<Platform
@@ -190,6 +191,10 @@
 						DisableSpecificWarnings="4996"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\IccEval.cpp"
+				>
 			</File>
 			<File
 				RelativePath="IccIO.cpp"
@@ -397,6 +402,10 @@
 			</File>
 			<File
 				RelativePath="IccDefs.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IccEval.h"
 				>
 			</File>
 			<File

@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="IccProfLib"
 	ProjectGUID="{A6480823-31F6-41FE-AA64-D11B1AF8B3FF}"
+	RootNamespace="IccProfLib"
 	SccLocalPath="."
 	SccProvider="MSSCCI:AccuRev"
 	>
@@ -192,6 +193,10 @@
 						DisableSpecificWarnings="4996"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\IccEval.cpp"
+				>
 			</File>
 			<File
 				RelativePath="IccIO.cpp"
@@ -399,6 +404,10 @@
 			</File>
 			<File
 				RelativePath="IccDefs.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IccEval.h"
 				>
 			</File>
 			<File

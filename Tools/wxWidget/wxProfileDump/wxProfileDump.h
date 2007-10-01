@@ -124,10 +124,10 @@ protected:
     DECLARE_EVENT_TABLE()
 };
 
-class MyDialog : public wxDialog
+class MyValidationDialog : public wxDialog
 {
 public:
-  MyDialog(wxWindow *pParent, const wxString& title, wxString &profilePath);
+  MyValidationDialog(wxWindow *pParent, const wxString& title, wxString &profilePath);
 
   wxString m_profilePath;
 };
