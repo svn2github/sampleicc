@@ -133,22 +133,36 @@ CIccProfile::CIccProfile(const CIccProfile &Profile)
   m_TagVals = new(TagPtrList);
   memcpy(&m_Header, &Profile.m_Header, sizeof(m_Header));
 
-  if (!Profile.m_Tags->empty()) {
-    TagEntryList::const_iterator i;
-    IccTagEntry entry;
-    for (i=Profile.m_Tags->begin(); i!=Profile.m_Tags->end(); i++) {
-      entry.pTag = i->pTag->NewCopy();
-      memcpy(&entry.TagInfo, &i->TagInfo, sizeof(icTag));
-      m_Tags->push_back(entry);
-    }
-  }
-
   if (!Profile.m_TagVals->empty()) {
     TagPtrList::const_iterator i;
     IccTagPtr tagptr;
     for (i=Profile.m_TagVals->begin(); i!=Profile.m_TagVals->end(); i++) {
       tagptr.ptr = i->ptr->NewCopy();
       m_TagVals->push_back(tagptr);
+    }
+  }
+
+  if (!Profile.m_Tags->empty()) {
+    TagEntryList::const_iterator i;
+    IccTagEntry entry;
+    for (i=Profile.m_Tags->begin(); i!=Profile.m_Tags->end(); i++) {
+      TagPtrList::const_iterator j, k;
+
+      //Make sure that tag entry values point to shared tags in m_TagVals
+      for (j=Profile.m_TagVals->begin(), k=m_TagVals->begin(); j!=Profile.m_TagVals->end() && k!=m_TagVals->end(); j++, k++) {
+        if (i->pTag == j->ptr) {
+          //k should point to the the corresponding copied tag
+          entry.pTag = k->ptr;
+          break;
+        }
+      }
+
+      if (j==Profile.m_TagVals->end()) {  //Did we not find the tag?
+        entry.pTag = NULL;
+      }
+
+      memcpy(&entry.TagInfo, &i->TagInfo, sizeof(icTag));
+      m_Tags->push_back(entry);
     }
   }
 
@@ -178,24 +192,36 @@ CIccProfile &CIccProfile::operator=(const CIccProfile &Profile)
 
   memcpy(&m_Header, &Profile.m_Header, sizeof(m_Header));
 
-  if (!Profile.m_Tags->empty()) {
-    m_Tags->clear();
-    TagEntryList::const_iterator i;
-    IccTagEntry entry;
-    for (i=Profile.m_Tags->begin(); i!=Profile.m_Tags->end(); i++) {
-      entry.pTag = i->pTag->NewCopy();
-      memcpy(&entry.TagInfo, &i->TagInfo, sizeof(icTag));
-      m_Tags->push_back(entry);
-    }
-  }
-
   if (!Profile.m_TagVals->empty()) {
-    m_TagVals->clear();
     TagPtrList::const_iterator i;
     IccTagPtr tagptr;
     for (i=Profile.m_TagVals->begin(); i!=Profile.m_TagVals->end(); i++) {
       tagptr.ptr = i->ptr->NewCopy();
       m_TagVals->push_back(tagptr);
+    }
+  }
+
+  if (!Profile.m_Tags->empty()) {
+    TagEntryList::const_iterator i;
+    IccTagEntry entry;
+    for (i=Profile.m_Tags->begin(); i!=Profile.m_Tags->end(); i++) {
+      TagPtrList::const_iterator j, k;
+
+      //Make sure that tag entry values point to shared tags in m_TagVals
+      for (j=Profile.m_TagVals->begin(), k=m_TagVals->begin(); j!=Profile.m_TagVals->end() && k!=m_TagVals->end(); j++, k++) {
+        if (i->pTag == j->ptr) {
+          //k should point to the the corresponding copied tag
+          entry.pTag = k->ptr;
+          break;
+        }
+      }
+
+      if (j==Profile.m_TagVals->end()) {  //Did we not find the tag?
+        entry.pTag = NULL;
+      }
+
+      memcpy(&entry.TagInfo, &i->TagInfo, sizeof(icTag));
+      m_Tags->push_back(entry);
     }
   }
 

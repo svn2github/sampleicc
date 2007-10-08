@@ -1,3 +1,12 @@
+2007-10-08
+  * Fixed memory leak in CIccProfile copy constructor and copy methods
+  * Added CIccEvalCompare object that can be derived from to perform round trip analysis.
+  * Added iccRoundTrip command line tool that performs round trip analysis of ICC profiles.
+
+2007-09-25
+  * Fixed bug in Tetrahedtral Interpolation for 3 dimensionial input as identified
+    by George Pawle
+
 2007-08-20
   * Fixed bug in MPE Formula Curve parameter checking.
   * MPE Formula Curve type 0001h used base 10 log function.

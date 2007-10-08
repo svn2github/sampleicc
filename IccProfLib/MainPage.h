@@ -46,7 +46,7 @@
  *  -# The IccProfLib implements very basic CMMs.  These may not
  *   provide the optimum speed in all situations. Profile transforms are done one pixel
  *   at a time for each profile in a profile transformation chain.  Various techniques
- *   can possibly be used to improve performance. An intial thought would be to create a
+ *   can possibly be used to improve performance. An initial thought would be to create a
  *   CMM that uses the basic CIccCmm to generate a single link transform (concatenating
  *   the profiles).  Such a transform could employ integer math if needed.
  *  -# The IccProfLib can be used to open, generate, manipulate (by adding, removing, or
@@ -56,9 +56,15 @@
  *   It is advisable to examine these applications for additional guidance in making
  *   the best use of the IccProfLib.
  *  -# Before compiling on non-Windows and non Mac OSX platforms it will be necessary to edit
- *   the configuration paramaters in IccProfLibConf.h. 
+ *   the configuration parameters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
+ * - October 2007
+ *  - Fixed Memory leak in CIccProfile Copy constructor and operator=.
+ *
+ * - September 2007
+ *  - Fixed bug with Tetrahedral Interpolation
+ *
  * - August 2007
  *  - MPE Formula Curve bug fixes.
  *  - Registered CMM signatures recognized and displayed correctly.
