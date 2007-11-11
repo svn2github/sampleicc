@@ -97,13 +97,14 @@ icStatusCMM CIccEvalCompare::EvaluateProfile(CIccProfile *pProfile, icUInt8Numbe
 
   if (pProfile->m_Header.deviceClass!=icSigInputClass &&
     pProfile->m_Header.deviceClass!=icSigDisplayClass &&
-    pProfile->m_Header.deviceClass!=icSigOutputClass)
+    pProfile->m_Header.deviceClass!=icSigOutputClass &&
+    pProfile->m_Header.deviceClass!=icSigColorSpaceClass)
   {
     return icCmmStatInvalidProfile;
   }
 
-  CIccCmm dev2Lab;
-  CIccCmm Lab2Dev2Lab(icSigUnknownData, icSigUnknownData, false);
+  CIccCmm dev2Lab(icSigUnknownData, icSigLabData);
+  CIccCmm Lab2Dev2Lab(icSigLabData, icSigLabData, false);
 
   icStatusCMM result;
 
@@ -133,13 +134,6 @@ icStatusCMM CIccEvalCompare::EvaluateProfile(CIccProfile *pProfile, icUInt8Numbe
     return result;
   }
 
-  // check for XYZ pcs
-  bool bxyz = false;
-  if (pProfile->m_Header.pcs==icSigXYZData)
-  {
-    bxyz = true;
-  }
-
   icFloatNumber sPixel[15];
   icFloatNumber devPcs[15], roundPcs1[15], roundPcs2[15];
 
@@ -156,7 +150,10 @@ icStatusCMM CIccEvalCompare::EvaluateProfile(CIccProfile *pProfile, icUInt8Numbe
     }
     else {
       CIccCLUT* pClut = pTag->GetCLUT();
-      nGran = pClut->GridPoints()+2;
+      if (pClut)
+        nGran = pClut->GridPoints()+2;
+      else
+        nGran = 33;
     }
   }
 
@@ -185,20 +182,11 @@ icStatusCMM CIccEvalCompare::EvaluateProfile(CIccProfile *pProfile, icUInt8Numbe
     dev2Lab.Apply(devPcs, sPixel); //Convert device value to pcs from input table
     Lab2Dev2Lab.Apply(roundPcs1, devPcs);  //First round trip gets color into output gamut
     Lab2Dev2Lab.Apply(roundPcs2, roundPcs1);  //Second round trip find reproducibility error
-    if (bxyz)
-    {
-      icXyzFromPcs(devPcs);
-      icXYZtoLab(devPcs);
-      icXyzFromPcs(roundPcs1);
-      icXYZtoLab(roundPcs1);
-      icXyzFromPcs(roundPcs2);
-      icXYZtoLab(roundPcs2);
-    }
-    else {
-      icLabFromPcs(devPcs);
-      icLabFromPcs(roundPcs1);
-      icLabFromPcs(roundPcs2);
-    }
+
+    icLabFromPcs(devPcs);
+    icLabFromPcs(roundPcs1);
+    icLabFromPcs(roundPcs2);
+
     Compare(sPixel, devPcs, roundPcs1, roundPcs2);
   }
   

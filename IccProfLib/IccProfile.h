@@ -88,6 +88,7 @@ namespace sampleICC {
 
 class ICCPROFLIB_API CIccTag;
 class ICCPROFLIB_API CIccIO;
+class ICCPROFLIB_API CIccMemIO;
 
 /**
  **************************************************************************
@@ -158,6 +159,7 @@ public:
   CIccTag* FindTag(icSignature sig);
   bool AttachTag(icSignature sig, CIccTag *pTag);
   bool DeleteTag(icSignature sig);
+  CIccMemIO* GetTagIO(icSignature sig); //caller should delete returned result
 
   bool Attach(CIccIO *pIO);
   bool Detach();

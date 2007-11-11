@@ -528,18 +528,9 @@ void MyChild::OnTagClicked(wxListEvent& event)
   icTagSignature tagSig = (icTagSignature)event.GetData();
   CIccTag *pTag = m_pIcc->FindTag(tagSig);
 
-  if (!pTag) {
-    CIccInfo Fmt;
+  MyTagDialog dialog(this, m_pIcc, tagSig, pTag);
 
-    wxString sTagSignature = Fmt.GetTagSigName(tagSig);
-    wxMessageBox(wxString(_T("Unable to parse tag '")) + sTagSignature + _T("'"),
-      _T("Invalid Tag!"));
-  }
-  else {
-    MyTagDialog dialog(this, m_pIcc, tagSig, pTag);
-
-    dialog.ShowModal();
-  }
+  dialog.ShowModal();
 }
 
 MyValidationDialog::MyValidationDialog(wxWindow *pParent, const wxString& title, wxString &profilePath) : 
@@ -628,18 +619,40 @@ wxDialog(pParent, wxID_ANY, _T("View Tag"), wxDefaultPosition, wxDefaultSize, wx
 
   wxString sTagSignature = Fmt.GetTagSigName(sig);
   wxString sTagType;
-  if (pTag->IsArrayType()) {
-    sTagType = _T("Array of ");
+  std::string desc;
+
+  if (pTag) {
+    if (pTag->IsArrayType()) {
+      sTagType = _T("Array of ");
+    }
+    else {
+      sTagType.Empty();
+    }
+    sTagType += Fmt.GetTagTypeSigName(pTag->GetType());
+
+    wxBeginBusyCursor();
+    pTag->Describe(desc);
+    wxEndBusyCursor();
+  }
+  else if (pIcc) {
+    CIccMemIO *pIO = pIcc->GetTagIO(sig);
+    sTagType = "***Invalid Tag!***";
+
+    if (pIO) {
+      std::string dump;
+      icMemDump(dump, pIO->GetData(), pIO->GetLength());
+      delete pIO;
+      desc = "Data contents of tag:\r\n\r\n";
+      desc += dump;
+    }
+    else {
+      desc = "Invalid Tag Directory Entry!\r\n";
+    }
   }
   else {
-    sTagType.Empty();
+    desc = "Invalid Tag Entry!\r\n";
+    sTagType = "***Invalid Tag***";
   }
-  sTagType += Fmt.GetTagTypeSigName(pTag->GetType());
-
-  std::string desc;
-  wxBeginBusyCursor();
-  pTag->Describe(desc);
-  wxEndBusyCursor();
 
   wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 

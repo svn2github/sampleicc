@@ -81,6 +81,7 @@
 #include <math.h>
 #include "IccUtil.h"
 #include "IccEval.h"
+#include "IccPrmg.h"
 
 class CIccMinMaxEval : public CIccEvalCompare
 {
@@ -88,10 +89,6 @@ public:
   CIccMinMaxEval();
 
   void Compare(icFloatNumber *pixel, icFloatNumber *deviceLab, icFloatNumber *lab1, icFloatNumber *lab2);
-
-  icFloatNumber sq(icFloatNumber x) { return x*x; }
-
-  icFloatNumber deltaE(icFloatNumber *lab1, icFloatNumber *lab2) {return sqrt(sq(lab1[0]-lab2[0]) + sq(lab1[1]-lab2[1]) + sq(lab1[2]-lab2[2])); }
 
   icFloatNumber GetMean1() { return sum1 / num1; }
   icFloatNumber GetMean2() { return sum2 / num2; }
@@ -120,8 +117,8 @@ CIccMinMaxEval::CIccMinMaxEval()
 
 void CIccMinMaxEval::Compare(icFloatNumber *pixel, icFloatNumber *deviceLab, icFloatNumber *lab1, icFloatNumber *lab2)
 {
-  icFloatNumber DE1 = deltaE(deviceLab, lab1);
-  icFloatNumber DE2 = deltaE(lab1, lab2);
+  icFloatNumber DE1 = icDeltaE(deviceLab, lab1);
+  icFloatNumber DE2 = icDeltaE(lab1, lab2);
 
   if (DE1<minDE1) {
     minDE1 = DE1;
@@ -175,12 +172,23 @@ int main(int argc, char* argv[])
 
   if (stat!=icCmmStatOk) {
     printf("Unable to perform round trip on '%s'\n", argv[1]);
+    return -1;
+  }
+
+  CIccPRMG prmg;
+
+  stat = prmg.EvaluateProfile(argv[1], nIntent, icInterpLinear, (nUseMPE!=0));
+
+  if (stat!=icCmmStatOk) {
+    printf("Unable to perform PRMG analysis on '%s'\n", argv[1]);
+    return -1;
   }
 
   CIccInfo info;
 
   printf("Profile:          '%s'\n", argv[1]);
   printf("Rendering Intent: %s\n", info.GetRenderingIntentName(nIntent));
+  printf("Specified Gamut:  %s\n", prmg.m_bPrmgImplied ? "Perceptual Reference Medium Gamut" : "Not Specified");
 
   printf("\nRound Trip 1\n");
   printf(  "------------\n");
@@ -198,7 +206,17 @@ int main(int argc, char* argv[])
 
   printf("Max L, a, b:   " ICFLOATFMT ", " ICFLOATFMT ", " ICFLOATFMT "\n", eval.maxLab2[0], eval.maxLab2[1], eval.maxLab2[2]);
 
+  if (prmg.m_nTotal) {
+    printf("\nPerceptual Reference Medium Gamut - Round Trip Results\n");
+    printf(  "------------------------------------------------------\n");
 
+    printf("DE <= 1.0 (%8u): %5.1f%%\n", prmg.m_nDE1, (float)prmg.m_nDE1/(float)prmg.m_nTotal*100.0); 
+    printf("DE <= 2.0 (%8u): %5.1f%%\n", prmg.m_nDE2, (float)prmg.m_nDE2/(float)prmg.m_nTotal*100.0);
+    printf("DE <= 3.0 (%8u): %5.1f%%\n", prmg.m_nDE3, (float)prmg.m_nDE3/(float)prmg.m_nTotal*100.0);
+    printf("DE <= 5.0 (%8u): %5.1f%%\n", prmg.m_nDE5, (float)prmg.m_nDE5/(float)prmg.m_nTotal*100.0);
+    printf("DE <=10.0 (%8u): %5.1f%%\n", prmg.m_nDE10, (float)prmg.m_nDE10/(float)prmg.m_nTotal*100.0);
+    printf("Total     (%8u)\n", prmg.m_nTotal);
+  }
   return 0;
 }
 

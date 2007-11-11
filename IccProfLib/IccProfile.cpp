@@ -382,6 +382,45 @@ CIccTag* CIccProfile::FindTag(icSignature sig)
   return NULL;
 }
 
+/**
+******************************************************************************
+* Name: CIccProfile::GetTagIO
+* 
+* Purpose: Finds the tag directory entry with the given signature and returns
+*  a CIccIO object that can be used to read the tag data stored in the profile.
+*  This only works if the profile is still connected to the file IO object.
+* 
+* Args: 
+*  sig - tag signature to find in profile
+* 
+* Return: 
+*  A CIccIO object that can be used to read the tag data from the file.
+*  Note: the caller is responsible for deleting the returned CIccIO object.
+*******************************************************************************
+*/
+CIccMemIO* CIccProfile::GetTagIO(icSignature sig)
+{
+  IccTagEntry *pEntry = GetTag(sig);
+
+  if (pEntry && m_pAttachIO) {
+    CIccMemIO *pIO = new CIccMemIO;
+
+    if (!pIO)
+      return NULL;
+    
+    if (!pIO->Alloc(pEntry->TagInfo.size)) {
+      delete pIO;
+      return NULL;
+    }
+
+    m_pAttachIO->Seek(pEntry->TagInfo.offset, icSeekSet);
+    m_pAttachIO->Read8(pIO->GetData(), pIO->GetLength());
+    return pIO;
+  }
+
+  return NULL;
+}
+
 
 /**
  ******************************************************************************
