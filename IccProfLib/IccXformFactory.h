@@ -121,7 +121,7 @@ public:
   * factory doesn't support creation of xforms of type xformTypeSig then it
   * should return NULL.
   */
-  virtual CIccXform* CreateXform(icXformType xformType, CIccTag *pTag=NULL, CIccCreateXformHint* pHint=0)=0;
+  virtual CIccXform* CreateXform(icXformType xformType, CIccTag *pTag=NULL, IIccCreateXformHint* pHint=0)=0;
 };
 
 
@@ -154,7 +154,7 @@ public:
   * Returns a new CIccXform object of the given xform type.
   * Unrecognized xformTypeSig's will be created as a CIccXformUnknown object.
   */
-  virtual CIccXform* CreateXform(icXformType xformType, CIccTag *pTag=NULL, CIccCreateXformHint *pHint=NULL);
+  virtual CIccXform* CreateXform(icXformType xformType, CIccTag *pTag=NULL, IIccCreateXformHint *pHint=NULL);
 
 };
 
@@ -189,7 +189,7 @@ public:
   * Each factory in the factoryStack is used until a factory supports the
   * signature type.
   */
-  static CIccXform* CreateXform(icXformType xformType, CIccTag *pTag=NULL, CIccCreateXformHint *pHint=NULL)
+  static CIccXform* CreateXform(icXformType xformType, CIccTag *pTag=NULL, IIccCreateXformHint *pHint=NULL)
       { return CIccXformCreator::GetInstance()->DoCreateXform(xformType, pTag, pHint); }
 
   /**
@@ -239,7 +239,7 @@ private:
   */
   static CIccXformCreator* GetInstance();
 
-  CIccXform* DoCreateXform(icXformType xformType, CIccTag *pTag=NULL, CIccCreateXformHint *pHint=NULL);
+  CIccXform* DoCreateXform(icXformType xformType, CIccTag *pTag=NULL, IIccCreateXformHint *pHint=NULL);
   void DoPushFactory(IIccXformFactory *pFactory);
   IIccXformFactory* DoPopFactory(bool bAll=false);
 

@@ -452,7 +452,7 @@ CIccXform::~CIccXform()
  */
 CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput, icRenderingIntent nIntent, 
                              icXformInterp nInterp, icXformLutType nLutType, bool bUseMpeTags,
-                             CIccCreateXformHint *pHint)
+                             IIccCreateXformHint *pHint)
 {
   CIccXform *rv = NULL;
   icRenderingIntent nTagIntent = nIntent;
@@ -694,7 +694,7 @@ void CIccXform::SetParams(CIccProfile *pProfile, bool bInput, icRenderingIntent 
  **************************************************************************
  */
 CIccXform *CIccXform::Create(CIccProfile &Profile, bool bInput, icRenderingIntent nIntent, icXformInterp nInterp, icXformLutType nLutType,
-                             bool bUseMpeTags, CIccCreateXformHint *pHint)
+                             bool bUseMpeTags, IIccCreateXformHint *pHint)
 {
   CIccProfile *pProfile = new CIccProfile(Profile);
   CIccXform *pXform = Create(pProfile, bInput, nIntent, nInterp, nLutType, bUseMpeTags, pHint);
@@ -2948,7 +2948,7 @@ icStatusCMM CIccCmm::AddXform(const icChar *szProfilePath,
                               icXformInterp nInterp /*icXformInterp*/,
                               icXformLutType nLutType /*=icXformLutColor*/,
                               bool bUseMpeTags /*=true*/,
-                              CIccCreateXformHint *pHint /*=NULL*/)
+                              IIccCreateXformHint *pHint /*=NULL*/)
 {
   CIccProfile *pProfile = OpenIccProfile(szProfilePath);
 
@@ -2991,7 +2991,7 @@ icStatusCMM CIccCmm::AddXform(icUInt8Number *pProfileMem,
                               icXformInterp nInterp /*icXformInterp*/,
                               icXformLutType nLutType /*=icXformLutColor*/,
                               bool bUseMpeTags /*=true*/,
-                              CIccCreateXformHint *pHint /*=NULL*/)
+                              IIccCreateXformHint *pHint /*=NULL*/)
 {
   CIccMemIO *pFile = new CIccMemIO;
 
@@ -3042,7 +3042,7 @@ icStatusCMM CIccCmm::AddXform(CIccProfile *pProfile,
                               icXformInterp nInterp /*=icInterpLinear*/,
                               icXformLutType nLutType /*=icXformLutColor*/,
                               bool bUseMpeTags /*=true*/,
-                              CIccCreateXformHint *pHint /*=NULL*/)
+                              IIccCreateXformHint *pHint /*=NULL*/)
 {
   icColorSpaceSignature nSrcSpace, nDstSpace;
   bool bInput = !m_bLastInput;
@@ -3159,7 +3159,7 @@ icStatusCMM CIccCmm::AddXform(CIccProfile &Profile,
                               icXformInterp nInterp /*=icInterpLinear*/,
                               icXformLutType nLutType /*=icXformLutColor*/,
                               bool bUseMpeTags /*=true*/,
-                              CIccCreateXformHint *pHint /*=NULL*/)
+                              IIccCreateXformHint *pHint /*=NULL*/)
 {
   CIccProfile *pProfile = new CIccProfile(Profile);
 
@@ -3988,7 +3988,7 @@ icStatusCMM CIccNamedColorCmm::AddXform(const icChar *szProfilePath,
                                         icXformInterp nInterp /*icXformInterp*/,
                                         icXformLutType nLutType /*=icXformLutColor*/,
                                         bool bUseMpeTags /*=true*/,
-                                        CIccCreateXformHint *pHint /*=NULL*/)
+                                        IIccCreateXformHint *pHint /*=NULL*/)
 {
   CIccProfile *pProfile = OpenIccProfile(szProfilePath);
 
@@ -4025,7 +4025,7 @@ icStatusCMM CIccNamedColorCmm::AddXform(CIccProfile *pProfile,
                                         icXformInterp nInterp /*=icInterpLinear*/,
                                         icXformLutType nLutType /*=icXformLutColor*/,
                                         bool bUseMpeTags /*=true*/,
-                                        CIccCreateXformHint *pHint /*=NULL*/)
+                                        IIccCreateXformHint *pHint /*=NULL*/)
 {
   icColorSpaceSignature nSrcSpace, nDstSpace;
   CIccXformPtr Xform;

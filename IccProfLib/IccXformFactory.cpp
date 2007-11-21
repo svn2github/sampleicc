@@ -82,7 +82,7 @@
 namespace sampleICC {
 #endif
 
-CIccXform* CIccBaseXformFactory::CreateXform(icXformType xformSig, CIccTag *pTag/*=NULL*/, CIccCreateXformHint *pHint/*=NULL*/)
+CIccXform* CIccBaseXformFactory::CreateXform(icXformType xformSig, CIccTag *pTag/*=NULL*/, IIccCreateXformHint *pHint/*=NULL*/)
 {
   //We generally ignore pHint in the base creator (used by others to determine what form of xform to create)
   switch(xformSig) {
@@ -137,7 +137,7 @@ CIccXformCreator* CIccXformCreator::GetInstance()
   return theXformCreator.get();
 }
 
-CIccXform* CIccXformCreator::DoCreateXform(icXformType xformTypeSig, CIccTag *pTag/*=NULL*/, CIccCreateXformHint *pHint/*=NULL*/)
+CIccXform* CIccXformCreator::DoCreateXform(icXformType xformTypeSig, CIccTag *pTag/*=NULL*/, IIccCreateXformHint *pHint/*=NULL*/)
 {
   CIccXformFactoryList::iterator i;
   CIccXform *rv = NULL;
