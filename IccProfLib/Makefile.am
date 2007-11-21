@@ -4,6 +4,7 @@ lib_LTLIBRARIES = libSampleICC.la
 
 libSampleICC_la_SOURCES = \
 	IccCmm.cpp \
+	IccXformFactory.cpp \
 	IccIO.cpp \
 	IccMpeACS.cpp \
 	IccMpeBasic.cpp \
@@ -23,6 +24,7 @@ libSampleICCincludedir = $(includedir)/SampleICC
 
 libSampleICCinclude_HEADERS = \
 	IccCmm.h \
+	IccXformFactory.h \
 	IccDefs.h \
 	IccIO.h \
 	IccMpeACS.h \

@@ -59,6 +59,12 @@
  *   the configuration parameters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
+ * - November 2007
+ *  - Addition of CIccXformCreator singleton factory and IIccXformFactory interface for dynamic
+ *    creation of CIccXform objects based upon xform type.   With a IIccXformFactory  derived
+ *    object properly registered using CIccXformCreator::PushFactory() overlaoded CIccXform objects
+ *    seemleessly get created and applied.
+ *
  * - October 2007
  *  - Fixed Memory leak in CIccProfile Copy constructor and operator=.
  *

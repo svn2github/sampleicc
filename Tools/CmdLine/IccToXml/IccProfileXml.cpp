@@ -76,7 +76,7 @@ bool CIccProfileXml::ToXml(std::string &xml)
     xml += "\n  reserved=\"";
     xml += buf;
   }
-  xml += "/>\n";
+  xml += ">\n";
 
   TagEntryList::iterator i, j;
   std::set<icTagSignature> sigSet;
@@ -88,26 +88,30 @@ bool CIccProfileXml::ToXml(std::string &xml)
       if (pTag) {
         CIccTagXml *pTagXml = (CIccTagXml*)(pTag->GetExtension());
         if (pTagXml) {
+          int n;
           j=i;
-          sprintf(line, "  <Tag type=\"%s\">\n", icFixXml(fix, icGetSigStr(buf, pTag->GetType())));
+          sprintf(line, "  <Tag type=\"%s\"", icFixXml(fix, icGetSigStr(buf, pTag->GetType())));
           xml += line;
-          sprintf(line, "    <Signature>\"%s\"</Signature>\n", icFixXml(fix, icGetSigStr(buf, i->TagInfo.sig)));
+          sprintf(line, " signature=\"%s\"", icFixXml(fix, icGetSigStr(buf, i->TagInfo.sig)));
           xml += line;
 
           sigSet.insert(i->TagInfo.sig);
 
-          for (j++; j!=m_Tags->end(); j++) {
+          for (j++, n=2; j!=m_Tags->end(); j++) {
             if (j->pTag == i->pTag || j->TagInfo.offset == i->TagInfo.offset) {
-              sprintf(line, "    <Signature>\"%s\"</Signature>\n", icFixXml(fix, icGetSigStr(buf, j->TagInfo.sig)));
+              sprintf(line, " signature%d=\"%s\"", n++, icFixXml(fix, icGetSigStr(buf, j->TagInfo.sig)));
               xml += line;
               sigSet.insert(j->TagInfo.sig);        
             }
           }
           if (pTag->m_nReserved) {
-            sprintf(line, "    <Reserved>%08x</Reserverd>\n", pTag->m_nReserved);
+            sprintf(line, " reserved=\"%08x\"", pTag->m_nReserved);
             xml += line;
           }
-          pTagXml->ToXml(xml, "    ");
+          xml += "/>\n";
+
+          if (!pTagXml->ToXml(xml, "    "))
+            return false;
           xml += "  </Tag>\n";
         }
         else {

@@ -234,6 +234,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IccPrmg.cpp"
+				>
+			</File>
+			<File
 				RelativePath="IccProfile.cpp"
 				>
 				<FileConfiguration
@@ -367,6 +371,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\IccXformFactory.cpp"
+				>
+			</File>
+			<File
 				RelativePath="md5.cpp"
 				>
 				<FileConfiguration
@@ -425,6 +433,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IccPrmg.h"
+				>
+			</File>
+			<File
 				RelativePath="IccProfile.h"
 				>
 			</File>
@@ -458,6 +470,10 @@
 			</File>
 			<File
 				RelativePath="IccUtil.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IccXformFactory.h"
 				>
 			</File>
 			<File

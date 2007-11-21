@@ -1,8 +1,7 @@
 /** @file
-File:       IccTagFactory.h
+File:       IccPrmg.h
 
-Contains:   Header for implementation of CIccTagFactory class and
-creation factories
+Contains:   Header for implementation of CIccPrmg class
 
 Version:    V1
 
@@ -13,7 +12,7 @@ Copyright:  © see ICC Software License
 * The ICC Software License, Version 0.1
 *
 *
-* Copyright (c) 2005 The International Color Consortium. All rights 
+* Copyright (c) 2007 The International Color Consortium. All rights 
 * reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -72,78 +71,42 @@ Copyright:  © see ICC Software License
 ////////////////////////////////////////////////////////////////////// 
 // HISTORY:
 //
-// -Oct 30, 2005 
-//  A CIccTagCreator singleton class has been added to provide general
-//  support for dynamically creating tag classes using a tag signature.
-//  Prototype and private tag type support can be added to the system
-//  by pushing additional IIccTagFactory based objects to the 
-//  singleton CIccTagCreator object.
+// -Oct 27, 2007 
+// Initial implementation of class CIccPRMG
 //
 //////////////////////////////////////////////////////////////////////
 
-#ifndef _ICCTAGXMLFACTORY_H
-#define _ICCTAGXMLFACTORY_H
+#ifndef _ICCPRMG_H
+#define _ICCPRMG_H
 
-#include "IccTagFactory.h"
+#include "IccCmm.h"
 
-//CIccTag factory support
 #ifdef USESAMPLEICCNAMESPACE
 namespace sampleICC {
 #endif
 
-/**
-***********************************************************************
-* Class: CIccTagXmlFactory
-*
-* Purpose:
-* CIccSpecTagFactory provides creation of CIccTag's defined by the ICC profile
-* specification.  The CIccTagCreator always creates a CIccSpecTagFactory.
-***********************************************************************
-*/
-class CIccTagXmlFactory : public IIccTagFactory
+class CIccPRMG
 {
 public:
-  /**
-  * Function: CreateTag(tagTypeSig)
-  *  Create a tag of type tagTypeSig.
-  *
-  * Parameter(s):
-  *  tagTypeSig = signature of the ICC tag type for the tag to be created
-  *
-  * Returns a new CIccTag object of the given signature type.
-  * Unrecognized tagTypeSig's will be created as a CIccTagUnknown object.
-  */
-  virtual CIccTag* CreateTag(icTagTypeSignature tagSig);
+  CIccPRMG();
 
-  /**
-  * Function: GetTagSigName(tagSig)
-  *  Get display name of tagSig.
-  *
-  * Parameter(s):
-  *  tagName = string to put tag name into, 
-  *  tagSig = signature of the ICC tag type to get a name for
-  *
-  * Returns pointer to string containing name of tag if tag is recognized
-  * by the factory, NULL if the factory doesn't create tagSig tags.
-  */
-  virtual const icChar* GetTagSigName(icTagSignature tagSig);
+  icFloatNumber GetChroma(icFloatNumber L, icFloatNumber h);
 
-  /**
-  * Function: GetTagTypeSigName(tagTypeSig)
-  *  Get display name of tagTypeSig.
-  *
-  * Parameter(s):
-  *  tagName = string to put tag name into, 
-  *  tagTypeSig = signature of the ICC tag type to get a name for
-  *
-  * Returns pointer to string containing name of tag type if tag is recognized
-  * by the factory, NULL if the factory doesn't create tagTypeSig tags.
-  */
-  virtual const icChar* GetTagTypeSigName(icTagTypeSignature tagTypeSig);
+  bool InGamut(icFloatNumber *Lab);
+  bool InGamut(icFloatNumber L, icFloatNumber c, icFloatNumber h);
+
+  icStatusCMM EvaluateProfile(CIccProfile *pProfile, icRenderingIntent nIntent=icUnknownIntent, 
+                              icXformInterp nInterp=icInterpLinear, bool buseMpeTags=true);
+  icStatusCMM EvaluateProfile(const char *szProfilePath, icRenderingIntent nIntent=icUnknownIntent, 
+                              icXformInterp nInterp=icInterpLinear, bool buseMpeTags=true);
+
+  icUInt32Number m_nDE1, m_nDE2, m_nDE3, m_nDE5, m_nDE10, m_nTotal;
+
+  bool m_bPrmgImplied;
 };
 
 #ifdef USESAMPLEICCNAMESPACE
-} //namespace sampleICC
+}
 #endif
 
-#endif //_ICCTAGFACTORY_H
+#endif

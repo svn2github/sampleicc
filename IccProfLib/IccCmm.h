@@ -126,13 +126,31 @@ typedef enum {
 #define icPerceptualRefWhiteY 1.0000
 #define icPerceptualRefWhiteZ 0.8249
 
+// CMM Xform creation hint information
+class CIccCreateXformHint
+{
+public:
+  virtual const char *GetHintType()=0;
+};
+
+class CIccCreateNamedColorXformHint : public CIccCreateXformHint
+{
+public:
+  virtual const char *GetHintType() {return "CIccCreateNamedColorXformHint";}
+
+  icColorSpaceSignature csPcs;
+  icColorSpaceSignature csDevice;
+  CIccCreateXformHint *pHint;
+};
+
+
 // CMM Xform types
 typedef enum {
   icXformTypeMatrixTRC  = 0,
   icXformType3DLut      = 1,
   icXformType4DLut      = 2,
   icXformTypeNDLut      = 3,
-  icXformTypeNamedColor = 4,
+  icXformTypeNamedColor = 4,  //Creator uses icNamedColorXformHint
   icXformTypeMpe        = 5,
 } icXformType;
 
@@ -158,13 +176,13 @@ public:
   ///Note: The returned CIccXform will own the profile.
   static CIccXform *Create(CIccProfile *pProfile, bool bInput=true, icRenderingIntent nIntent=icUnknownIntent, 
                            icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-                           bool bUseMpeTags=true);
+                           bool bUseMpeTags=true, CIccCreateXformHint *pHint=NULL);
 
   ///Note: Provide an interface to work profile references.  The IccProfile is copied, and the copy's ownership
   ///is turned over to the Returned CIccXform object.
   static CIccXform *Create(CIccProfile &pProfile, bool bInput=true, icRenderingIntent nIntent=icUnknownIntent, 
                            icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-                           bool bUseMpeTags=true);
+                           bool bUseMpeTags=true, CIccCreateXformHint *pHint=NULL);
 
   virtual icStatusCMM Begin();
   virtual void Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)=0;
@@ -560,16 +578,17 @@ public:
   ///Must make at least one call to some form of AddXform() before calling Begin()
   virtual icStatusCMM AddXform(const icChar *szProfilePath, icRenderingIntent nIntent=icUnknownIntent,
                                icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-                               bool bUseMpeTags=true);
+                               bool bUseMpeTags=true, CIccCreateXformHint *pHint=NULL);
   virtual icStatusCMM AddXform(icUInt8Number *pProfileMem, icUInt32Number nProfileLen,
                                icRenderingIntent nIntent=icUnknownIntent, icXformInterp nInterp=icInterpLinear,
-                               icXformLutType nLutType=icXformLutColor, bool bUseMpeTags=true);
+                               icXformLutType nLutType=icXformLutColor, bool bUseMpeTags=true,
+                               CIccCreateXformHint *pHint=NULL);
   virtual icStatusCMM AddXform(CIccProfile *pProfile, icRenderingIntent nIntent=icUnknownIntent,
                                icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-                               bool bUseMpeTags=true);  //Note: profile will be owned by the CMM
+                               bool bUseMpeTags=true, CIccCreateXformHint *pHint=NULL);  //Note: profile will be owned by the CMM
   virtual icStatusCMM AddXform(CIccProfile &Profile, icRenderingIntent nIntent=icUnknownIntent,
                                icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-                               bool bUseMpeTags=true);  //Note the profile will be copied
+                               bool bUseMpeTags=true, CIccCreateXformHint *pHint=NULL);  //Note the profile will be copied
 
   ///Must be called before calling Apply()
   virtual icStatusCMM Begin(); 
@@ -662,10 +681,10 @@ public:
   ///Must make at least one call to some form of AddXform() before calling Begin()
   virtual icStatusCMM AddXform(const icChar *szProfilePath, icRenderingIntent nIntent=icUnknownIntent,
                                icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-                               bool bUseMpeTags=true);
+                               bool bUseMpeTags=true, CIccCreateXformHint *pHint=NULL);
   virtual icStatusCMM AddXform(CIccProfile *pProfile, icRenderingIntent nIntent=icUnknownIntent,
                                icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-                               bool buseMpeTags=true);  //Note: profile will be owned by the CMM
+                               bool buseMpeTags=true, CIccCreateXformHint *pHint=NULL);  //Note: profile will be owned by the CMM
 
   ///Must be called before calling Apply()
   virtual icStatusCMM Begin(); 
@@ -716,16 +735,16 @@ public:
   //override AddXform/Begin functions to return bad status.
   virtual icStatusCMM AddXform(const icChar *szProfilePath, icRenderingIntent nIntent=icUnknownIntent,
     icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-    bool bUseMpeTags=true) { return icCmmStatBad; }
+    bool bUseMpeTags=true, CIccCreateXformHint *pHint=NULL) { return icCmmStatBad; }
   virtual icStatusCMM AddXform(icUInt8Number *pProfileMem, icUInt32Number nProfileLen,
     icRenderingIntent nIntent=icUnknownIntent, icXformInterp nInterp=icInterpLinear,
-    icXformLutType nLutType=icXformLutColor, bool bUseMpeTags=true)  { return icCmmStatBad; }
+    icXformLutType nLutType=icXformLutColor, bool bUseMpeTags=true, CIccCreateXformHint *pHint=NULL)  { return icCmmStatBad; }
   virtual icStatusCMM AddXform(CIccProfile *pProfile, icRenderingIntent nIntent=icUnknownIntent,
     icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-    bool bUseMpeTags=true)  { return icCmmStatBad; }
+    bool bUseMpeTags=true, CIccCreateXformHint *pHint=NULL)  { return icCmmStatBad; }
   virtual icStatusCMM AddXform(CIccProfile &Profile, icRenderingIntent nIntent=icUnknownIntent,
     icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-    bool bUseMpeTags=true) { return icCmmStatBad; }
+    bool bUseMpeTags=true, CIccCreateXformHint *pHint=NULL) { return icCmmStatBad; }
   virtual icStatusCMM Begin()  { return icCmmStatBad; }
 
   virtual icStatusCMM Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);

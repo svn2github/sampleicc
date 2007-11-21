@@ -173,7 +173,7 @@ CIccTag* CIccSpecTagFactory::CreateTag(icTagTypeSignature tagSig)
       return new CIccTagResponseCurveSet16;
 
     case icSigProfileSequceIdType:
-      return new CIccTagProfileSequenceId();
+      return new CIccTagProfileSequenceId;
 
     case icSigScreeningType:
     case icSigUcrBgType:

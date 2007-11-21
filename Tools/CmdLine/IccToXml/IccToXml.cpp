@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include "IccTagXmlFactory.h"
+#include "IccMpeXmlFactory.h"
 #include "IccProfileXml.h"
 #include "IccIO.h"
 
@@ -14,6 +15,7 @@ int main(int argc, char* argv[])
   }
   
   CIccTagCreator::PushFactory(new CIccTagXmlFactory());
+  CIccMpeCreator::PushFactory(new CIccMpeXmlFactory());
 
   CIccProfileXml profile;
   CIccFileIO IO;

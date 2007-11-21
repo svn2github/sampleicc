@@ -327,7 +327,7 @@ protected:
 };
 
 
-//CIccFloatTag support
+//CIccMpeTag support
 #ifdef USESAMPLEICCNAMESPACE
 }
 #endif

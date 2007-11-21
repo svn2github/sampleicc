@@ -91,6 +91,10 @@ SOURCE=.\IccCmm.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\IccEval.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\IccIO.cpp
 # End Source File
 # Begin Source File
@@ -104,6 +108,10 @@ SOURCE=.\IccMpeBasic.cpp
 # Begin Source File
 
 SOURCE=.\IccMpeFactory.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\IccPrmg.cpp
 # End Source File
 # Begin Source File
 
@@ -135,6 +143,10 @@ SOURCE=.\IccUtil.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\IccXformFactory.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\md5.cpp
 # End Source File
 # End Group
@@ -151,6 +163,10 @@ SOURCE=.\IccDefs.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\IccEval.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\IccIO.h
 # End Source File
 # Begin Source File
@@ -164,6 +180,10 @@ SOURCE=.\IccMpeBasic.h
 # Begin Source File
 
 SOURCE=.\IccMpeFactory.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\IccPrmg.h
 # End Source File
 # Begin Source File
 
@@ -200,6 +220,10 @@ SOURCE=.\IccTagProfSeqId.h
 # Begin Source File
 
 SOURCE=.\IccUtil.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\IccXformFactory.h
 # End Source File
 # Begin Source File
 

@@ -125,7 +125,7 @@ CIccTag* CIccTagXmlFactory::CreateTag(icTagTypeSignature tagSig)
     return new CIccTagXmlMultiLocalizedUnicode;
 
   case icSigMultiProcessElementType:
-    return new CIccTagXmlMultiProcessElement();
+    return new CIccTagXmlMultiProcessElement;
 
   case icSigParametricCurveType:
     return new CIccTagXmlParametricCurve;
@@ -171,6 +171,9 @@ CIccTag* CIccTagXmlFactory::CreateTag(icTagTypeSignature tagSig)
 
   case icSigResponseCurveSet16Type:
     return new CIccTagXmlResponseCurveSet16;
+
+  case icSigProfileSequceIdType:
+    return new CIccTagXmlProfileSequenceId;
 
   case icSigScreeningType:
   case icSigUcrBgType:

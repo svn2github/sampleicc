@@ -342,6 +342,18 @@ void icVectorApplyMatrix3x3(icFloatNumber* result,
 }
 
 
+static inline icFloatNumber icSq(icFloatNumber x)
+{
+  return x*x;
+}
+
+
+icFloatNumber icDeltaE(icFloatNumber *lab1, icFloatNumber *lab2)
+{
+  return sqrt(icSq(lab1[0]-lab2[0]) + icSq(lab1[1]-lab2[1]) + icSq(lab1[2]-lab2[2]));
+}
+
+
 icS15Fixed16Number icDtoF(icFloatNumber num)
 {
   icS15Fixed16Number rv;

@@ -659,7 +659,7 @@ CIccTagParametricCurve::CIccTagParametricCurve(const CIccTagParametricCurve &ITP
   m_nNumParam = ITPC.m_nNumParam;
 
   m_Param = new icS15Fixed16Number[m_nNumParam];
-  memcpy(m_Param, ITPC.m_Param, sizeof(m_Param));  
+  memcpy(m_Param, ITPC.m_Param, m_nNumParam*sizeof(icS15Fixed16Number));  
   m_dParam = NULL;
 }
 
@@ -685,7 +685,7 @@ CIccTagParametricCurve &CIccTagParametricCurve::operator=(const CIccTagParametri
   if (m_Param)
     delete [] m_Param;
   m_Param = new icS15Fixed16Number[m_nNumParam];
-  memcpy(m_Param, ParamCurveTag.m_Param, sizeof(m_Param));  
+  memcpy(m_Param, ParamCurveTag.m_Param, m_nNumParam*sizeof(icS15Fixed16Number));  
 
   m_dParam = NULL;
 

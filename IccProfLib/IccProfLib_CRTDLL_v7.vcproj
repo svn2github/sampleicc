@@ -136,6 +136,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\IccEval.cpp">
+			</File>
+			<File
 				RelativePath="IccIO.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -163,6 +166,9 @@
 			</File>
 			<File
 				RelativePath=".\IccMpeFactory.cpp">
+			</File>
+			<File
+				RelativePath=".\IccPrmg.cpp">
 			</File>
 			<File
 				RelativePath="IccProfile.cpp">
@@ -271,6 +277,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\IccXformFactory.cpp">
+			</File>
+			<File
 				RelativePath="md5.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -301,6 +310,9 @@
 				RelativePath="IccDefs.h">
 			</File>
 			<File
+				RelativePath=".\IccEval.h">
+			</File>
+			<File
 				RelativePath="IccIO.h">
 			</File>
 			<File
@@ -311,6 +323,9 @@
 			</File>
 			<File
 				RelativePath=".\IccMpeFactory.h">
+			</File>
+			<File
+				RelativePath=".\IccPrmg.h">
 			</File>
 			<File
 				RelativePath="IccProfile.h">
@@ -338,6 +353,9 @@
 			</File>
 			<File
 				RelativePath="IccUtil.h">
+			</File>
+			<File
+				RelativePath=".\IccXformFactory.h">
 			</File>
 			<File
 				RelativePath=".\icProfileHeader.h">

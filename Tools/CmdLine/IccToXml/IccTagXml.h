@@ -79,14 +79,14 @@ Copyright:  © see ICC Software License
 #define _ICCTAGXML_H
 #include "IccTag.h"
 
-char *icFixXml(char *szDest, const char *szSrc);
+const char *icFixXml(char *szDest, const char *szSrc);
 
 class CIccTagXml : public IIccExtensionTag
 {
 public:
   virtual ~CIccTagXml(void) {}
 
-  virtual const char *GetExtClassName() { return "IIccExtensionTag"; }
+  virtual const char *GetExtClassName() { return "CIccTagXml"; }
 
   virtual bool ToXml(std::string &xml, std::string blanks="") = 0;
 };
@@ -396,6 +396,18 @@ public:
   virtual ~CIccTagXmlMultiProcessElement() {}
 
   virtual const char *GetClassName() { return "CIccTagXmlMultiProcessElement"; }
+
+  virtual IIccExtensionTag *GetExtension() { return this; }
+
+  virtual bool ToXml(std::string &xml, std::string blanks="");
+};
+
+class CIccTagXmlProfileSequenceId : public CIccTagProfileSequenceId, public CIccTagXml
+{
+public:
+  virtual ~CIccTagXmlProfileSequenceId() {}
+
+  virtual const char *GetClassName() { return "CIccTagXmlProfileSequenceId"; }
 
   virtual IIccExtensionTag *GetExtension() { return this; }
 

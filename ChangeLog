@@ -1,4 +1,10 @@
-2007-10-08
+2007-11-21 Max Derhak
+ * Addition of CIccXformCreator singleton factory and IIccXformFactory interface for dynamic
+   creation of CIccXform objects based upon xform type.   With a IIccXformFactory  derived
+   object properly registered using CIccXformCreator::PushFactory() overlaoded CIccXform objects
+   seemleessly get created and applied.
+   
+2007-10-08 Max Derhak
   * Fixed memory leak in CIccProfile copy constructor and copy methods
   * Added CIccEvalCompare object that can be derived from to perform round trip analysis.
   * Added iccRoundTrip command line tool that performs round trip analysis of ICC profiles.

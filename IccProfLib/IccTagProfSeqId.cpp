@@ -241,7 +241,7 @@ void CIccProfileIdDesc::Describe(std::string &sDescription)
   for (i=0; i<sizeof(icProfileID); i++) {
     if (i && i%4==0)
       sDescription += " ";
-    sprintf(buf, "%2x", m_profileID.ID8[i]);
+    sprintf(buf, "%02x", m_profileID.ID8[i]);
     sDescription += buf;
   }
   sDescription += "\r\n";

@@ -1836,9 +1836,7 @@ icInt32Number CIccTagNamedColor2::FindPCSColor(icFloatNumber *pPCS, icFloatNumbe
   for (icUInt32Number i=0; i<m_nSize; i++) {
     pLab = m_NamedLab[i].lab;
 
-    dCalcDE = sqrt((pLabIn[0]-pLab[0])*(pLabIn[0]-pLab[0]) +
-                   (pLabIn[1]-pLab[1])*(pLabIn[1]-pLab[1]) +
-                   (pLabIn[2]-pLab[2])*(pLabIn[2]-pLab[2]));
+    dCalcDE = icDeltaE(pLabIn, pLab);
 
     if (i==0) {
       dLeastDE = dCalcDE;
@@ -5340,7 +5338,7 @@ CIccProfileDescText::CIccProfileDescText(const CIccProfileDescText &IPDC)
   if (IPDC.m_pTag) {
     SetType(IPDC.GetType());
     if (m_pTag) {
-      m_pTag = IPDC.m_pTag->NewCopy();
+      *m_pTag = *IPDC.m_pTag;
     }
     m_bNeedsPading = IPDC.m_bNeedsPading;
   }
@@ -5369,7 +5367,7 @@ CIccProfileDescText &CIccProfileDescText::operator=(const CIccProfileDescText &P
   if (ProfDescText.m_pTag) {
     SetType(ProfDescText.GetType());
     if (m_pTag) {
-      m_pTag = ProfDescText.m_pTag->NewCopy();
+      *m_pTag = *ProfDescText.m_pTag;
     }
     m_bNeedsPading = ProfDescText.m_bNeedsPading;
   }
@@ -5416,10 +5414,9 @@ bool CIccProfileDescText::SetType(icTagTypeSignature nType)
     delete m_pTag;
   }
 
-  if (nType == icSigMultiLocalizedUnicodeType)
-    m_pTag = new CIccTagMultiLocalizedUnicode;
-  else if (nType == icSigTextDescriptionType)
-    m_pTag = new CIccTagTextDescription;
+  if (nType == icSigMultiLocalizedUnicodeType ||
+      nType == icSigTextDescriptionType)
+    m_pTag = CIccTag::Create(nType);
   else
     m_pTag = NULL;
 
