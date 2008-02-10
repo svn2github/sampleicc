@@ -95,9 +95,11 @@ usage(ostream& s, const char* my_name)
   s << my_name << ": usage is " << my_name << " input_file N description"
     << " copyright output_file\n"
     << " where IN.txt is a file whose contents are:\n"
-    << "  red XYZ primary (triplet of floats)\n"
-    << "  green XYZ primary (triplet of floats)\n"
-    << "  blue XYZ primary (triplet of floats)\n"
+    << "  measured red XYZ primary (triplet of floats)\n"
+    << "  measured green XYZ primary (triplet of floats)\n"
+    << "  measured blue XYZ primary (triplet of floats)\n"
+    << "  measured medium black XYZ  (triplet of floats)\n"
+    << "  measured medium white XYZ (triplet of floats)\n"
     << "  N lines being the tone curve for red (floats)\n"
     << "  N lines being the tone curve for green (floats)\n"
     << "  N lines being the tone curve for blue (floats)\n"
@@ -131,9 +133,9 @@ main(int argc, char* argv[])
     vet_input_file_pathname(in_file_pathname, "input_file",
                             "the pathname of a file"
                             " whose contents are lines with five XYZ triplets"
-                            " representing red, green, blue, black and white,"
-                            " then N lines of tone reproduction curve info for"
-                            " the red, green and blue channels");
+                            " representing red, green, blue, black and white"
+                            " measurements, then N lines of tone reproduction"
+                            " curve info for the red, green and blue channels");
 
     const char* const N_chars = argv[2];
     
