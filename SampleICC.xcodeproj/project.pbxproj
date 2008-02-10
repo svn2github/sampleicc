@@ -139,6 +139,12 @@
 		7C9415410C4BEAB50044B447 /* SampleICC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C605E5C0B4B65A900350479 /* SampleICC.framework */; };
 		7CB8F91C0C4AFEA600F1941A /* IccTagProfSeqId.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CB8F91A0C4AFEA600F1941A /* IccTagProfSeqId.cpp */; };
 		7CB8F91D0C4AFEA600F1941A /* IccTagProfSeqId.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CB8F91B0C4AFEA600F1941A /* IccTagProfSeqId.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CDF328E0D3E9B3C00398517 /* IccEval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CDF32880D3E9B3C00398517 /* IccEval.cpp */; };
+		7CDF328F0D3E9B3C00398517 /* IccEval.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CDF32890D3E9B3C00398517 /* IccEval.h */; };
+		7CDF32900D3E9B3C00398517 /* IccPrmg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CDF328A0D3E9B3C00398517 /* IccPrmg.cpp */; };
+		7CDF32910D3E9B3C00398517 /* IccPrmg.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CDF328B0D3E9B3C00398517 /* IccPrmg.h */; };
+		7CDF32920D3E9B3C00398517 /* IccXformFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CDF328C0D3E9B3C00398517 /* IccXformFactory.cpp */; };
+		7CDF32930D3E9B3C00398517 /* IccXformFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CDF328D0D3E9B3C00398517 /* IccXformFactory.h */; };
 		7CE0F4850AF04F9B002F2A93 /* iccApplyNamedCmm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0F47F0AF04F9B002F2A93 /* iccApplyNamedCmm.cpp */; };
 		7CE0F4960AF04FE9002F2A93 /* cmyk16bit.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CE0F4790AF04F9B002F2A93 /* cmyk16bit.txt */; };
 		7CE0F4970AF04FE9002F2A93 /* cmyk8bit.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CE0F47A0AF04F9B002F2A93 /* cmyk8bit.txt */; };
@@ -501,6 +507,12 @@
 		7C9415330C4BEA170044B447 /* iccStripUnknownTags */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iccStripUnknownTags; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CB8F91A0C4AFEA600F1941A /* IccTagProfSeqId.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = IccTagProfSeqId.cpp; sourceTree = "<group>"; };
 		7CB8F91B0C4AFEA600F1941A /* IccTagProfSeqId.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccTagProfSeqId.h; sourceTree = "<group>"; };
+		7CDF32880D3E9B3C00398517 /* IccEval.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IccEval.cpp; sourceTree = "<group>"; };
+		7CDF32890D3E9B3C00398517 /* IccEval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IccEval.h; sourceTree = "<group>"; };
+		7CDF328A0D3E9B3C00398517 /* IccPrmg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IccPrmg.cpp; sourceTree = "<group>"; };
+		7CDF328B0D3E9B3C00398517 /* IccPrmg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IccPrmg.h; sourceTree = "<group>"; };
+		7CDF328C0D3E9B3C00398517 /* IccXformFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IccXformFactory.cpp; sourceTree = "<group>"; };
+		7CDF328D0D3E9B3C00398517 /* IccXformFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IccXformFactory.h; sourceTree = "<group>"; };
 		7CE0F4160AF04D3F002F2A93 /* IccCmm.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = IccCmm.cpp; sourceTree = "<group>"; };
 		7CE0F4170AF04D3F002F2A93 /* IccCmm.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccCmm.h; sourceTree = "<group>"; };
 		7CE0F4180AF04D3F002F2A93 /* IccDefs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IccDefs.h; sourceTree = "<group>"; };
@@ -939,6 +951,12 @@
 		7CE0F4120AF04D3F002F2A93 /* IccProfLib */ = {
 			isa = PBXGroup;
 			children = (
+				7CDF32880D3E9B3C00398517 /* IccEval.cpp */,
+				7CDF32890D3E9B3C00398517 /* IccEval.h */,
+				7CDF328A0D3E9B3C00398517 /* IccPrmg.cpp */,
+				7CDF328B0D3E9B3C00398517 /* IccPrmg.h */,
+				7CDF328C0D3E9B3C00398517 /* IccXformFactory.cpp */,
+				7CDF328D0D3E9B3C00398517 /* IccXformFactory.h */,
 				7CB8F91A0C4AFEA600F1941A /* IccTagProfSeqId.cpp */,
 				7CB8F91B0C4AFEA600F1941A /* IccTagProfSeqId.h */,
 				7CFB28AF0B13D0230093D058 /* IccMpeACS.cpp */,
@@ -1104,6 +1122,9 @@
 				7C605E770B4B65E200350479 /* icProfileHeader.h in Headers */,
 				7C605E780B4B65E200350479 /* md5.h in Headers */,
 				7CB8F91D0C4AFEA600F1941A /* IccTagProfSeqId.h in Headers */,
+				7CDF328F0D3E9B3C00398517 /* IccEval.h in Headers */,
+				7CDF32910D3E9B3C00398517 /* IccPrmg.h in Headers */,
+				7CDF32930D3E9B3C00398517 /* IccXformFactory.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1557,6 +1578,9 @@
 				7C605E850B4B661400350479 /* IccUtil.cpp in Sources */,
 				7C605E860B4B661400350479 /* md5.cpp in Sources */,
 				7CB8F91C0C4AFEA600F1941A /* IccTagProfSeqId.cpp in Sources */,
+				7CDF328E0D3E9B3C00398517 /* IccEval.cpp in Sources */,
+				7CDF32900D3E9B3C00398517 /* IccPrmg.cpp in Sources */,
+				7CDF32920D3E9B3C00398517 /* IccXformFactory.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
