@@ -152,7 +152,13 @@ typedef enum {
   icXformTypeNDLut      = 3,
   icXformTypeNamedColor = 4,  //Creator uses icNamedColorXformHint
   icXformTypeMpe        = 5,
+
+  icXformTypeUnknown    = 0x7ffffff,
 } icXformType;
+
+
+//forward reference to CIccXform used by CIccApplyXform
+class CIccApplyXform;
 
 /**
  **************************************************************************
@@ -171,7 +177,7 @@ public:
   CIccXform();
   virtual ~CIccXform();
 
-  virtual icXformType GetXformType()=0;
+  virtual icXformType GetXformType() const = 0;
 
   ///Note: The returned CIccXform will own the profile.
   static CIccXform *Create(CIccProfile *pProfile, bool bInput=true, icRenderingIntent nIntent=icUnknownIntent, 
@@ -185,7 +191,10 @@ public:
                            bool bUseMpeTags=true, IIccCreateXformHint *pHint=NULL);
 
   virtual icStatusCMM Begin();
-  virtual void Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)=0;
+
+  virtual CIccApplyXform *GetNewApply(icStatusCMM &status);
+
+  virtual void Apply(CIccApplyXform *pXform, icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) const = 0;
 
   //Detach and remove CIccIO object associated with xform's profile.  Must call after Begin()
   virtual bool RemoveIO() { return m_pProfile->Detach(); }
@@ -212,15 +221,15 @@ public:
   virtual LPIccCurve* ExtractOutputCurves()=0;
 
 protected:
-  
-  const icFloatNumber *CheckSrcAbs(const icFloatNumber *Pixel);
-  void CheckDstAbs(icFloatNumber *Pixel);
+  //Called by derived classes to initialize Base
+
+  const icFloatNumber *CheckSrcAbs(CIccApplyXform *pApply, const icFloatNumber *Pixel) const;
+  void CheckDstAbs(icFloatNumber *Pixel) const;
 
   CIccProfile *m_pProfile;
   bool m_bInput;
   icRenderingIntent m_nIntent;
 
-  icFloatNumber m_AbsLab[3];
   icXYZNumber m_MediaXYZ;
 
   icXformInterp m_nInterp;
@@ -248,6 +257,55 @@ public:
  */
 typedef std::list<CIccXformPtr> CIccXformList;
 
+
+/**
+**************************************************************************
+* Type: Class
+* 
+* Purpose: The Apply Cmm Xform object (Allows xforms to have apply time data)
+**************************************************************************
+*/
+class ICCPROFLIB_API CIccApplyXform
+{
+  friend class CIccXform;
+public:
+  virtual ~CIccApplyXform();
+  virtual icXformType GetXformType() const { return icXformTypeUnknown; }
+
+  void __inline Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) { m_pXform->Apply(this, DstPixel, SrcPixel); }
+
+  const CIccXform *GetXform() { return m_pXform; }
+
+protected:
+  icFloatNumber m_AbsLab[3];
+
+  CIccApplyXform(CIccXform *pXform);
+
+  const CIccXform *m_pXform;
+};
+
+/**
+**************************************************************************
+* Type: Class
+* 
+* Purpose: Pointer to the Apply Cmm Xform object
+**************************************************************************
+*/
+class ICCPROFLIB_API CIccApplyXformPtr {
+public:
+  CIccApplyXform *ptr;
+};
+
+
+/**
+**************************************************************************
+* Type: List Class
+* 
+* Purpose: List of CIccApplyXformPtr which is updated on addition of Apply Xforms
+************************************************************************** 
+*/
+typedef std::list<CIccApplyXformPtr> CIccApplyXformList;
+
 /**
  **************************************************************************
  * Type: Class
@@ -262,15 +320,16 @@ public:
   CIccXformMatrixTRC();
   virtual ~CIccXformMatrixTRC();
 
-  virtual icXformType GetXformType() { return icXformTypeMatrixTRC; }
+  virtual icXformType GetXformType() const { return icXformTypeMatrixTRC; }
 
   virtual icStatusCMM Begin();
-  virtual void Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);
+  virtual void Apply(CIccApplyXform *pApplyXform, icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) const;
   
   virtual LPIccCurve* ExtractInputCurves();
   virtual LPIccCurve* ExtractOutputCurves();
 
 protected:
+
   icFloatNumber m_e[9];
   CIccCurve *m_Curve[3];
   CIccCurve *GetCurve(icSignature sig) const;
@@ -279,8 +338,9 @@ protected:
   CIccTagXYZ *GetColumn(icSignature sig) const;
   bool m_bFreeCurve;
   /// used only when applying the xform
-  LPIccCurve* m_ApplyCurvePtr;
+  const LPIccCurve* m_ApplyCurvePtr;
 };
+
 
 /**
  **************************************************************************
@@ -296,24 +356,26 @@ public:
   CIccXform3DLut(CIccTag *pTag);
   virtual ~CIccXform3DLut();
 
-  virtual icXformType GetXformType() { return icXformType3DLut; }
+  virtual icXformType GetXformType() const { return icXformType3DLut; }
 
   virtual icStatusCMM Begin();
-  virtual void Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);
+  virtual void Apply(CIccApplyXform *pApplyXform, icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) const;
 
   virtual bool UseLegacyPCS() const { return m_pTag->UseLegacyPCS(); }
 
   virtual LPIccCurve* ExtractInputCurves();
   virtual LPIccCurve* ExtractOutputCurves();
 protected:
-  CIccMBB *m_pTag;
+
+  const CIccMBB *m_pTag;
 
   /// Pointers to data in m_pTag, used only for applying the xform
-  LPIccCurve* m_ApplyCurvePtrA;
-  LPIccCurve* m_ApplyCurvePtrB;
-  LPIccCurve* m_ApplyCurvePtrM;
-  CIccMatrix* m_ApplyMatrixPtr;
+  const LPIccCurve* m_ApplyCurvePtrA;
+  const LPIccCurve* m_ApplyCurvePtrB;
+  const LPIccCurve* m_ApplyCurvePtrM;
+  const CIccMatrix* m_ApplyMatrixPtr;
 };
+
 
 /**
  **************************************************************************
@@ -329,24 +391,25 @@ public:
   CIccXform4DLut(CIccTag *pTag);
   virtual ~CIccXform4DLut();
 
-  virtual icXformType GetXformType() { return icXformType4DLut; }
+  virtual icXformType GetXformType() const { return icXformType4DLut; }
 
   virtual icStatusCMM Begin();
-  virtual void Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);
+  virtual void Apply(CIccApplyXform *pApplyXform, icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) const;
 
   virtual bool UseLegacyPCS() const { return m_pTag->UseLegacyPCS(); }
 
   virtual LPIccCurve* ExtractInputCurves();
   virtual LPIccCurve* ExtractOutputCurves();
 protected:
-  CIccMBB *m_pTag;
+  const CIccMBB *m_pTag;
 
   /// Pointers to data in m_pTag, used only for applying the xform
-  LPIccCurve* m_ApplyCurvePtrA;
-  LPIccCurve* m_ApplyCurvePtrB;
-  LPIccCurve* m_ApplyCurvePtrM;
-  CIccMatrix* m_ApplyMatrixPtr;
+  const LPIccCurve* m_ApplyCurvePtrA;
+  const LPIccCurve* m_ApplyCurvePtrB;
+  const LPIccCurve* m_ApplyCurvePtrM;
+  const CIccMatrix* m_ApplyMatrixPtr;
 };
+
 
 /**
  **************************************************************************
@@ -362,25 +425,27 @@ public:
   CIccXformNDLut(CIccTag *pTag);
   virtual ~CIccXformNDLut();
 
-  virtual icXformType GetXformType() { return icXformTypeNDLut; }
+  virtual icXformType GetXformType() const { return icXformTypeNDLut; }
 
   virtual icStatusCMM Begin();
-  virtual void Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);
+  virtual void Apply(CIccApplyXform *pApplyXform, icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) const;
 
   virtual bool UseLegacyPCS() const { return m_pTag->UseLegacyPCS(); }
 
   virtual LPIccCurve* ExtractInputCurves();
   virtual LPIccCurve* ExtractOutputCurves();
 protected:
-  CIccMBB *m_pTag;
+  const CIccMBB *m_pTag;
   int m_nNumInput;
 
   /// Pointers to data in m_pTag, used only for applying the xform
-  LPIccCurve* m_ApplyCurvePtrA;
-  LPIccCurve* m_ApplyCurvePtrB;
-  LPIccCurve* m_ApplyCurvePtrM;
-  CIccMatrix* m_ApplyMatrixPtr;
+  const LPIccCurve* m_ApplyCurvePtrA;
+  const LPIccCurve* m_ApplyCurvePtrB;
+  const LPIccCurve* m_ApplyCurvePtrM;
+  const CIccMatrix* m_ApplyMatrixPtr;
 };
+
+
 
 /**
  **************************************************************************
@@ -399,6 +464,7 @@ typedef enum {
 } icApplyInterface;
 
 
+
 /**
  **************************************************************************
  * Type: Class
@@ -413,16 +479,17 @@ public:
   CIccXformNamedColor(CIccTag *pTag, icColorSpaceSignature csPCS, icColorSpaceSignature csDevice);
   virtual ~CIccXformNamedColor();
 
-  virtual icXformType GetXformType() { return icXformTypeNamedColor; }
+  virtual icXformType GetXformType() const { return icXformTypeNamedColor; }
 
   virtual icStatusCMM Begin();
 
   ///Returns the type of interface that will be applied
   icApplyInterface GetInterface() const {return m_nApplyInterface;}
 
-  virtual void Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) {}
-  void Apply(icChar *DstColorName, const icFloatNumber *SrcPixel);
-  icStatusCMM Apply(icFloatNumber *DstPixel, const icChar *SrcColorName);
+  virtual void Apply(CIccApplyXform *pApplyXform, icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) const {} 
+
+  icStatusCMM Apply(CIccApplyXform *pApplyXform, icChar *DstColorName, const icFloatNumber *SrcPixel) const;
+  icStatusCMM Apply(CIccApplyXform *pApplyXform, icFloatNumber *DstPixel, const icChar *SrcColorName) const;
 
   virtual bool UseLegacyPCS() const { return m_pTag->UseLegacyPCS(); }
 
@@ -450,20 +517,32 @@ protected:
   icColorSpaceSignature m_nDestSpace;
 };
 
+
+/**
+**************************************************************************
+* Type: Class
+* 
+* Purpose: This is the general Xform for Multi Processing Elements.
+* 
+**************************************************************************
+*/
 class ICCPROFLIB_API CIccXformMpe : public CIccXform
 {
 public:
   CIccXformMpe(CIccTag *pTag);
   virtual ~CIccXformMpe();
 
-  virtual icXformType GetXformType() { return icXformTypeMpe; }
+  virtual icXformType GetXformType() const { return icXformTypeMpe; }
 
   ///Note: The returned CIccXform will own the profile.
   static CIccXform *Create(CIccProfile *pProfile, bool bInput=true, icRenderingIntent nIntent=icUnknownIntent, 
     icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor);
 
   virtual icStatusCMM Begin();
-  virtual void Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);
+
+  virtual CIccApplyXform *GetNewApply(icStatusCMM &status);
+  virtual void Apply(CIccApplyXform *pApplyXform, icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) const;
+
   virtual bool UseLegacyPCS() const { return false; }
   virtual LPIccCurve* ExtractInputCurves() {return NULL;}
   virtual LPIccCurve* ExtractOutputCurves() {return NULL;}
@@ -471,6 +550,26 @@ public:
 protected:
   CIccTagMultiProcessElement *m_pTag;
   bool m_bUsingAcs;
+};
+
+/**
+**************************************************************************
+* Type: Class
+* 
+* Purpose: The Apply general MPE Xform object (Allows xforms to have apply time data)
+**************************************************************************
+*/
+class ICCPROFLIB_API CIccApplyXformMpe : public CIccApplyXform
+{
+  friend class CIccXformMpe;
+public:
+  virtual ~CIccApplyXformMpe();
+  virtual icXformType GetXformType() const { return icXformTypeMpe; }
+
+protected:
+  CIccApplyXformMpe(CIccXformMpe *pXform);
+
+  CIccApplyTagMpe *m_pApply;
 };
 
 /**
@@ -491,7 +590,7 @@ public:
 
   void Reset(icColorSpaceSignature StartSpace, bool bUseLegacyPCS = false);
 
-  virtual const icFloatNumber *Check(const icFloatNumber *SrcPixel, CIccXform *pXform);
+  virtual const icFloatNumber *Check(const icFloatNumber *SrcPixel, const CIccXform *pXform);
   void CheckLast(icFloatNumber *SrcPixel, icColorSpaceSignature Space);
 
   static void LabToXyz(icFloatNumber *Dst, const icFloatNumber *Src, bool bNoClip=false);
@@ -556,6 +655,43 @@ typedef enum
   icEncodeUnknown,
 } icFloatColorEncoding;
 
+//Forward Reference of CIccCmm for CIccCmmApply
+class CIccCmm;
+
+/**
+**************************************************************************
+* Type: Class 
+* 
+* Purpose: Defines a class that provides and interface for applying pixel
+*  transformations through a CMM.  Multiply CIccCmmApply objects can use
+*  a single CIccCmm Object.
+* 
+**************************************************************************
+*/
+class ICCPROFLIB_API CIccApplyCmm
+{
+  friend class CIccCmm;
+public:
+  virtual ~CIccApplyCmm();
+
+  virtual icStatusCMM Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);
+
+  //Make sure that when DstPixel==SrcPixel the sizeof DstPixel is less than size of SrcPixel
+  virtual icStatusCMM Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel, icUInt32Number nPixels);
+
+  void AppendApplyXform(CIccApplyXform *pApplyXform);
+
+  CIccCmm *GetCmm() { return m_pCmm; }
+
+protected:
+  CIccApplyCmm(CIccCmm *pCmm);
+
+  CIccApplyXformList *m_Xforms;
+  CIccCmm *m_pCmm;
+
+  CIccPCS *m_pPCS;
+};
+
 /**
  **************************************************************************
  * Type: Class 
@@ -567,6 +703,7 @@ typedef enum
  */
 class ICCPROFLIB_API CIccCmm 
 {
+  friend class CIccApplyCmm;
 public:
   CIccCmm(icColorSpaceSignature nSrcSpace=icSigUnknownData,
           icColorSpaceSignature nDestSpace=icSigUnknownData,
@@ -590,12 +727,19 @@ public:
                                icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
                                bool bUseMpeTags=true, IIccCreateXformHint *pHint=NULL);  //Note the profile will be copied
 
-  ///Must be called before calling Apply()
-  virtual icStatusCMM Begin(); 
+  //The Begin function should be called before Apply or GetNewApplyCmm()
+  virtual icStatusCMM Begin(bool bAllocNewApply=true);
 
+  //Get an additional Apply cmm object to apply pixels with.  The Apply object should be deleted by the caller.
+  virtual CIccApplyCmm *GetNewApplyCmm(icStatusCMM &status); 
+
+  virtual CIccApplyCmm *GetApply() { return m_pApply; }
+
+  //The following apply functions should only be called if using Begin(true);
   virtual icStatusCMM Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);
+  virtual icStatusCMM Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel, icUInt32Number nPixels);
 
-  //Call to Detach and remove all pending IO objects attached to the profiles used by the CMM. Must be called after Begin()
+  //Call to Detach and remove all pending IO objects attached to the profiles used by the CMM. Should be called only after Begin()
   virtual icStatusCMM RemoveAllIO();
 
   ///Returns the number of profiles/transforms added 
@@ -647,6 +791,9 @@ public:
   virtual icColorSpaceSignature GetLastXformDest();
 
 protected:
+
+  CIccApplyCmm *m_pApply;
+
   bool m_bValid;
 
   bool m_bLastInput;
@@ -657,8 +804,38 @@ protected:
   icRenderingIntent m_nLastIntent;
 
   CIccXformList *m_Xforms;
+};
 
-  CIccPCS *m_pPCS;
+//Forward Class for CIccApplyNamedColorCmm
+class CIccNamedColorCmm;
+/**
+**************************************************************************
+* Type: Class 
+* 
+* Purpose: Defines a class that provides and interface for applying pixel
+*  transformations through a Named Color CMM.  Multiply CIccApplyNamedColorCmm
+*  objects can refer to a single CIccNamedColorCmm Object.
+* 
+**************************************************************************
+*/
+class ICCPROFLIB_API CIccApplyNamedColorCmm : public CIccApplyCmm
+{
+  friend class CIccNamedColorCmm;
+public:
+  virtual ~CIccApplyNamedColorCmm();
+
+  virtual icStatusCMM Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);
+
+  //Make sure that when DstPixel==SrcPixel the sizeof DstPixel is less than size of SrcPixel
+  virtual icStatusCMM Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel, icUInt32Number nPixels);
+
+  ///Define 4 apply interfaces that are used depending upon the source and destination xforms
+  virtual icStatusCMM Apply(icChar* DstColorName, const icFloatNumber *SrcPixel);
+  virtual icStatusCMM Apply(icFloatNumber *DstPixel, const icChar *SrcColorName);
+  virtual icStatusCMM Apply(icChar* DstColorName, const icChar *SrcColorName);
+
+protected:
+  CIccApplyNamedColorCmm(CIccNamedColorCmm *pCmm);
 };
 
 /**
@@ -671,6 +848,7 @@ protected:
  */
 class ICCPROFLIB_API CIccNamedColorCmm : public CIccCmm
 {
+  friend class CIccApplyNamedColorCmm;
 public:
   ///nSrcSpace cannot be icSigUnknownData if first profile is named color
   CIccNamedColorCmm(icColorSpaceSignature nSrcSpace=icSigUnknownData, 
@@ -686,13 +864,18 @@ public:
                                icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
                                bool buseMpeTags=true, IIccCreateXformHint *pHint=NULL);  //Note: profile will be owned by the CMM
 
-  ///Must be called before calling Apply()
-  virtual icStatusCMM Begin(); 
+  ///Must be called before calling Apply() or GetNewApply()
+  //The Begin function should be called before Apply or GetNewApplyCmm()
+  virtual icStatusCMM Begin(bool bAllocNewApply=true);
 
-  ///Define 4 apply interfaces that are used depending upon the source and destination xforms
-  virtual icStatusCMM Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);
-  virtual icStatusCMM Apply(icChar* DstColorName, const icFloatNumber *SrcPixel);
+  virtual CIccApplyCmm *GetNewApply(icStatusCMM &status); 
+
+
+  //The following apply functions should only be called if using Begin(true);
+  icStatusCMM Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) { return CIccCmm::Apply(DstPixel, SrcPixel); }
+  icStatusCMM Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel, icUInt32Number nPixels) { return CIccCmm::Apply(DstPixel, SrcPixel, nPixels); }
   virtual icStatusCMM Apply(icFloatNumber *DstPixel, const icChar *SrcColorName);
+  virtual icStatusCMM Apply(icChar* DstColorName, const icFloatNumber *SrcPixel);
   virtual icStatusCMM Apply(icChar* DstColorName, const icChar *SrcColorName);
 
   ///Returns the type of interface that will be applied
@@ -714,6 +897,53 @@ public:
   CIccMruPixel *pNext;
 };
 
+//Forward Class for CIccApplyNamedColorCmm
+class CIccMruCmm;
+/**
+**************************************************************************
+* Type: Class 
+* 
+* Purpose: Defines a class that provides and interface for applying pixel
+*  transformations through a CMM.  Multiply CIccCmmApply objects can use
+*  a single CIccCmm Object.
+* 
+**************************************************************************
+*/
+class ICCPROFLIB_API CIccApplyMruCmm : public CIccApplyCmm
+{
+  friend class CIccMruCmm;
+public:
+  virtual ~CIccApplyMruCmm();
+
+  virtual icStatusCMM Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);
+
+  //Make sure that when DstPixel==SrcPixel the sizeof DstPixel is greater than size of SrcPixel
+  virtual icStatusCMM Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel, icUInt32Number nPixels);
+
+protected:
+  CIccApplyMruCmm(CIccMruCmm *pCmm);
+
+  bool Init(CIccCmm *pCachedCmm, icUInt16Number nCacheSize);
+
+  CIccCmm *m_pCachedCmm;
+
+  icUInt16Number m_nCacheSize;
+
+  icFloatNumber *m_pixelData;
+
+  CIccMruPixel *m_pFirst;
+  CIccMruPixel *m_cache;
+
+  icUInt16Number m_nNumPixel;
+
+  icUInt32Number m_nTotalSamples;
+  icUInt32Number m_nSrcSamples;
+
+  icUInt32Number m_nSrcSize;
+  icUInt32Number m_nDstSize;
+
+};
+
 /**
 **************************************************************************
 * Type: Class
@@ -724,6 +954,7 @@ public:
 */
 class ICCPROFLIB_API CIccMruCmm : public CIccCmm
 {
+  friend class CIccApplyMruCmm;
 private:
   CIccMruCmm();
 public:
@@ -745,9 +976,8 @@ public:
   virtual icStatusCMM AddXform(CIccProfile &Profile, icRenderingIntent nIntent=icUnknownIntent,
     icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
     bool bUseMpeTags=true, IIccCreateXformHint *pHint=NULL) { return icCmmStatBad; }
-  virtual icStatusCMM Begin()  { return icCmmStatBad; }
 
-  virtual icStatusCMM Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel);
+  virtual CIccApplyCmm *GetNewApply(icStatusCMM &status); 
 
   //Forward calls to attached CMM
   virtual icStatusCMM RemoveAllIO() { return m_pCmm->RemoveAllIO(); }
@@ -758,24 +988,9 @@ public:
   virtual icColorSpaceSignature GetLastXformDest() { return m_pCmm->GetLastXformDest(); }
 
 protected:
-  bool Init(CIccCmm *pCmm, icUInt8Number nCacheSize);
-
   CIccCmm *m_pCmm;
-
   icUInt16Number m_nCacheSize;
 
-  icFloatNumber *m_pixelData;
-
-  CIccMruPixel *m_pFirst;
-  CIccMruPixel *m_cache;
-
-  icUInt16Number m_nNumPixel;
-
-  icUInt32Number m_nTotalSamples;
-  icUInt32Number m_nSrcSamples;
-
-  icUInt32Number m_nSrcSize;
-  icUInt32Number m_nDstSize;
 };
 
 #ifdef USESAMPLEICCNAMESPACE

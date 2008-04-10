@@ -93,6 +93,36 @@
 namespace sampleICC {
 #endif
 
+/**
+ ******************************************************************************
+ * Name: CIccApplyMpe::CIccApplyMpe
+ * 
+ * Purpose: 
+ * 
+ * Args: 
+ * 
+ * Return: 
+ ******************************************************************************/
+CIccApplyMpe::CIccApplyMpe(CIccMultiProcessElement *pElem)
+{
+  m_pElem = pElem;
+}
+
+
+/**
+ ******************************************************************************
+ * Name: CIccApplyMpe::~CIccApplyMpe
+ * 
+ * Purpose: 
+ * 
+ * Args: 
+ * 
+ * Return: 
+ ******************************************************************************/
+CIccApplyMpe::~CIccApplyMpe()
+{
+}
+
 
 /**
  ******************************************************************************
@@ -108,6 +138,22 @@ CIccMultiProcessElement* CIccMultiProcessElement::Create(icElemTypeSignature sig
 {
   return CIccMpeCreator::CreateElement(sig);
 }
+
+/**
+ ******************************************************************************
+ * Name: CIccMultiProcessElement::GetNewApply()
+ * 
+ * Purpose: 
+ * 
+ * Args: 
+ * 
+ * Return: 
+******************************************************************************/
+CIccApplyMpe* CIccMultiProcessElement::GetNewApply( CIccApplyTagMpe *pApplyTag )
+{
+  return new CIccApplyMpe(this);
+}
+
 
 /**
  ******************************************************************************
@@ -198,6 +244,37 @@ CIccMpeUnknown::~CIccMpeUnknown()
 {
   if (m_pData)
     free(m_pData);
+}
+
+/**
+******************************************************************************
+* Name: CIccMpeUnknown::SetType
+* 
+* Purpose: 
+* 
+* Args: 
+* 
+* Return: 
+******************************************************************************/
+void CIccMpeUnknown::SetType(icElemTypeSignature sig)
+{
+  m_sig = sig;
+}
+
+/**
+******************************************************************************
+* Name: CIccMpeUnknown::Describe
+* 
+* Purpose: 
+* 
+* Args: 
+* 
+* Return: 
+******************************************************************************/
+void CIccMpeUnknown::SetChannels(icUInt16Number nInputChannels, icUInt16Number nOutputChannels)
+{
+  m_nInputChannels = nInputChannels;
+  m_nOutputChannels = nOutputChannels;
 }
 
 /**
@@ -541,6 +618,79 @@ bool CIccDblPixelBuffer::Begin()
 
 
 /**
+******************************************************************************
+* Name: CIccApplyTagMpe::CIccApplyTagMpe
+* 
+* Purpose: 
+* 
+* Args: 
+* 
+* Return: 
+******************************************************************************/
+CIccApplyTagMpe::CIccApplyTagMpe(CIccTagMultiProcessElement *pTag)
+{
+  m_pTag = pTag;
+  m_list = NULL;
+}
+
+
+/**
+******************************************************************************
+* Name: CIccApplyTagMpe::~CIccApplyTagMpe
+* 
+* Purpose: 
+* 
+* Args: 
+* 
+* Return: 
+******************************************************************************/
+CIccApplyTagMpe::~CIccApplyTagMpe()
+{
+  if (m_list) {
+    CIccApplyMpeList::iterator i;
+
+    for (i=m_list->begin(); i!=m_list->end(); i++) {
+      delete i->ptr;
+    }
+
+    delete m_list;
+  }
+}
+
+
+/**
+******************************************************************************
+* Name: CIccApplyTagMpe::CIccApplyTagMpe
+* 
+* Purpose: 
+* 
+* Args: 
+* 
+* Return: 
+******************************************************************************/
+bool CIccApplyTagMpe::AppendElem(CIccMultiProcessElement *pElem)
+{
+  if (!m_list)
+    m_list = new CIccApplyMpeList();
+
+  if (!m_list)
+    return false;
+
+  CIccApplyMpe *pApply = pElem->GetNewApply(this);
+
+  if (!pApply)
+    return false;
+
+  CIccApplyMpePtr ptr;
+
+  ptr.ptr = pApply;
+  m_list->push_back(ptr);
+
+  return true;
+}
+
+
+/**
  ******************************************************************************
  * Name: CIccTagMultiProcessElement::CIccTagMultiProcessElement
  * 
@@ -597,8 +747,6 @@ CIccTagMultiProcessElement::CIccTagMultiProcessElement(const CIccTagMultiProcess
     m_nProcElements = lut.m_nProcElements;
   }
 
-  m_applyBuf = lut.m_applyBuf;
-
 }
 
 /**
@@ -638,8 +786,6 @@ CIccTagMultiProcessElement &CIccTagMultiProcessElement::operator=(const CIccTagM
     }
     m_nProcElements = lut.m_nProcElements;
   }
-
-  m_applyBuf = lut.m_applyBuf;
 
   return *this;
 }
@@ -694,8 +840,6 @@ void CIccTagMultiProcessElement::Clean()
   }
 
   m_nProcElements = 0;
-
-  m_applyBuf.Clean();
 }
 
 /**
@@ -1061,6 +1205,8 @@ bool CIccTagMultiProcessElement::Begin(icElemInterp nInterp/* =icElemInterpLinea
 
   CIccMultiProcessElementList::iterator i;
 
+  m_nBufChannels=0;
+
   //Now we initialize each processing element checking channel matching as we go
   CIccMultiProcessElement *last=NULL;
   i = m_list->begin();
@@ -1074,7 +1220,8 @@ bool CIccTagMultiProcessElement::Begin(icElemInterp nInterp/* =icElemInterpLinea
     }
     last = i->ptr;
 
-    m_applyBuf.UpdateChannels(last->NumOutputChannels());
+    if (m_nBufChannels<last->NumOutputChannels())
+      m_nBufChannels = last->NumOutputChannels();
 
     if (!last->Begin(nInterp, this))
       return false;
@@ -1084,12 +1231,10 @@ bool CIccTagMultiProcessElement::Begin(icElemInterp nInterp/* =icElemInterpLinea
   if (last && last->NumOutputChannels() != m_nOutputChannels)
     return false;
 
-  //Initialize pixel apply buffer
-  if (!m_applyBuf.Begin())
-    return false;
-
   return true;
 }
+
+
 
 
 /**
@@ -1126,6 +1271,47 @@ CIccMultiProcessElementList::iterator CIccTagMultiProcessElement::GetLastElem()
 {
   return m_list->end();
 }
+
+
+/**
+******************************************************************************
+* Name: CIccTagMultiProcessElement::GetNewApply
+* 
+* Purpose: 
+* 
+* Args: 
+* 
+* Return: 
+******************************************************************************/
+CIccApplyTagMpe *CIccTagMultiProcessElement::GetNewApply()
+{
+  CIccApplyTagMpe *pApply = new CIccApplyTagMpe(this);
+
+  if (!pApply)
+    return NULL;
+
+  CIccDblPixelBuffer *pApplyBuf = pApply->GetBuf();
+  pApplyBuf->UpdateChannels(m_nBufChannels);
+  if (!pApplyBuf->Begin()) {
+    delete pApply;
+    return NULL;
+  }
+
+  if (!m_list || !m_list->size())
+    return pApply;
+
+  CIccMultiProcessElementList::iterator i, last;
+  last = GetLastElem();
+  for (i=GetFirstElem(); i!=last;) {
+    pApply->AppendElem(i->ptr);
+
+    GetNextElemIterator(i);
+  }
+
+  return pApply;
+}
+
+
 /**
  ******************************************************************************
  * Name: CIccTagMultiProcessElement::Apply
@@ -1136,51 +1322,49 @@ CIccMultiProcessElementList::iterator CIccTagMultiProcessElement::GetLastElem()
  * 
  * Return: 
  ******************************************************************************/
-void CIccTagMultiProcessElement::Apply(icFloatNumber *pDestPixel, const icFloatNumber *pSrcPixel)
+void CIccTagMultiProcessElement::Apply(CIccApplyTagMpe *pApply, icFloatNumber *pDestPixel, const icFloatNumber *pSrcPixel) const
 {
-  if (!m_list || !m_list->size()) {
+  if (!pApply || !pApply->GetList() || !pApply->GetList()->size()) {
     memcpy(pDestPixel, pSrcPixel, m_nInputChannels*sizeof(icFloatNumber));
     return;
   }
-  CIccMultiProcessElementList::iterator i, last;
 
-  i = GetFirstElem();
-  last = GetLastElem();
-
-  CIccMultiProcessElementList::iterator next;
+  CIccDblPixelBuffer *pApplyBuf = pApply->GetBuf();
+  CIccApplyMpeIter i = pApply->begin();
+  CIccApplyMpeIter next;
 
   next = i;
-  GetNextElemIterator(next);
+  next++;
 
-  if (next==last) {
+  if (next==pApply->end()) {
     //Elements rely on pDestPixel != pSrcPixel
     if (pSrcPixel==pDestPixel) {
-      i->ptr->Apply(m_applyBuf.GetDstBuf(), pSrcPixel);
-      memcpy(pDestPixel, m_applyBuf.GetDstBuf(), m_nOutputChannels*sizeof(icFloatNumber));
+      i->ptr->Apply(pApplyBuf->GetDstBuf(), pSrcPixel);
+      memcpy(pDestPixel, pApplyBuf->GetDstBuf(), m_nOutputChannels*sizeof(icFloatNumber));
     }
     else {
       i->ptr->Apply(pDestPixel, pSrcPixel);
     }
   }
   else {
-    i->ptr->Apply(m_applyBuf.GetDstBuf(), pSrcPixel);
-    GetNextElemIterator(i);
-    GetNextElemIterator(next);
-    m_applyBuf.Switch();
+    i->ptr->Apply(pApplyBuf->GetDstBuf(), pSrcPixel);
+    i++;
+    next++;
+    pApplyBuf->Switch();
 
-    while (next != last) {
-      CIccMultiProcessElement *pElem = i->ptr;
+    while (next != pApply->end()) {
+      CIccMultiProcessElement *pElem = i->ptr->GetElem();
 
       if (!pElem->IsAcs()) {
-        pElem->Apply(m_applyBuf.GetDstBuf(), m_applyBuf.GetSrcBuf());
-        m_applyBuf.Switch();
+        i->ptr->Apply(pApplyBuf->GetDstBuf(), pApplyBuf->GetSrcBuf());
+        pApplyBuf->Switch();
       }
 
-      GetNextElemIterator(i);
-      GetNextElemIterator(next);
+      i++;
+      next++;
     }
 
-    i->ptr->Apply(pDestPixel, m_applyBuf.GetSrcBuf());
+    i->ptr->Apply(pDestPixel, pApplyBuf->GetSrcBuf());
   }
 }
 

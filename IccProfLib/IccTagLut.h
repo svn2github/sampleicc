@@ -207,8 +207,8 @@ public:
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL);
   virtual bool IsIdentity();
 
-protected:
   icUInt16Number      m_nReserved2;
+protected:
   icUInt16Number      m_nFunctionType;
   icS15Fixed16Number *m_Param;
   icUInt16Number      m_nNumParam;
@@ -237,7 +237,7 @@ public:
   icFloatNumber m_e[12]; //e = element
   bool m_bUseConstants;
 
-  virtual void Apply(icFloatNumber *Pixel);
+  virtual void Apply(icFloatNumber *Pixel) const;
   icValidateStatus Validate(icTagTypeSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL) const;
   virtual bool IsIdentity();
 };
@@ -274,8 +274,8 @@ public:
   CIccCLUT &operator=(const CIccCLUT &CLUTClass);
   virtual ~CIccCLUT();
 
-  void Init(icUInt8Number nGridPoints);
-  void Init(icUInt8Number *pGridPoints);
+  bool Init(icUInt8Number nGridPoints);
+  bool Init(icUInt8Number *pGridPoints);
 
   bool ReadData(icUInt32Number size, CIccIO *pIO, icUInt8Number nPrecision);
   bool WriteData(CIccIO *pIO, icUInt8Number nPrecision);
@@ -303,12 +303,12 @@ public:
 
 
   void Begin();
-  void Interp3dTetra(icFloatNumber *destPixel, const icFloatNumber *srcPixel);
-  void Interp3d(icFloatNumber *destPixel, const icFloatNumber *srcPixel);
-  void Interp4d(icFloatNumber *destPixel, const icFloatNumber *srcPixel);
-  void Interp5d(icFloatNumber *destPixel, const icFloatNumber *srcPixel);
-  void Interp6d(icFloatNumber *destPixel, const icFloatNumber *srcPixel);
-  void InterpND(icFloatNumber *destPixel, const icFloatNumber *srcPixel);
+  void Interp3dTetra(icFloatNumber *destPixel, const icFloatNumber *srcPixel) const;
+  void Interp3d(icFloatNumber *destPixel, const icFloatNumber *srcPixel) const;
+  void Interp4d(icFloatNumber *destPixel, const icFloatNumber *srcPixel) const;
+  void Interp5d(icFloatNumber *destPixel, const icFloatNumber *srcPixel) const;
+  void Interp6d(icFloatNumber *destPixel, const icFloatNumber *srcPixel) const;
+  void InterpND(icFloatNumber *destPixel, const icFloatNumber *srcPixel) const;
 
   void Iterate(IIccCLUTExec* pExec);
   icValidateStatus Validate(icTagTypeSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL)  const;
@@ -378,7 +378,7 @@ public:
 
   virtual icUInt8Number GetPrecision() { return 2; }
   virtual bool IsInputMatrix() { return m_bInputMatrix; } //Is matrix on input side of CLUT?
-  virtual bool UseLegacyPCS() { return false; } //Treat Lab Encoding differently?
+  virtual bool UseLegacyPCS() const { return false; } //Treat Lab Encoding differently?
 
   bool IsInputB() { return IsInputMatrix(); }
 
@@ -406,7 +406,7 @@ public:
   LPIccCurve *GetCurvesB() const {return m_CurvesB;}
   LPIccCurve *GetCurvesM() const {return m_CurvesM;}
 
-
+  CIccCLUT *SetCLUT(CIccCLUT *clut);
 
 protected:
   bool m_bInputMatrix;
@@ -517,7 +517,7 @@ public:
   virtual ~CIccTagLut16();
   
   virtual icTagTypeSignature GetType() { return icSigLut16Type; }
-  virtual bool UseLegacyPCS() { return true; } //Treat Lab Encoding differently?
+  virtual bool UseLegacyPCS() const { return true; } //Treat Lab Encoding differently?
 
   bool Read(icUInt32Number size, CIccIO *pIO);
   bool Write(CIccIO *pIO);

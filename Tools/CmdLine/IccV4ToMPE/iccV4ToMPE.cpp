@@ -287,7 +287,7 @@ CIccMultiProcessElement *ScaleInput(icFloatNumber min1, icFloatNumber max1,
 
     params[0] = (icFloatNumber)1.0;
     params[1] = (icFloatNumber)1.0 / (max3-min3);
-    params[2] = min3 / (max3-min3);
+    params[2] = -min3 / (max3-min3);
     params[3] = (icFloatNumber)0.0;
     pFormula = new CIccFormulaCurveSegment(icMinFloat32Number, icMaxFloat32Number);
     pFormula->SetFunction(0, 4, params);
@@ -464,8 +464,7 @@ int main(int argc, char* argv[])
         CIccTag *pTagLut, *pTagMBE;
         icColorSpaceSignature connectSig;
 
-        if (pProfile->m_Header.deviceClass!=icSigLinkClass && 
-            pProfile->m_Header.deviceClass!=icSigColorSpaceClass) {
+        if (pProfile->m_Header.deviceClass!=icSigLinkClass) {
           connectSig = pProfile->m_Header.pcs;
         }
         else

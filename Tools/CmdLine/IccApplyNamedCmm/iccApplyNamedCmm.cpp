@@ -182,6 +182,15 @@ int main(int argc, icChar* argv[])
     printf("    1 - Relative Colorimetric\n");
     printf("    2 - Saturation\n");
     printf("    3 - Absolute Colorimetric\n");
+    printf("    10 - Perceptual without MPE\n");
+    printf("    11 - Relative Colorimetric without MPE\n");
+    printf("    12 - Saturation without MPE\n");
+    printf("    13 - Absolute Colorimetric without MPE \n");
+    printf("    30 - Preview Perceptual\n");
+    printf("    31 - Preview Relative Colorimetric\n");
+    printf("    32 - Preview Saturation\n");
+    printf("    33 - Preview Absolute Colorimetric\n");
+    printf("    40 - Gamut\n");
 
     return -1;
   }
@@ -204,11 +213,15 @@ int main(int argc, icChar* argv[])
     printf("    1 - Relative Colorimetric\n");
     printf("    2 - Saturation\n");
     printf("    3 - Absolute Colorimetric\n");
-    printf("    20 - Preview Perceptual\n");
-    printf("    21 - Preview Relative Colorimetric\n");
-    printf("    22 - Preview Saturation\n");
-    printf("    23 - Preview Absolute Colorimetric\n");
-    printf("    30 - Gamut\n");
+    printf("    10 - Perceptual without MPE\n");
+    printf("    11 - Relative Colorimetric without MPE\n");
+    printf("    12 - Saturation without MPE\n");
+    printf("    13 - Absolute Colorimetric without MPE \n");
+    printf("    30 - Preview Perceptual\n");
+    printf("    31 - Preview Relative Colorimetric\n");
+    printf("    32 - Preview Saturation\n");
+    printf("    33 - Preview Absolute Colorimetric\n");
+    printf("    40 - Gamut\n");
 
     return -1;
   }
@@ -260,12 +273,19 @@ int main(int argc, icChar* argv[])
   CIccNamedColorCmm namedCmm(SrcspaceSig, icSigUnknownData, !IsSpacePCS(SrcspaceSig));
 
   int nCount;
+  bool bUseMPE;
   for(i = 0, nCount=3; i<nNumProfiles; i++, nCount+=2) {
+    bUseMPE = true;
     nIntent = atoi(argv[nCount+1]);
     nType = abs(nIntent) / 10;
     nIntent = nIntent % 10;
 
-    if (namedCmm.AddXform(argv[nCount], nIntent<0 ? icUnknownIntent : (icRenderingIntent)nIntent, icInterpLinear, (icXformLutType)nType)) {
+    if (nIntent==1) {
+      nIntent = 0;
+      bUseMPE = false;
+    }
+
+    if (namedCmm.AddXform(argv[nCount], nIntent<0 ? icUnknownIntent : (icRenderingIntent)nIntent, icInterpLinear, (icXformLutType)nType, bUseMPE)) {
       printf("Invalid Profile:  %s\n", argv[nCount]);
       return -1;
     }

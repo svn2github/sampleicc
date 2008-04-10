@@ -86,6 +86,8 @@
 namespace sampleICC {
 #endif
 
+double ICCPROFLIB_API icRoundOffset(double v);
+
 icValidateStatus ICCPROFLIB_API icMaxStatus(icValidateStatus s1, icValidateStatus s2);
 bool ICCPROFLIB_API icIsSpaceCLR(icColorSpaceSignature sig);
 

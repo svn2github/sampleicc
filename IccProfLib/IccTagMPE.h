@@ -103,6 +103,9 @@ typedef enum {
 class CIccTagMultiProcessElement;
 class CIccMultiProcessElement;
 
+class CIccApplyTagMpe;
+class CIccApplyMpe;
+
 /**
 ****************************************************************************
 * Class: CIccProcessElementPtr
@@ -122,6 +125,14 @@ typedef CIccMultiProcessElementList::iterator CIccMultiProcessElementIter;
 
 #define icSigMpeLevel0 ((icSignature)0x6D706530)  /* 'mpe0' */
 
+class CIccApplyMpePtr
+{
+public:
+  CIccApplyMpe *ptr;
+};
+
+typedef std::list<CIccApplyMpePtr> CIccApplyMpeList;
+typedef CIccApplyMpeList::iterator CIccApplyMpeIter;
 
 class IIccExtensionMpe
 {
@@ -161,7 +172,9 @@ public:
   virtual bool Write(CIccIO *pIO) = 0;
 
   virtual bool Begin(icElemInterp nIterp=icElemInterpLinear, CIccTagMultiProcessElement *pMPE=NULL) = 0;
-  virtual void Apply(icFloatNumber *pDestPixel, const icFloatNumber *pSrcPixel) = 0;
+
+  virtual CIccApplyMpe* GetNewApply(CIccApplyTagMpe *pApplyTag);
+  virtual void Apply(CIccApplyMpe *pApply, icFloatNumber *pDestPixel, const icFloatNumber *pSrcPixel) const = 0;
 
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccTagMultiProcessElement* pMPE=NULL) const = 0;
 
@@ -173,10 +186,38 @@ public:
   // Allow MPE objects to be extended and get extended object type.
   virtual IIccExtensionMpe *GetExtension() { return NULL; }
 
-protected:
+  //All elements start with a reserved value.  Allocate a place to put it.
   icUInt32Number m_nReserved;
+
+protected:
   icUInt16Number m_nInputChannels;
   icUInt16Number m_nOutputChannels;
+};
+
+/**
+****************************************************************************
+* Class: CIccApplyMpe
+* 
+* Purpose: Base Class for Apply storage for Multi Process Elements
+*****************************************************************************
+*/
+class CIccApplyMpe
+{
+public:
+  CIccApplyMpe(CIccMultiProcessElement *pElem);
+  virtual ~CIccApplyMpe();
+
+  virtual icElemTypeSignature GetType() const { return icSigUnknownElemType; }
+  virtual const icChar *GetClassName() const { return "CIccApplyMpe"; }
+
+  CIccMultiProcessElement *GetElem() const { return m_pElem; }
+
+  void Apply(icFloatNumber *pDestPixel, const icFloatNumber *pSrcPixel) { m_pElem->Apply(this, pDestPixel, pSrcPixel); }
+
+protected:
+  CIccApplyTagMpe *m_pApplyTag;
+
+  CIccMultiProcessElement *m_pElem;
 };
 
 
@@ -197,11 +238,14 @@ public:
   virtual ~CIccMpeUnknown();
 
   virtual icElemTypeSignature GetType() const { return m_sig; }
-  virtual const icChar *GetClassName() const { return "CIccMpeentUnknown"; }
+  virtual const icChar *GetClassName() const { return "CIccMpeUnknown"; }
 
   virtual bool IsSupported() { return false; }
 
   virtual void Describe(std::string &sDescription);
+
+  void SetType(icElemTypeSignature sig);
+  void SetChannels(icUInt16Number nInputChannels, icUInt16Number nOutputChannels);
 
   bool SetDataSize(icUInt32Number nSize, bool bZeroData=true);
   icUInt8Number *GetData() { return m_pData; }
@@ -210,7 +254,8 @@ public:
   virtual bool Write(CIccIO *pIO);
 
   virtual bool Begin(icElemInterp nIterp=icElemInterpLinear, CIccTagMultiProcessElement *pMPE=NULL) { return false; }
-  virtual void Apply(icFloatNumber *pDestPixel, const icFloatNumber *pSrcPixel) {}
+  virtual CIccApplyMpe *GetNewApply() { return NULL; }
+  virtual void Apply(CIccApplyMpe *pApply, icFloatNumber *pDestPixel, const icFloatNumber *pSrcPixel) const {}
 
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccTagMultiProcessElement* pMPE=NULL) const;
 
@@ -266,6 +311,40 @@ protected:
   icFloatNumber *m_pixelBuf2;
 };
 
+
+/**
+****************************************************************************
+* Class: CIccTagMultiProcessElement
+* 
+* Purpose: Apply storage for MPE general purpose processing tags
+*****************************************************************************
+*/
+class CIccApplyTagMpe
+{
+public:
+  CIccApplyTagMpe(CIccTagMultiProcessElement *pTag);
+  virtual ~CIccApplyTagMpe();
+
+  CIccTagMultiProcessElement *GetTag() { return m_pTag; }
+
+  virtual bool AppendElem(CIccMultiProcessElement *pElem);
+
+  CIccDblPixelBuffer *GetBuf() { return &m_applyBuf; }
+  CIccApplyMpeList *GetList() { return m_list; }
+
+  CIccApplyMpeIter begin() { return m_list->begin(); }
+  CIccApplyMpeIter end() { return m_list->end(); }
+
+protected:
+  CIccTagMultiProcessElement *m_pTag;
+
+  //List of processing elements
+  CIccApplyMpeList *m_list;
+
+  //Pixel data for Apply 
+  CIccDblPixelBuffer m_applyBuf;
+};
+
 /**
 ****************************************************************************
 * Class: CIccTagMultiProcessElement
@@ -298,7 +377,10 @@ public:
   void DeleteElement(int nIndex);
 
   virtual bool Begin(icElemInterp nInterp=icElemInterpLinear);
-  virtual void Apply(icFloatNumber *pDestPixel, const icFloatNumber *pSrcPixel);
+  virtual CIccApplyTagMpe *GetNewApply();
+
+  virtual void Apply(CIccApplyTagMpe *pApply, icFloatNumber *pDestPixel, const icFloatNumber *pSrcPixel) const;
+
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL) const;
 
   icUInt16Number NumInputChannels() const { return m_nInputChannels; }
@@ -322,8 +404,8 @@ protected:
   icUInt32Number m_nProcElements;
   icPositionNumber *m_position;
 
-  //Pixel data for Apply 
-  CIccDblPixelBuffer m_applyBuf;
+  //Number of Buffer Channels needed
+  icUInt16Number m_nBufChannels;
 };
 
 

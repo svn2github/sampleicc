@@ -266,11 +266,10 @@ bool CIccTagUnknown::Read(icUInt32Number size, CIccIO *pIO)
 {
   if (m_pData) {
     delete [] m_pData;
-
+    m_pData = NULL;
   }
 
   if (size<sizeof(icTagTypeSignature) || !pIO) {
-    m_pData = NULL;
     return false;
   }
 
@@ -1530,11 +1529,47 @@ void CIccTagNamedColor2::SetSize(icUInt32Number nSize, icInt32Number nDeviceCoor
   }
   free(m_NamedColor);
 
+  m_nColorEntrySize = nColorEntrySize;
+
   m_NamedColor = pNamedColor;
   m_nSize = nSize;
   m_nDeviceCoords = nNewCoords;
 
   ResetPCSCache();
+}
+
+
+/**
+****************************************************************************
+* Name: CIccTagNamedColor2::SetPrefix
+* 
+* Purpose: Set contents of suffix member field
+* 
+* Args:
+*  szPrefix - string to set prefix to
+*****************************************************************************
+*/
+void CIccTagNamedColor2::SetPrefix(const icChar *szPrefix)
+{
+  strncpy(m_szPrefix, szPrefix, sizeof(m_szPrefix));
+  m_szPrefix[sizeof(m_szPrefix)-1]='\0';
+}
+
+
+/**
+****************************************************************************
+* Name: CIccTagNamedColor2::SetSufix
+* 
+* Purpose: Set contents of suffix member field
+* 
+* Args:
+*  szPrefix - string to set prefix to
+*****************************************************************************
+*/
+void CIccTagNamedColor2::SetSufix(const icChar *szSufix)
+{
+  strncpy(m_szSufix, szSufix, sizeof(m_szSufix));
+  m_szSufix[sizeof(m_szSufix)-1]='\0';
 }
 
 
@@ -1689,6 +1724,12 @@ void CIccTagNamedColor2::Describe(std::string &sDescription)
   sprintf(buf, "BEGIN_NAMED_COLORS flags=%08x %u %u\r\n", m_nVendorFlags, m_nSize, m_nDeviceCoords);
   sDescription += buf;
 
+  sprintf(buf, "Prefix=\"%s\"\r\n", m_szPrefix);
+  sDescription += buf;
+
+  sprintf(buf, "Sufix= \"%s\"\r\n", m_szSufix);
+  sDescription += buf;
+
   for (i=0; i<m_nSize; i++) {
     sprintf(buf, "Color[%u]: %s :", i, pNamedColor->rootName);
     sDescription += buf;
@@ -1754,7 +1795,7 @@ void CIccTagNamedColor2::SetColorSpaces(icColorSpaceSignature csPCS, icColorSpac
  *  if the color was not found -1 is returned
  *****************************************************************************
  */
-icInt32Number CIccTagNamedColor2::FindRootColor(const icChar *szRootColor)
+icInt32Number CIccTagNamedColor2::FindRootColor(const icChar *szRootColor) const
 {
   for (icUInt32Number i=0; i<m_nSize; i++) {
     if (stricmp(m_NamedColor[i].rootName,szRootColor) == 0)
@@ -1782,40 +1823,24 @@ void CIccTagNamedColor2::ResetPCSCache()
 }
 
 /**
- ****************************************************************************
- * Name: CIccTagNamedColor2::FindPCSColor
- * 
- * Purpose: Find the PCS color within the specified deltaE
- * 
- * Args: 
- *  pPCS = PCS co-ordinates,
- *  dMinDE = the minimum deltaE (tolerance)
- * 
- * Return: Index of the named color array where the PCS color was found,
- *  if the color was not found within the tolerance -1 is returned
- *****************************************************************************
- */
-icInt32Number CIccTagNamedColor2::FindPCSColor(icFloatNumber *pPCS, icFloatNumber dMinDE/*=1000.0*/)
+****************************************************************************
+* Name: CIccTagNamedColor2::InitFindPCSColor
+* 
+* Purpose: Initialization needed for using FindPCSColor
+* 
+* Return: 
+*  true if successfull, false if failure
+*****************************************************************************
+*/
+bool CIccTagNamedColor2::InitFindCachedPCSColor()
 {
-  icFloatNumber dCalcDE, dLeastDE;
-  icFloatNumber pLabIn[3];
   icFloatNumber *pXYZ, *pLab;
-  icInt32Number leastDEindex = -1;
-  if (m_csPCS != icSigLabData) {
-    pXYZ = pPCS;
-    icXyzFromPcs(pXYZ);
-    icXYZtoLab(pLabIn,pXYZ);
-  }
-  else {
-    Lab2ToLab4(pLabIn, pPCS);
-    icLabFromPcs(pLabIn);
-  }
 
   if (!m_NamedLab) {
     m_NamedLab = new SIccNamedLabEntry[m_nSize];
     if (!m_NamedLab)
-      return -1;
-    
+      return false;
+
     if (m_csPCS != icSigLabData) {
       for (icUInt32Number i=0; i<m_nSize; i++) {
         pLab = m_NamedLab[i].lab;
@@ -1832,6 +1857,42 @@ icInt32Number CIccTagNamedColor2::FindPCSColor(icFloatNumber *pPCS, icFloatNumbe
       }
     }
   }
+
+  return true;
+}
+
+/**
+ ****************************************************************************
+ * Name: CIccTagNamedColor2::FindPCSColor
+ * 
+ * Purpose: Find the PCS color within the specified deltaE
+ * 
+ * Args: 
+ *  pPCS = PCS co-ordinates,
+ *  dMinDE = the minimum deltaE (tolerance)
+ * 
+ * Return: Index of the named color array where the PCS color was found,
+ *  if the color was not found within the tolerance -1 is returned
+ *****************************************************************************
+ */
+icInt32Number CIccTagNamedColor2::FindCachedPCSColor(icFloatNumber *pPCS, icFloatNumber dMinDE/*=1000.0*/) const
+{
+  icFloatNumber dCalcDE, dLeastDE;
+  icFloatNumber pLabIn[3];
+  icFloatNumber *pXYZ, *pLab;
+  icInt32Number leastDEindex = -1;
+  if (m_csPCS != icSigLabData) {
+    pXYZ = pPCS;
+    icXyzFromPcs(pXYZ);
+    icXYZtoLab(pLabIn,pXYZ);
+  }
+  else {
+    Lab2ToLab4(pLabIn, pPCS);
+    icLabFromPcs(pLabIn);
+  }
+
+  if (!m_NamedLab)
+    return -1;
 
   for (icUInt32Number i=0; i<m_nSize; i++) {
     pLab = m_NamedLab[i].lab;
@@ -1855,6 +1916,28 @@ icInt32Number CIccTagNamedColor2::FindPCSColor(icFloatNumber *pPCS, icFloatNumbe
 }
 
 /**
+****************************************************************************
+* Name: CIccTagNamedColor2::FindPCSColor
+* 
+* Purpose: Find the PCS color within the specified deltaE
+* 
+* Args: 
+*  pPCS = PCS co-ordinates,
+*  dMinDE = the minimum deltaE (tolerance)
+* 
+* Return: Index of the named color array where the PCS color was found,
+*  if the color was not found within the tolerance -1 is returned
+*****************************************************************************
+*/
+icInt32Number CIccTagNamedColor2::FindPCSColor(icFloatNumber *pPCS, icFloatNumber dMinDE/*=1000.0*/)
+{
+  if (!m_NamedLab)
+    InitFindCachedPCSColor();
+
+  return FindCachedPCSColor(pPCS, dMinDE);
+}
+
+/**
  ****************************************************************************
  * Name: CIccTagNamedColor2::FindColor
  * 
@@ -1867,7 +1950,7 @@ icInt32Number CIccTagNamedColor2::FindPCSColor(icFloatNumber *pPCS, icFloatNumbe
  *  if the color was not found -1 is returned
  *****************************************************************************
  */
-icInt32Number CIccTagNamedColor2::FindColor(const icChar *szColor)
+icInt32Number CIccTagNamedColor2::FindColor(const icChar *szColor) const
 {
   std::string sColorName;
   icInt32Number i, j;
@@ -1911,7 +1994,7 @@ icInt32Number CIccTagNamedColor2::FindColor(const icChar *szColor)
  *  was found, if device representation is absent -1 is returned.
  *****************************************************************************
  */
-icInt32Number CIccTagNamedColor2::FindDeviceColor(icFloatNumber *pDevColor)
+icInt32Number CIccTagNamedColor2::FindDeviceColor(icFloatNumber *pDevColor) const
 {
   if (!m_nDeviceCoords)
     return -1;
@@ -1960,7 +2043,7 @@ icInt32Number CIccTagNamedColor2::FindDeviceColor(icFloatNumber *pDevColor)
  *  false = index out of range
  *****************************************************************************
  */
-bool CIccTagNamedColor2::GetColorName(std::string &sColorName, icInt32Number index)
+bool CIccTagNamedColor2::GetColorName(std::string &sColorName, icInt32Number index) const
 {
   if (index > (icInt32Number)m_nSize-1)
     return false;
@@ -1985,7 +2068,7 @@ bool CIccTagNamedColor2::GetColorName(std::string &sColorName, icInt32Number ind
  *  
  *****************************************************************************
  */
-icFloatNumber CIccTagNamedColor2::UnitClip(icFloatNumber v)
+icFloatNumber CIccTagNamedColor2::UnitClip(icFloatNumber v) const
 {
   if (v<0)
     v = 0;
@@ -2008,7 +2091,7 @@ icFloatNumber CIccTagNamedColor2::UnitClip(icFloatNumber v)
  *  
  *****************************************************************************
  */
-icFloatNumber CIccTagNamedColor2::NegClip(icFloatNumber v)
+icFloatNumber CIccTagNamedColor2::NegClip(icFloatNumber v) const
 {
   if (v<0)
     v=0;
@@ -2029,7 +2112,7 @@ icFloatNumber CIccTagNamedColor2::NegClip(icFloatNumber v)
  * 
  *****************************************************************************
  */
-void CIccTagNamedColor2::Lab2ToLab4(icFloatNumber *Dst, const icFloatNumber *Src)
+void CIccTagNamedColor2::Lab2ToLab4(icFloatNumber *Dst, const icFloatNumber *Src) const
 {
   Dst[0] = UnitClip((icFloatNumber)(Src[0] * 65535.0 / 65280.0));
   Dst[1] = UnitClip((icFloatNumber)(Src[1] * 65535.0 / 65280.0));
@@ -2048,7 +2131,7 @@ void CIccTagNamedColor2::Lab2ToLab4(icFloatNumber *Dst, const icFloatNumber *Src
  * 
  *****************************************************************************
  */
-void CIccTagNamedColor2::Lab4ToLab2(icFloatNumber *Dst, const icFloatNumber *Src)
+void CIccTagNamedColor2::Lab4ToLab2(icFloatNumber *Dst, const icFloatNumber *Src) const
 {
   Dst[0] = (icFloatNumber)(Src[0] * 65280.0 / 65535.0);
   Dst[1] = (icFloatNumber)(Src[1] * 65280.0 / 65535.0);

@@ -660,7 +660,12 @@ CIccTagParametricCurve::CIccTagParametricCurve(const CIccTagParametricCurve &ITP
 
   m_Param = new icS15Fixed16Number[m_nNumParam];
   memcpy(m_Param, ITPC.m_Param, m_nNumParam*sizeof(icS15Fixed16Number));  
-  m_dParam = NULL;
+	m_dParam = NULL;
+	if (ITPC.m_dParam)
+	{
+		m_dParam = new icFloatNumber[m_nNumParam];
+		memcpy(m_dParam, ITPC.m_dParam, m_nNumParam*sizeof(icFloatNumber));
+	}
 }
 
 
@@ -688,9 +693,13 @@ CIccTagParametricCurve &CIccTagParametricCurve::operator=(const CIccTagParametri
   memcpy(m_Param, ParamCurveTag.m_Param, m_nNumParam*sizeof(icS15Fixed16Number));  
 
   m_dParam = NULL;
+	if (ParamCurveTag.m_dParam)
+	{
+		m_dParam = new icFloatNumber[m_nNumParam];
+		memcpy(m_dParam, ParamCurveTag.m_dParam, m_nNumParam*sizeof(icFloatNumber));
+	}
 
   return *this;
-
 }
 
 
@@ -832,53 +841,53 @@ case 0x0000:
   return;
 
 case 0x0001:
-  sprintf(buf, "Y = (%.4lf * X + %.4lf) ^ %.4lf   when (X >= %.4lf / %.4lf)\r\n",
-    icFtoD(m_Param[1]), icFtoD(m_Param[2]), icFtoD(m_Param[0]),
+  sprintf(buf, "Y = 0 when (X < %.4lf / %.4lf)\r\n",
     -icFtoD(m_Param[2]), icFtoD(m_Param[1]));
   sDescription += buf;
 
-  sprintf(buf, "Y = 0 when (X < %.4lf / %.4lf)\r\n",
+  sprintf(buf, "Y = (%.4lf * X + %.4lf) ^ %.4lf   when (X >= %.4lf / %.4lf)\r\n",
+    icFtoD(m_Param[1]), icFtoD(m_Param[2]), icFtoD(m_Param[0]),
     -icFtoD(m_Param[2]), icFtoD(m_Param[1]));
   sDescription += buf;
   return;
 
 case 0x0002:
+  sprintf(buf, "Y = %.4lf   when (X < %.4lf / %.4lf)\r\n", icFtoD(m_Param[3]),
+    -icFtoD(m_Param[2]), icFtoD(m_Param[1]));
+  sDescription += buf;
+
   sprintf(buf, "Y = (%.4lf * X + %.4lf) ^ %.4lf + %.4lf   when (X >= %.4lf / %.4lf)\r\n",
     icFtoD(m_Param[1]), icFtoD(m_Param[2]), icFtoD(m_Param[0]),
     icFtoD(m_Param[3]),
     -icFtoD(m_Param[2]), icFtoD(m_Param[1]));
   sDescription += buf;
-
-  sprintf(buf, "Y = %.4lf   when (X < %.4lf / %.4lf)\r\n", icFtoD(m_Param[3]),
-    -icFtoD(m_Param[2]), icFtoD(m_Param[1]));
-  sDescription += buf;
   return;
 
 case 0x0003:
+  sprintf(buf, "Y = %lf * X   when (X < %.4lf)\r\n",
+    icFtoD(m_Param[3]), icFtoD(m_Param[4]));
+  sDescription += buf;
+
   sprintf(buf, "Y = (%.4lf * X + %.4lf) ^ %.4lf   when (X >= %.4lf)\r\n",
     icFtoD(m_Param[1]), icFtoD(m_Param[2]), icFtoD(m_Param[0]),
     icFtoD(m_Param[4]));
   sDescription += buf;
-
-  sprintf(buf, "Y = %lf * X   when (X < %.4lf)\r\n",
-    icFtoD(m_Param[3]), icFtoD(m_Param[4]));
-  sDescription += buf;
   return;
 
 case 0x0004:
+  sprintf(buf, "Y = %lf * X + %.4lf  when (X < %.4lf)\r\n",
+    icFtoD(m_Param[3]), icFtoD(m_Param[6]), icFtoD(m_Param[4]));
+  sDescription += buf;
+
   sprintf(buf, "Y = (%.4lf * X + %.4lf) ^ %.4lf + %.4lf  when (X >= %.4lf)\r\n",
     icFtoD(m_Param[1]), icFtoD(m_Param[2]), icFtoD(m_Param[0]),
     icFtoD(m_Param[5]), icFtoD(m_Param[4]));
-  sDescription += buf;
-
-  sprintf(buf, "Y = %lf * X + %.4lf  when (X < %.4lf)\r\n",
-    icFtoD(m_Param[3]), icFtoD(m_Param[6]), icFtoD(m_Param[4]));
   sDescription += buf;
   return;
 
 default:
   int i;
-  sprintf(buf, "Unknown Function with %d parameters:\r\n");
+  sprintf(buf, "Unknown Function with %d parameters:\r\n", m_nNumParam);
   sDescription += buf;
 
   for (i=0; i<m_nNumParam; i++) {
@@ -1326,7 +1335,7 @@ bool CIccMatrix::IsIdentity()
 *
 *****************************************************************************
 */
-void CIccMatrix::Apply(icFloatNumber *Pixel)
+void CIccMatrix::Apply(icFloatNumber *Pixel) const
 {
   icFloatNumber a=Pixel[0];
   icFloatNumber b=Pixel[1];
@@ -1546,11 +1555,11 @@ CIccCLUT::~CIccCLUT()
  *  nGridPoints = number of grid points in the CLUT
  *****************************************************************************
  */
-void CIccCLUT::Init(icUInt8Number nGridPoints)
+bool CIccCLUT::Init(icUInt8Number nGridPoints)
 {
   memset(&m_GridPoints, 0, sizeof(m_GridPoints));
   memset(m_GridPoints, nGridPoints, m_nInput);
-  Init(&m_GridPoints[0]);
+  return Init(&m_GridPoints[0]);
 }
 
 /**
@@ -1563,7 +1572,7 @@ void CIccCLUT::Init(icUInt8Number nGridPoints)
  *  pGridPoints = number of grid points in the CLUT
  *****************************************************************************
  */
-void CIccCLUT::Init(icUInt8Number *pGridPoints)
+bool CIccCLUT::Init(icUInt8Number *pGridPoints)
 {
   memset(m_nReserved2, 0, sizeof(m_nReserved2));
   if (pGridPoints!=&m_GridPoints[0]) {
@@ -1587,7 +1596,12 @@ void CIccCLUT::Init(icUInt8Number *pGridPoints)
 
   icUInt32Number nSize = NumPoints() * m_nOutput;
 
+  if (!nSize)
+    return false;
+
   m_pData = new icFloatNumber[nSize];
+
+  return (m_pData != NULL);
 }
 
 
@@ -2119,7 +2133,7 @@ static icInt32Number Scale3d(icInt32Number t,
  *  Pixel = Pixel value to be found in the CLUT. Also used to store the result.
  *******************************************************************************
  */
-void CIccCLUT::Interp3dTetra(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
+void CIccCLUT::Interp3dTetra(icFloatNumber *destPixel, const icFloatNumber *srcPixel) const
 {
   icUInt8Number mx = m_MaxGridPoint[0];
   icUInt8Number my = m_MaxGridPoint[1];
@@ -2205,7 +2219,7 @@ void CIccCLUT::Interp3dTetra(icFloatNumber *destPixel, const icFloatNumber *srcP
  *  Pixel = Pixel value to be found in the CLUT. Also used to store the result.
  *******************************************************************************
  */
-void CIccCLUT::Interp3d(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
+void CIccCLUT::Interp3d(icFloatNumber *destPixel, const icFloatNumber *srcPixel) const
 {
   icUInt8Number mx = m_MaxGridPoint[0];
   icUInt8Number my = m_MaxGridPoint[1];
@@ -2275,7 +2289,7 @@ void CIccCLUT::Interp3d(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
  *  Pixel = Pixel value to be found in the CLUT. Also used to store the result.
  *******************************************************************************
  */
-void CIccCLUT::Interp4d(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
+void CIccCLUT::Interp4d(icFloatNumber *destPixel, const icFloatNumber *srcPixel) const
 {
   icUInt8Number mw = m_MaxGridPoint[0];
   icUInt8Number mx = m_MaxGridPoint[1];
@@ -2362,7 +2376,7 @@ void CIccCLUT::Interp4d(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
  *  Pixel = Pixel value to be found in the CLUT. Also used to store the result.
  *******************************************************************************
  */
-void CIccCLUT::Interp5d(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
+void CIccCLUT::Interp5d(icFloatNumber *destPixel, const icFloatNumber *srcPixel) const
 {
   icUInt8Number m0 = m_MaxGridPoint[0];
   icUInt8Number m1 = m_MaxGridPoint[1];
@@ -2474,7 +2488,7 @@ void CIccCLUT::Interp5d(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
  *  Pixel = Pixel value to be found in the CLUT. Also used to store the result.
  *******************************************************************************
  */
-void CIccCLUT::Interp6d(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
+void CIccCLUT::Interp6d(icFloatNumber *destPixel, const icFloatNumber *srcPixel) const
 {
   icUInt8Number m0 = m_MaxGridPoint[0];
   icUInt8Number m1 = m_MaxGridPoint[1];
@@ -2626,7 +2640,7 @@ void CIccCLUT::Interp6d(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
  *  Pixel = Pixel value to be found in the CLUT. Also used to store the result.
  *******************************************************************************
  */
-void CIccCLUT::InterpND(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
+void CIccCLUT::InterpND(icFloatNumber *destPixel, const icFloatNumber *srcPixel) const
 {
   icUInt32Number i,j, index = 0;
 
@@ -2982,7 +2996,6 @@ void CIccMBB::Cleanup()
     delete m_CLUT;
     m_CLUT = NULL;
   }
-
 }
 
 /**
@@ -3329,6 +3342,35 @@ CIccCLUT* CIccMBB::NewCLUT(icUInt8Number *pGridPoints, icUInt8Number nPrecision/
   m_CLUT->Init(pGridPoints);
 
   return m_CLUT;
+}
+
+/**
+****************************************************************************
+* Name: CIccMBB::SetCLUT
+* 
+* Purpose: Assignes CLUT connection to an initialized new CLUT
+*
+* Args:
+*  clut = pointer to a previously allocated CLUT (Onwership is transfered to
+*    CIccMBB object).
+*
+* Return: Pointer to the CIccCLUT object or NULL if clut is incompatible with
+*  CIccMBB object.  If the clut is incompatible it is deleted.
+*****************************************************************************
+*/
+CIccCLUT *CIccMBB::SetCLUT(CIccCLUT *clut)
+{
+  if (clut->GetInputDim() != m_nInput || clut->GetOutputChannels() != m_nOutput) {
+    delete clut;
+    return NULL;
+  }
+
+  if (m_CLUT) {
+    delete m_CLUT;
+  }
+
+  m_CLUT = clut;
+  return clut;
 }
 
 /**

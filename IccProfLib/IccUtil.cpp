@@ -87,7 +87,6 @@
 
 #define PI 3.1415926535897932384626433832795
 
-
 #ifdef USESAMPLEICCNAMESPACE
 namespace sampleICC {
 #endif
@@ -95,6 +94,29 @@ namespace sampleICC {
 const char *icValidateWarningMsg = "Warning! - ";
 const char *icValidateNonCompliantMsg = "NonCompliant! - ";
 const char *icValidateCriticalErrorMsg = "Error! - ";
+
+/**
+******************************************************************************
+* Name: icRoundOffset
+* 
+* Purpose: Adds offset to floating point value for purposes of rounding
+*  by casting to and integer based value
+* 
+* Args:
+*  v - value to offset
+* 
+* Return: 
+*  v with offset added - suitable for casting to some form of integer
+******************************************************************************
+*/
+double icRoundOffset(double v)
+{
+  if (v < 0.0) 
+    return v - 0.5;
+  else
+    return v + 0.5;
+}
+
 
 /**
  ******************************************************************************
@@ -363,14 +385,14 @@ icS15Fixed16Number icDtoF(icFloatNumber num)
   else if (num>32767.0)
     num = 32767.0;
 
-  rv = (icS15Fixed16Number)(num*65536 + 0.5);
+  rv = (icS15Fixed16Number)icRoundOffset((double)num*65536.0);
 
   return rv;
 }
 
 icFloatNumber icFtoD(icS15Fixed16Number num)
 {
-  icFloatNumber rv = (icFloatNumber)((icFloatNumber)num / 65536.0);
+  icFloatNumber rv = (icFloatNumber)((double)num / 65536.0);
 
   return rv;
 }
@@ -384,14 +406,14 @@ icU16Fixed16Number icDtoUF(icFloatNumber num)
   else if (num>65535.0)
     num = 65535.0;
 
-  rv = (icU16Fixed16Number)(num*65536 + 0.5);
+  rv = (icU16Fixed16Number)icRoundOffset((double)num*65536.0);
 
   return rv;
 }
 
 icFloatNumber icUFtoD(icU16Fixed16Number num)
 {
-  icFloatNumber rv = (icFloatNumber)((icFloatNumber)num / 65536.0);
+  icFloatNumber rv = (icFloatNumber)((double)num / 65536.0);
 
   return rv;
 }
@@ -405,7 +427,7 @@ icU1Fixed15Number icDtoUSF(icFloatNumber num)
   else if (num>65535.0/32768.0)
     num = 65535.0/32768.0;
 
-  rv = (icU1Fixed15Number)(num*32768.0 + 0.5);
+  rv = (icU1Fixed15Number)icRoundOffset(num*32768.0);
 
   return rv;
 }
@@ -426,7 +448,7 @@ icU8Fixed8Number icDtoUCF(icFloatNumber num)
   else if (num>255.0)
     num = 255.0;
 
-  rv = (icU8Fixed8Number)(num*256.0 + 0.5);
+  rv = (icU8Fixed8Number)icRoundOffset(num*256.0);
 
   return rv;
 }
@@ -447,7 +469,7 @@ icUInt8Number icFtoU8(icFloatNumber num)
   else if (num>1.0)
     num = 1.0;
 
-  rv = (icUInt8Number)(num*255.0 + 0.5);
+  rv = (icUInt8Number)icRoundOffset(num*255.0);
 
   return rv;
 }
@@ -468,7 +490,7 @@ icUInt16Number icFtoU16(icFloatNumber num)
   else if (num>1.0)
     num = 1.0;
 
-  rv = (icUInt16Number)(num*65535.0 + 0.5);
+  rv = (icUInt16Number)icRoundOffset(num*65535.0);
 
   return rv;
 }
@@ -760,6 +782,9 @@ const icChar *icGetSigStr(icChar *pBuf, icUInt32Number nSig)
 icUInt32Number icGetSigVal(const icChar *pBuf)
 {
   switch(strlen(pBuf)) {
+    case 0:
+      return 0;
+
     case 1:
       return (((unsigned long)pBuf[0])<<24) +
              0x202020;
@@ -776,13 +801,12 @@ icUInt32Number icGetSigVal(const icChar *pBuf)
              0x20;
 
     case 4:
+    default:
       return (((unsigned long)pBuf[0])<<24) +
              (((unsigned long)pBuf[1])<<16) +
              (((unsigned long)pBuf[2])<<8) +
              (((unsigned long)pBuf[3]));
 
-    default:
-      return icSigUnknownData;
   }
 }
 

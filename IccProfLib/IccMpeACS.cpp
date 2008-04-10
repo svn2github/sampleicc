@@ -275,7 +275,7 @@ bool CIccMpeAcs::Begin(icElemInterp nInterp, CIccTagMultiProcessElement *pMPE)
 * 
 * Return: 
 ******************************************************************************/
-void CIccMpeAcs::Apply(icFloatNumber *dstPixel, const icFloatNumber *srcPixel)
+void CIccMpeAcs::Apply(CIccApplyMpe *pApply, icFloatNumber *dstPixel, const icFloatNumber *srcPixel) const
 {
   memcpy(dstPixel, srcPixel, m_nInputChannels*sizeof(icFloatNumber));
 }

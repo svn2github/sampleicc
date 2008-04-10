@@ -115,7 +115,7 @@ public:
   virtual bool Write(CIccIO *pIO)=0;
 
   virtual bool Begin() = 0;
-  virtual icFloatNumber Apply(icFloatNumber v)=0;
+  virtual icFloatNumber Apply(icFloatNumber v) const =0;
 
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccTagMultiProcessElement* pMPE=NULL) const = 0;
 
@@ -156,7 +156,7 @@ public:
   virtual bool Write(CIccIO *pIO);
 
   virtual bool Begin();
-  virtual icFloatNumber Apply(icFloatNumber v);
+  virtual icFloatNumber Apply(icFloatNumber v) const;
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccTagMultiProcessElement* pMPE=NULL) const;
 
 protected:
@@ -197,7 +197,7 @@ public:
   virtual bool Write(CIccIO *pIO);
 
   virtual bool Begin();
-  virtual icFloatNumber Apply(icFloatNumber v);
+  virtual icFloatNumber Apply(icFloatNumber v) const;
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccTagMultiProcessElement* pMPE=NULL) const ;
 
 protected:
@@ -233,7 +233,7 @@ public:
   virtual bool Write(CIccIO *pIO) = 0;
 
   virtual bool Begin() = 0;
-  virtual icFloatNumber Apply(icFloatNumber v) = 0; 
+  virtual icFloatNumber Apply(icFloatNumber v) const = 0; 
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccTagMultiProcessElement* pMPE=NULL) const = 0;
 
 protected:
@@ -269,7 +269,7 @@ public:
   bool Insert(CIccCurveSegment *pCurveSegment);
 
   virtual bool Begin();
-  virtual icFloatNumber Apply(icFloatNumber v);
+  virtual icFloatNumber Apply(icFloatNumber v) const;
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccTagMultiProcessElement* pMPE=NULL) const;
 
 protected:
@@ -309,7 +309,8 @@ public:
   virtual bool Write(CIccIO *pIO);
 
   virtual bool Begin(icElemInterp nInterp, CIccTagMultiProcessElement *pMPE);
-  virtual void Apply(icFloatNumber *pDestPixel, const icFloatNumber *pSrcPixel);
+  virtual void Apply(CIccApplyMpe *pApply, icFloatNumber *dstPixel, const icFloatNumber *srcPixel) const;
+
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccTagMultiProcessElement* pMPE=NULL) const;
 
 protected:
@@ -357,7 +358,8 @@ public:
   icFloatNumber *GetConstants() {return m_pConstants;}
 
   virtual bool Begin(icElemInterp nInterp, CIccTagMultiProcessElement *pMPE);
-  virtual void Apply(icFloatNumber *dstPixel, const icFloatNumber *srcPixel);
+  virtual void Apply(CIccApplyMpe *pApply, icFloatNumber *dstPixel, const icFloatNumber *srcPixel) const;
+
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccTagMultiProcessElement* pMPE=NULL) const;
 
 protected:
@@ -401,7 +403,8 @@ public:
   virtual bool Write(CIccIO *pIO);
 
   virtual bool Begin(icElemInterp nInterp, CIccTagMultiProcessElement *pMPE);
-  virtual void Apply(icFloatNumber *dstPixel, const icFloatNumber *srcPixel);
+  virtual void Apply(CIccApplyMpe *pApply, icFloatNumber *dstPixel, const icFloatNumber *srcPixel) const;
+
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccTagMultiProcessElement* pMPE=NULL) const;
 
   CIccCLUT *GetCLUT() { return m_pCLUT; }

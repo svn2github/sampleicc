@@ -457,7 +457,7 @@ bool CIccFormulaCurveSegment::Begin()
  * 
  * Return: 
  ******************************************************************************/
-icFloatNumber CIccFormulaCurveSegment::Apply(icFloatNumber v)
+icFloatNumber CIccFormulaCurveSegment::Apply(icFloatNumber v) const
 {
   switch (m_nFunctionType) {
   case 0x0000:
@@ -874,7 +874,7 @@ bool CIccSampledCurveSegment::Begin()
  * 
  * Return: 
  ******************************************************************************/
-icFloatNumber CIccSampledCurveSegment::Apply(icFloatNumber v)
+icFloatNumber CIccSampledCurveSegment::Apply(icFloatNumber v) const
 {
   if (v<m_startPoint)
     v=m_startPoint;
@@ -1312,7 +1312,7 @@ bool CIccSegmentedCurve::Begin()
  * 
  * Return: 
  ******************************************************************************/
-icFloatNumber CIccSegmentedCurve::Apply(icFloatNumber v)
+icFloatNumber CIccSegmentedCurve::Apply(icFloatNumber v) const
 {
  CIccCurveSegmentList::iterator i;
 
@@ -1831,7 +1831,7 @@ bool CIccMpeCurveSet::Begin(icElemInterp nInterp, CIccTagMultiProcessElement *pM
  * 
  * Return: 
  ******************************************************************************/
-void CIccMpeCurveSet::Apply(icFloatNumber *pDestPixel, const icFloatNumber *pSrcPixel)
+void CIccMpeCurveSet::Apply(CIccApplyMpe *pApply, icFloatNumber *pDestPixel, const icFloatNumber *pSrcPixel) const
 {
   int i;
   for (i=0; i<m_nInputChannels; i++) {
@@ -2200,7 +2200,7 @@ bool CIccMpeMatrix::Begin(icElemInterp nInterp, CIccTagMultiProcessElement *pMPE
  * 
  * Return: 
  ******************************************************************************/
-void CIccMpeMatrix::Apply(icFloatNumber *dstPixel, const icFloatNumber *srcPixel)
+void CIccMpeMatrix::Apply(CIccApplyMpe *pApply, icFloatNumber *dstPixel, const icFloatNumber *srcPixel) const
 {
   icFloatNumber *data = m_pMatrix;
   switch (m_type) {
@@ -2576,23 +2576,25 @@ bool CIccMpeCLUT::Begin(icElemInterp nInterp, CIccTagMultiProcessElement *pMPE)
  * 
  * Return: 
  ******************************************************************************/
-void CIccMpeCLUT::Apply(icFloatNumber *dstPixel, const icFloatNumber *srcPixel)
+void CIccMpeCLUT::Apply(CIccApplyMpe *pApply, icFloatNumber *dstPixel, const icFloatNumber *srcPixel) const
 {
+  const CIccCLUT *pCLUT = m_pCLUT;
+
   switch(m_interpType) {
   case ic3dInterp:
-    m_pCLUT->Interp3d(dstPixel, srcPixel);
+    pCLUT->Interp3d(dstPixel, srcPixel);
     break;
   case ic4dInterp:
-    m_pCLUT->Interp4d(dstPixel, srcPixel);
+    pCLUT->Interp4d(dstPixel, srcPixel);
     break;
   case ic5dInterp:
-    m_pCLUT->Interp5d(dstPixel, srcPixel);
+    pCLUT->Interp5d(dstPixel, srcPixel);
     break;
   case ic6dInterp:
-    m_pCLUT->Interp6d(dstPixel, srcPixel);
+    pCLUT->Interp6d(dstPixel, srcPixel);
     break;
   case icNdInterp:
-    m_pCLUT->InterpND(dstPixel, srcPixel);
+    pCLUT->InterpND(dstPixel, srcPixel);
     break;
   }
 }

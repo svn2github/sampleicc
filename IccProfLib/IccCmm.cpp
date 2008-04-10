@@ -150,7 +150,7 @@ void CIccPCS::Reset(icColorSpaceSignature StartSpace, bool bUseLegacyPCS)
  *  SrcPixel or ptr to adjusted pixel data (we dont want to modify the source data).
  **************************************************************************
  */
-const icFloatNumber *CIccPCS::Check(const icFloatNumber *SrcPixel, CIccXform *pXform)
+const icFloatNumber *CIccPCS::Check(const icFloatNumber *SrcPixel, const CIccXform *pXform)
 {
   icColorSpaceSignature NextSpace = pXform->GetSrcSpace();
   bool bIsV2 = pXform->UseLegacyPCS();
@@ -412,6 +412,7 @@ CIccXform::CIccXform()
   m_nIntent = icUnknownIntent;
 }
 
+
 /**
  **************************************************************************
  * Name: CIccXform::~CIccXform
@@ -456,6 +457,10 @@ CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput, icRenderingInte
 {
   CIccXform *rv = NULL;
   icRenderingIntent nTagIntent = nIntent;
+
+  if (pProfile->m_Header.deviceClass==icSigLinkClass && nIntent==icAbsoluteColorimetric) {
+    nIntent = icPerceptual;
+  }
 
   if (nTagIntent == icUnknownIntent)
     nTagIntent = icPerceptual;
@@ -734,6 +739,29 @@ icStatusCMM CIccXform::Begin()
 }
 
 /**
+**************************************************************************
+* Name: CIccXform::GetNewApply
+* 
+* Purpose: 
+*  This Factory function allocates data specific for the application of the xform.
+*  This allows multiple threads to simultaneously use the same xform.
+**************************************************************************
+*/
+CIccApplyXform *CIccXform::GetNewApply(icStatusCMM &status)
+{
+  CIccApplyXform *rv = new CIccApplyXform(this);
+  
+  if (!rv) {
+    status = icCmmStatAllocErr;
+    return NULL;
+  }
+
+  status = icCmmStatOk;
+  return rv;
+}
+
+
+/**
  **************************************************************************
  * Name: CIccXform::CheckSrcAbs
  * 
@@ -749,8 +777,10 @@ icStatusCMM CIccXform::Begin()
  *  returns Pixel or adjusted pixel data.
  **************************************************************************
  */
-const icFloatNumber *CIccXform::CheckSrcAbs(const icFloatNumber *Pixel)
+const icFloatNumber *CIccXform::CheckSrcAbs(CIccApplyXform *pApply, const icFloatNumber *Pixel) const
 {
+  icFloatNumber *pAbsLab = pApply->m_AbsLab;
+
   if (!m_bInput) {
     if (m_nIntent == icAbsoluteColorimetric && 
         (m_MediaXYZ.X != m_pProfile->m_Header.illuminant.X ||
@@ -762,27 +792,27 @@ const icFloatNumber *CIccXform::CheckSrcAbs(const icFloatNumber *Pixel)
       if (IsSpacePCS(Space)) {
         if (Space==icSigLabData) {
           if (UseLegacyPCS()) {
-            CIccPCS::Lab2ToXyz(m_AbsLab, Pixel, true);
+            CIccPCS::Lab2ToXyz(pAbsLab, Pixel, true);
           }
           else
-            CIccPCS::LabToXyz(m_AbsLab, Pixel, true);
-          Pixel = m_AbsLab;
+            CIccPCS::LabToXyz(pAbsLab, Pixel, true);
+          Pixel = pAbsLab;
         }
 
-        m_AbsLab[0] = Pixel[0] * m_pProfile->m_Header.illuminant.X / m_MediaXYZ.X;
-        m_AbsLab[1] = Pixel[1] * m_pProfile->m_Header.illuminant.Y / m_MediaXYZ.Y;
-        m_AbsLab[2] = Pixel[2] * m_pProfile->m_Header.illuminant.Z / m_MediaXYZ.Z;
+        pAbsLab[0] = Pixel[0] * m_pProfile->m_Header.illuminant.X / m_MediaXYZ.X;
+        pAbsLab[1] = Pixel[1] * m_pProfile->m_Header.illuminant.Y / m_MediaXYZ.Y;
+        pAbsLab[2] = Pixel[2] * m_pProfile->m_Header.illuminant.Z / m_MediaXYZ.Z;
 
         if (Space==icSigLabData) {
           if (UseLegacyPCS()) {
-            CIccPCS::XyzToLab2(m_AbsLab, m_AbsLab, true);
+            CIccPCS::XyzToLab2(pAbsLab, pAbsLab, true);
           }
           else {
-            CIccPCS::XyzToLab(m_AbsLab, m_AbsLab, true);
+            CIccPCS::XyzToLab(pAbsLab, pAbsLab, true);
           }
         }
 
-        return m_AbsLab;
+        return pAbsLab;
       }
     }
     else if (m_nIntent == icPerceptual && IsVersion2()) {
@@ -791,28 +821,28 @@ const icFloatNumber *CIccXform::CheckSrcAbs(const icFloatNumber *Pixel)
       if (IsSpacePCS(Space)) {
         if (Space==icSigLabData) {
           if (UseLegacyPCS()) {
-            CIccPCS::Lab2ToXyz(m_AbsLab, Pixel, true);
+            CIccPCS::Lab2ToXyz(pAbsLab, Pixel, true);
           }
           else
-            CIccPCS::LabToXyz(m_AbsLab, Pixel, true);
-          Pixel = m_AbsLab;
+            CIccPCS::LabToXyz(pAbsLab, Pixel, true);
+          Pixel = pAbsLab;
         }
 
         //Convert version 4 black point to version 2
-        m_AbsLab[0] = CIccPCS::NegClip((icFloatNumber)((Pixel[0] - icPerceptualRefBlackX * 32768.0 / 65535.0) / (1.0 - icPerceptualRefBlackX / icPerceptualRefWhiteX)));
-        m_AbsLab[1] = CIccPCS::NegClip((icFloatNumber)((Pixel[1] - icPerceptualRefBlackY * 32768.0 / 65535.0) / (1.0 - icPerceptualRefBlackY / icPerceptualRefWhiteY)));
-        m_AbsLab[2] = CIccPCS::NegClip((icFloatNumber)((Pixel[2] - icPerceptualRefBlackZ * 32768.0 / 65535.0) / (1.0 - icPerceptualRefBlackZ / icPerceptualRefWhiteZ)));
+        pAbsLab[0] = CIccPCS::NegClip((icFloatNumber)((Pixel[0] - icPerceptualRefBlackX * 32768.0 / 65535.0) / (1.0 - icPerceptualRefBlackX / icPerceptualRefWhiteX)));
+        pAbsLab[1] = CIccPCS::NegClip((icFloatNumber)((Pixel[1] - icPerceptualRefBlackY * 32768.0 / 65535.0) / (1.0 - icPerceptualRefBlackY / icPerceptualRefWhiteY)));
+        pAbsLab[2] = CIccPCS::NegClip((icFloatNumber)((Pixel[2] - icPerceptualRefBlackZ * 32768.0 / 65535.0) / (1.0 - icPerceptualRefBlackZ / icPerceptualRefWhiteZ)));
 
         if (Space==icSigLabData) {
           if (UseLegacyPCS()) {
-            CIccPCS::XyzToLab2(m_AbsLab, m_AbsLab, true);
+            CIccPCS::XyzToLab2(pAbsLab, pAbsLab, true);
           }
           else {
-            CIccPCS::XyzToLab(m_AbsLab, m_AbsLab, true);
+            CIccPCS::XyzToLab(pAbsLab, pAbsLab, true);
           }
         }
 
-        return m_AbsLab;
+        return pAbsLab;
       }
     }
   }
@@ -833,7 +863,7 @@ const icFloatNumber *CIccXform::CheckSrcAbs(const icFloatNumber *Pixel)
  *
  **************************************************************************
  */
-void CIccXform::CheckDstAbs(icFloatNumber *Pixel)
+void CIccXform::CheckDstAbs(icFloatNumber *Pixel) const
 {
   if (m_bInput) {
     if (m_nIntent == icAbsoluteColorimetric && 
@@ -968,6 +998,31 @@ icColorSpaceSignature CIccXform::GetDstSpace() const
   return rv;
 }
 
+/**
+**************************************************************************
+* Name: CIccApplyXform::CIccApplyXform
+* 
+* Purpose: 
+*  Constructor
+**************************************************************************
+*/
+CIccApplyXform::CIccApplyXform(CIccXform *pXform)
+{
+  m_pXform = pXform;
+}
+
+/**
+**************************************************************************
+* Name: CIccApplyXform::CIccApplyXform
+* 
+* Purpose: 
+*  Destructor
+**************************************************************************
+*/
+CIccApplyXform::~CIccApplyXform()
+{
+}
+
 
 /**
  **************************************************************************
@@ -1016,31 +1071,35 @@ CIccXformMatrixTRC::~CIccXformMatrixTRC()
  */
 icStatusCMM CIccXformMatrixTRC::Begin()
 {
-  icStatusCMM rv = CIccXform::Begin();
-  CIccTagXYZ *pXYZ;
+  icStatusCMM status;
+  const CIccTagXYZ *pXYZ;
 
-  if (rv != icCmmStatOk)
-    return rv;
+  status = CIccXform::Begin();
+  if (status != icCmmStatOk)
+    return status;
 
   pXYZ = GetColumn(icSigRedMatrixColumnTag);
-  if (!pXYZ)
+  if (!pXYZ) {
     return icCmmStatProfileMissingTag;
+  }
 
   m_e[0] = icFtoD((*pXYZ)[0].X);
   m_e[3] = icFtoD((*pXYZ)[0].Y);
   m_e[6] = icFtoD((*pXYZ)[0].Z);
 
   pXYZ = GetColumn(icSigGreenMatrixColumnTag);
-  if (!pXYZ)
+  if (!pXYZ) {
     return icCmmStatProfileMissingTag;
+  }
 
   m_e[1] = icFtoD((*pXYZ)[0].X);
   m_e[4] = icFtoD((*pXYZ)[0].Y);
   m_e[7] = icFtoD((*pXYZ)[0].Z);
 
   pXYZ = GetColumn(icSigBlueMatrixColumnTag);
-  if (!pXYZ)
+  if (!pXYZ) {
     return icCmmStatProfileMissingTag;
+  }
 
   m_e[2] = icFtoD((*pXYZ)[0].X);
   m_e[5] = icFtoD((*pXYZ)[0].Y);
@@ -1059,8 +1118,9 @@ icStatusCMM CIccXformMatrixTRC::Begin()
 
   }
   else {
-    if (m_pProfile->m_Header.pcs!=icSigXYZData)
+    if (m_pProfile->m_Header.pcs!=icSigXYZData) {
       return icCmmStatBadSpaceLink;
+    }
 
     m_Curve[0] = GetInvCurve(icSigRedTRCTag);
     m_Curve[1] = GetInvCurve(icSigGreenTRCTag);
@@ -1084,7 +1144,7 @@ icStatusCMM CIccXformMatrixTRC::Begin()
   if (!m_Curve[0]->IsIdentity() || !m_Curve[1]->IsIdentity() || !m_Curve[2]->IsIdentity()) {
     m_ApplyCurvePtr = m_Curve;
   }
-
+  
   return icCmmStatOk;
 }
 
@@ -1118,15 +1178,16 @@ static icFloatNumber RGBClip(icFloatNumber v, CIccCurve *pCurve)
  *  Does the actual application of the Xform.
  *  
  * Args:
+ *  pApply = ApplyXform object containging temporary storage used during Apply
  *  DstPixel = Destination pixel where the result is stored,
  *  SrcPixel = Source pixel which is to be applied.
  **************************************************************************
  */
-void CIccXformMatrixTRC::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)
+void CIccXformMatrixTRC::Apply(CIccApplyXform* pApply, icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) const
 {
   icFloatNumber Pixel[3];
 
-  SrcPixel = CheckSrcAbs(SrcPixel);
+  SrcPixel = CheckSrcAbs(pApply, SrcPixel);
   Pixel[0] = SrcPixel[0];
   Pixel[1] = SrcPixel[1];
   Pixel[2] = SrcPixel[2];
@@ -1363,18 +1424,20 @@ CIccXform3DLut::~CIccXform3DLut()
  *
  **************************************************************************
  */
-icStatusCMM CIccXform3DLut::Begin()
+ icStatusCMM CIccXform3DLut::Begin()
 {
-  icStatusCMM rv = CIccXform::Begin();
+  icStatusCMM status;
   CIccCurve **Curve;
   int i;
 
-  if (rv != icCmmStatOk)
-    return rv;
+  status = CIccXform::Begin();
+  if (status != icCmmStatOk)
+    return status;
 
   if (!m_pTag ||
-      m_pTag->InputChannels()!=3)
+      m_pTag->InputChannels()!=3) {
     return icCmmStatInvalidLut;
+  }
 
   m_ApplyCurvePtrA = NULL;
   m_ApplyCurvePtrB = NULL;
@@ -1502,16 +1565,17 @@ icStatusCMM CIccXform3DLut::Begin()
  *  Does the actual application of the Xform.
  *  
  * Args:
+ *  pApply = ApplyXform object containging temporary storage used during Apply
  *  DstPixel = Destination pixel where the result is stored,
  *  SrcPixel = Source pixel which is to be applied.
  **************************************************************************
  */
-void CIccXform3DLut::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)
+void CIccXform3DLut::Apply(CIccApplyXform* pApply, icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) const
 {
   icFloatNumber Pixel[16];
   int i;
 
-  SrcPixel = CheckSrcAbs(SrcPixel);
+  SrcPixel = CheckSrcAbs(pApply, SrcPixel);
   Pixel[0] = SrcPixel[0];
   Pixel[1] = SrcPixel[1];
   Pixel[2] = SrcPixel[2];
@@ -1718,16 +1782,19 @@ CIccXform4DLut::~CIccXform4DLut()
  */
 icStatusCMM CIccXform4DLut::Begin()
 {
-  icStatusCMM rv = CIccXform::Begin();
+  icStatusCMM status;
   CIccCurve **Curve;
   int i;
 
-  if (rv != icCmmStatOk)
-    return rv;
+  status = CIccXform::Begin();
+  if (status != icCmmStatOk) {
+    return status;
+  }
 
   if (!m_pTag ||
-      m_pTag->InputChannels()!=4)
+      m_pTag->InputChannels()!=4) {
     return icCmmStatInvalidLut;
+  }
 
   m_ApplyCurvePtrA = m_ApplyCurvePtrB = m_ApplyCurvePtrM = NULL;
 
@@ -1846,16 +1913,17 @@ icStatusCMM CIccXform4DLut::Begin()
  *  Does the actual application of the Xform.
  *  
  * Args:
+ *  pApply = ApplyXform object containging temporary storage used during Apply
  *  DstPixel = Destination pixel where the result is stored,
  *  SrcPixel = Source pixel which is to be applied.
  **************************************************************************
  */
-void CIccXform4DLut::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)
+void CIccXform4DLut::Apply(CIccApplyXform* pApply, icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) const
 {
   icFloatNumber Pixel[16];
   int i;
 
-  SrcPixel = CheckSrcAbs(SrcPixel);
+  SrcPixel = CheckSrcAbs(pApply, SrcPixel);
   Pixel[0] = SrcPixel[0];
   Pixel[1] = SrcPixel[1];
   Pixel[2] = SrcPixel[2];
@@ -2002,6 +2070,7 @@ LPIccCurve* CIccXform4DLut::ExtractOutputCurves()
   return NULL;
 }
 
+
 /**
  **************************************************************************
  * Name: CIccXformNDLut::CIccXformNDLut
@@ -2051,15 +2120,18 @@ CIccXformNDLut::~CIccXformNDLut()
  */
 icStatusCMM CIccXformNDLut::Begin()
 {
-  icStatusCMM rv = CIccXform::Begin();
+  icStatusCMM status;
   CIccCurve **Curve;
   int i;
 
-  if (rv != icCmmStatOk)
-    return rv;
+  status = CIccXform::Begin();
+  if (status != icCmmStatOk) {
+    return status;
+  }
 
-  if (!m_pTag || (m_pTag->InputChannels()>2 && m_pTag->InputChannels()<5))
+  if (!m_pTag || (m_pTag->InputChannels()>2 && m_pTag->InputChannels()<5)) {
     return icCmmStatInvalidLut;
+  }
 
   m_nNumInput = m_pTag->m_nInput;
 
@@ -2178,16 +2250,17 @@ icStatusCMM CIccXformNDLut::Begin()
  *  Does the actual application of the Xform.
  *  
  * Args:
+ *  pApply = ApplyXform object containging temporary storage used during Apply
  *  DstPixel = Destination pixel where the result is stored,
  *  SrcPixel = Source pixel which is to be applied.
  **************************************************************************
  */
-void CIccXformNDLut::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)
+void CIccXformNDLut::Apply(CIccApplyXform* pApply, icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) const
 {
   icFloatNumber Pixel[16];
   int i;
 
-  SrcPixel = CheckSrcAbs(SrcPixel);
+  SrcPixel = CheckSrcAbs(pApply, SrcPixel);
   for (i=0; i<m_nNumInput; i++)
     Pixel[i] = SrcPixel[i];
 
@@ -2397,16 +2470,20 @@ CIccXformNamedColor::~CIccXformNamedColor()
  */
 icStatusCMM CIccXformNamedColor::Begin()
 {
-  icStatusCMM rv = CIccXform::Begin();
-  if (rv != icCmmStatOk)
-    return rv;
+  icStatusCMM status;
 
-  if (m_pTag == NULL)
+  status = CIccXform::Begin();
+  if (status != icCmmStatOk)
+    return status;
+
+  if (m_pTag == NULL) {
     return icCmmStatProfileMissingTag;
+  }
 
   if (m_nSrcSpace==icSigUnknownData ||
-     m_nDestSpace==icSigUnknownData)
+      m_nDestSpace==icSigUnknownData) {
     return icCmmStatIncorrectApply;
+  }
 
   if (m_nSrcSpace != icSigNamedData) {
     if (m_nDestSpace != icSigNamedData) {
@@ -2425,6 +2502,9 @@ icStatusCMM CIccXformNamedColor::Begin()
     }
   }
 
+  if (!m_pTag->InitFindCachedPCSColor())
+    return icCmmStatAllocErr;
+
   return icCmmStatOk;
 }
 
@@ -2438,41 +2518,47 @@ icStatusCMM CIccXformNamedColor::Begin()
  *  Does the actual application of the Xform.
  *  
  * Args:
+ *  pApply = ApplyXform object containging temporary storage used during Apply
  *  DstPixel = Destination pixel where the result is stored,
  *  SrcPixel = Source pixel which is to be applied.
  **************************************************************************
  */
-void CIccXformNamedColor::Apply(icChar *DstColorName, const icFloatNumber *SrcPixel)
+icStatusCMM CIccXformNamedColor::Apply(CIccApplyXform* pApply, icChar *DstColorName, const icFloatNumber *SrcPixel) const
 {
-  if (m_pTag == NULL)
-    return;
+  const CIccTagNamedColor2 *pTag = m_pTag;
+  if (pTag == NULL)
+    return icCmmStatBadXform;
 
   icFloatNumber DevicePix[16], PCSPix[3];
   std::string NamedColor;
   icUInt32Number i, j;
 
   if (IsSrcPCS()) {
-    SrcPixel = CheckSrcAbs(SrcPixel);
+    SrcPixel = CheckSrcAbs(pApply, SrcPixel);
     for(i=0; i<3; i++)
       PCSPix[i] = SrcPixel[i];
 
-    j = m_pTag->FindPCSColor(PCSPix);
-    m_pTag->GetColorName(NamedColor, j);
+    j = pTag->FindCachedPCSColor(PCSPix);
+    pTag->GetColorName(NamedColor, j);
   }
   else {
     for(i=0; i<m_pTag->GetDeviceCoords(); i++)
       DevicePix[i] = SrcPixel[i];
 
-    j = m_pTag->FindDeviceColor(DevicePix);
-    m_pTag->GetColorName(NamedColor, j);
+    j = pTag->FindDeviceColor(DevicePix);
+    pTag->GetColorName(NamedColor, j);
   }
 
   sprintf(DstColorName, "%s", NamedColor.c_str());
+
+  return icCmmStatOk;
 }
 
-icStatusCMM CIccXformNamedColor::Apply(icFloatNumber *DstPixel, const icChar *SrcColorName)
+icStatusCMM CIccXformNamedColor::Apply(CIccApplyXform* pApply, icFloatNumber *DstPixel, const icChar *SrcColorName) const
 {
-  if (m_pTag == NULL)
+  const CIccTagNamedColor2 *pTag = m_pTag;
+
+  if (pTag == NULL)
     return icCmmStatProfileMissingTag;
 
   icUInt32Number j;
@@ -2482,23 +2568,23 @@ icStatusCMM CIccXformNamedColor::Apply(icFloatNumber *DstPixel, const icChar *Sr
 
   if (IsDestPCS()) {
 
-    j = m_pTag->FindColor(SrcColorName);
+    j = pTag->FindColor(SrcColorName);
     if (j<0)
       return icCmmStatColorNotFound;
 
     if (m_nDestSpace == icSigLabData) {
-      memcpy(DstPixel, m_pTag->GetEntry(j)->pcsCoords, 3*sizeof(icFloatNumber));
+      memcpy(DstPixel, pTag->GetEntry(j)->pcsCoords, 3*sizeof(icFloatNumber));
     }
     else {
-      memcpy(DstPixel, m_pTag->GetEntry(j)->pcsCoords, 3*sizeof(icFloatNumber));
+      memcpy(DstPixel, pTag->GetEntry(j)->pcsCoords, 3*sizeof(icFloatNumber));
     }
     CheckDstAbs(DstPixel);
   }
   else {
-    j = m_pTag->FindColor(SrcColorName);
+    j = pTag->FindColor(SrcColorName);
     if (j<0)
       return icCmmStatColorNotFound;
-    memcpy(DstPixel, m_pTag->GetEntry(j)->deviceCoords, m_pTag->GetDeviceCoords()*sizeof(icFloatNumber));
+    memcpy(DstPixel, pTag->GetEntry(j)->deviceCoords, pTag->GetDeviceCoords()*sizeof(icFloatNumber));
   }
 
   return icCmmStatOk;
@@ -2552,6 +2638,7 @@ icStatusCMM CIccXformNamedColor::SetDestSpace(icColorSpaceSignature nDestSpace)
 
   return icCmmStatOk;
 }
+
 
 /**
 **************************************************************************
@@ -2796,20 +2883,22 @@ CIccXform *CIccXformMpe::Create(CIccProfile *pProfile, bool bInput, icRenderingI
 * 
 * Purpose: 
 *  This function will be called before the xform is applied.  Derived objects
-*  should also call this base class function to initialize for Absolute Colorimetric
+*  should also call the base class function to initialize for Absolute Colorimetric
 *  Intent handling which is performed through the use of the CheckSrcAbs and
 *  CheckDstAbs functions.
 **************************************************************************
 */
 icStatusCMM CIccXformMpe::Begin()
 {
-  icStatusCMM rv = CIccXform::Begin();
+  icStatusCMM status;
+  status = CIccXform::Begin();
 
-  if (rv != icCmmStatOk)
-    return rv;
+  if (status != icCmmStatOk)
+    return status;
 
-  if (!m_pTag)
+  if (!m_pTag) {
     return icCmmStatInvalidLut;
+  }
 
   if (!m_pTag->Begin()) {
     return icCmmStatInvalidProfile;
@@ -2817,6 +2906,40 @@ icStatusCMM CIccXformMpe::Begin()
 
   return icCmmStatOk;
 }
+
+
+/**
+**************************************************************************
+* Name: CIccXformMpe::GetNewApply
+* 
+* Purpose: 
+*  This Factory function allocates data specific for the application of the xform.
+*  This allows multiple threads to simultaneously use the same xform.
+**************************************************************************
+*/
+CIccApplyXform *CIccXformMpe::GetNewApply(icStatusCMM &status)
+{
+  if (!m_pTag)
+    return NULL;
+
+  CIccApplyXformMpe *rv= new CIccApplyXformMpe(this); 
+
+  if (!rv) {
+    status = icCmmStatAllocErr;
+    return NULL;
+  }
+
+  rv->m_pApply = m_pTag->GetNewApply();
+  if (!rv->m_pApply) {
+    status = icCmmStatAllocErr;
+    delete rv;
+    return NULL;
+  }
+
+  status = icCmmStatOk;
+  return rv;
+}
+
 
 /**
 **************************************************************************
@@ -2826,13 +2949,16 @@ icStatusCMM CIccXformMpe::Begin()
 *  Does the actual application of the Xform.
 *  
 * Args:
+*  pApply = ApplyXform object containging temporary storage used during Apply
 *  DstPixel = Destination pixel where the result is stored,
 *  SrcPixel = Source pixel which is to be applied.
 **************************************************************************
 */
-void CIccXformMpe::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)
+void CIccXformMpe::Apply(CIccApplyXform* pApply, icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) const
 {
-  SrcPixel = CheckSrcAbs(SrcPixel);
+  const CIccTagMultiProcessElement *pTag = m_pTag;
+
+  SrcPixel = CheckSrcAbs(pApply, SrcPixel);
 
   //Since MPE tags use "real" values for PCS we need to convert from 
   //internal encoding used by IccProfLib
@@ -2851,7 +2977,10 @@ void CIccXformMpe::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)
       break;
   }
 
-  m_pTag->Apply(DstPixel, SrcPixel);
+  //Note: pApply should be a CIccApplyXformMpe type here
+  CIccApplyXformMpe *pApplyMpe = (CIccApplyXformMpe *)pApply;
+
+  pTag->Apply(pApplyMpe->m_pApply, DstPixel, SrcPixel);
 
   //Since MPE tags use "real" values for PCS we need to convert to
   //internal encoding used by IccProfLib
@@ -2868,6 +2997,182 @@ void CIccXformMpe::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)
   CheckDstAbs(DstPixel);
 }
 
+/**
+**************************************************************************
+* Name: CIccApplyXformMpe::CIccApplyXformMpe
+* 
+* Purpose: 
+*  Constructor
+**************************************************************************
+*/
+CIccApplyXformMpe::CIccApplyXformMpe(CIccXformMpe *pXform) : CIccApplyXform(pXform)
+{
+}
+
+/**
+**************************************************************************
+* Name: CIccApplyXformMpe::~CIccApplyXformMpe
+* 
+* Purpose: 
+*  Destructor
+**************************************************************************
+*/
+CIccApplyXformMpe::~CIccApplyXformMpe()
+{
+}
+
+
+/**
+**************************************************************************
+* Name: CIccApplyCmm::CIccApplyCmm
+* 
+* Purpose: 
+*  Constructor
+*
+* Args:
+*  pCmm = ptr to CMM to apply against
+**************************************************************************
+*/
+CIccApplyCmm::CIccApplyCmm(CIccCmm *pCmm)
+{
+  m_pCmm = pCmm;
+  m_pPCS = m_pCmm->GetPCS();
+
+  m_Xforms = new CIccApplyXformList;
+  m_Xforms->clear();
+}
+
+/**
+**************************************************************************
+* Name: CIccApplyCmm::~CIccApplyCmm
+* 
+* Purpose: 
+*  Destructor
+**************************************************************************
+*/
+CIccApplyCmm::~CIccApplyCmm()
+{
+  if (m_Xforms) {
+    CIccApplyXformList::iterator i;
+
+    for (i=m_Xforms->begin(); i!=m_Xforms->end(); i++) {
+      if (i->ptr)
+        delete i->ptr;
+    }
+
+    delete m_Xforms;
+  }
+
+  if (m_pPCS)
+    delete m_pPCS;
+}
+
+
+/**
+**************************************************************************
+* Name: CIccApplyCmm::Apply
+* 
+* Purpose: 
+*  Does the actual application of the Xforms in the list.
+*  
+* Args:
+*  DstPixel = Destination pixel where the result is stored,
+*  SrcPixel = Source pixel which is to be applied.
+**************************************************************************
+*/
+icStatusCMM CIccApplyCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)
+{
+  icFloatNumber Pixel[16], *pDst;
+  const icFloatNumber *pSrc;
+  CIccApplyXformList::iterator i;
+  int j, n = m_Xforms->size();
+
+  if (!n)
+    return icCmmStatBadXform;
+
+  m_pPCS->Reset(m_pCmm->m_nSrcSpace);
+
+  pSrc = SrcPixel;
+  pDst = Pixel;
+
+  if (n>1) {
+    for (j=0, i=m_Xforms->begin(); j<n-1 && i!=m_Xforms->end(); i++, j++) {
+
+      i->ptr->Apply(pDst, m_pPCS->Check(pSrc, i->ptr->GetXform()));
+      pSrc = pDst;
+    }
+
+    i->ptr->Apply(DstPixel, m_pPCS->Check(pSrc, i->ptr->GetXform()));
+  }
+  else if (n==1) {
+    i = m_Xforms->begin();
+    i->ptr->Apply(DstPixel, m_pPCS->Check(SrcPixel, i->ptr->GetXform()));
+  }
+
+  m_pPCS->CheckLast(DstPixel, m_pCmm->m_nDestSpace);
+
+  return icCmmStatOk;
+}
+
+/**
+**************************************************************************
+* Name: CIccApplyCmm::Apply
+* 
+* Purpose: 
+*  Does the actual application of the Xforms in the list.
+*  
+* Args:
+*  DstPixel = Destination pixel where the result is stored,
+*  SrcPixel = Source pixel which is to be applied.
+**************************************************************************
+*/
+icStatusCMM CIccApplyCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel, icUInt32Number nPixels)
+{
+  icFloatNumber Pixel[16], *pDst;
+  const icFloatNumber *pSrc;
+  CIccApplyXformList::iterator i;
+  int j, n = m_Xforms->size();
+  icUInt32Number k;
+
+  if (!n)
+    return icCmmStatBadXform;
+
+  for (k=0; k<nPixels; k++) {
+    m_pPCS->Reset(m_pCmm->m_nSrcSpace);
+
+    pSrc = SrcPixel;
+    pDst = Pixel;
+
+    if (n>1) {
+      for (j=0, i=m_Xforms->begin(); j<n-1 && i!=m_Xforms->end(); i++, j++) {
+
+        i->ptr->Apply(pDst, m_pPCS->Check(pSrc, i->ptr->GetXform()));
+        pSrc = pDst;
+      }
+
+      i->ptr->Apply(DstPixel, m_pPCS->Check(pSrc, i->ptr->GetXform()));
+    }
+    else if (n==1) {
+      i = m_Xforms->begin();
+      i->ptr->Apply(DstPixel, m_pPCS->Check(SrcPixel, i->ptr->GetXform()));
+    }
+
+    m_pPCS->CheckLast(DstPixel, m_pCmm->m_nDestSpace);
+
+    DstPixel += m_pCmm->GetDestSamples();
+    SrcPixel += m_pCmm->GetSourceSamples();
+  }
+
+  return icCmmStatOk;
+}
+
+void CIccApplyCmm::AppendApplyXform(CIccApplyXform *pApplyXform)
+{
+  CIccApplyXformPtr ptr;
+  ptr.ptr = pApplyXform;
+
+  m_Xforms->push_back(ptr);
+}
 
 /**
  **************************************************************************
@@ -2898,7 +3203,7 @@ CIccCmm::CIccCmm(icColorSpaceSignature nSrcSpace /*=icSigUnknownData*/,
   m_Xforms = new CIccXformList;
   m_Xforms->clear();
 
-  m_pPCS = NULL;
+  m_pApply = NULL;
 }
 
 /**
@@ -2922,8 +3227,8 @@ CIccCmm::~CIccCmm()
     delete m_Xforms;
   }
 
-  if (m_pPCS)
-    delete m_pPCS;
+  if (m_pApply)
+    delete m_pApply;
 }
 
 /**
@@ -3174,19 +3479,21 @@ icStatusCMM CIccCmm::AddXform(CIccProfile &Profile,
   return stat;
 }
 
-
 /**
- **************************************************************************
- * Name: CIccCmm::Begin
- * 
- * Purpose: 
- *  Does the initialization of the Xforms before Apply() is called.
- *  Must be called before Apply().
- *
- **************************************************************************
- */
-icStatusCMM CIccCmm::Begin()
+**************************************************************************
+* Name: CIccCmm::GetNewApplyCmm
+* 
+* Purpose: 
+*  Does the initialization of the Xforms before Apply() is called.
+*  Must be called before Apply().
+*
+**************************************************************************
+*/
+icStatusCMM CIccCmm::Begin(bool bAllocApplyCmm/*=true*/)
 {
+  if (m_pApply)
+    return icCmmStatOk;
+
   if (m_nDestSpace==icSigUnknownData) {
     m_nDestSpace = m_nLastSpace;
   }
@@ -3194,74 +3501,100 @@ icStatusCMM CIccCmm::Begin()
     return icCmmStatBadSpaceLink;
   }
 
-  if (m_nDestSpace==icSigNamedData)
+  if (m_nSrcSpace==icSigNamedData || m_nDestSpace==icSigNamedData) {
     return icCmmStatBadSpaceLink;
+  }
 
-  CIccXformList::iterator i;
   icStatusCMM rv;
+  CIccXformList::iterator i;
 
   for (i=m_Xforms->begin(); i!=m_Xforms->end(); i++) {
     rv = i->ptr->Begin();
-    if (rv != icCmmStatOk)
+
+    if (rv!= icCmmStatOk) {
       return rv;
+    }
+  }
+
+  if (bAllocApplyCmm) {
+    m_pApply = GetNewApplyCmm(rv);
+  }
+  else
+    rv = icCmmStatOk;
+
+  return rv;
+}
+
+
+/**
+ **************************************************************************
+ * Name: CIccCmm::GetNewApplyCmm
+ * 
+ * Purpose: 
+ *  Allocates an CIccApplyCmm object that does the initialization of the Xforms
+ *  that provides an Apply() function.
+ *  Multiple CIccApplyCmm objects can be allocated and used in separate threads.
+ *
+ **************************************************************************
+ */
+CIccApplyCmm *CIccCmm::GetNewApplyCmm(icStatusCMM &status)
+{
+  CIccApplyCmm *pApply = new CIccApplyCmm(this);
+
+  if (!pApply) {
+    status = icCmmStatAllocErr;
+    return NULL;
+  }
+
+  CIccXformList::iterator i;
+  CIccApplyXform *pXform;
+
+  for (i=m_Xforms->begin(); i!=m_Xforms->end(); i++) {
+    pXform = i->ptr->GetNewApply(status);
+    if (!pXform || status != icCmmStatOk) {
+      delete pApply;
+      return NULL;
+    }
+    pApply->AppendApplyXform(pXform);
   }
 
   m_bValid = true;
 
-  if (!m_pPCS)
-    m_pPCS = GetPCS();
+  status = icCmmStatOk;
 
-  if (!m_pPCS)
-    return icCmmStatAllocErr;
-
-  return icCmmStatOk;
-
+  return pApply;
 }
 
+
 /**
- **************************************************************************
- * Name: CIccCmm::Apply
- * 
- * Purpose: 
- *  Does the actual application of the Xforms in the list.
- *  
- * Args:
- *  DstPixel = Destination pixel where the result is stored,
- *  SrcPixel = Source pixel which is to be applied.
- **************************************************************************
- */
+**************************************************************************
+* Name: CIccCmm::Apply
+* 
+* Purpose: 
+*  Uses the m_pApply object allocated during Begin to Apply the transformations
+*  associated with the CMM.
+*
+**************************************************************************
+*/
 icStatusCMM CIccCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)
 {
-  icFloatNumber Pixel[16], *pDst;
-  const icFloatNumber *pSrc;
-  CIccXformList::iterator i;
-  int j, n = m_Xforms->size();
+  return m_pApply->Apply(DstPixel, SrcPixel);
+}
 
-  if (!n)
-    return icCmmStatBadXform;
 
-  m_pPCS->Reset(m_nSrcSpace);
-
-  pSrc = SrcPixel;
-  pDst = Pixel;
-
-  if (n>1) {
-    for (j=0, i=m_Xforms->begin(); j<n-1 && i!=m_Xforms->end(); i++, j++) {
-          
-      i->ptr->Apply(pDst, m_pPCS->Check(pSrc, i->ptr));
-      pSrc = pDst;
-    }
-
-    i->ptr->Apply(DstPixel, m_pPCS->Check(pSrc, i->ptr));
-  }
-  else if (n==1) {
-    i = m_Xforms->begin();
-    i->ptr->Apply(DstPixel, m_pPCS->Check(SrcPixel, i->ptr));
-  }
-
-  m_pPCS->CheckLast(DstPixel, m_nDestSpace);
-
-  return icCmmStatOk;
+/**
+**************************************************************************
+* Name: CIccCmm::Apply
+* 
+* Purpose: 
+*  Uses the m_pApply object allocated during Begin to Apply the transformations
+*  associated with the CMM.
+*
+**************************************************************************
+*/
+icStatusCMM CIccCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel, icUInt32Number nPixels)
+{
+  return m_pApply->Apply(DstPixel, SrcPixel, nPixels);
 }
 
 
@@ -3936,6 +4269,610 @@ icColorSpaceSignature CIccCmm::GetLastXformDest()
 }
 
 /**
+**************************************************************************
+* Name: CIccApplyCmm::CIccApplyCmm
+* 
+* Purpose: 
+*  Constructor
+*
+* Args:
+*  pCmm = ptr to CMM to apply against
+**************************************************************************
+*/
+CIccApplyNamedColorCmm::CIccApplyNamedColorCmm(CIccNamedColorCmm *pCmm) : CIccApplyCmm(pCmm)
+{
+}
+
+
+/**
+**************************************************************************
+* Name: CIccApplyCmm::CIccApplyCmm
+* 
+* Purpose: 
+*  Destructor
+**************************************************************************
+*/
+CIccApplyNamedColorCmm::~CIccApplyNamedColorCmm()
+{
+}
+
+
+/**
+**************************************************************************
+* Name: CIccApplyNamedColorCmm::Apply
+* 
+* Purpose: 
+*  Does the actual application of the Xforms in the list.
+*  
+* Args:
+*  DstPixel = Destination pixel where the result is stored,
+*  SrcPixel = Source pixel which is to be applied.
+**************************************************************************
+*/
+icStatusCMM CIccApplyNamedColorCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)
+{
+  icFloatNumber Pixel[16], *pDst;
+  const icFloatNumber *pSrc;
+  CIccApplyXformList::iterator i;
+  int j, n = m_Xforms->size();
+  CIccApplyXform *pApply;
+  const CIccXform *pApplyXform;
+  CIccXformNamedColor *pXform;
+
+  if (!n)
+    return icCmmStatBadXform;
+
+  icChar NamedColor[256];
+  icStatusCMM rv;
+
+  m_pPCS->Reset(m_pCmm->GetSourceSpace());
+
+  pSrc = SrcPixel;
+  pDst = Pixel;
+
+  if (n>1) {
+    for (j=0, i=m_Xforms->begin(); j<n-1 && i!=m_Xforms->end(); i++, j++) {
+
+      pApply = i->ptr;
+      pApplyXform = pApply->GetXform();
+      if (pApplyXform->GetXformType()==icXformTypeNamedColor) {
+        pXform = (CIccXformNamedColor*)pApplyXform;
+
+        switch(pXform->GetInterface()) {
+        case icApplyPixel2Pixel:
+          pXform->Apply(pApply, pDst, m_pPCS->Check(pSrc, pXform));
+          break;
+
+        case icApplyPixel2Named:
+          pXform->Apply(pApply, NamedColor, m_pPCS->Check(pSrc, pXform));
+          break;
+
+        case icApplyNamed2Pixel:
+          if (j==0) {
+            return icCmmStatIncorrectApply;
+          }
+
+          rv = pXform->Apply(pApply, pDst, NamedColor);
+
+          if (rv) {
+            return rv;
+          }
+          break;
+
+        }
+      }
+      else {
+        pXform->Apply(pApply, pDst, m_pPCS->Check(pSrc, pXform));
+      }
+      pSrc = pDst;
+    }
+
+    pApply = i->ptr;
+    pApplyXform = pApply->GetXform();
+    if (pApplyXform->GetXformType()==icXformTypeNamedColor) {
+      pXform = (CIccXformNamedColor*)pApplyXform;
+
+      switch(pXform->GetInterface()) {
+      case icApplyPixel2Pixel:
+        pXform->Apply(pApply, DstPixel, m_pPCS->Check(pSrc, pXform));
+        break;
+
+      case icApplyPixel2Named:
+      default:
+        return icCmmStatIncorrectApply;
+        break;
+
+      case icApplyNamed2Pixel:
+        rv = pXform->Apply(pApply, DstPixel, NamedColor);
+        if (rv) {
+          return rv;
+        }
+        break;
+
+      }
+    }
+    else {
+      pApplyXform->Apply(pApply, DstPixel, m_pPCS->Check(pSrc, pApplyXform));
+    }
+
+  }
+  else if (n==1) {
+    i = m_Xforms->begin();
+
+    pApply = i->ptr;
+    pApplyXform = pApply->GetXform();
+    if (pApplyXform->GetXformType()==icXformTypeNamedColor) {
+      return icCmmStatIncorrectApply;
+    }
+
+    pApplyXform->Apply(pApply, DstPixel, m_pPCS->Check(pSrc, pApplyXform));
+  }
+
+  m_pPCS->CheckLast(DstPixel, m_pCmm->GetDestSpace());
+
+  return icCmmStatOk;
+}
+
+
+/**
+**************************************************************************
+* Name: CIccApplyNamedColorCmm::Apply
+* 
+* Purpose: 
+*  Does the actual application of the Xforms in the list.
+*  
+* Args:
+*  DstPixel = Destination pixel where the result is stored,
+*  SrcPixel = Source pixel which is to be applied.
+**************************************************************************
+*/
+icStatusCMM CIccApplyNamedColorCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel, icUInt32Number nPixels)
+{
+  icFloatNumber Pixel[16], *pDst;
+  const icFloatNumber *pSrc;
+  CIccApplyXformList::iterator i;
+  int j, n = m_Xforms->size();
+  CIccApplyXform *pApply;
+  const CIccXform *pApplyXform;
+  CIccXformNamedColor *pXform;
+  icUInt32Number k; 
+
+  if (!n)
+    return icCmmStatBadXform;
+
+  icChar NamedColor[256];
+  icStatusCMM rv;
+
+  for (k=0; k<nPixels; k++) {
+    m_pPCS->Reset(m_pCmm->GetSourceSpace());
+
+    pSrc = SrcPixel;
+    pDst = Pixel;
+
+    if (n>1) {
+      for (j=0, i=m_Xforms->begin(); j<n-1 && i!=m_Xforms->end(); i++, j++) {
+
+        pApply = i->ptr;
+        pApplyXform = pApply->GetXform();
+        if (pApplyXform->GetXformType()==icXformTypeNamedColor) {
+          pXform = (CIccXformNamedColor*)pApplyXform;
+
+          switch(pXform->GetInterface()) {
+          case icApplyPixel2Pixel:
+            pXform->Apply(pApply, pDst, m_pPCS->Check(pSrc, pXform));
+            break;
+
+          case icApplyPixel2Named:
+            pXform->Apply(pApply, NamedColor, m_pPCS->Check(pSrc, pXform));
+            break;
+
+          case icApplyNamed2Pixel:
+            if (j==0) {
+              return icCmmStatIncorrectApply;
+            }
+
+            rv = pXform->Apply(pApply, pDst, NamedColor);
+
+            if (rv) {
+              return rv;
+            }
+            break;
+
+          }
+        }
+        else {
+          pXform->Apply(pApply, pDst, m_pPCS->Check(pSrc, pXform));
+        }
+        pSrc = pDst;
+      }
+
+      pApply = i->ptr;
+      pApplyXform = pApply->GetXform();
+      if (pApplyXform->GetXformType()==icXformTypeNamedColor) {
+        pXform = (CIccXformNamedColor*)pApplyXform;
+
+        switch(pXform->GetInterface()) {
+        case icApplyPixel2Pixel:
+          pXform->Apply(pApply, DstPixel, m_pPCS->Check(pSrc, pXform));
+          break;
+
+        case icApplyPixel2Named:
+        default:
+          return icCmmStatIncorrectApply;
+          break;
+
+        case icApplyNamed2Pixel:
+          rv = pXform->Apply(pApply, DstPixel, NamedColor);
+          if (rv) {
+            return rv;
+          }
+          break;
+
+        }
+      }
+      else {
+        pApplyXform->Apply(pApply, DstPixel, m_pPCS->Check(pSrc, pApplyXform));
+      }
+
+    }
+    else if (n==1) {
+      i = m_Xforms->begin();
+
+      pApply = i->ptr;
+      pApplyXform = pApply->GetXform();
+      if (pApplyXform->GetXformType()==icXformTypeNamedColor) {
+        return icCmmStatIncorrectApply;
+      }
+
+      pApplyXform->Apply(pApply, DstPixel, m_pPCS->Check(pSrc, pApplyXform));
+    }
+
+    m_pPCS->CheckLast(DstPixel, m_pCmm->GetDestSpace());
+
+    SrcPixel += m_pCmm->GetSourceSamples();
+    DstPixel += m_pCmm->GetDestSamples();
+  }
+
+  return icCmmStatOk;
+}
+
+
+/**
+**************************************************************************
+* Name: CIccApplyNamedColorCmm::Apply
+* 
+* Purpose: 
+*  Does the actual application of the Xforms in the list.
+*  
+* Args:
+*  DstColorName = Destination string where the result is stored,
+*  SrcPixel = Source pixel which is to be applied.
+**************************************************************************
+*/
+icStatusCMM CIccApplyNamedColorCmm::Apply(icChar* DstColorName, const icFloatNumber *SrcPixel)
+{
+  icFloatNumber Pixel[16], *pDst;
+  const icFloatNumber *pSrc;
+  CIccApplyXformList::iterator i;
+  int j, n = m_Xforms->size();
+  CIccApplyXform *pApply;
+  const CIccXform *pApplyXform;
+  CIccXformNamedColor *pXform;
+
+  if (!n)
+    return icCmmStatBadXform;
+
+  icChar NamedColor[256];
+  icStatusCMM rv;
+
+  m_pPCS->Reset(m_pCmm->GetSourceSpace());
+
+  pSrc = SrcPixel;
+  pDst = Pixel;
+
+  if (n>1) {
+    for (j=0, i=m_Xforms->begin(); j<n-1 && i!=m_Xforms->end(); i++, j++) {
+
+      pApply = i->ptr;
+      pApplyXform = pApply->GetXform();
+      if (pApplyXform->GetXformType()==icXformTypeNamedColor) {
+        pXform = (CIccXformNamedColor*)pApplyXform;
+        switch(pXform->GetInterface()) {
+        case icApplyPixel2Pixel:
+          pXform->Apply(pApply, pDst, m_pPCS->Check(pSrc, pXform));
+          break;
+
+        case icApplyPixel2Named:
+          pXform->Apply(pApply, NamedColor, m_pPCS->Check(pSrc, pXform));
+          break;
+
+        case icApplyNamed2Pixel:
+          if (j==0) {
+            return icCmmStatIncorrectApply;
+          }
+          rv = pXform->Apply(pApply, pDst, NamedColor);
+          if (rv) {
+            return rv;
+          }
+          break;
+
+        }
+      }
+      else {
+        pApplyXform->Apply(pApply, pDst, m_pPCS->Check(pSrc, pApplyXform));
+      }
+      pSrc = pDst;
+    }
+
+    pApply = i->ptr;
+    pApplyXform = pApply->GetXform();
+    if (pApplyXform->GetXformType()==icXformTypeNamedColor) {
+      pXform = (CIccXformNamedColor*)pApplyXform;
+      switch(pXform->GetInterface()) {
+
+      case icApplyPixel2Named:
+        pXform->Apply(pApply, DstColorName, m_pPCS->Check(pSrc, pXform));
+        break;
+
+      case icApplyPixel2Pixel:
+      case icApplyNamed2Pixel:
+      default:
+        return icCmmStatIncorrectApply;
+        break;
+
+      }
+    }
+    else {
+      return icCmmStatIncorrectApply;
+    }
+
+  }
+  else if (n==1) {
+    i = m_Xforms->begin();
+    pApply = i->ptr;
+    pApplyXform = pApply->GetXform();
+    if (pApplyXform->GetXformType()!=icXformTypeNamedColor) {
+      return icCmmStatIncorrectApply;
+    }
+
+    pXform = (CIccXformNamedColor*)pApplyXform;
+    pXform->Apply(pApply, DstColorName, m_pPCS->Check(pSrc, pXform));
+  }
+
+  return icCmmStatOk;
+}
+
+
+/**
+**************************************************************************
+* Name: CIccApplyNamedColorCmm::Apply
+* 
+* Purpose: 
+*  Does the actual application of the Xforms in the list.
+*  
+* Args:
+*  DstPixel = Destination pixel where the result is stored,
+*  SrcColorName = Source color name which is to be searched.
+**************************************************************************
+*/
+icStatusCMM CIccApplyNamedColorCmm::Apply(icFloatNumber *DstPixel, const icChar *SrcColorName)
+{
+  icFloatNumber Pixel[16], *pDst;
+  const icFloatNumber *pSrc;
+  CIccApplyXformList::iterator i;
+  int j, n = m_Xforms->size();
+  CIccApplyXform *pApply;
+  const CIccXform *pApplyXform;
+  CIccXformNamedColor *pXform;
+
+  if (!n)
+    return icCmmStatBadXform;
+
+  icChar NamedColor[256];
+  icStatusCMM rv;
+
+  i=m_Xforms->begin();
+  pApply = i->ptr;
+  pApplyXform = pApply->GetXform();
+  if (pApplyXform->GetXformType()!=icXformTypeNamedColor)
+    return icCmmStatIncorrectApply;
+
+  pXform = (CIccXformNamedColor*)pApplyXform;  
+  m_pPCS->Reset(pXform->GetSrcSpace(), pXform->UseLegacyPCS());
+
+  pDst = Pixel;
+
+  if (n>1) {
+    rv = pXform->Apply(pApply, pDst, SrcColorName);
+    if (rv) {
+      return rv;
+    }
+
+    pSrc = pDst;
+
+    for (j=0, i++; j<n-2 && i!=m_Xforms->end(); i++, j++) {
+
+      pApply = i->ptr;
+      pApplyXform = pApply->GetXform();
+      if (pApplyXform->GetXformType()==icXformTypeNamedColor) {
+        CIccXformNamedColor *pXform = (CIccXformNamedColor*)pApplyXform;
+        switch(pXform->GetInterface()) {
+        case icApplyPixel2Pixel:
+          pXform->Apply(pApply, pDst, m_pPCS->Check(pSrc, pXform));
+          break;
+
+        case icApplyPixel2Named:
+          pXform->Apply(pApply, NamedColor, m_pPCS->Check(pSrc, pXform));
+          break;
+
+        case icApplyNamed2Pixel:
+          rv = pXform->Apply(pApply, pDst, NamedColor);
+          if (rv) {
+            return rv;
+          }
+          break;
+
+        }
+      }
+      else {
+        pApply = i->ptr;
+        pApplyXform = pApply->GetXform();
+        pApplyXform->Apply(pApply, pDst, m_pPCS->Check(pSrc, pApplyXform));
+      }
+      pSrc = pDst;
+    }
+
+    pApply = i->ptr;
+    pApplyXform = pApply->GetXform();
+    if (pApplyXform->GetXformType()==icXformTypeNamedColor) {
+      pXform = (CIccXformNamedColor*)pApplyXform;
+      switch(pXform->GetInterface()) {
+      case icApplyPixel2Pixel:
+        pXform->Apply(pApply, DstPixel, m_pPCS->Check(pSrc, pXform));
+        break;
+
+      case icApplyPixel2Named:
+      default:
+        return icCmmStatIncorrectApply;
+        break;
+
+      case icApplyNamed2Pixel:
+        rv = pXform->Apply(pApply, DstPixel, NamedColor);
+        if (rv) {
+          return rv;
+        }
+        break;
+
+      }
+    }
+    else {
+      pApplyXform->Apply(pApply, DstPixel, m_pPCS->Check(pSrc, pApplyXform));
+    }
+
+  }
+  else if (n==1) {
+    rv = pXform->Apply(pApply, DstPixel, SrcColorName);
+    if (rv) {
+      return rv;
+    }
+    m_pPCS->Check(DstPixel, pXform);
+  }
+
+  m_pPCS->CheckLast(DstPixel, m_pCmm->GetDestSpace());
+
+  return icCmmStatOk;
+}
+
+/**
+**************************************************************************
+* Name: CIccApplyNamedColorCmm::Apply
+* 
+* Purpose: 
+*  Does the actual application of the Xforms in the list.
+*  
+* Args:
+*  DstColorName = Destination string where the result is stored, 
+*  SrcColorName = Source color name which is to be searched.
+**************************************************************************
+*/
+icStatusCMM CIccApplyNamedColorCmm::Apply(icChar *DstColorName, const icChar *SrcColorName)
+{
+  icFloatNumber Pixel[16], *pDst;
+  const icFloatNumber *pSrc;
+  CIccApplyXformList::iterator i;
+  int j, n = m_Xforms->size();
+  icChar NamedColor[256];
+  icStatusCMM rv;
+  CIccApplyXform *pApply;
+  const CIccXform *pApplyXform;
+  CIccXformNamedColor *pXform;
+
+  if (!n)
+    return icCmmStatBadXform;
+
+  i=m_Xforms->begin();
+
+  pApply = i->ptr;
+  pApplyXform = pApply->GetXform();
+  if (pApplyXform->GetXformType()!=icXformTypeNamedColor)
+    return icCmmStatIncorrectApply;
+
+  pXform = (CIccXformNamedColor*)pApplyXform;
+
+  m_pPCS->Reset(pXform->GetSrcSpace(), pXform->UseLegacyPCS());
+
+  pDst = Pixel;
+
+  if (n>1) {
+    rv = pXform->Apply(pApply, pDst, SrcColorName);
+
+    if (rv) {
+      return rv;
+    }
+
+    pSrc = pDst;
+
+    for (j=0, i++; j<n-2 && i!=m_Xforms->end(); i++, j++) {
+
+      pApply = i->ptr;
+      pApplyXform = pApply->GetXform();
+      if (pApplyXform->GetXformType()==icXformTypeNamedColor) {
+        pXform = (CIccXformNamedColor*)pApplyXform;
+        switch(pXform->GetInterface()) {
+        case icApplyPixel2Pixel:
+          pXform->Apply(pApply, pDst, m_pPCS->Check(pSrc, pXform));
+          break;
+
+
+        case icApplyPixel2Named:
+          pXform->Apply(pApply, NamedColor, m_pPCS->Check(pSrc, pXform));
+          break;
+
+        case icApplyNamed2Pixel:
+          rv = pXform->Apply(pApply, pDst, NamedColor);
+          if (rv) {
+            return rv;
+          }
+          break;
+
+        }
+      }
+      else {
+        pApplyXform->Apply(pApply, pDst, m_pPCS->Check(pSrc, pXform));
+      }
+      pSrc = pDst;
+    }
+
+    pApply = i->ptr;
+    pApplyXform = pApply->GetXform();
+    if (pApplyXform->GetXformType()==icXformTypeNamedColor) {
+      pXform = (CIccXformNamedColor*)pApplyXform;
+      switch(pXform->GetInterface()) {
+      case icApplyPixel2Named:
+        pXform->Apply(pApply, DstColorName, m_pPCS->Check(pSrc, pXform));
+        break;
+
+      case icApplyPixel2Pixel:
+      case icApplyNamed2Pixel:
+      default:
+        return icCmmStatIncorrectApply;
+        break;
+
+      }
+    }
+    else {
+      return icCmmStatIncorrectApply;
+    }
+
+  }
+  else if (n==1) {
+    return icCmmStatIncorrectApply;
+  }
+
+  return icCmmStatOk;
+}
+
+/**
  **************************************************************************
  * Name: CIccNamedColorCmm::CIccNamedColorCmm
  * 
@@ -4179,10 +5116,8 @@ icStatusCMM CIccNamedColorCmm::AddXform(CIccProfile *pProfile,
  *
  **************************************************************************
  */
-icStatusCMM CIccNamedColorCmm::Begin()
+ icStatusCMM CIccNamedColorCmm::Begin(bool bAllocNewApply/* =true */)
 {
-  icStatusCMM rv;
-
   if (m_nDestSpace==icSigUnknownData) {
     m_nDestSpace = m_nLastSpace;
   }
@@ -4207,434 +5142,109 @@ icStatusCMM CIccNamedColorCmm::Begin()
     }
   }
 
+  icStatusCMM rv;
   CIccXformList::iterator i;
 
   for (i=m_Xforms->begin(); i!=m_Xforms->end(); i++) {
     rv = i->ptr->Begin();
-    if (rv != icCmmStatOk)
+
+    if (rv!= icCmmStatOk) {
       return rv;
+    }
   }
 
-  if (!m_pPCS)
-    m_pPCS = GetPCS();
+  if (bAllocNewApply) {
+    m_pApply = GetNewApplyCmm(rv);
+  }
+  else
+    rv = icCmmStatOk;
 
-  if (!m_pPCS)
-    return icCmmStatAllocErr;
- 
+  return rv;
+}
+
+ /**
+ **************************************************************************
+ * Name: CIccNamedColorCmm::GetNewApply
+ * 
+ * Purpose: 
+ *  Allocates a CIccApplyCmm object that allows one to call apply from
+ *  multiple threads.
+ *
+ **************************************************************************
+ */
+ CIccApplyCmm *CIccNamedColorCmm::GetNewApply(icStatusCMM &status)
+ {
+  CIccApplyCmm *pApply = new CIccApplyNamedColorCmm(this);
+
+  CIccXformList::iterator i;
+
+  for (i=m_Xforms->begin(); i!=m_Xforms->end(); i++) {
+    CIccApplyXform *pXform = i->ptr->GetNewApply(status);
+    if (status != icCmmStatOk || !pXform) {
+      delete pApply;
+      return NULL;
+    }
+    pApply->AppendApplyXform(pXform);
+  }
+
   m_bValid = true;
 
-  return icCmmStatOk;
-}
-
-/**
- **************************************************************************
- * Name: CIccNamedColorCmm::Apply
- * 
- * Purpose: 
- *  Does the actual application of the Xforms in the list.
- *  
- * Args:
- *  DstPixel = Destination pixel where the result is stored,
- *  SrcPixel = Source pixel which is to be applied.
- **************************************************************************
- */
-icStatusCMM CIccNamedColorCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)
-{
-  icFloatNumber Pixel[16], *pDst;
-  const icFloatNumber *pSrc;
-  CIccXformList::iterator i;
-  int j, n = m_Xforms->size();
-
-  if (!n)
-    return icCmmStatBadXform;
-  
-  icChar NamedColor[256];
-  icStatusCMM rv;
-
-  m_pPCS->Reset(m_nSrcSpace);
-
-  pSrc = SrcPixel;
-  pDst = Pixel;
-
-  if (n>1) {
-    for (j=0, i=m_Xforms->begin(); j<n-1 && i!=m_Xforms->end(); i++, j++) {
-
-      if (i->ptr->GetXformType()==icXformTypeNamedColor) {
-        CIccXformNamedColor *pXform = (CIccXformNamedColor*)i->ptr;
-        switch(pXform->GetInterface()) {
-        case icApplyPixel2Pixel:
-          pXform->Apply(pDst, m_pPCS->Check(pSrc, pXform));
-          break;
-
-        case icApplyPixel2Named:
-          pXform->Apply(NamedColor, m_pPCS->Check(pSrc, pXform));
-          break;
-        
-        case icApplyNamed2Pixel:
-          if (j==0) {
-            return icCmmStatIncorrectApply;
-          }
-
-          rv = pXform->Apply(pDst, NamedColor);
-
-          if (rv) {
-            return rv;
-          }
-          break;
-
-        }
-      }
-      else {
-        i->ptr->Apply(pDst, m_pPCS->Check(pSrc, i->ptr));
-      }
-      pSrc = pDst;
-    }
-
-    if (i->ptr->GetXformType()==icXformTypeNamedColor) {
-      CIccXformNamedColor *pXform = (CIccXformNamedColor*)i->ptr;
-      switch(pXform->GetInterface()) {
-      case icApplyPixel2Pixel:
-        pXform->Apply(DstPixel, m_pPCS->Check(pSrc, pXform));
-        break;
-
-      case icApplyPixel2Named:
-      default:
-        return icCmmStatIncorrectApply;
-        break;
-      
-      case icApplyNamed2Pixel:
-        rv = pXform->Apply(DstPixel, NamedColor);
-        if (rv) {
-          return rv;
-        }
-        break;
-
-      }
-    }
-    else {
-      i->ptr->Apply(DstPixel, m_pPCS->Check(pSrc, i->ptr));
-    }
-
-  }
-  else if (n==1) {
-    i = m_Xforms->begin();
-    
-    if (i->ptr->GetXformType()==icXformTypeNamedColor) {
-      return icCmmStatIncorrectApply;
-    }
-
-    i->ptr->Apply(DstPixel, m_pPCS->Check(pSrc, i->ptr));
-  }
-
-  m_pPCS->CheckLast(DstPixel, m_nDestSpace);
-
-  return icCmmStatOk;
-}
-
-/**
- **************************************************************************
- * Name: CIccNamedColorCmm::Apply
- * 
- * Purpose: 
- *  Does the actual application of the Xforms in the list.
- *  
- * Args:
- *  DstColorName = Destination string where the result is stored,
- *  SrcPixel = Source pixel which is to be applied.
- **************************************************************************
- */
-icStatusCMM CIccNamedColorCmm::Apply(icChar* DstColorName, const icFloatNumber *SrcPixel)
-{
-  icFloatNumber Pixel[16], *pDst;
-  const icFloatNumber *pSrc;
-  CIccXformList::iterator i;
-  int j, n = m_Xforms->size();
-
-  if (!n)
-    return icCmmStatBadXform;
-  
-  icChar NamedColor[256];
-  icStatusCMM rv;
-
-  m_pPCS->Reset(m_nSrcSpace);
-
-  pSrc = SrcPixel;
-  pDst = Pixel;
-
-  if (n>1) {
-    for (j=0, i=m_Xforms->begin(); j<n-1 && i!=m_Xforms->end(); i++, j++) {
-
-      if (i->ptr->GetXformType()==icXformTypeNamedColor) {
-        CIccXformNamedColor *pXform = (CIccXformNamedColor*)i->ptr;
-        switch(pXform->GetInterface()) {
-        case icApplyPixel2Pixel:
-          pXform->Apply(pDst, m_pPCS->Check(pSrc, pXform));
-          break;
-
-        case icApplyPixel2Named:
-          pXform->Apply(NamedColor, m_pPCS->Check(pSrc, pXform));
-          break;
-        
-        case icApplyNamed2Pixel:
-          if (j==0) {
-            return icCmmStatIncorrectApply;
-          }
-          rv = pXform->Apply(pDst, NamedColor);
-          if (rv) {
-            return rv;
-          }
-          break;
-
-        }
-      }
-      else {
-        i->ptr->Apply(pDst, m_pPCS->Check(pSrc, i->ptr));
-      }
-      pSrc = pDst;
-    }
-
-    if (i->ptr->GetXformType()==icXformTypeNamedColor) {
-      CIccXformNamedColor *pXform = (CIccXformNamedColor*)i->ptr;
-      switch(pXform->GetInterface()) {
-
-      case icApplyPixel2Named:
-        pXform->Apply(DstColorName, m_pPCS->Check(pSrc, pXform));
-        break;
-      
-      case icApplyPixel2Pixel:
-      case icApplyNamed2Pixel:
-      default:
-        return icCmmStatIncorrectApply;
-        break;
-
-      }
-    }
-    else {
-      return icCmmStatIncorrectApply;
-    }
-
-  }
-  else if (n==1) {
-    i = m_Xforms->begin();
-    if (i->ptr->GetXformType()!=icXformTypeNamedColor) {
-      return icCmmStatIncorrectApply;
-    }
-
-    CIccXformNamedColor *pXform = (CIccXformNamedColor*)i->ptr;
-    pXform->Apply(DstColorName, m_pPCS->Check(pSrc, pXform));
-  }
-
-  return icCmmStatOk;
+  status = icCmmStatOk;
+  return pApply;
 }
 
 
-/**
+ /**
  **************************************************************************
- * Name: CIccNamedColorCmm::Apply
- * 
- * Purpose: 
- *  Does the actual application of the Xforms in the list.
- *  
- * Args:
- *  DstPixel = Destination pixel where the result is stored,
- *  SrcColorName = Source color name which is to be searched.
- **************************************************************************
- */
-icStatusCMM CIccNamedColorCmm::Apply(icFloatNumber *DstPixel, const icChar *SrcColorName)
-{
-  icFloatNumber Pixel[16], *pDst;
-  const icFloatNumber *pSrc;
-  CIccXformList::iterator i;
-  int j, n = m_Xforms->size();
-
-  if (!n)
-    return icCmmStatBadXform;
-
-  icChar NamedColor[256];
-  icStatusCMM rv;
-
-  i=m_Xforms->begin();
-  if (i->ptr->GetXformType()!=icXformTypeNamedColor)
-    return icCmmStatIncorrectApply;
-
-  CIccXformNamedColor *pXform = (CIccXformNamedColor*)i->ptr;  
-  m_pPCS->Reset(pXform->GetSrcSpace(), pXform->UseLegacyPCS());
-
-  pDst = Pixel;
-
-  if (n>1) {
-    rv = pXform->Apply(pDst, SrcColorName);
-    if (rv) {
-      return rv;
-    }
-
-    pSrc = pDst;
-
-    for (j=0, i++; j<n-2 && i!=m_Xforms->end(); i++, j++) {
-
-      if (i->ptr->GetXformType()==icXformTypeNamedColor) {
-        CIccXformNamedColor *pXform = (CIccXformNamedColor*)i->ptr;
-        switch(pXform->GetInterface()) {
-        case icApplyPixel2Pixel:
-          pXform->Apply(pDst, m_pPCS->Check(pSrc, pXform));
-          break;
-
-        case icApplyPixel2Named:
-          pXform->Apply(NamedColor, m_pPCS->Check(pSrc, pXform));
-          break;
-        
-        case icApplyNamed2Pixel:
-          rv = pXform->Apply(pDst, NamedColor);
-          if (rv) {
-            return rv;
-          }
-          break;
-
-        }
-      }
-      else {
-        i->ptr->Apply(pDst, m_pPCS->Check(pSrc, i->ptr));
-      }
-      pSrc = pDst;
-    }
-
-    if (i->ptr->GetXformType()==icXformTypeNamedColor) {
-      CIccXformNamedColor *pXform = (CIccXformNamedColor*)i->ptr;
-      switch(pXform->GetInterface()) {
-      case icApplyPixel2Pixel:
-        pXform->Apply(DstPixel, m_pPCS->Check(pSrc, pXform));
-        break;
-
-      case icApplyPixel2Named:
-      default:
-        return icCmmStatIncorrectApply;
-        break;
-      
-      case icApplyNamed2Pixel:
-        rv = pXform->Apply(DstPixel, NamedColor);
-        if (rv) {
-          return rv;
-        }
-        break;
-
-      }
-    }
-    else {
-      i->ptr->Apply(DstPixel, m_pPCS->Check(pSrc, i->ptr));
-    }
-
-  }
-  else if (n==1) {
-    rv = pXform->Apply(DstPixel, SrcColorName);
-    if (rv) {
-      return rv;
-    }
-    m_pPCS->Check(DstPixel, pXform);
-  }
-
-  m_pPCS->CheckLast(DstPixel, m_nDestSpace);
-
-  return icCmmStatOk;
-}
-
-/**
- **************************************************************************
- * Name: CIccNamedColorCmm::Apply
+ * Name: CIccApplyNamedColorCmm::Apply
  * 
  * Purpose: 
  *  Does the actual application of the Xforms in the list.
  *  
  * Args:
  *  DstColorName = Destination string where the result is stored, 
- *  SrcColorName = Source color name which is to be searched.
+ *  SrcPoxel = Source pixel
  **************************************************************************
  */
-icStatusCMM CIccNamedColorCmm::Apply(icChar *DstColorName, const icChar *SrcColorName)
+icStatusCMM CIccNamedColorCmm::Apply(icChar* DstColorName, const icFloatNumber *SrcPixel)
 {
-  icFloatNumber Pixel[16], *pDst;
-  const icFloatNumber *pSrc;
-  CIccXformList::iterator i;
-  int j, n = m_Xforms->size();
-  icChar NamedColor[256];
-  icStatusCMM rv;
-
-  if (!n)
-    return icCmmStatBadXform;
-
-  i=m_Xforms->begin();
-
-  if (i->ptr->GetXformType()!=icXformTypeNamedColor)
-    return icCmmStatIncorrectApply;
-
-  CIccXformNamedColor *pXform = (CIccXformNamedColor*)i->ptr;
-
-  m_pPCS->Reset(pXform->GetSrcSpace(), pXform->UseLegacyPCS());
-
-  pDst = Pixel;
-
-  if (n>1) {
-    rv = pXform->Apply(pDst, SrcColorName);
-
-    if (rv) {
-      return rv;
-    }
-
-    pSrc = pDst;
-
-    for (j=0, i++; j<n-2 && i!=m_Xforms->end(); i++, j++) {
-
-      if (i->ptr->GetXformType()==icXformTypeNamedColor) {
-        pXform = (CIccXformNamedColor*)i->ptr;
-        switch(pXform->GetInterface()) {
-        case icApplyPixel2Pixel:
-          pXform->Apply(pDst, m_pPCS->Check(pSrc, pXform));
-          break;
+  return ((CIccApplyNamedColorCmm*)m_pApply)->Apply(DstColorName, SrcPixel);
+}
 
 
-        case icApplyPixel2Named:
-          pXform->Apply(NamedColor, m_pPCS->Check(pSrc, pXform));
-          break;
-        
-        case icApplyNamed2Pixel:
-          rv = pXform->Apply(pDst, NamedColor);
-          if (rv) {
-            return rv;
-          }
-          break;
+/**
+**************************************************************************
+* Name: CIccApplyNamedColorCmm::Apply
+* 
+* Purpose: 
+*  Does the actual application of the Xforms in the list.
+*  
+* Args:
+*  DestPixel = Destination pixel where the result is stored, 
+*  SrcColorName = Source color name which is to be searched.
+**************************************************************************
+*/
+icStatusCMM CIccNamedColorCmm::Apply(icFloatNumber *DstPixel, const icChar *SrcColorName)
+{
+  return ((CIccApplyNamedColorCmm*)m_pApply)->Apply(DstPixel, SrcColorName);
+}
 
-        }
-      }
-      else {
-        i->ptr->Apply(pDst, m_pPCS->Check(pSrc, i->ptr));
-      }
-      pSrc = pDst;
-    }
 
-    if (i->ptr->GetXformType()==icXformTypeNamedColor) {
-      pXform = (CIccXformNamedColor*)i->ptr;
-      switch(pXform->GetInterface()) {
-      case icApplyPixel2Named:
-        pXform->Apply(DstColorName, m_pPCS->Check(pSrc, i->ptr));
-        break;
-      
-      case icApplyPixel2Pixel:
-      case icApplyNamed2Pixel:
-      default:
-        return icCmmStatIncorrectApply;
-        break;
-
-      }
-    }
-    else {
-      return icCmmStatIncorrectApply;
-    }
-
-  }
-  else if (n==1) {
-    return icCmmStatIncorrectApply;
-  }
-
-  return icCmmStatOk;
+/**
+**************************************************************************
+* Name: CIccApplyNamedColorCmm::Apply
+* 
+* Purpose: 
+*  Does the actual application of the Xforms in the list.
+*  
+* Args:
+*  DstColorName = Destination string where the result is stored, 
+*  SrcColorName = Source color name which is to be searched.
+**************************************************************************
+*/
+icStatusCMM CIccNamedColorCmm::Apply(icChar* DstColorName, const icChar *SrcColorName)
+{
+  return ((CIccApplyNamedColorCmm*)m_pApply)->Apply(DstColorName, SrcColorName);
 }
 
 
@@ -4701,12 +5311,6 @@ CIccMruCmm::~CIccMruCmm()
 {
    if (m_pCmm)
      delete m_pCmm;
-
-   if (m_cache)
-     delete [] m_cache;
-
-   if (m_pixelData)
-     free(m_pixelData);
 }
 
 
@@ -4740,17 +5344,67 @@ CIccMruCmm* CIccMruCmm::Attach(CIccCmm *pCmm, icUInt8Number nCacheSize/* =4 */)
 
   CIccMruCmm *rv = new CIccMruCmm();
 
-  if (!rv->Init(pCmm, nCacheSize)) {
+  rv->m_pCmm = pCmm;
+  rv->m_nCacheSize = nCacheSize;
+
+  if (rv->Begin()!=icCmmStatOk) {
     delete rv;
+    return NULL;
+  }
+
+  rv->m_nSrcSpace = pCmm->GetSourceSpace();
+  rv->m_nDestSpace = pCmm->GetDestSpace();
+
+  rv->m_nLastIntent = pCmm->GetLastIntent();
+
+  return rv;
+}
+
+CIccApplyCmm *CIccMruCmm::GetNewApply(icStatusCMM &status)
+{
+  CIccApplyMruCmm *rv = new CIccApplyMruCmm(this);
+
+  if (!rv) {
+    status = icCmmStatAllocErr;
+    return NULL;
+  }
+
+  if (!rv->Init(m_pCmm, m_nCacheSize)) {
+    delete rv;
+    status = icCmmStatBad;
     return NULL;
   }
 
   return rv;
 }
 
+
+CIccApplyMruCmm::CIccApplyMruCmm(CIccMruCmm *pCmm) : CIccApplyCmm(pCmm)
+{
+  m_cache = NULL;
+
+  m_pixelData = NULL;
+}
+
 /**
 ****************************************************************************
-* Name: CIccMruCmm::Init
+* Name: CIccApplyMruCmm::~CIccApplyMruCmm
+* 
+* Purpose: destructor
+*****************************************************************************
+*/
+CIccApplyMruCmm::~CIccApplyMruCmm()
+{
+  if (m_cache)
+    delete [] m_cache;
+
+  if (m_pixelData)
+    free(m_pixelData);
+}
+
+/**
+****************************************************************************
+* Name: CIccApplyMruCmm::Init
 * 
 * Purpose: Initialize the object and set up the cache
 * 
@@ -4762,22 +5416,15 @@ CIccMruCmm* CIccMruCmm::Attach(CIccCmm *pCmm, icUInt8Number nCacheSize/* =4 */)
 *  true if successful
 *****************************************************************************
 */
-bool CIccMruCmm::Init(CIccCmm *pCmm, icUInt8Number nCacheSize)
+bool CIccApplyMruCmm::Init(CIccCmm *pCachedCmm, icUInt16Number nCacheSize)
 {
-  m_pCmm = pCmm;
+  m_pCachedCmm = pCachedCmm;
 
-  m_bValid = true;
-
-  m_nSrcSpace = pCmm->GetSourceSpace();
-  m_nDestSpace = pCmm->GetDestSpace();
-
-  m_nLastIntent = pCmm->GetLastIntent();
-
-  m_nSrcSamples = GetSourceSamples();
+  m_nSrcSamples = m_pCmm->GetSourceSamples();
   m_nSrcSize = m_nSrcSamples * sizeof(icFloatNumber);
-  m_nDstSize = GetDestSamples() * sizeof(icFloatNumber);
+  m_nDstSize = m_pCmm->GetDestSamples() * sizeof(icFloatNumber);
 
-  m_nTotalSamples = m_nSrcSamples + GetDestSamples();
+  m_nTotalSamples = m_nSrcSamples + m_pCmm->GetDestSamples();
 
   m_nNumPixel = 0;
   m_nCacheSize = nCacheSize;
@@ -4810,7 +5457,7 @@ bool CIccMruCmm::Init(CIccCmm *pCmm, icUInt8Number nCacheSize)
 *  icCmmStatOk if successful
 *****************************************************************************
 */
-icStatusCMM CIccMruCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)
+icStatusCMM CIccApplyMruCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel)
 {
   CIccMruPixel *ptr, *prev=NULL, *last=NULL;
   int i;
@@ -4851,9 +5498,78 @@ icStatusCMM CIccMruCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcP
 
   memcpy(pixel, SrcPixel, m_nSrcSize);
 
-  m_pCmm->Apply(dest, pixel);
+  m_pCachedCmm->Apply(dest, pixel);
 
   memcpy(DstPixel, dest, m_nDstSize);
+
+  return icCmmStatOk;
+}
+
+/**
+****************************************************************************
+* Name: CIccMruCmm::Apply
+* 
+* Purpose: Apply a transformation to a pixel.
+* 
+* Args:
+*  DstPixel - Location to store pixel results
+*  SrcPixel - Location to get pixel values from
+*  nPixels - number of pixels to convert
+*
+* Return:
+*  icCmmStatOk if successful
+*****************************************************************************
+*/
+icStatusCMM CIccApplyMruCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel, icUInt32Number nPixels)
+{
+  CIccMruPixel *ptr, *prev=NULL, *last=NULL;
+  int i;
+  icFloatNumber *pixel;
+  icUInt32Number k;
+
+  for (k=0; k<nPixels;) {
+    for (ptr = m_pFirst, i=0; ptr; ptr=ptr->pNext, i++) {
+      if (!memcmp(SrcPixel, ptr->pPixelData, m_nSrcSize)) {
+        memcpy(DstPixel, &ptr->pPixelData[m_nSrcSamples], m_nDstSize);
+        goto next_k;
+      }
+      prev = last;
+      last = ptr;
+    }
+
+    //If we get here SrcPixel is not in the cache
+    if (i<m_nCacheSize) {
+      pixel = &m_pixelData[i*m_nTotalSamples];
+
+      ptr = &m_cache[i];
+      ptr->pPixelData = pixel;
+
+      if (!last) {
+        m_pFirst = ptr;
+      }
+      else {
+
+        last->pNext =  ptr;
+      }
+    }
+    else {  //Reuse oldest value and put it at the front of the list
+      prev->pNext = NULL;
+      last->pNext = m_pFirst;
+
+      m_pFirst = last;
+      pixel = last->pPixelData;
+    }
+    icFloatNumber *dest = &pixel[m_nSrcSamples];
+
+    memcpy(pixel, SrcPixel, m_nSrcSize);
+
+    m_pCachedCmm->Apply(dest, pixel);
+
+    memcpy(DstPixel, dest, m_nDstSize);
+
+next_k:
+    k++;
+  }
 
   return icCmmStatOk;
 }

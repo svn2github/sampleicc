@@ -105,7 +105,8 @@ public:
   virtual bool Write(CIccIO *pIO);
 
   virtual bool Begin(icElemInterp nInterp, CIccTagMultiProcessElement *pMPE);
-  virtual void Apply(icFloatNumber *pDestPixel, const icFloatNumber *pSrcPixel);
+  virtual void Apply(CIccApplyMpe *pApply, icFloatNumber *dstPixel, const icFloatNumber *srcPixel) const;
+
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccTagMultiProcessElement* pMPE=NULL) const;
 
   virtual bool IsAcs() { return true; }

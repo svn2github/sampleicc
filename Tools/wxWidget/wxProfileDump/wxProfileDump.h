@@ -90,44 +90,53 @@ public:
     void OnUpdateRefresh(wxUpdateUIEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnClose(wxCloseEvent& event);
-    void OnValidate(wxCommandEvent& event);
-    void OnTagClicked(wxListEvent& event);
+		void OnValidate(wxCommandEvent& event);
+    void OnRoundTrip(wxCommandEvent& event);
+		void OnTagClicked(wxListEvent& event);
 
     void SetFileMenu(wxMenu *menu);
 
 protected:
     wxMenu *m_fileMenu;
 
-    CIccProfile *m_pIcc;
-    wxString m_profilePath;
+		CIccProfile *m_pIcc;
+		wxString m_profilePath;
 
-    wxPanel *m_panel;
-    wxListCtrl *m_tagsCtrl;
+		wxPanel *m_panel;
+		wxListCtrl *m_tagsCtrl;
 
-    wxStaticText *m_textAttribute;
-    wxStaticText *m_textCMM;
-    wxStaticText *m_textColorSpace;
-    wxStaticText *m_textCreationDate;
-    wxStaticText *m_textCreator;
-    wxStaticText *m_textFlags;
-    wxStaticText *m_textIlluminant;
-    wxStaticText *m_textPCS;
-    wxStaticText *m_textPlatform;
-    wxStaticText *m_textProfileID;
-    wxStaticText *m_textRenderingIntent;
-    wxStaticText *m_textSize;
-    wxStaticText *m_textType;
-    wxStaticText *m_textVersion;
+		wxStaticText *m_textAttribute;
+		wxStaticText *m_textCMM;
+		wxStaticText *m_textColorSpace;
+		wxStaticText *m_textCreationDate;
+		wxStaticText *m_textCreator;
+		wxStaticText *m_textFlags;
+		wxStaticText *m_textIlluminant;
+		wxStaticText *m_textPCS;
+		wxStaticText *m_textPlatform;
+		wxStaticText *m_textProfileID;
+		wxStaticText *m_textRenderingIntent;
+		wxStaticText *m_textSize;
+		wxStaticText *m_textType;
+		wxStaticText *m_textVersion;
 
-    wxSizer *CreateSizerWithText(const wxString &labelText, wxStaticText **ppText);
+		wxSizer *CreateSizerWithText(const wxString &labelText, wxStaticText **ppText);
 
     DECLARE_EVENT_TABLE()
 };
 
-class MyValidationDialog : public wxDialog
+class MyDialog : public wxDialog
 {
 public:
-  MyValidationDialog(wxWindow *pParent, const wxString& title, wxString &profilePath);
+	MyDialog(wxWindow *pParent, const wxString& title, wxString &profilePath);
+
+	wxString m_profilePath;
+};
+
+class MyRoundTripDialog : public wxDialog
+{
+public:
+  MyRoundTripDialog(wxWindow *pParent, const wxString& title, wxString &profilePath, CIccProfile *pIcc);
 
   wxString m_profilePath;
 };
@@ -135,13 +144,13 @@ public:
 class MyTagDialog : public wxDialog
 {
 public:
-  MyTagDialog(wxWindow *pParent, CIccProfile *pIcc /*=NULL*/, icTagSignature sig/*=icMaxEnumTag*/, CIccTag *pTag /*=NULL*/);
+	MyTagDialog(wxWindow *pParent, CIccProfile *pIcc /*=NULL*/, icTagSignature sig/*=icMaxEnumTag*/, CIccTag *pTag /*=NULL*/);
 
-  CIccProfile *m_pIcc;
-  icTagSignature m_sigTag;
-  CIccTag *m_pTag;
+	CIccProfile *m_pIcc;
+	icTagSignature m_sigTag;
+	CIccTag *m_pTag;
 
-  wxFont m_FixedFont;
+	wxFont m_FixedFont;
 
 };
 // menu items ids

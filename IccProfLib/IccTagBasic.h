@@ -389,7 +389,7 @@ public:
   virtual icTagTypeSignature GetType() { return icSigNamedColor2Type; }
   virtual const icChar *GetClassName() { return "CIccTagNamedColor2"; }
 
-  virtual bool UseLegacyPCS() { return true; } //Treat Lab Encoding differently?
+  virtual bool UseLegacyPCS() const { return true; } //Treat Lab Encoding differently?
 
   virtual void Describe(std::string &sDescription);
 
@@ -407,17 +407,22 @@ public:
 
   //The following Find functions return the zero based index of the color
   //or -1 to indicate that the color was not found.
-  icInt32Number FindColor(const icChar *szColor);
-  icInt32Number FindRootColor(const icChar *szRootColor);
+  icInt32Number FindColor(const icChar *szColor) const;
+  icInt32Number FindRootColor(const icChar *szRootColor) const;
+  icInt32Number FindDeviceColor(icFloatNumber *pDevColor) const;
   icInt32Number FindPCSColor(icFloatNumber *pPCS, icFloatNumber dMinDE=1000.0);
-  icInt32Number FindDeviceColor(icFloatNumber *pDevColor);
+
+  bool InitFindCachedPCSColor();
+  //FindPCSColor returns the zero based index of the color or -1 to indicate that the color was not found.
+  //InitFindPCSColor must be called before FindPCSColor
+  icInt32Number FindCachedPCSColor(icFloatNumber *pPCS, icFloatNumber dMinDE=1000.0) const;
 
   ///Call ResetPCSCache() if entry values change between calls to FindPCSColor()
   void ResetPCSCache();
 
-  bool GetColorName(std::string &sColorName, icInt32Number index);
-  SIccNamedColorEntry &operator[](icUInt32Number index) {return m_NamedColor[index];}
-  SIccNamedColorEntry *GetEntry(icUInt32Number index) {return &m_NamedColor[index];}
+  bool GetColorName(std::string &sColorName, icInt32Number index) const;
+  SIccNamedColorEntry &operator[](icUInt32Number index) const {return *(SIccNamedColorEntry*)((icUInt8Number*)m_NamedColor + index * m_nColorEntrySize);}
+  SIccNamedColorEntry *GetEntry(icUInt32Number index) const {return (SIccNamedColorEntry*)((icUInt8Number*)m_NamedColor + index * m_nColorEntrySize);}
 
   icUInt32Number GetSize() const { return m_nSize; }
   icUInt32Number GetDeviceCoords() const {return m_nDeviceCoords;}
@@ -427,11 +432,11 @@ public:
   icColorSpaceSignature GetPCS() const {return m_csPCS;}
   icColorSpaceSignature GetDeviceSpace() const {return m_csDevice;}
 
-  icFloatNumber NegClip(icFloatNumber v);
-  icFloatNumber UnitClip(icFloatNumber v);
+  icFloatNumber NegClip(icFloatNumber v) const;
+  icFloatNumber UnitClip(icFloatNumber v) const;
 
-  void Lab2ToLab4(icFloatNumber *Dst, const icFloatNumber *Src);
-  void Lab4ToLab2(icFloatNumber *Dst, const icFloatNumber *Src);
+  void Lab2ToLab4(icFloatNumber *Dst, const icFloatNumber *Src) const;
+  void Lab4ToLab2(icFloatNumber *Dst, const icFloatNumber *Src) const;
 
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL) const;
 
@@ -477,7 +482,7 @@ public:
   virtual bool Read(icUInt32Number size, CIccIO *pIO);
   virtual bool Write(CIccIO *pIO);
 
-  icXYZNumber &operator[](icUInt32Number index) {return m_XYZ[index];}
+  icXYZNumber &operator[](icUInt32Number index) const {return m_XYZ[index];}
   icXYZNumber *GetXYZ(icUInt32Number index) {return &m_XYZ[index];}
   icUInt32Number GetSize() const { return m_nSize; }
   void SetSize(icUInt32Number nSize, bool bZeroNew=true);
@@ -1084,6 +1089,9 @@ class ICCPROFLIB_API CIccResponseCurveStruct
 {
   friend class ICCPROFLIB_API CIccTagResponseCurveSet16;
 public: //member functions
+  CIccResponseCurveStruct(icMeasurementUnitSig sig, icUInt16Number nChannels=0);
+  CIccResponseCurveStruct(icUInt16Number nChannels=0);
+
   CIccResponseCurveStruct(const CIccResponseCurveStruct& IRCS);
   CIccResponseCurveStruct &operator=(const CIccResponseCurveStruct& RespCurveStruct);
   virtual ~CIccResponseCurveStruct();
@@ -1101,9 +1109,6 @@ public: //member functions
   icValidateStatus Validate(std::string &sReport);
 
 protected:
-  CIccResponseCurveStruct(icMeasurementUnitSig sig, icUInt16Number nChannels=0);
-  CIccResponseCurveStruct(icUInt16Number nChannels=0);
-
   icUInt16Number m_nChannels;
   icMeasurementUnitSig m_measurementUnitSig;
   icXYZNumber *m_maxColorantXYZ;

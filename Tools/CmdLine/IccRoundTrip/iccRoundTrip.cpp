@@ -207,7 +207,7 @@ int main(int argc, char* argv[])
   printf("Max L, a, b:   " ICFLOATFMT ", " ICFLOATFMT ", " ICFLOATFMT "\n", eval.maxLab2[0], eval.maxLab2[1], eval.maxLab2[2]);
 
   if (prmg.m_nTotal) {
-    printf("\nPerceptual Reference Medium Gamut - Round Trip Results\n");
+    printf("\nPRMG Interoperability - Round Trip Results\n");
     printf(  "------------------------------------------------------\n");
 
     printf("DE <= 1.0 (%8u): %5.1f%%\n", prmg.m_nDE1, (float)prmg.m_nDE1/(float)prmg.m_nTotal*100.0); 
