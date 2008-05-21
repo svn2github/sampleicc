@@ -63,7 +63,7 @@ CIccMultiProcessElement *ConvertCurves(LPIccCurve *pCurves, int nCurves, bool bS
       CIccSampledCurveSegment *pSegment;
       icFloatNumber startPos, endPos;
 
-      if (bStrict) {
+      if (bStrict || pCurves[i]->GetType()!=icSigParametricCurveType) {
         pFormula = new CIccFormulaCurveSegment(icMinFloat32Number, 0.0);
         pFormula->SetFunction(0, 4, clipZeroParams);
         pCurve->Insert(pFormula);
@@ -239,7 +239,7 @@ CIccMultiProcessElement *ConvertCurves(LPIccCurve *pCurves, int nCurves, bool bS
 
       }
 
-      if (bStrict) {
+      if (bStrict || pCurves[i]->GetType()!=icSigParametricCurveType) {
         pFormula = new CIccFormulaCurveSegment(1.0, icMaxFloat32Number);
         pFormula->SetFunction(0, 4, clipOneParams);
         pCurve->Insert(pFormula);

@@ -5524,7 +5524,7 @@ icStatusCMM CIccApplyMruCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber 
 {
   CIccMruPixel *ptr, *prev=NULL, *last=NULL;
   int i;
-  icFloatNumber *pixel;
+  icFloatNumber *pixel, *dest;
   icUInt32Number k;
 
   for (k=0; k<nPixels;) {
@@ -5559,7 +5559,7 @@ icStatusCMM CIccApplyMruCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber 
       m_pFirst = last;
       pixel = last->pPixelData;
     }
-    icFloatNumber *dest = &pixel[m_nSrcSamples];
+    dest = &pixel[m_nSrcSamples];
 
     memcpy(pixel, SrcPixel, m_nSrcSize);
 

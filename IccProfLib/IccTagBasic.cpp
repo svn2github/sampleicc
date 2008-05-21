@@ -4843,11 +4843,27 @@ icValidateStatus CIccTagColorantOrder::Validate(icTagSignature sig, std::string 
     return rv;
   }
 
-  if (m_nCount != icGetSpaceSamples(pProfile->m_Header.colorSpace)) {
-    sReport += icValidateNonCompliantMsg;
+  if (sig==icSigColorantTableTag) {
+    if (m_nCount != icGetSpaceSamples(pProfile->m_Header.colorSpace)) {
+      sReport += icValidateNonCompliantMsg;
+      sReport += sSigName;
+      sReport += " - Incorrect number of colorants.\r\n";
+      rv = icMaxStatus(rv, icValidateNonCompliant);
+    }
+  }
+  else if (sig==icSigColorantTableOutTag) {
+    if (m_nCount != icGetSpaceSamples(pProfile->m_Header.pcs)) {
+      sReport += icValidateNonCompliantMsg;
+      sReport += sSigName;
+      sReport += " - Incorrect number of colorants.\r\n";
+      rv = icMaxStatus(rv, icValidateNonCompliant);
+    }
+  }
+  else {
+    sReport += icValidateWarningMsg;
     sReport += sSigName;
-    sReport += " - Incorrect number of colorants.\r\n";
-    rv = icMaxStatus(rv, icValidateNonCompliant);
+    sReport += " - Unknown number of required colorants.\r\n";
+    rv = icMaxStatus(rv, icValidateWarning);
   }
 
   return rv;
@@ -5160,13 +5176,20 @@ icValidateStatus CIccTagColorantTable::Validate(icTagSignature sig, std::string 
       sReport += " - Use of this tag is allowed only in DeviceLink Profiles.\r\n";
       rv = icMaxStatus(rv, icValidateNonCompliant);
     }
+    if (m_nCount != icGetSpaceSamples(pProfile->m_Header.pcs)) {
+      sReport += icValidateNonCompliantMsg;
+      sReport += sSigName;
+      sReport += " - Incorrect number of colorants.\r\n";
+      rv = icMaxStatus(rv, icValidateNonCompliant);
+    }
   }
-
-  if (m_nCount != icGetSpaceSamples(pProfile->m_Header.colorSpace)) {
-    sReport += icValidateNonCompliantMsg;
-    sReport += sSigName;
-    sReport += " - Incorrect number of colorants.\r\n";
-    rv = icMaxStatus(rv, icValidateNonCompliant);
+  else {
+    if (m_nCount != icGetSpaceSamples(pProfile->m_Header.colorSpace)) {
+      sReport += icValidateNonCompliantMsg;
+      sReport += sSigName;
+      sReport += " - Incorrect number of colorants.\r\n";
+      rv = icMaxStatus(rv, icValidateNonCompliant);
+    }
   }
 
   return rv;
@@ -5417,13 +5440,13 @@ CIccProfileDescText::CIccProfileDescText()
  */
 CIccProfileDescText::CIccProfileDescText(const CIccProfileDescText &IPDC)
 {
-  m_pTag = NULL;
   if (IPDC.m_pTag) {
-    SetType(IPDC.GetType());
-    if (m_pTag) {
-      *m_pTag = *IPDC.m_pTag;
-    }
+    m_pTag = IPDC.m_pTag->NewCopy();
     m_bNeedsPading = IPDC.m_bNeedsPading;
+  }
+  else {
+    m_pTag = NULL;
+    m_bNeedsPading = false;
   }
 }
 
@@ -5445,14 +5468,14 @@ CIccProfileDescText &CIccProfileDescText::operator=(const CIccProfileDescText &P
 
   if (m_pTag)
     delete m_pTag;
-  m_pTag = NULL;
 
   if (ProfDescText.m_pTag) {
-    SetType(ProfDescText.GetType());
-    if (m_pTag) {
-      *m_pTag = *ProfDescText.m_pTag;
-    }
+    m_pTag = ProfDescText.m_pTag->NewCopy();
     m_bNeedsPading = ProfDescText.m_bNeedsPading;
+  }
+  else {
+    m_pTag = NULL;
+    m_bNeedsPading = false;
   }
 
   return *this;
