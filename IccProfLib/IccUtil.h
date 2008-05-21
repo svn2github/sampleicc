@@ -150,8 +150,6 @@ icFloatNumber ICCPROFLIB_API icMax(icFloatNumber v1, icFloatNumber v2);
 icUInt32Number ICCPROFLIB_API icIntMin(icUInt32Number v1, icUInt32Number v2);
 icUInt32Number ICCPROFLIB_API icIntMax(icUInt32Number v1, icUInt32Number v2);
 
-icFloatNumber ICCPROFLIB_API icDeltaE(icFloatNumber *Lab1, icFloatNumber *Lab2);
-
 /**Floating point encoding of Lab in PCS is in range 0.0 to 1.0 */
 ///Here are some conversion routines to convert to regular Lab encoding
 void ICCPROFLIB_API icLabFromPcs(icFloatNumber *Lab);

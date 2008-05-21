@@ -96,7 +96,7 @@ const char *icValidateNonCompliantMsg = "NonCompliant! - ";
 const char *icValidateCriticalErrorMsg = "Error! - ";
 
 /**
-******************************************************************************
+ ******************************************************************************
 * Name: icRoundOffset
 * 
 * Purpose: Adds offset to floating point value for purposes of rounding
@@ -361,18 +361,6 @@ void icVectorApplyMatrix3x3(icFloatNumber* result,
   result[0] = m[e11] * v[0] + m[e12] * v[1] + m[e13] * v[2];
   result[1] = m[e21] * v[0] + m[e22] * v[1] + m[e23] * v[2];
   result[2] = m[e31] * v[0] + m[e32] * v[1] + m[e33] * v[2];
-}
-
-
-static inline icFloatNumber icSq(icFloatNumber x)
-{
-  return x*x;
-}
-
-
-icFloatNumber icDeltaE(icFloatNumber *lab1, icFloatNumber *lab2)
-{
-  return sqrt(icSq(lab1[0]-lab2[0]) + icSq(lab1[1]-lab2[1]) + icSq(lab1[2]-lab2[2]));
 }
 
 
