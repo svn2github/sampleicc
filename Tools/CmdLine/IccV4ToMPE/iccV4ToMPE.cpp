@@ -52,6 +52,7 @@ CIccMultiProcessElement *ConvertCurves(LPIccCurve *pCurves, int nCurves, bool bS
   CIccMpeCurveSet *pCurveSet = new CIccMpeCurveSet(nCurves);
   static icFloatNumber clipZeroParams[4] = {1.0, 0.0, 0.0, 0.0};
   static icFloatNumber clipOneParams[4] = {1.0, 0.0, 0.0, 1.0};
+  static icFloatNumber clipValueParams[4] = {1.0, 0.0, 0.0, 0.0};  //set clipValueParams[3] to value to clip to
   
   if (pCurveSet) {
     int i;
@@ -63,21 +64,22 @@ CIccMultiProcessElement *ConvertCurves(LPIccCurve *pCurves, int nCurves, bool bS
       CIccSampledCurveSegment *pSegment;
       icFloatNumber startPos, endPos;
 
-      if (bStrict || pCurves[i]->GetType()!=icSigParametricCurveType) {
-        pFormula = new CIccFormulaCurveSegment(icMinFloat32Number, 0.0);
-        pFormula->SetFunction(0, 4, clipZeroParams);
-        pCurve->Insert(pFormula);
-        startPos = 0.0;
-        endPos = 1.0;
-      }
-      else {
-        startPos = icMinFloat32Number;
-        endPos = icMaxFloat32Number;
-      }
 
       if (pCurves[i]->GetType()==icSigParametricCurveType) {
         CIccTagParametricCurve *pParCurve = (CIccTagParametricCurve*)pCurves[i];
         icS15Fixed16Number *parParams = pParCurve->GetParams();
+
+        if (bStrict) {
+          pFormula = new CIccFormulaCurveSegment(icMinFloat32Number, 0.0);
+          pFormula->SetFunction(0, 4, clipZeroParams);
+          pCurve->Insert(pFormula);
+          startPos = 0.0;
+          endPos = 1.0;
+        }
+        else {
+          startPos = icMinFloat32Number;
+          endPos = icMaxFloat32Number;
+        }
 
         switch(pParCurve->GetFunctionType()) {
         case 0x0000:
@@ -187,12 +189,30 @@ CIccMultiProcessElement *ConvertCurves(LPIccCurve *pCurves, int nCurves, bool bS
 
           break;
         }
+
+        if (bStrict) {
+          pFormula = new CIccFormulaCurveSegment(1.0, icMaxFloat32Number);
+          pFormula->SetFunction(0, 4, clipOneParams);
+          pCurve->Insert(pFormula);
+        }
       }
       else if (pCurves[i]->GetType()==icSigCurveType) {
         CIccTagCurve *pLutCurve = (CIccTagCurve*)pCurves[i];
         icUInt32Number nSamples = pLutCurve->GetSize();
 
         if (!nSamples) {
+          if (bStrict) {
+            pFormula = new CIccFormulaCurveSegment(icMinFloat32Number, 0.0);
+            pFormula->SetFunction(0, 4, clipZeroParams);
+            pCurve->Insert(pFormula);
+            startPos = 0.0;
+            endPos = 1.0;
+          }
+          else {
+            startPos = icMinFloat32Number;
+            endPos = icMaxFloat32Number;
+          }
+
           pFormula = new CIccFormulaCurveSegment(startPos, endPos);
 
           params[0] = 1.0;
@@ -202,10 +222,28 @@ CIccMultiProcessElement *ConvertCurves(LPIccCurve *pCurves, int nCurves, bool bS
 
           pFormula->SetFunction(0, 4, params);
           pCurve->Insert(pFormula);
+
+          if (bStrict) {
+            pFormula = new CIccFormulaCurveSegment(1.0, icMaxFloat32Number);
+            pFormula->SetFunction(0, 4, clipOneParams);
+            pCurve->Insert(pFormula);
+          }
         }
         else if (nSamples==1) {
           icFloatNumber *pData = pLutCurve->GetData(0);
           icFloatNumber gamma = (icFloatNumber)(pData[0] * 65535.0 / 256.0);
+
+          if (bStrict) {
+            pFormula = new CIccFormulaCurveSegment(icMinFloat32Number, 0.0);
+            pFormula->SetFunction(0, 4, clipZeroParams);
+            pCurve->Insert(pFormula);
+            startPos = 0.0;
+            endPos = 1.0;
+          }
+          else {
+            startPos = icMinFloat32Number;
+            endPos = icMaxFloat32Number;
+          }
 
           pFormula = new CIccFormulaCurveSegment(startPos, endPos);
           params[0] = gamma;
@@ -215,34 +253,40 @@ CIccMultiProcessElement *ConvertCurves(LPIccCurve *pCurves, int nCurves, bool bS
 
           pFormula->SetFunction(0, 4, params);
           pCurve->Insert(pFormula);
-        }
-        else {
-          if (!bStrict) {
-            pFormula = new CIccFormulaCurveSegment(icMinFloat32Number, 0.0);
-            pFormula->SetFunction(0, 4, clipZeroParams);
-            pCurve->Insert(pFormula);
-          }
 
-          pSegment = new CIccSampledCurveSegment(0.0, 1.0);
-
-          pSegment->SetSize(pLutCurve->GetSize(), false);
-          memcpy(pSegment->GetSamples(), pLutCurve->GetData(0), pLutCurve->GetSize()*sizeof(icFloatNumber));
-
-          pCurve->Insert(pSegment);
-
-          if (!bStrict) {
+          if (bStrict) {
             pFormula = new CIccFormulaCurveSegment(1.0, icMaxFloat32Number);
             pFormula->SetFunction(0, 4, clipOneParams);
             pCurve->Insert(pFormula);
           }
         }
+        else {
+          //In converting a Sampled Curve we ALWAYS need to have a Formula curve segment before and after
+          //the sampled curve segment since the entire floating point range is encoded in MPE
+          //curves.  The first segment will be y=pLutcurve[0], the last segment will be y=pLutcurve[size-1].
+          //This provides for proper interpolation of the sampled curve segment which uses the value of the
+          //preceding formula segment at the break point for interpolation.
 
-      }
+          //Formula curve needed before sampled curve segment (provides first interpolation point)
+          pFormula = new CIccFormulaCurveSegment(icMinFloat32Number, 0.0);
+          clipValueParams[3] = (*pLutCurve)[0];
+          pFormula->SetFunction(0, 4, clipValueParams);
+          pCurve->Insert(pFormula);
 
-      if (bStrict || pCurves[i]->GetType()!=icSigParametricCurveType) {
-        pFormula = new CIccFormulaCurveSegment(1.0, icMaxFloat32Number);
-        pFormula->SetFunction(0, 4, clipOneParams);
-        pCurve->Insert(pFormula);
+          pSegment = new CIccSampledCurveSegment(0.0, 1.0);
+          pSegment->SetSize(pLutCurve->GetSize(), false);
+          //Note: Data at curve[0] is copied, but not saved in profile file.  Value comes from previous segment.
+          memcpy(pSegment->GetSamples(), pLutCurve->GetData(0), pLutCurve->GetSize()*sizeof(icFloatNumber));
+          pCurve->Insert(pSegment);
+
+          //Formula Curve needed after sampled curve segment
+          pFormula = new CIccFormulaCurveSegment(1.0, icMaxFloat32Number);
+          clipValueParams[3] = (*pLutCurve)[pLutCurve->GetSize()-1];
+          pFormula->SetFunction(0, 4, clipValueParams);
+          pFormula->SetFunction(0, 4, clipOneParams);
+          pCurve->Insert(pFormula);
+        }
+
       }
 
       pCurveSet->SetCurve(i, pCurve);

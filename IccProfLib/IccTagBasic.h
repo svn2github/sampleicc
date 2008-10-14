@@ -94,6 +94,7 @@ class IIccExtensionTag
 {
 public:
   virtual const char *GetExtClassName()=0;
+  virtual const char *GetExtDerivedClassName()=0;
 };
 
 /**

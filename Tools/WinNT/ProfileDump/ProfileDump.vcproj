@@ -23,7 +23,7 @@
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="2">
 			<Tool
-				Name="VCCLCompilerTool"
+				Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\IccProfLib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
@@ -89,7 +89,7 @@
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="2">
 			<Tool
-				Name="VCCLCompilerTool"
+				Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\..\..\IccProfLib"
@@ -157,7 +157,7 @@
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
-						Name="VCCLCompilerTool"
+						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 						Optimization="0"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
@@ -166,7 +166,7 @@
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool"
+						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""/>
@@ -177,7 +177,7 @@
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
-						Name="VCCLCompilerTool"
+						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 						Optimization="0"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
@@ -186,7 +186,7 @@
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool"
+						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""/>
@@ -197,7 +197,7 @@
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
-						Name="VCCLCompilerTool"
+						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 						Optimization="0"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
@@ -206,7 +206,7 @@
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool"
+						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""/>
@@ -217,7 +217,7 @@
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
-						Name="VCCLCompilerTool"
+						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 						Optimization="0"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
@@ -226,7 +226,7 @@
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool"
+						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""/>
@@ -240,7 +240,7 @@
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
-						Name="VCCLCompilerTool"
+						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 						Optimization="0"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
@@ -249,7 +249,7 @@
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool"
+						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""/>
@@ -260,7 +260,7 @@
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
-						Name="VCCLCompilerTool"
+						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 						Optimization="0"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
@@ -269,7 +269,7 @@
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool"
+						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""/>
@@ -283,7 +283,7 @@
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
-						Name="VCCLCompilerTool"
+						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 						Optimization="0"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
@@ -293,7 +293,7 @@
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool"
+						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
@@ -305,7 +305,7 @@
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
-						Name="VCCLCompilerTool"
+						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 						Optimization="0"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
@@ -314,7 +314,7 @@
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool"
+						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
 						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""/>

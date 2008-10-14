@@ -156,17 +156,18 @@ const icFloatNumber *CIccPCS::Check(const icFloatNumber *SrcPixel, const CIccXfo
   bool bIsV2 = pXform->UseLegacyPCS();
   bool bIsNextV2Lab = bIsV2 && (NextSpace == icSigLabData);
   const icFloatNumber *rv;
+  bool bNoClip = pXform->NoClipPCS();
 
   if (m_bIsV2Lab && !bIsNextV2Lab) {
-    Lab2ToLab4(m_Convert, SrcPixel);
+    Lab2ToLab4(m_Convert, SrcPixel, bNoClip);
     if (NextSpace==icSigXYZData) {
-      LabToXyz(m_Convert, m_Convert);
+      LabToXyz(m_Convert, m_Convert, bNoClip);
     }
     rv = m_Convert;
   }
   else if (!m_bIsV2Lab && bIsNextV2Lab) {
     if (m_Space==icSigXYZData) {
-      XyzToLab(m_Convert, SrcPixel);
+      XyzToLab(m_Convert, SrcPixel, bNoClip);
       SrcPixel = m_Convert;
     }
     Lab4ToLab2(m_Convert, SrcPixel);
@@ -176,11 +177,11 @@ const icFloatNumber *CIccPCS::Check(const icFloatNumber *SrcPixel, const CIccXfo
     rv = SrcPixel;
   }
   else if (m_Space==icSigXYZData && NextSpace==icSigLabData) {
-    XyzToLab(m_Convert, SrcPixel);
+    XyzToLab(m_Convert, SrcPixel, bNoClip);
     rv = m_Convert;
   }
   else if (m_Space==icSigLabData && NextSpace==icSigXYZData) {
-    LabToXyz(m_Convert, SrcPixel);
+    LabToXyz(m_Convert, SrcPixel, bNoClip);
     rv = m_Convert;
   }
   else {
@@ -204,24 +205,25 @@ const icFloatNumber *CIccPCS::Check(const icFloatNumber *SrcPixel, const CIccXfo
  * Args: 
  *  Pixel = Pixel data,
  *  DestSpace = destination color space
+ *  bNoClip = indicates whether PCS should be clipped
  **************************************************************************
  */
-void CIccPCS::CheckLast(icFloatNumber *Pixel, icColorSpaceSignature DestSpace)
+void CIccPCS::CheckLast(icFloatNumber *Pixel, icColorSpaceSignature DestSpace, bool bNoClip)
 {
   if (m_bIsV2Lab) {
-    Lab2ToLab4(Pixel, Pixel);
+    Lab2ToLab4(Pixel, Pixel, bNoClip);
     if (DestSpace==icSigXYZData) {
-      LabToXyz(Pixel, Pixel);
+      LabToXyz(Pixel, Pixel, bNoClip);
     }
   }
   else if (m_Space==DestSpace) {
     return;
   }
   else if (m_Space==icSigXYZData) {
-    XyzToLab(Pixel, Pixel);
+    XyzToLab(Pixel, Pixel, bNoClip);
   }
   else if (m_Space==icSigLabData) {
-    LabToXyz(Pixel, Pixel);
+    LabToXyz(Pixel, Pixel, bNoClip);
   }
 }
 
@@ -322,9 +324,16 @@ void CIccPCS::XyzToLab(icFloatNumber *Dst, const icFloatNumber *Src, bool bNoCli
 
   icLabToPcs(XYZ);
 
-  Dst[0] = UnitClip(XYZ[0]);
-  Dst[1] = UnitClip(XYZ[1]);
-  Dst[2] = UnitClip(XYZ[2]);
+  if (!bNoClip) {
+    Dst[0] = UnitClip(XYZ[0]);
+    Dst[1] = UnitClip(XYZ[1]);
+    Dst[2] = UnitClip(XYZ[2]);
+  }
+  else {
+    Dst[0] = XYZ[0];
+    Dst[1] = XYZ[1];
+    Dst[2] = XYZ[2];
+  }
 }
 
 
@@ -2958,23 +2967,26 @@ void CIccXformMpe::Apply(CIccApplyXform* pApply, icFloatNumber *DstPixel, const 
 {
   const CIccTagMultiProcessElement *pTag = m_pTag;
 
-  SrcPixel = CheckSrcAbs(pApply, SrcPixel);
+  if (!m_bInput) { //PCS comming in?
+    if (m_nIntent != icAbsoluteColorimetric)  //B2D3 tags don't need abs conversion
+      SrcPixel = CheckSrcAbs(pApply, SrcPixel);
 
-  //Since MPE tags use "real" values for PCS we need to convert from 
-  //internal encoding used by IccProfLib
-  icFloatNumber temp[3];
-  switch (GetSrcSpace()) {
-    case icSigXYZData:
-      memcpy(&temp[0], SrcPixel, 3*sizeof(icFloatNumber));
-      icXyzFromPcs(temp);
-      SrcPixel = &temp[0];
-      break;
+    //Since MPE tags use "real" values for PCS we need to convert from 
+    //internal encoding used by IccProfLib
+    icFloatNumber temp[3];
+    switch (GetSrcSpace()) {
+      case icSigXYZData:
+        memcpy(&temp[0], SrcPixel, 3*sizeof(icFloatNumber));
+        icXyzFromPcs(temp);
+        SrcPixel = &temp[0];
+        break;
 
-    case icSigLabData:
-      memcpy(&temp[0], SrcPixel, 3*sizeof(icFloatNumber));
-      icLabFromPcs(temp);
-      SrcPixel = &temp[0];
-      break;
+      case icSigLabData:
+        memcpy(&temp[0], SrcPixel, 3*sizeof(icFloatNumber));
+        icLabFromPcs(temp);
+        SrcPixel = &temp[0];
+        break;
+    }
   }
 
   //Note: pApply should be a CIccApplyXformMpe type here
@@ -2982,19 +2994,23 @@ void CIccXformMpe::Apply(CIccApplyXform* pApply, icFloatNumber *DstPixel, const 
 
   pTag->Apply(pApplyMpe->m_pApply, DstPixel, SrcPixel);
 
-  //Since MPE tags use "real" values for PCS we need to convert to
-  //internal encoding used by IccProfLib
-  switch(GetDstSpace()) {
-    case icSigXYZData:
-      icXyzToPcs(DstPixel);
-      break;
+  if (m_bInput) { //PCS going out?
+    //Since MPE tags use "real" values for PCS we need to convert to
+    //internal encoding used by IccProfLib
+    switch(GetDstSpace()) {
+      case icSigXYZData:
+        icXyzToPcs(DstPixel);
+        break;
 
-    case icSigLabData:
-      icLabToPcs(DstPixel);
-      break;
+      case icSigLabData:
+        icLabToPcs(DstPixel);
+        break;
+    }
+
+    if (m_nIntent != icAbsoluteColorimetric) { //D2B3 tags don't need abs conversion
+      CheckDstAbs(DstPixel);
+    }
   }
-
-  CheckDstAbs(DstPixel);
 }
 
 /**
@@ -3085,7 +3101,9 @@ icStatusCMM CIccApplyCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber *Sr
   icFloatNumber Pixel[16], *pDst;
   const icFloatNumber *pSrc;
   CIccApplyXformList::iterator i;
+  const CIccXform *pLastXform;
   int j, n = m_Xforms->size();
+  bool bNoClip;
 
   if (!n)
     return icCmmStatBadXform;
@@ -3102,14 +3120,19 @@ icStatusCMM CIccApplyCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber *Sr
       pSrc = pDst;
     }
 
-    i->ptr->Apply(DstPixel, m_pPCS->Check(pSrc, i->ptr->GetXform()));
+    pLastXform = i->ptr->GetXform();   
+    i->ptr->Apply(DstPixel, m_pPCS->Check(pSrc, pLastXform));
+    bNoClip = pLastXform->NoClipPCS();
   }
   else if (n==1) {
     i = m_Xforms->begin();
-    i->ptr->Apply(DstPixel, m_pPCS->Check(SrcPixel, i->ptr->GetXform()));
+
+    pLastXform = i->ptr->GetXform();
+    i->ptr->Apply(DstPixel, m_pPCS->Check(SrcPixel, pLastXform));
+    bNoClip = pLastXform->NoClipPCS();
   }
 
-  m_pPCS->CheckLast(DstPixel, m_pCmm->m_nDestSpace);
+  m_pPCS->CheckLast(DstPixel, m_pCmm->m_nDestSpace, bNoClip);
 
   return icCmmStatOk;
 }

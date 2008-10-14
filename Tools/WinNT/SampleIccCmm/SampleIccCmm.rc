@@ -81,7 +81,7 @@ BEGIN
             VALUE "FileDescription", "SampleIcc CMM"
             VALUE "FileVersion", "1, 0, 0, 1"
             VALUE "InternalName", "SampleIccCmm"
-            VALUE "LegalCopyright", "Copyright (C) 2006"
+            VALUE "LegalCopyright", "Copyright (C) 2008"
             VALUE "OriginalFilename", "SampleIc.dll"
             VALUE "ProductName", " SampleIcc CMM"
             VALUE "ProductVersion", "1, 0, 0, 1"

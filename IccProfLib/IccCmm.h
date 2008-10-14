@@ -220,6 +220,8 @@ public:
   virtual LPIccCurve* ExtractInputCurves()=0;
   virtual LPIccCurve* ExtractOutputCurves()=0;
 
+  virtual bool NoClipPCS() const { return false; }
+
 protected:
   //Called by derived classes to initialize Base
 
@@ -547,6 +549,8 @@ public:
   virtual LPIccCurve* ExtractInputCurves() {return NULL;}
   virtual LPIccCurve* ExtractOutputCurves() {return NULL;}
 
+  virtual bool NoClipPCS() const { return true; }
+
 protected:
   CIccTagMultiProcessElement *m_pTag;
   bool m_bUsingAcs;
@@ -591,7 +595,7 @@ public:
   void Reset(icColorSpaceSignature StartSpace, bool bUseLegacyPCS = false);
 
   virtual const icFloatNumber *Check(const icFloatNumber *SrcPixel, const CIccXform *pXform);
-  void CheckLast(icFloatNumber *SrcPixel, icColorSpaceSignature Space);
+  void CheckLast(icFloatNumber *SrcPixel, icColorSpaceSignature Space, bool bNoClip=false);
 
   static void LabToXyz(icFloatNumber *Dst, const icFloatNumber *Src, bool bNoClip=false);
   static void XyzToLab(icFloatNumber *Dst, const icFloatNumber *Src, bool bNoClip=false);

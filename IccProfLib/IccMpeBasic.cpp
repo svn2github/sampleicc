@@ -419,7 +419,7 @@ bool CIccFormulaCurveSegment::Write(CIccIO *pIO)
  * 
  * Return: 
  ******************************************************************************/
-bool CIccFormulaCurveSegment::Begin()
+bool CIccFormulaCurveSegment::Begin(CIccCurveSegment *pPrevSeg = NULL)
 {
   switch (m_nFunctionType) {
   case 0x0000:
@@ -665,7 +665,11 @@ CIccSampledCurveSegment::~CIccSampledCurveSegment()
  *  Sets size of sampled lookup table.  Previous data (if exists) is lost.
  * 
  * Args: 
- *  nCount = number of elements in lut (must be >= 2)
+ *  nCount = number of elements in lut (must be >= 2).  Note: the m_pSample[0] is
+ *    initialized from the the previous segment.  It is not saved as part
+ *    of Write(), or loaded as part of Read().  It will be initialized during
+ *    the call to Begin(),  The actual count of elements written to the file
+ *    will be nCount-1
  *  bZeroAlloc = flag to decide if memory should be set to zero.
  * 
  * Return: 
@@ -753,7 +757,7 @@ void CIccSampledCurveSegment::Describe(std::string &sDescription)
     icFloatNumber range = m_endPoint - m_startPoint;
     icFloatNumber last = (icFloatNumber)(m_nCount-1);
 
-    for (i=0; i<m_nCount; i++) {
+    for (i=1; i<m_nCount; i++) {
       sprintf(buf, "%.8f %.8f\r\n", m_startPoint + (icFloatNumber)i*range/last, m_pSamples[i]);
       sDescription += buf;
     }
@@ -795,13 +799,19 @@ bool CIccSampledCurveSegment::Read(icUInt32Number size, CIccIO *pIO)
   if (!pIO->Read32(&m_nCount))
     return false;
 
+  //Reserve room for first point who's value comes from previous segment
+  m_nCount++;
+
   if (!SetSize(m_nCount, false))
     return false;
 
   if (m_nCount) {
-    if (pIO->ReadFloat32Float(m_pSamples, m_nCount)!=m_nCount)
+    if (pIO->ReadFloat32Float(m_pSamples+1, m_nCount-1)!=m_nCount-1)
       return false;
   }
+
+  //Initialize first point with zero.  Properly initialized during Begin()
+  m_pSamples[0] = 0;
 
   return true;
 }
@@ -829,11 +839,19 @@ bool CIccSampledCurveSegment::Write(CIccIO *pIO)
   if (!pIO->Write32(&m_nReserved))
     return false;
 
-  if (!pIO->Write32(&m_nCount))
+  icUInt32Number nCount;
+
+  if (m_nCount)
+    nCount = m_nCount -1;
+  else
+    nCount = 0;
+
+  if (!pIO->Write32(&nCount))
     return false;
 
-  if (m_nCount) {
-    if (pIO->WriteFloat32Float(m_pSamples, m_nCount)!=m_nCount)
+  //First point in samples is ONLY for interpolation (not saved)
+  if (nCount) {
+    if (pIO->WriteFloat32Float(m_pSamples+1, nCount)!=nCount)
       return false;
   }
 
@@ -850,7 +868,7 @@ bool CIccSampledCurveSegment::Write(CIccIO *pIO)
  * 
  * Return: 
  ******************************************************************************/
-bool CIccSampledCurveSegment::Begin()
+bool CIccSampledCurveSegment::Begin(CIccCurveSegment *pPrevSeg = NULL)
 {
   if (m_nCount<2)
     return false;
@@ -860,6 +878,12 @@ bool CIccSampledCurveSegment::Begin()
 
   if (m_endPoint-m_startPoint == 0.0)
     return false;
+
+  if (!pPrevSeg)
+    return false;
+
+  //Set up interpolation from Application of last segment
+  m_pSamples[0] = pPrevSeg->Apply(m_startPoint);
 
   return true;
 }
@@ -1292,10 +1316,12 @@ bool CIccSegmentedCurve::Begin()
     return false;
 
  CIccCurveSegmentList::iterator i;
+ CIccCurveSegment *pLast = NULL;
 
   for (i=m_list->begin(); i!=m_list->end(); i++) {
-    if (!(*i)->Begin())
+    if (!(*i)->Begin(pLast))
       return false;
+    pLast = *i;
   }
 
   return true;

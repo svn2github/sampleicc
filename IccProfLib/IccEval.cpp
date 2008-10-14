@@ -144,7 +144,7 @@ icStatusCMM CIccEvalCompare::EvaluateProfile(CIccProfile *pProfile, icUInt8Numbe
   if (!nGran)
   {
     CIccTagLutAtoB* pTag = (CIccTagLutAtoB*)pProfile->FindTag(icSigAToB0Tag+(nIntent==icAbsoluteColorimetric ? icRelativeColorimetric : nIntent));
-    if (!pTag)
+    if (!pTag || ndim==3)
     {
       nGran = 33;
     }

@@ -59,6 +59,18 @@
  *   the configuration parameters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
+ * - October 2008
+ *  - Added support for External extension of CIccTags and CIccMPE objects
+ *  - Make CIccMultiProcessElement::m_nReserved public
+ *  - Added CIccMpeUnknown:SetType() and CIccMpeUnknown::SetChannels() to allow unknown elements to be externally created
+ *  - CIccCLUT::Init() now returns bool to indicate allocation failure
+ *  - Added icDeltaE() funciton to IccUtil.cpp
+ *  - Modified MPE Sampled Curve to conform to specification.  First point is NOT stored in file.
+ *  - Fixed MPE processing to not Clip PCS or apply Absolute Rendering Intent adjustments.
+ *  - Added support for selective use of MPE tags in iccApplyNamedCmm.cpp
+ *  - Modified IccV4ToMPE to correctly create SampledCurve segments by not saving first point.
+ *  - wxProfileDump now supports option to perform round trip performance analysis.
+*
  * - November 2007
  *  - Addition of CIccXformCreator singleton factory and IIccXformFactory interface for dynamic
  *    creation of CIccXform objects based upon xform type.   With a IIccXformFactory  derived

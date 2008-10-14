@@ -129,7 +129,7 @@ public:
   icInt32Number Write16Float(void *pBuf16, icInt32Number nNum=1);
 
   icInt32Number ReadFloat32Float(void *pBufFloat, icInt32Number nNum=1);
-  icInt32Number WriteFloat32Float(void *pBuf16, icInt32Number nNum=1);
+  icInt32Number WriteFloat32Float(void *pBufFloat, icInt32Number nNum=1);
 
   virtual icInt32Number GetLength() {return 0;}
 

@@ -438,7 +438,7 @@ public:
   CIccTagLutAtoB();
   CIccTagLutAtoB(const CIccTagLutAtoB &ITLA2B);
   CIccTagLutAtoB &operator=(const CIccTagLutAtoB &ITLA2B);
-  virtual CIccTag* NewCopy() { return new CIccTagLutAtoB(*this); }
+  virtual CIccTag* NewCopy() const { return new CIccTagLutAtoB(*this); }
   virtual ~CIccTagLutAtoB();
 
   virtual icTagTypeSignature GetType() { return icSigLutAtoBType; }

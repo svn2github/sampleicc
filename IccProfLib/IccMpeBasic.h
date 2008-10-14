@@ -114,7 +114,7 @@ public:
   virtual bool Read(icUInt32Number size, CIccIO *pIO)=0;
   virtual bool Write(CIccIO *pIO)=0;
 
-  virtual bool Begin() = 0;
+  virtual bool Begin(CIccCurveSegment *pPrevSeg) = 0;
   virtual icFloatNumber Apply(icFloatNumber v) const =0;
 
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccTagMultiProcessElement* pMPE=NULL) const = 0;
@@ -155,7 +155,7 @@ public:
   virtual bool Read(icUInt32Number size, CIccIO *pIO);
   virtual bool Write(CIccIO *pIO);
 
-  virtual bool Begin();
+  virtual bool Begin(CIccCurveSegment *pPrevSeg);
   virtual icFloatNumber Apply(icFloatNumber v) const;
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccTagMultiProcessElement* pMPE=NULL) const;
 
@@ -186,7 +186,7 @@ public:
   virtual icCurveSegSignature GetType() const { return icSigSampledCurveSeg; }
   virtual const icChar *GetClassName() const { return "CIccSampledCurveSegment"; }
 
-  virtual bool SetSize(icUInt32Number nSize, bool bZeroAlloc=true);
+  virtual bool SetSize(icUInt32Number nSize, bool bZeroAlloc=true); //nSize must be >= 2
   virtual icUInt32Number GetSize() { return m_nCount; }
 
   virtual icFloatNumber *GetSamples() { return m_pSamples; }
@@ -196,13 +196,13 @@ public:
   virtual bool Read(icUInt32Number size, CIccIO *pIO);
   virtual bool Write(CIccIO *pIO);
 
-  virtual bool Begin();
+  virtual bool Begin(CIccCurveSegment *pPrevSeg);
   virtual icFloatNumber Apply(icFloatNumber v) const;
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccTagMultiProcessElement* pMPE=NULL) const ;
 
 protected:
-  icUInt32Number m_nCount;
-  icFloatNumber *m_pSamples;
+  icUInt32Number m_nCount;   //number of samples used for interpolation
+  icFloatNumber *m_pSamples; //interpolation values - Note m_pSamples[0] is initialized from previous segment in Begin()
 
   icFloatNumber m_range;
   icFloatNumber m_last;
