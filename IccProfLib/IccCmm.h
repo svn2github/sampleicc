@@ -753,6 +753,8 @@ public:
   icColorSpaceSignature GetSourceSpace() const { return m_nSrcSpace; }
   ///Returns the destination color space
   icColorSpaceSignature GetDestSpace() const { return m_nDestSpace; }
+  ///Returns the color space of the last profile added
+  icColorSpaceSignature GetLastSpace() const { return m_nLastSpace; }
   ///Returns the rendering intent of the last profile added
   icRenderingIntent GetLastIntent() const { return m_nLastIntent; }
 
@@ -981,7 +983,7 @@ public:
     icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
     bool bUseMpeTags=true, IIccCreateXformHint *pHint=NULL) { return icCmmStatBad; }
 
-  virtual CIccApplyCmm *GetNewApply(icStatusCMM &status); 
+  virtual CIccApplyCmm *GetNewApplyCmm(icStatusCMM &status); 
 
   //Forward calls to attached CMM
   virtual icStatusCMM RemoveAllIO() { return m_pCmm->RemoveAllIO(); }

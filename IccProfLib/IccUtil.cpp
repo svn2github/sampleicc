@@ -807,6 +807,10 @@ icUInt32Number icGetSigVal(const icChar *pBuf)
              (((unsigned long)pBuf[2])<<8) +
              (((unsigned long)pBuf[3]));
 
+    case 9:
+      icUInt32Number v;
+      sscanf(pBuf, "%x", &v);
+      return v;
   }
 }
 

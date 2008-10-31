@@ -3528,7 +3528,7 @@ icStatusCMM CIccCmm::Begin(bool bAllocApplyCmm/*=true*/)
     return icCmmStatBadSpaceLink;
   }
 
-  icStatusCMM rv;
+  icStatusCMM rv = icCmmStatOk;
   CIccXformList::iterator i;
 
   for (i=m_Xforms->begin(); i!=m_Xforms->end(); i++) {
@@ -5370,20 +5370,20 @@ CIccMruCmm* CIccMruCmm::Attach(CIccCmm *pCmm, icUInt8Number nCacheSize/* =4 */)
   rv->m_pCmm = pCmm;
   rv->m_nCacheSize = nCacheSize;
 
+  rv->m_nSrcSpace = pCmm->GetSourceSpace();
+  rv->m_nDestSpace = pCmm->GetDestSpace();
+  rv->m_nLastSpace = pCmm->GetLastSpace();
+  rv->m_nLastIntent = pCmm->GetLastIntent();
+
   if (rv->Begin()!=icCmmStatOk) {
     delete rv;
     return NULL;
   }
 
-  rv->m_nSrcSpace = pCmm->GetSourceSpace();
-  rv->m_nDestSpace = pCmm->GetDestSpace();
-
-  rv->m_nLastIntent = pCmm->GetLastIntent();
-
   return rv;
 }
 
-CIccApplyCmm *CIccMruCmm::GetNewApply(icStatusCMM &status)
+CIccApplyCmm *CIccMruCmm::GetNewApplyCmm(icStatusCMM &status)
 {
   CIccApplyMruCmm *rv = new CIccApplyMruCmm(this);
 
