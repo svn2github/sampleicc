@@ -320,3 +320,4 @@ vet_output_file_pathname(const char* const s, const string& name,
       }
   }
 }
+

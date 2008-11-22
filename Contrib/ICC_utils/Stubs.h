@@ -130,7 +130,7 @@ public:
 
   // use one of these to force desired sort order in assoc. containers of DPX
   bool
-  DPX::operator<(const DPX& p) const
+  operator<(const DPX& p) const
   {
     return (r_ != p.r_) ? (r_ < p.r_) : ((g_ != p.g_) ? (g_ < p.g_) : (b_ < p.b_));
   }

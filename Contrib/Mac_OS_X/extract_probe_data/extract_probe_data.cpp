@@ -92,6 +92,8 @@ using namespace std;
 
 #include "Vetters.h"
 
+#ifdef __APPLE__
+
 #include <CoreFoundation/CoreFoundation.h>
 #include <ApplicationServices/ApplicationServices.h>
 
@@ -280,8 +282,11 @@ usage(ostream& s, const char* const myName)
   << endl;
 }
 
+#endif /* __APPLE__ */
+
 int
 main(int argc, const char * argv[]) {
+#ifdef __APPLE__
   const char* const my_name = path_tail(argv[0]);
   if (argc != 3)
   {
@@ -438,5 +443,6 @@ main(int argc, const char * argv[]) {
     return EXIT_FAILURE;
   }
   cout << N << endl;
+#endif /* __APPLE__ */
   return EXIT_SUCCESS;
 }

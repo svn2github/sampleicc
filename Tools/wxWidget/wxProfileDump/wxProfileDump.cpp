@@ -29,9 +29,10 @@
 #include "wx/toolbar.h"
 #include "wx/config.h"
 #include "wx/filename.h"
+#include "wx/filedlg.h"
 
 #if !defined(__WXMSW__)
-    #include "mondrian.xpm"
+//    #include "mondrian.xpm"
 #endif
 
 #include "bitmaps/new.xpm"
@@ -109,7 +110,7 @@ bool MyApp::OnInit()
 
     // using wxConfig instead of writing wxFileConfig or wxRegConfig enhances
     // portability of the code
-    wxConfig config("wxProfileDump");
+    wxConfig config(wxT("wxProfileDump"));
 
     m_history.Load(config);
 
@@ -126,7 +127,7 @@ bool MyApp::OnInit()
 #ifdef __WXMSW__
     frame->SetIcon(wxIcon(_T("wxProfileDump_icn")));
 #else
-    frame->SetIcon(wxIcon( wxProfileDump_xpm ));
+    //frame->SetIcon(wxIcon( wxProfileDump_xpm ));
 #endif
 
     // Make a menubar
@@ -237,7 +238,7 @@ void MyFrame::OpenFile(wxString profilePath)
   wxFileName filepath(profilePath);
   wxString profileTitle = filepath.GetName();
 
-  CIccProfile *pIcc = OpenIccProfile(profilePath);
+  CIccProfile *pIcc = OpenIccProfile((icChar*)profilePath.wx_str());
 
   if (!pIcc) {
     (void)wxMessageBox(wxString(_T("Unable to open profile '")) + profilePath + _T("'"),
@@ -256,7 +257,7 @@ void MyFrame::OpenFile(wxString profilePath)
 #ifdef __WXMSW__
   subframe->SetIcon(wxIcon(_T("ProfileDumpDoc_icn")));
 #else
-  subframe->SetIcon(wxIcon( mondrian_xpm ));
+//  subframe->SetIcon(wxIcon( mondrian_xpm ));
 #endif
 
   // Make a menubar
@@ -288,7 +289,7 @@ void MyFrame::OnOpenProfile(wxCommandEvent& event )
   wxString profilePath;
 
   if (event.GetId()==MDI_OPEN_PROFILE) {
-	  wxFileDialog dialog(this, _T("Open Profile"), wxEmptyString, wxEmptyString, _T("ICC files (*.icc)|*.icc|ICM files (*.icm)|*.icm|All files|*.*"), wxOPEN |wxHIDE_READONLY |wxFILE_MUST_EXIST);
+	  wxFileDialog dialog(this, _T("Open Profile"), wxEmptyString, wxEmptyString, _T("ICC files (*.icc)|*.icc|ICM files (*.icm)|*.icm|All files|*.*"), wxOPEN |wxFILE_MUST_EXIST);
 
 	  if (dialog.ShowModal()!=wxID_OK)
 		  return;
@@ -451,9 +452,9 @@ MyChild::MyChild(wxMDIParentFrame *parent, const wxString& title, CIccProfile *p
 		int n;
     wxString str;
 
-		m_textAttribute->SetLabel(Fmt.GetDeviceAttrName(pHdr->attributes));
-    m_textCMM->SetLabel(Fmt.GetCmmSigName((icCmmSignature)pHdr->cmmId));
-		m_textCreationDate->SetLabel(wxString::Format(_T("%d/%d/%d  %02u:%02u:%02u"),
+		m_textAttribute->SetLabel((wxT(Fmt.GetDeviceAttrName(pHdr->attributes)));
+    m_textCMM->SetLabel(wxT(Fmt.GetCmmSigName((icCmmSignature)pHdr->cmmId)));
+		m_textCreationDate->SetLabel(wxString::Format(wxT("%d/%d/%d  %02u:%02u:%02u"),
 			pHdr->date.month, pHdr->date.day, pHdr->date.year,
 			pHdr->date.hours, pHdr->date.minutes, pHdr->date.seconds));
 		m_textCreator->SetLabel(icGetSig(buf, pHdr->creator));

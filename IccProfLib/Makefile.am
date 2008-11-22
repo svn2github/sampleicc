@@ -4,11 +4,13 @@ lib_LTLIBRARIES = libSampleICC.la
 
 libSampleICC_la_SOURCES = \
 	IccCmm.cpp \
+	IccEval.cpp \
 	IccXformFactory.cpp \
 	IccIO.cpp \
 	IccMpeACS.cpp \
 	IccMpeBasic.cpp \
 	IccMpeFactory.cpp \
+	IccPrmg.cpp \
 	IccProfile.cpp \
 	IccTagBasic.cpp \
 	IccTagFactory.cpp \
@@ -30,6 +32,7 @@ libSampleICCinclude_HEADERS = \
 	IccMpeACS.h \
 	IccMpeBasic.h \
 	IccMpeFactory.h \
+	IccPrmg.h \
 	IccProfLibConf.h \
 	IccProfile.h \
 	IccTag.h \

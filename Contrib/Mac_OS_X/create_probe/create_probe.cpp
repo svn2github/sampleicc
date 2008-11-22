@@ -104,6 +104,8 @@
 using namespace std;
 #include "Vetters.h"
 
+#ifdef __APPLE__
+
 #include "ApplicationServices/ApplicationServices.h"
 
 CGColorSpaceRef
@@ -272,10 +274,12 @@ usage(ostream& s, const char* const myName, unsigned int N)
        << " be used to turn one of these into a 10-bit log DPX or Cineon file."
        << endl;
 }
+#endif /* __APPLE__ */
 
 int
 main(int argc, char* argv[])
 {
+#ifdef __APPLE__
   const unsigned int DEFAULT_N = 52;
   
   const char* const myName = path_tail(argv[0]);
@@ -316,6 +320,7 @@ main(int argc, char* argv[])
   CFURLRef shallowURL = CFURLCreateWithString(NULL, shallowURLString, NULL);
   exportImage(image,    deepURL, kUTTypeTIFF);
   exportImage(image, shallowURL, kUTTypeTIFF);
+#endif /* __APPLE__ */
   return EXIT_SUCCESS;
 }
 

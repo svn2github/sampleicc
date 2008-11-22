@@ -6,4 +6,4 @@ INCLUDES = -I$(top_builddir) -I$(top_srcdir)/IccProfLib
 
 LDADD = -L$(top_builddir)/IccProfLib -lSampleICC
 
-iccV4ToMPE_SOURCES = iccV4ToMpe.cpp
+iccV4ToMPE_SOURCES = iccV4ToMPE.cpp

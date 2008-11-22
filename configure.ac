@@ -6,7 +6,7 @@ AC_CANONICAL_TARGET
 
 SAMPLEICC_MAJOR_VERSION=1
 SAMPLEICC_MINOR_VERSION=3
-SAMPLEICC_MICRO_VERSION=6
+SAMPLEICC_MICRO_VERSION=7
 
 SAMPLEICC_VERSION=$SAMPLEICC_MAJOR_VERSION.$SAMPLEICC_MINOR_VERSION.${SAMPLEICC_MICRO_VERSION}
 AC_SUBST(SAMPLEICC_VERSION)
@@ -159,6 +159,7 @@ case "$host" in
   ;;
 *darwin*) 
   AC_DEFINE(PLATFORM_DARWIN_PPC) 
+  OSX_APPLICATION_LIBS="-framework ApplicationServices"
   ;;
 esac
 
@@ -175,6 +176,7 @@ AM_CXXFLAGS="$EXTRA_OPT_CFLAGS $EXTRA_CPU_CFLAGS"
 
 AC_SUBST(AM_CFLAGS)
 AC_SUBST(AM_CXXFLAGS)
+AC_SUBST(OSX_APPLICATION_LIBS)
 
 AC_OUTPUT([
 Makefile
@@ -185,6 +187,7 @@ Tools/CmdLine/IccApplyNamedCmm/Makefile
 Tools/CmdLine/IccApplyProfiles/Makefile
 Tools/CmdLine/IccDumpProfile/Makefile
 Tools/CmdLine/IccProfLibTest/Makefile
+Tools/CmdLine/IccRoundTrip/Makefile
 Tools/CmdLine/IccStripUnknownTags/Makefile
 Tools/CmdLine/IccV4ToMPE/Makefile
 Contrib/Makefile
