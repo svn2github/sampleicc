@@ -9,7 +9,7 @@ Copyright:  © see ICC Software License
 */
 
 /*
-* The ICC Software License, Version 0.1
+* The ICC Software License, Version 0.2
 *
 *
 * Copyright (c) 2007 The International Color Consortium. All rights 
@@ -27,14 +27,7 @@ Copyright:  © see ICC Software License
 *    the documentation and/or other materials provided with the
 *    distribution.
 *
-* 3. The end-user documentation included with the redistribution,
-*    if any, must include the following acknowledgment:  
-*       "This product includes software developed by the
-*        The International Color Consortium (www.color.org)"
-*    Alternately, this acknowledgment may appear in the software itself,
-*    if and wherever such third-party acknowledgments normally appear.
-*
-* 4. In the absence of prior written permission, the names "ICC" and "The
+* 3. In the absence of prior written permission, the names "ICC" and "The
 *    International Color Consortium" must not be used to imply that the
 *    ICC organization endorses or promotes products derived from this
 *    software.

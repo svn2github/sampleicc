@@ -1,3 +1,9 @@
+2008-11-24
+ * Cleanup of build files for Linux
+
+2008-10-31
+ * Added fix to make CIccCmmMRU work after chages to add CIccApplyCmm architecture
+
 2008-10-15
  * Added support for External extension of CIccTags and CIccMPE objects
  * Make CIccMultiProcessElement::m_nReserved public

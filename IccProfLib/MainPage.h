@@ -59,6 +59,10 @@
  *   the configuration parameters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
+ * - November 2008
+ *  - Cleanup of build files for Linux
+ *  - Revised License to version 0.2
+ *
  * - October 2008
  *  - Added support for External extension of CIccTags and CIccMPE objects
  *  - Make CIccMultiProcessElement::m_nReserved public
@@ -70,6 +74,7 @@
  *  - Added support for selective use of MPE tags in iccApplyNamedCmm.cpp
  *  - Modified IccV4ToMPE to correctly create SampledCurve segments by not saving first point.
  *  - wxProfileDump now supports option to perform round trip performance analysis.
+ *  - Added fix to make CIccCmmMRU work after chages to add CIccApplyCmm architecture.
 *
  * - November 2007
  *  - Addition of CIccXformCreator singleton factory and IIccXformFactory interface for dynamic
@@ -274,7 +279,7 @@
  * - Naming Convention Cleanup of conversion functions in IccUtil.
  * - Restructure profile validation to use Tag Factory mechanism.
  *
- * <b>The ICC Software License, Version 0.1</b>
+ * <b>The ICC Software License, Version 0.2</b>
  *
  * Copyright © 2003-2007 The International Color Consortium. All rights 
  * reserved.
@@ -291,14 +296,7 @@
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
- * 3. The end-user documentation included with the redistribution,
- *    if any, must include the following acknowledgment:  
- *       "This product includes software developed by the
- *        The International Color Consortium (www.color.org)"
- *    Alternately, this acknowledgment may appear in the software itself,
- *    if and wherever such third-party acknowledgments normally appear.
- *
- * 4. In the absence of prior written permission, the names "ICC" and "The
+ * 3. In the absence of prior written permission, the names "ICC" and "The
  *    International Color Consortium" must not be used to imply that the
  *    ICC organization endorses or promotes products derived from this
  *    software.

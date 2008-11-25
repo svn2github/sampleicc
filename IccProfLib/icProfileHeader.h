@@ -77,7 +77,7 @@ bgCurve->curve[i] = 255 - (icUInt16Number)i;
 /*
  *
  *
-* Copyright (c) 2003-2007 The International Color Consortium. 
+* Copyright (c) 2003-2008 The International Color Consortium. 
  *
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
