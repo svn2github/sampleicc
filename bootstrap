@@ -5,6 +5,7 @@ if [ "$HOSTTYPE" == "Darwin" ]; then
         LIBTOOLIZE=glibtoolize
 else
 	LIBTOOLIZE=libtoolize
+	dos2unix configure.ac
 fi
 
 
