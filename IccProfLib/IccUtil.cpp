@@ -522,7 +522,7 @@ void icDeNormXyz(icFloatNumber *XYZ, icFloatNumber *WhiteXYZ)
 static icFloatNumber cubeth(icFloatNumber v)
 {
   if (v> 0.008856) {
-    return (icFloatNumber)pow((double)v, 1.0/3.0);
+    return (icFloatNumber)ICC_CBRTF(v);
   }
   else {
     return (icFloatNumber)(7.787037037037037037037037037037*v + 16.0/116.0);
