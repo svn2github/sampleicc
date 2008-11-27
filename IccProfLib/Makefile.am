@@ -26,6 +26,7 @@ libSampleICCincludedir = $(includedir)/SampleICC
 
 libSampleICCinclude_HEADERS = \
 	IccCmm.h \
+	IccEval.h \
 	IccXformFactory.h \
 	IccDefs.h \
 	IccIO.h \
