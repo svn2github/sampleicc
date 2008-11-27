@@ -77,6 +77,7 @@
 
 #include <exception>
 #include <string>
+#include <cstring>
 
 class ICC_tool_exception : public std::exception
 {

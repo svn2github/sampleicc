@@ -75,6 +75,7 @@
 #include <string>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <cstdlib>
 
 #ifdef WIN32
 typedef unsigned short mode_t;

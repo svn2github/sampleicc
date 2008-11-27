@@ -70,6 +70,7 @@
 
 
 #include <stdio.h>
+#include <cstring>
 #include "IccProfile.h"
 #include "IccTag.h"
 #include "IccUtil.h"

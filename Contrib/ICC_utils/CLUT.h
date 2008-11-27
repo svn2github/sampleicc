@@ -74,6 +74,7 @@
 
 
 #include <string>
+#include <cstdlib>
 
 #include "IccUtil.h"
 #include "IccTagLut.h"

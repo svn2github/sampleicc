@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <iostream>
+#include <cstring>
 
 #include "IccProfile.h"
 #include "IccTag.h"

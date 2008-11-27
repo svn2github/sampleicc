@@ -75,6 +75,8 @@
 #include "IccTag.h"
 #include "IccUtil.h"
 #include <list>
+#include <cstring>
+#include <cstdlib>
 
 #ifdef USESAMPLEICCNAMESPACE
 namespace sampleICC {
