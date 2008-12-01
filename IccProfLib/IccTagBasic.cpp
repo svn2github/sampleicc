@@ -3823,6 +3823,10 @@ CIccTagMultiLocalizedUnicode::~CIccTagMultiLocalizedUnicode()
  * Name: CIccTagMultiLocalizedUnicode::Read
  * 
  * Purpose: Read in the tag contents into a data block
+ *
+ * Since MultiLocalizedUnicode tags can be embedded in other tags
+ * this function ensures that the current read pointer will be set to the
+ * position just after the last name record.
  * 
  * Args:
  *  size - # of bytes in tag,
@@ -3866,6 +3870,7 @@ bool CIccTagMultiLocalizedUnicode::Read(icUInt32Number size, CIccIO *pIO)
 
   icUInt32Number i; 
   CIccLocalizedUnicode Unicode;
+  icUInt32Number nLastPos = 0;
 
   for (i=0; i<nNumRec; i++) {
     if (4*sizeof(icUInt32Number) + (i+1)*12 > size)
@@ -3882,6 +3887,10 @@ bool CIccTagMultiLocalizedUnicode::Read(icUInt32Number size, CIccIO *pIO)
     if (nOffset+nLength > size)
       return false;
 
+    //Find out position of the end of last named record
+    if (nOffset+nLength > nLastPos)
+      nLastPos = nOffset + nLength;
+
     nNumChar = nLength / sizeof(icUInt16Number);
 
     Unicode.SetSize(nNumChar);
@@ -3895,6 +3904,10 @@ bool CIccTagMultiLocalizedUnicode::Read(icUInt32Number size, CIccIO *pIO)
 
     m_Strings->push_back(Unicode);
   }
+
+  //Now seek past the last named record
+  if (nLastPos > 0)
+    pIO->Seek(nTagPos+nOffset, icSeekSet);
 
   return true;
 }
