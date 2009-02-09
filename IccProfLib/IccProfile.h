@@ -153,6 +153,7 @@ public:
   bool AttachTag(icSignature sig, CIccTag *pTag);
   bool DeleteTag(icSignature sig);
   CIccMemIO* GetTagIO(icSignature sig); //caller should delete returned result
+	bool ReadTags(CIccProfile* pProfile); // will read in all the tags using the IO of the passed profile
 
   bool Attach(CIccIO *pIO);
   bool Detach();
@@ -166,6 +167,7 @@ public:
   icUInt16Number GetSpaceSamples() const;
 
   bool AreTagsUnique() const;
+	bool IsTagPresent(icSignature sig) const { return (GetTag(sig)!=NULL); }
 
 protected:
 

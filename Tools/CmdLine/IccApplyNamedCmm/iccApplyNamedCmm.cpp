@@ -3,6 +3,7 @@
 #include "IccCmm.h"
 #include "IccUtil.h"
 #include "IccDefs.h"
+#include "IccApplyBPC.h"
 
 //----------------------------------------------------
 // Function Declarations
@@ -163,66 +164,55 @@ bool ParseName(icChar* pName, icChar* pString)
   return true;
 }
 
+void Usage() 
+{
+	printf("Usage: iccApplyNamedCmm data_file_path final_data_encoding interpolation {profile_file_path Rendering_intent}\n\n");
+	printf("  For final_data_encoding:\n");
+	printf("    0 - icEncodeValue\n");
+	printf("    1 - icEncodePercent\n");
+	printf("    2 - icEncodeFloat\n");
+	printf("    3 - icEncode8Bit\n");
+	printf("    4 - icEncode16Bit\n\n");
+
+	printf("  For interpolation:\n");
+	printf("    0 - Linear\n");
+	printf("    1 - Tetrahedral\n\n");
+
+	printf("  For Rendering_intent:\n");
+	printf("    0 - Perceptual\n");
+	printf("    1 - Relative Colorimetric\n");
+	printf("    2 - Saturation\n");
+	printf("    3 - Absolute Colorimetric\n");
+	printf("    10 - Perceptual without MPE\n");
+	printf("    11 - Relative Colorimetric without MPE\n");
+	printf("    12 - Saturation without MPE\n");
+	printf("    13 - Absolute Colorimetric without MPE \n");
+	printf("    20 - Preview Perceptual\n");
+	printf("    21 - Preview Relative Colorimetric\n");
+	printf("    22 - Preview Saturation\n");
+	printf("    23 - Preview Absolute Colorimetric\n");
+	printf("    30 - Gamut\n");
+	printf("    40 - Perceptual with BPC\n");
+	printf("    41 - Relative Colorimetric with BPC\n");
+	printf("    42 - Saturation with BPC\n");
+}
 
 //===================================================
 
 int main(int argc, icChar* argv[])
 {
-  if(argc<3) {
-    printf("Usage: iccApplyNamedCmm data_file_path final_data_encoding {profile_file_path Rendering_intent}\n\n");
-    printf("  For final_data_encoding:\n");
-    printf("    0 - icEncodeValue\n");
-    printf("    1 - icEncodePercent\n");
-    printf("    2 - icEncodeFloat\n");
-    printf("    3 - icEncode8Bit\n");
-    printf("    4 - icEncode16Bit\n\n");
-
-    printf("  For Rendering_intent:\n");
-    printf("    0 - Perceptual\n");
-    printf("    1 - Relative Colorimetric\n");
-    printf("    2 - Saturation\n");
-    printf("    3 - Absolute Colorimetric\n");
-    printf("    10 - Perceptual without MPE\n");
-    printf("    11 - Relative Colorimetric without MPE\n");
-    printf("    12 - Saturation without MPE\n");
-    printf("    13 - Absolute Colorimetric without MPE \n");
-    printf("    30 - Preview Perceptual\n");
-    printf("    31 - Preview Relative Colorimetric\n");
-    printf("    32 - Preview Saturation\n");
-    printf("    33 - Preview Absolute Colorimetric\n");
-    printf("    40 - Gamut\n");
-
+	int minargs = 4; // minimum number of arguments
+  if(argc<minargs) {
+		Usage();
     return -1;
   }
 
   int nNumProfiles, temp;
-  temp = argc - 3;
+  temp = argc - minargs;
 
   if(temp%2 != 0) {
     printf("\nMissing arguments!\n");
-    printf("Usage: ApplyNamedCmm data_file_path final_data_encoding {profile_file_path Rendering_Transform}\n\n");
-    printf("  For final_data_encoding:\n");
-    printf("    0 - icEncodeValue\n");
-    printf("    1 - icEncodePercent\n");
-    printf("    2 - icEncodeFloat\n");
-    printf("    3 - icEncode8Bit\n");
-    printf("    4 - icEncode16Bit\n\n");
-
-    printf("  For Rendering_Transform:\n");
-    printf("    0 - Perceptual\n");
-    printf("    1 - Relative Colorimetric\n");
-    printf("    2 - Saturation\n");
-    printf("    3 - Absolute Colorimetric\n");
-    printf("    10 - Perceptual without MPE\n");
-    printf("    11 - Relative Colorimetric without MPE\n");
-    printf("    12 - Saturation without MPE\n");
-    printf("    13 - Absolute Colorimetric without MPE \n");
-    printf("    30 - Preview Perceptual\n");
-    printf("    31 - Preview Relative Colorimetric\n");
-    printf("    32 - Preview Saturation\n");
-    printf("    33 - Preview Absolute Colorimetric\n");
-    printf("    40 - Gamut\n");
-
+		Usage();
     return -1;
   }
 
@@ -235,17 +225,17 @@ int main(int argc, icChar* argv[])
     return false;
   }
 
-  icChar COlorSig[5], tempBuf[512];
+  icChar ColorSig[5], tempBuf[512];
   InputData.getline(tempBuf, sizeof(tempBuf));
 
   int i;
   for (i = 0; i < 4; i++) {
-    COlorSig[i] = tempBuf[i+1];
+    ColorSig[i] = tempBuf[i+1];
   }
-  COlorSig[4] = '\0';
+  ColorSig[4] = '\0';
 
 
-  icColorSpaceSignature SrcspaceSig = (icColorSpaceSignature)icGetSigVal(COlorSig);
+  icColorSpaceSignature SrcspaceSig = (icColorSpaceSignature)icGetSigVal(ColorSig);
   int nSamples = icGetSpaceSamples(SrcspaceSig);
 
   if(SrcspaceSig != icSigNamedData) {
@@ -268,24 +258,33 @@ int main(int argc, icChar* argv[])
   }
 
   destEncoding = (icFloatColorEncoding)atoi(argv[2]);
+	icXformInterp nInterp = (icXformInterp)atoi(argv[3]);
 
   int nIntent, nType;
   CIccNamedColorCmm namedCmm(SrcspaceSig, icSigUnknownData, !IsSpacePCS(SrcspaceSig));
 
   int nCount;
   bool bUseMPE;
-  for(i = 0, nCount=3; i<nNumProfiles; i++, nCount+=2) {
+  for(i = 0, nCount=minargs; i<nNumProfiles; i++, nCount+=2) {
     bUseMPE = true;
     nIntent = atoi(argv[nCount+1]);
     nType = abs(nIntent) / 10;
     nIntent = nIntent % 10;
 
-    if (nIntent==1) {
-      nIntent = 0;
-      bUseMPE = false;
-    }
+		CIccCreateXformHintManager Hint;
 
-    if (namedCmm.AddXform(argv[nCount], nIntent<0 ? icUnknownIntent : (icRenderingIntent)nIntent, icInterpLinear, (icXformLutType)nType, bUseMPE)) {
+		switch(nType) {
+			case 1:
+				nType = 0;
+				bUseMPE = false;
+				break;
+			case 4:
+				nType = 0;
+				Hint.AddHint(new CIccApplyBPCHint());
+				break;
+		}
+
+    if (namedCmm.AddXform(argv[nCount], nIntent<0 ? icUnknownIntent : (icRenderingIntent)nIntent, nInterp, (icXformLutType)nType, bUseMPE, &Hint)) {
       printf("Invalid Profile:  %s\n", argv[nCount]);
       return -1;
     }
@@ -325,7 +324,7 @@ int main(int argc, icChar* argv[])
   OutPutData += ";Source data is after semicolon\n";
   
   OutPutData += "\n;Profiles applied\n";
-  for(i = 0, nCount=3; i<nNumProfiles; i++, nCount+=2) {
+  for(i = 0, nCount=minargs; i<nNumProfiles; i++, nCount+=2) {
     OutPutData += "; ";
     sprintf(tempBuf, "%s\n", argv[nCount]);
     OutPutData += tempBuf;

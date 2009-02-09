@@ -1,3 +1,6 @@
+2008-12-02 Rohit
+ * Added support for Monochrome ICC profile apply
+
 2008-11-24
  * Cleanup of build files for Linux
 

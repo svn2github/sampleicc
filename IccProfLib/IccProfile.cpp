@@ -563,6 +563,46 @@ bool CIccProfile::Detach()
 }
 
 /**
+******************************************************************************
+* Name: CIccProfile::ReadTags
+* 
+* Purpose: This will read the all the tags from the IO object into the
+*  CIccProfile object. The IO object must have been attached before
+*		calling this function.
+* 
+* Return: 
+*  true - CIccProfile object now contains all tag data,
+*  false - No IO object attached or tags cannot be read.
+*******************************************************************************
+*/
+bool CIccProfile::ReadTags(CIccProfile* pProfile)
+{
+	CIccIO *pIO = m_pAttachIO;
+	
+	if (pProfile && pProfile->m_pAttachIO) {
+		pIO = pProfile->m_pAttachIO;
+	}
+
+	if (!pIO) {
+		return false;
+	}
+
+	TagEntryList::iterator i;
+	icUInt32Number pos = pIO->Tell();
+
+	for (i=m_Tags->begin(); i!=m_Tags->end(); i++) {
+		if (!LoadTag((IccTagEntry*)&(i->TagInfo), pIO)) {
+			pIO->Seek(pos, icSeekSet);
+			return false;
+		}
+	}
+
+	pIO->Seek(pos, icSeekSet);
+
+	return true;
+}
+
+/**
  ******************************************************************************
  * Name: CIccProfile::Read
  * 

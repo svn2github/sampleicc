@@ -75,7 +75,7 @@
 namespace sampleICC {
 #endif
 
-CIccXform* CIccBaseXformFactory::CreateXform(icXformType xformSig, CIccTag *pTag/*=NULL*/, IIccCreateXformHint *pHint/*=NULL*/)
+CIccXform* CIccBaseXformFactory::CreateXform(icXformType xformSig, CIccTag *pTag/*=NULL*/, CIccCreateXformHintManager *pHintManager/*=NULL*/)
 {
   //We generally ignore pHint in the base creator (used by others to determine what form of xform to create)
   switch(xformSig) {
@@ -92,15 +92,20 @@ CIccXform* CIccBaseXformFactory::CreateXform(icXformType xformSig, CIccTag *pTag
      return new CIccXformNDLut(pTag);
 
    case icXformTypeNamedColor:
-     if (!pHint || strcmp(pHint->GetHintType(), "CIccCreateXformNamedColorHint"))
-       return NULL;
-     {
-       CIccCreateNamedColorXformHint *pNCHint = (CIccCreateNamedColorXformHint*)pHint;
-       return new CIccXformNamedColor(pTag, pNCHint->csPcs, pNCHint->csDevice);
+     if (pHintManager) {
+			 IIccCreateXformHint* pHint = pHintManager->GetHint("CIccCreateXformNamedColorHint");
+			 if (pHint) {
+				 CIccCreateNamedColorXformHint *pNCHint = (CIccCreateNamedColorXformHint*)pHint;
+				 return new CIccXformNamedColor(pTag, pNCHint->csPcs, pNCHint->csDevice);
+			 }
      }
+		 return NULL;
 
    case icXformTypeMpe:
      return new CIccXformMpe(pTag);
+
+	 case icXformTypeMonochrome:
+		 return new CIccXformMonochrome();
 
     default:
       return NULL;
@@ -130,13 +135,13 @@ CIccXformCreator* CIccXformCreator::GetInstance()
   return theXformCreator.get();
 }
 
-CIccXform* CIccXformCreator::DoCreateXform(icXformType xformTypeSig, CIccTag *pTag/*=NULL*/, IIccCreateXformHint *pHint/*=NULL*/)
+CIccXform* CIccXformCreator::DoCreateXform(icXformType xformTypeSig, CIccTag *pTag/*=NULL*/, CIccCreateXformHintManager *pHintManager/*=NULL*/)
 {
   CIccXformFactoryList::iterator i;
   CIccXform *rv = NULL;
 
   for (i=factoryStack.begin(); i!=factoryStack.end(); i++) {
-    rv = (*i)->CreateXform(xformTypeSig, pTag, pHint);
+    rv = (*i)->CreateXform(xformTypeSig, pTag, pHintManager);
     if (rv)
       break;
   }

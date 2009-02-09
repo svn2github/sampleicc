@@ -1,5 +1,5 @@
 'CMYK' ; Data Format
-icEncodePercent ; Encoding
+icEncode16bit ; Encoding
 65535.0     0.0     0.0     0.0
     0.0 65535.0     0.0     0.0
     0.0     0.0 65535.0     0.0

@@ -108,13 +108,13 @@ public:
   * Parameter(s):
   *  xformTypeSig = signature of the ICC xform type for the xform to be created
   *  pTag = tag information for created xform
-  *  pHint = additional information used to create xform
+  *  pHintManager = contains additional information used to create xform
   *
   * Returns a new CIccXform object of the given signature type.  If the xform
   * factory doesn't support creation of xforms of type xformTypeSig then it
   * should return NULL.
   */
-  virtual CIccXform* CreateXform(icXformType xformType, CIccTag *pTag=NULL, IIccCreateXformHint* pHint=0)=0;
+  virtual CIccXform* CreateXform(icXformType xformType, CIccTag *pTag=NULL, CIccCreateXformHintManager* pHintManager=0)=0;
 };
 
 
@@ -142,12 +142,12 @@ public:
   * Parameter(s):
   *  xformTypeSig = signature of the ICC xform type for the xform to be created
   *  pTag = tag information for created xform
-  *  pHint = additional information used to create xform
+  *  pHintManager = contains additional information used to create xform
   *
   * Returns a new CIccXform object of the given xform type.
   * Unrecognized xformTypeSig's will be created as a CIccXformUnknown object.
   */
-  virtual CIccXform* CreateXform(icXformType xformType, CIccTag *pTag=NULL, IIccCreateXformHint *pHint=NULL);
+  virtual CIccXform* CreateXform(icXformType xformType, CIccTag *pTag=NULL, CIccCreateXformHintManager *pHintManager=NULL);
 
 };
 
@@ -176,14 +176,14 @@ public:
   * Parameter(s):
   *  xformType = signature of the ICC xform type for the xform to be created
   *  pTag = tag information for created xform
-  *  pHint = additional information used to create xform
+  *  pHintManager = contains additional information used to create xform
   *
   * Returns a new CIccXform object of the given xform type.
   * Each factory in the factoryStack is used until a factory supports the
   * signature type.
   */
-  static CIccXform* CreateXform(icXformType xformType, CIccTag *pTag=NULL, IIccCreateXformHint *pHint=NULL)
-      { return CIccXformCreator::GetInstance()->DoCreateXform(xformType, pTag, pHint); }
+  static CIccXform* CreateXform(icXformType xformType, CIccTag *pTag=NULL, CIccCreateXformHintManager *pHintManager=NULL)
+      { return CIccXformCreator::GetInstance()->DoCreateXform(xformType, pTag, pHintManager); }
 
   /**
   * Function: PushFactory(pFactory)
@@ -232,7 +232,7 @@ private:
   */
   static CIccXformCreator* GetInstance();
 
-  CIccXform* DoCreateXform(icXformType xformType, CIccTag *pTag=NULL, IIccCreateXformHint *pHint=NULL);
+  CIccXform* DoCreateXform(icXformType xformType, CIccTag *pTag=NULL, CIccCreateXformHintManager *pHintManager=NULL);
   void DoPushFactory(IIccXformFactory *pFactory);
   IIccXformFactory* DoPopFactory(bool bAll=false);
 

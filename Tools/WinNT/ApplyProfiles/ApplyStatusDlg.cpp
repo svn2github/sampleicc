@@ -241,30 +241,43 @@ void CApplyStatusDlg::Start()
   unsigned long i, j, k, sn, sphoto, dn, photo, space;
   CString Msg;
   CTiffImg SrcImg, DstImg;
-  CIccCmm cmm;
   unsigned char *sptr, *dptr;
   bool bConvert = false;
 
-  if (cmm.AddXform(m_sSrcProfile, m_nIntent==0 ? icUnknownIntent : (icRenderingIntent)(m_nIntent-1)) ||
-      cmm.AddXform(m_sDstProfile)) {
-    Msg.Format("Invalid Profile:\n  %s\n  %s'", (LPCTSTR)m_sSrcProfile, m_sDstProfile);
+	if (!SrcImg.Open(m_sSrcImage)) {
+		Msg.Format("Invalid Tiff file - '%s'", (LPCTSTR)m_sSrcImage);
+		DoMsgBox(Msg, MB_OK);
+		return;
+	}
+	sn = SrcImg.GetSamples();
+	sphoto = SrcImg.GetPhoto();
+
+	bool bInput = true;
+	if (sn==3 && sphoto==PHOTO_CIELAB) {
+		bInput = false;
+	}
+
+	CIccCmm cmm(icSigUnknownData, icSigUnknownData, bInput);
+  if (cmm.AddXform(m_sSrcProfile, m_nIntent==0 ? icUnknownIntent : (icRenderingIntent)(m_nIntent-1))!=icCmmStatOk) {
+    Msg.Format("Invalid Source Profile:\n  %s\n", (LPCTSTR)m_sSrcProfile);
     DoMsgBox(Msg, MB_OK);
     return;
   }
+
+	if (!m_sDstProfile.IsEmpty()) {
+		if (cmm.AddXform(m_sSrcProfile, m_nIntent==0 ? icUnknownIntent : (icRenderingIntent)(m_nIntent-1))!=icCmmStatOk) {
+			Msg.Format("Invalid Destination Profile:\n  %s\n", m_sDstProfile);
+			DoMsgBox(Msg, MB_OK);
+			return;
+		}
+	}
 
   if (cmm.Begin() != icCmmStatOk) {
-    Msg.Format("Invalid Profile:\n  %s\n  %s'", (LPCTSTR)m_sSrcProfile, m_sDstProfile);
+    Msg.Format("Invalid Profiles:\n  %s\n  %s'", (LPCTSTR)m_sSrcProfile, m_sDstProfile);
     DoMsgBox(Msg, MB_OK);
     return;
   }
 
-  if (!SrcImg.Open(m_sSrcImage)) {
-    Msg.Format("Invalid Tiff file - '%s'", (LPCTSTR)m_sSrcImage);
-    DoMsgBox(Msg, MB_OK);
-    return;
-  }
-  sn = SrcImg.GetSamples();
-  sphoto = SrcImg.GetPhoto();
   space = cmm.GetSourceSpace();
 
   if (SrcImg.GetBitsPerSample()!=8 ||

@@ -65,6 +65,8 @@
 // HISTORY:
 //
 // -Initial implementation by Max Derhak 5-15-2003
+// -Added support for Monochrome ICC profile apply by Rohit Patil 12-03-2008
+// -Integrated changes for PCS adjustment by George Pawle 12-09-2008
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -75,6 +77,7 @@
 #include "IccXformFactory.h"
 #include "IccTag.h"
 #include "IccIO.h"
+#include "IccApplyBPC.h"
 
 #ifdef USESAMPLEICCNAMESPACE
 namespace sampleICC {
@@ -397,7 +400,130 @@ void CIccPCS::Lab4ToLab2(icFloatNumber *Dst, const icFloatNumber *Src)
   Dst[2] = (icFloatNumber)(Src[2] * 65280.0 / 65535.0);
 }
 
+/**
+**************************************************************************
+* Name: CIccCreateXformHintManager::CIccCreateXformHintManager
+* 
+* Purpose: 
+*  Destructor
+**************************************************************************
+*/
+CIccCreateXformHintManager::~CIccCreateXformHintManager()
+{
+	if (m_pList) {
+		IIccCreateXformHintList::iterator i;
 
+		for (i=m_pList->begin(); i!=m_pList->end(); i++) {
+			if (i->ptr)
+				delete i->ptr;
+		}
+
+		delete m_pList;
+	}
+}
+
+/**
+**************************************************************************
+* Name: CIccCreateXformHintManager::AddHint
+* 
+* Purpose:
+*  Adds and owns the passed named hint to it's list.
+* 
+* Args: 
+*  pHint = pointer to the hint object to be added
+* 
+* Return: 
+*  true = hint added to the list
+*  false = hint not added
+**************************************************************************
+*/
+bool CIccCreateXformHintManager::AddHint(IIccCreateXformHint* pHint)
+{
+	if (!m_pList) {
+		m_pList = new IIccCreateXformHintList;
+	}
+
+	if (pHint) {
+		if (GetHint(pHint->GetHintType())) {
+			delete pHint;
+			return false;
+		}
+		IIccCreateXformHintPtr Hint;
+		Hint.ptr = pHint;
+		m_pList->push_back(Hint);
+		return true;
+	}
+
+	return false;
+}
+
+/**
+**************************************************************************
+* Name: CIccCreateXformHintManager::DeleteHint
+* 
+* Purpose:
+*  Deletes the object referenced by the passed named hint pointer 
+*		and removes it from the list.
+* 
+* Args: 
+*  pHint = pointer to the hint object to be deleted
+* 
+* Return: 
+*  true = hint found and deleted
+*  false = hint not found
+**************************************************************************
+*/
+bool CIccCreateXformHintManager::DeleteHint(IIccCreateXformHint* pHint)
+{
+	if (m_pList && pHint) {
+		IIccCreateXformHintList::iterator i;
+		for (i=m_pList->begin(); i!=m_pList->end(); i++) {
+			if (i->ptr) {
+				if (i->ptr == pHint) {
+					delete pHint;
+					pHint = NULL;
+					m_pList->erase(i);
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
+/**
+**************************************************************************
+* Name: CIccCreateXformHintManager::GetHint
+* 
+* Purpose:
+*  Finds and returns a pointer to the named hint.
+* 
+* Args: 
+*  hintName = name of the desired hint
+* 
+* Return: 
+*  Appropriate IIccCreateXformHint pointer
+**************************************************************************
+*/
+IIccCreateXformHint* CIccCreateXformHintManager::GetHint(const char* hintName)
+{
+	IIccCreateXformHint* pHint=NULL;
+	
+	if (m_pList) {
+		IIccCreateXformHintList::iterator i;
+		for (i=m_pList->begin(); i!=m_pList->end(); i++) {
+			if (i->ptr) {
+				if (!strcmp(i->ptr->GetHintType(), hintName)) {
+					pHint = i->ptr;
+					break;
+				}
+			}
+		}
+	}
+
+	return pHint;
+}
 
 /**
  **************************************************************************
@@ -412,6 +538,8 @@ CIccXform::CIccXform()
   m_pProfile = NULL;
   m_bInput = true;
   m_nIntent = icUnknownIntent;
+	m_pAdjustPCS = NULL;
+	m_bAdjustPCS = false;
 }
 
 
@@ -427,6 +555,11 @@ CIccXform::~CIccXform()
 {
   if (m_pProfile)
     delete m_pProfile;
+
+	if (m_pAdjustPCS) {
+		delete m_pAdjustPCS;
+	}
+
 }
 
 
@@ -447,15 +580,15 @@ CIccXform::~CIccXform()
  *  nInterp = the interpolation algorithm to use for N-D luts.
  *  nLutType = selection of which transform lut to use
  *  bUseMpeTags = flag to indicate the use MPE flags if available
- *  pHint = pointer to object passed to CIccXform creation functionality
+ *  pHintManager = pointer to object that contains xform creation hints
  * 
  * Return: 
  *  A suitable pXform object
  **************************************************************************
  */
-CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput, icRenderingIntent nIntent, 
-                             icXformInterp nInterp, icXformLutType nLutType, bool bUseMpeTags,
-                             IIccCreateXformHint *pHint)
+CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput/* =true */, icRenderingIntent nIntent/* =icUnknownIntent */, 
+														 icXformInterp nInterp/* =icInterpLinear */, icXformLutType nLutType/* =icXformLutColor */, 
+														 bool bUseMpeTags/* =true */, CIccCreateXformHintManager *pHintManager/* =NULL */)
 {
   CIccXform *rv = NULL;
   icRenderingIntent nTagIntent = nIntent;
@@ -501,13 +634,16 @@ CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput, icRenderingInte
 
         if (!pTag) {
           if (pProfile->m_Header.colorSpace == icSigRgbData) {
-            rv = CIccXformCreator::CreateXform(icXformTypeMatrixTRC, NULL, pHint);
+            rv = CIccXformCreator::CreateXform(icXformTypeMatrixTRC, NULL, pHintManager);
           }
+					else if (pProfile->m_Header.colorSpace == icSigGrayData) {
+						rv = CIccXformCreator::CreateXform(icXformTypeMonochrome, NULL, pHintManager);
+					}
           else
             return NULL;
         }
         else if (pTag->GetType()==icSigMultiProcessElementType) {
-          rv = CIccXformCreator::CreateXform(icXformTypeMpe, pTag, pHint);
+          rv = CIccXformCreator::CreateXform(icXformTypeMpe, pTag, pHintManager);
         }
         else {
           switch(pProfile->m_Header.colorSpace) {
@@ -521,16 +657,16 @@ CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput, icRenderingInte
             case icSigHlsData:
             case icSigCmyData:
             case icSig3colorData:
-              rv = CIccXformCreator::CreateXform(icXformType3DLut, pTag, pHint);
+              rv = CIccXformCreator::CreateXform(icXformType3DLut, pTag, pHintManager);
               break;
 
             case icSigCmykData:
             case icSig4colorData:
-              rv = CIccXformCreator::CreateXform(icXformType4DLut, pTag, pHint);
+              rv = CIccXformCreator::CreateXform(icXformType4DLut, pTag, pHintManager);
               break;
 
             default:
-              rv = CIccXformCreator::CreateXform(icXformTypeNDLut, pTag, pHint);
+              rv = CIccXformCreator::CreateXform(icXformTypeNDLut, pTag, pHintManager);
               break;
           }
         }
@@ -568,19 +704,22 @@ CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput, icRenderingInte
 
         if (!pTag) {
           if (pProfile->m_Header.colorSpace == icSigRgbData) {
-            rv = CIccXformCreator::CreateXform(icXformTypeMatrixTRC, pTag, pHint);
+            rv = CIccXformCreator::CreateXform(icXformTypeMatrixTRC, pTag, pHintManager);
           }
+					else if (pProfile->m_Header.colorSpace == icSigGrayData) {
+						rv = CIccXformCreator::CreateXform(icXformTypeMonochrome, NULL, pHintManager);
+					}
           else
             return NULL;
         }
         else if (pTag->GetType()==icSigMultiProcessElementType) {
-          rv = CIccXformCreator::CreateXform(icXformTypeMpe, pTag, pHint);
+          rv = CIccXformCreator::CreateXform(icXformTypeMpe, pTag, pHintManager);
         }
         else {
           switch(pProfile->m_Header.pcs) {
             case icSigXYZData:
             case icSigLabData:
-              rv = CIccXformCreator::CreateXform(icXformType3DLut, pTag, pHint);
+              rv = CIccXformCreator::CreateXform(icXformType3DLut, pTag, pHintManager);
               break;
 
           default:
@@ -596,12 +735,19 @@ CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput, icRenderingInte
         if (!pTag)
           return NULL;
 
-        CIccCreateNamedColorXformHint hint;
-        hint.csPcs = pProfile->m_Header.pcs;
-        hint.csDevice = pProfile->m_Header.colorSpace;
-        hint.pHint = pHint;
-
-        rv = CIccXformCreator::CreateXform(icXformTypeNamedColor, pTag, &hint);
+        CIccCreateNamedColorXformHint* pNamedColorHint = new CIccCreateNamedColorXformHint();
+        pNamedColorHint->csPcs = pProfile->m_Header.pcs;
+        pNamedColorHint->csDevice = pProfile->m_Header.colorSpace;
+				if (pHintManager) {
+					pHintManager->AddHint(pNamedColorHint);
+					rv = CIccXformCreator::CreateXform(icXformTypeNamedColor, pTag, pHintManager);
+					pHintManager->DeleteHint(pNamedColorHint);
+				}
+				else {
+					CIccCreateXformHintManager HintManager;
+					HintManager.AddHint(pNamedColorHint);
+					rv = CIccXformCreator::CreateXform(icXformTypeNamedColor, pTag, &HintManager);
+				}
       }
       break;
 
@@ -619,7 +765,7 @@ CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput, icRenderingInte
           switch(pProfile->m_Header.pcs) {
             case icSigXYZData:
             case icSigLabData:
-              rv = CIccXformCreator::CreateXform(icXformType3DLut, pTag, pHint);
+              rv = CIccXformCreator::CreateXform(icXformType3DLut, pTag, pHintManager);
 
             default:
               break;
@@ -639,7 +785,7 @@ CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput, icRenderingInte
           switch(pProfile->m_Header.pcs) {
             case icSigXYZData:
             case icSigLabData:
-              rv = CIccXformCreator::CreateXform(icXformType3DLut, pTag, pHint);
+              rv = CIccXformCreator::CreateXform(icXformType3DLut, pTag, pHintManager);
 
             default:
               break;
@@ -650,7 +796,7 @@ CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput, icRenderingInte
   }
 
   if (rv) {
-    rv->SetParams(pProfile, bInput, nIntent, nInterp);
+    rv->SetParams(pProfile, bInput, nIntent, nInterp, pHintManager);
   }
 
   return rv;
@@ -669,12 +815,20 @@ CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput, icRenderingInte
  *  nIntent = rendering intent to apply to the profile
  *  nInterp = the interpolation algorithm to use for N-D luts
  ******************************************************************************/
-void CIccXform::SetParams(CIccProfile *pProfile, bool bInput, icRenderingIntent nIntent, icXformInterp nInterp)
+void CIccXform::SetParams(CIccProfile *pProfile, bool bInput, icRenderingIntent nIntent, 
+													icXformInterp nInterp, CIccCreateXformHintManager *pHintManager/* =NULL */)
 {
   m_pProfile = pProfile;
   m_bInput = bInput;
   m_nIntent = nIntent;
   m_nInterp = nInterp;
+	m_pAdjustPCS = NULL;
+
+	IIccCreateXformHint *pHint=NULL;
+	if (pHintManager && (pHint = pHintManager->GetHint("CIccCreateAdjustPCSXformHint"))){
+		CIccCreateAdjustPCSXformHint *pAdjustPCSHint = (CIccCreateAdjustPCSXformHint*)pHint;
+		m_pAdjustPCS = pAdjustPCSHint->GetNewAdjustPCSXform();
+	}
 }
 
 /**
@@ -700,11 +854,12 @@ void CIccXform::SetParams(CIccProfile *pProfile, bool bInput, icRenderingIntent 
  *  A suitable pXform object
  **************************************************************************
  */
-CIccXform *CIccXform::Create(CIccProfile &Profile, bool bInput, icRenderingIntent nIntent, icXformInterp nInterp, icXformLutType nLutType,
-                             bool bUseMpeTags, IIccCreateXformHint *pHint)
+CIccXform *CIccXform::Create(CIccProfile &Profile, bool bInput/* =true */, icRenderingIntent nIntent/* =icUnknownIntent */, 
+														 icXformInterp nInterp/* =icInterpLinear */, icXformLutType nLutType/* =icXformLutColor */, 
+														 bool bUseMpeTags/* =true */, CIccCreateXformHintManager *pHintManager/* =NULL */)
 {
   CIccProfile *pProfile = new CIccProfile(Profile);
-  CIccXform *pXform = Create(pProfile, bInput, nIntent, nInterp, nLutType, bUseMpeTags, pHint);
+  CIccXform *pXform = Create(pProfile, bInput, nIntent, nInterp, nLutType, bUseMpeTags, pHintManager);
 
   if (!pXform)
     delete pProfile;
@@ -735,8 +890,81 @@ icStatusCMM CIccXform::Begin()
     CIccTagXYZ *pXyzTag = (CIccTagXYZ*)pTag;
 
     m_MediaXYZ = (*pXyzTag)[0];
-
   }
+
+	// set up for any needed PCS adjustment
+	if (m_nIntent == icAbsoluteColorimetric && 
+		(m_MediaXYZ.X != m_pProfile->m_Header.illuminant.X ||
+		m_MediaXYZ.Y != m_pProfile->m_Header.illuminant.Y ||
+		m_MediaXYZ.Z != m_pProfile->m_Header.illuminant.Z)) {
+
+			icColorSpaceSignature Space = m_pProfile->m_Header.pcs;
+
+			if (IsSpacePCS(Space)) {
+				m_bAdjustPCS = true;				// turn ON PCS adjustment
+
+				// scale factors depend upon media white point
+				// set up for input transform
+				m_PCSScale[0] = (icFloatNumber) m_MediaXYZ.X / m_pProfile->m_Header.illuminant.X;	// convert to icFloat to avoid precision errors
+				m_PCSScale[1] = (icFloatNumber) m_MediaXYZ.Y / m_pProfile->m_Header.illuminant.Y;
+				m_PCSScale[2] = (icFloatNumber) m_MediaXYZ.Z / m_pProfile->m_Header.illuminant.Z;
+
+				if (!m_bInput) {
+					m_PCSScale[0] = (icFloatNumber) 1.0 / m_PCSScale[0];	// inverse for output transform
+					m_PCSScale[1] = (icFloatNumber) 1.0 / m_PCSScale[1];
+					m_PCSScale[2] = (icFloatNumber) 1.0 / m_PCSScale[2];
+				}
+
+				m_PCSOffset[0] = 0.0;
+				m_PCSOffset[1] = 0.0;
+				m_PCSOffset[2] = 0.0;
+			}
+	}
+	else if (m_nIntent == icPerceptual && IsVersion2()) {
+		icColorSpaceSignature Space = m_pProfile->m_Header.pcs;
+
+		if (IsSpacePCS(Space)) {
+			m_bAdjustPCS = true;				// turn ON PCS adjustment
+
+			// set up for input transform, which needs version 2 black point to version 4
+			m_PCSScale[0] = (icFloatNumber) (1.0 - icPerceptualRefBlackX / icPerceptualRefWhiteX);	// scale factors
+			m_PCSScale[1] = (icFloatNumber) (1.0 - icPerceptualRefBlackY / icPerceptualRefWhiteY);
+			m_PCSScale[2] = (icFloatNumber) (1.0 - icPerceptualRefBlackZ / icPerceptualRefWhiteZ);
+
+			m_PCSOffset[0] = (icFloatNumber) (icPerceptualRefBlackX * 32768.0 / 65535.0);	// offset factors
+			m_PCSOffset[1] = (icFloatNumber) (icPerceptualRefBlackY * 32768.0 / 65535.0);
+			m_PCSOffset[2] = (icFloatNumber) (icPerceptualRefBlackZ * 32768.0 / 65535.0);
+
+			if (!m_bInput) {				// output transform must convert version 4 black point to version 2
+				m_PCSScale[0] = (icFloatNumber) 1.0 / m_PCSScale[0];	// invert scale factors
+				m_PCSScale[1] = (icFloatNumber) 1.0 / m_PCSScale[1];
+				m_PCSScale[2] = (icFloatNumber) 1.0 / m_PCSScale[2];
+
+				m_PCSOffset[0] = - m_PCSOffset[0] * m_PCSScale[0];	// negate offset factors
+				m_PCSOffset[1] = - m_PCSOffset[1] * m_PCSScale[1];
+				m_PCSOffset[2] = - m_PCSOffset[2] * m_PCSScale[2];
+			}
+		}
+	}
+
+
+	if (m_pAdjustPCS) {
+		CIccProfile ProfileCopy(*m_pProfile);
+
+		// need to read in all the tags, so that a copy of the profile can be made
+		if (!ProfileCopy.ReadTags(m_pProfile)) {
+			return icCmmStatInvalidProfile;
+		}
+		
+		if (!m_pAdjustPCS->CalcFactors(&ProfileCopy, this, m_PCSScale, m_PCSOffset)) {
+			return icCmmStatIncorrectApply;
+  }
+
+		m_bAdjustPCS = true;
+		delete m_pAdjustPCS;
+		m_pAdjustPCS = NULL;
+	}
+
   return icCmmStatOk;
 }
 
@@ -762,6 +990,51 @@ CIccApplyXform *CIccXform::GetNewApply(icStatusCMM &status)
   return rv;
 }
 
+/**
+ **************************************************************************
+* Name: CIccXform::AdjustPCS
+ * 
+ * Purpose: 
+*  This function will take care of any PCS adjustments 
+*  needed by the xform (the PCS is always version 4 relative).
+ * 
+ * Args: 
+*  DstPixel = Destination pixel where the result is stored,
+*  SrcPixel = Source pixel which is to be applied.
+ * 
+ **************************************************************************
+ */
+void CIccXform::AdjustPCS(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) const
+{
+      icColorSpaceSignature Space = m_pProfile->m_Header.pcs;
+
+        if (Space==icSigLabData) {
+          if (UseLegacyPCS()) {
+			CIccPCS::Lab2ToXyz(DstPixel, SrcPixel, true);
+          }
+		else {
+			CIccPCS::LabToXyz(DstPixel, SrcPixel, true);
+        }
+          }
+          else {
+		DstPixel[0] = SrcPixel[0];
+		DstPixel[1] = SrcPixel[1];
+		DstPixel[2] = SrcPixel[2];
+        }
+
+	DstPixel[0] = CIccPCS::NegClip((icFloatNumber)(DstPixel[0] * m_PCSScale[0] + m_PCSOffset[0]));
+	DstPixel[1] = CIccPCS::NegClip((icFloatNumber)(DstPixel[1] * m_PCSScale[1] + m_PCSOffset[1]));
+	DstPixel[2] = CIccPCS::NegClip((icFloatNumber)(DstPixel[2] * m_PCSScale[2] + m_PCSOffset[2]));
+
+        if (Space==icSigLabData) {
+          if (UseLegacyPCS()) {
+			CIccPCS::XyzToLab2(DstPixel, DstPixel, true);
+          }
+		else {
+			CIccPCS::XyzToLab(DstPixel, DstPixel, true);
+          }
+          }
+        }
 
 /**
  **************************************************************************
@@ -782,72 +1055,11 @@ CIccApplyXform *CIccXform::GetNewApply(icStatusCMM &status)
 const icFloatNumber *CIccXform::CheckSrcAbs(CIccApplyXform *pApply, const icFloatNumber *Pixel) const
 {
   icFloatNumber *pAbsLab = pApply->m_AbsLab;
-
-  if (!m_bInput) {
-    if (m_nIntent == icAbsoluteColorimetric && 
-        (m_MediaXYZ.X != m_pProfile->m_Header.illuminant.X ||
-         m_MediaXYZ.Y != m_pProfile->m_Header.illuminant.Y ||
-         m_MediaXYZ.Z != m_pProfile->m_Header.illuminant.Z)) {
-
-      icColorSpaceSignature Space = m_pProfile->m_Header.pcs;
-
-      if (IsSpacePCS(Space)) {
-        if (Space==icSigLabData) {
-          if (UseLegacyPCS()) {
-            CIccPCS::Lab2ToXyz(pAbsLab, Pixel, true);
-          }
-          else
-            CIccPCS::LabToXyz(pAbsLab, Pixel, true);
-          Pixel = pAbsLab;
-        }
-
-        pAbsLab[0] = Pixel[0] * m_pProfile->m_Header.illuminant.X / m_MediaXYZ.X;
-        pAbsLab[1] = Pixel[1] * m_pProfile->m_Header.illuminant.Y / m_MediaXYZ.Y;
-        pAbsLab[2] = Pixel[2] * m_pProfile->m_Header.illuminant.Z / m_MediaXYZ.Z;
-
-        if (Space==icSigLabData) {
-          if (UseLegacyPCS()) {
-            CIccPCS::XyzToLab2(pAbsLab, pAbsLab, true);
-          }
-          else {
-            CIccPCS::XyzToLab(pAbsLab, pAbsLab, true);
-          }
-        }
-
+	if (m_bAdjustPCS && !m_bInput) {
+		AdjustPCS(pAbsLab, Pixel);
         return pAbsLab;
       }
-    }
-    else if (m_nIntent == icPerceptual && IsVersion2()) {
-      icColorSpaceSignature Space = m_pProfile->m_Header.pcs;
 
-      if (IsSpacePCS(Space)) {
-        if (Space==icSigLabData) {
-          if (UseLegacyPCS()) {
-            CIccPCS::Lab2ToXyz(pAbsLab, Pixel, true);
-          }
-          else
-            CIccPCS::LabToXyz(pAbsLab, Pixel, true);
-          Pixel = pAbsLab;
-        }
-
-        //Convert version 4 black point to version 2
-        pAbsLab[0] = CIccPCS::NegClip((icFloatNumber)((Pixel[0] - icPerceptualRefBlackX * 32768.0 / 65535.0) / (1.0 - icPerceptualRefBlackX / icPerceptualRefWhiteX)));
-        pAbsLab[1] = CIccPCS::NegClip((icFloatNumber)((Pixel[1] - icPerceptualRefBlackY * 32768.0 / 65535.0) / (1.0 - icPerceptualRefBlackY / icPerceptualRefWhiteY)));
-        pAbsLab[2] = CIccPCS::NegClip((icFloatNumber)((Pixel[2] - icPerceptualRefBlackZ * 32768.0 / 65535.0) / (1.0 - icPerceptualRefBlackZ / icPerceptualRefWhiteZ)));
-
-        if (Space==icSigLabData) {
-          if (UseLegacyPCS()) {
-            CIccPCS::XyzToLab2(pAbsLab, pAbsLab, true);
-          }
-          else {
-            CIccPCS::XyzToLab(pAbsLab, pAbsLab, true);
-          }
-        }
-
-        return pAbsLab;
-      }
-    }
-  }
   return Pixel;
 }
 
@@ -867,67 +1079,11 @@ const icFloatNumber *CIccXform::CheckSrcAbs(CIccApplyXform *pApply, const icFloa
  */
 void CIccXform::CheckDstAbs(icFloatNumber *Pixel) const
 {
-  if (m_bInput) {
-    if (m_nIntent == icAbsoluteColorimetric && 
-        (m_MediaXYZ.X != m_pProfile->m_Header.illuminant.X ||
-         m_MediaXYZ.Y != m_pProfile->m_Header.illuminant.Y ||
-         m_MediaXYZ.Z != m_pProfile->m_Header.illuminant.Z)) {
-      icColorSpaceSignature Space = m_pProfile->m_Header.pcs;
-      
-      if (IsSpacePCS(Space)) {
-        if (Space==icSigLabData) {
-          if (UseLegacyPCS()) {
-            CIccPCS::Lab2ToXyz(Pixel, Pixel, true);
-          }
-          else
-            CIccPCS::LabToXyz(Pixel, Pixel, true);
-        }
-        
-        Pixel[0] = Pixel[0] * m_MediaXYZ.X / m_pProfile->m_Header.illuminant.X;
-        Pixel[1] = Pixel[1] * m_MediaXYZ.Y / m_pProfile->m_Header.illuminant.Y;
-        Pixel[2] = Pixel[2] * m_MediaXYZ.Z / m_pProfile->m_Header.illuminant.Z;
-        
-        if (Space==icSigLabData) {
-          if (UseLegacyPCS()) {
-            CIccPCS::XyzToLab2(Pixel, Pixel, true);
-          }
-          else {
-            CIccPCS::XyzToLab(Pixel, Pixel, true);
+	if (m_bAdjustPCS && m_bInput) {
+		AdjustPCS(Pixel, Pixel);
           }
         }
-      }
-    }    
-    else if (m_nIntent == icPerceptual && IsVersion2()) {
-      icColorSpaceSignature Space = m_pProfile->m_Header.pcs;
-      
-      if (IsSpacePCS(Space)) {
-        if (Space==icSigLabData) {
-          if (UseLegacyPCS()) {
-            CIccPCS::Lab2ToXyz(Pixel, Pixel, true);
-          }
-          else
-            CIccPCS::LabToXyz(Pixel, Pixel, true);
-        }
         
-        //Convert version 2 black point to version 4
-        Pixel[0] = (icFloatNumber)(Pixel[0] * (1.0 - icPerceptualRefBlackX / icPerceptualRefWhiteX) + icPerceptualRefBlackX * 32768.0 / 65535.0);
-        Pixel[1] = (icFloatNumber)(Pixel[1] * (1.0 - icPerceptualRefBlackY / icPerceptualRefWhiteY) + icPerceptualRefBlackY * 32768.0 / 65535.0);
-        Pixel[2] = (icFloatNumber)(Pixel[2] * (1.0 - icPerceptualRefBlackZ / icPerceptualRefWhiteZ) + icPerceptualRefBlackZ * 32768.0 / 65535.0);
-        
-        if (Space==icSigLabData) {
-          if (UseLegacyPCS()) {
-            CIccPCS::XyzToLab2(Pixel, Pixel, true);
-          }
-          else {
-            CIccPCS::XyzToLab(Pixel, Pixel, true);
-          }
-        }
-      }
-    }    
-  }
-}
-
-
 /**
 **************************************************************************
 * Name: CIccXformMatrixTRC::GetSrcSpace
@@ -1025,6 +1181,271 @@ CIccApplyXform::~CIccApplyXform()
 {
 }
 
+/**
+**************************************************************************
+* Name: CIccXformMonochrome::CIccXformMonochrome
+* 
+* Purpose: 
+*  Constructor
+**************************************************************************
+*/
+CIccXformMonochrome::CIccXformMonochrome()
+{
+	m_Curve = NULL;
+	m_ApplyCurvePtr = NULL;
+	m_bFreeCurve = false;
+}
+
+/**
+**************************************************************************
+* Name: CIccXformMonochrome::~CIccXformMonochrome
+* 
+* Purpose: 
+*  Destructor
+**************************************************************************
+*/
+CIccXformMonochrome::~CIccXformMonochrome()
+{
+	if (m_bFreeCurve && m_Curve) {
+		delete m_Curve;
+	}
+}
+
+/**
+**************************************************************************
+* Name: CIccXformMonochrome::Begin
+* 
+* Purpose: 
+*  Does the initialization of the Xform before Apply() is called.
+*  Must be called before Apply().
+*
+**************************************************************************
+*/
+icStatusCMM CIccXformMonochrome::Begin()
+{
+	icStatusCMM status;
+
+	status = CIccXform::Begin();
+	if (status != icCmmStatOk)
+		return status;
+
+	m_ApplyCurvePtr = NULL;
+
+	if (m_bInput) {
+		m_Curve = GetCurve(icSigGrayTRCTag);
+
+		if (!m_Curve) {
+			return icCmmStatProfileMissingTag;
+		}
+	}
+	else {
+		m_Curve = GetInvCurve(icSigGrayTRCTag);
+		m_bFreeCurve = true;
+
+		if (!m_Curve) {
+			return icCmmStatProfileMissingTag;
+		}
+	}
+
+	m_Curve->Begin();
+	if (!m_Curve->IsIdentity()) {
+		m_ApplyCurvePtr = m_Curve;
+	}
+
+	return icCmmStatOk;
+}
+
+/**
+**************************************************************************
+* Name: CIccXformMonochrome::Apply
+* 
+* Purpose: 
+*  Does the actual application of the Xform.
+*  
+* Args:
+*  pApply = ApplyXform object containing temporary storage used during Apply
+*  DstPixel = Destination pixel where the result is stored,
+*  SrcPixel = Source pixel which is to be applied.
+**************************************************************************
+*/
+void CIccXformMonochrome::Apply(CIccApplyXform* pApply, icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) const
+{
+	icFloatNumber Pixel[3];
+	SrcPixel = CheckSrcAbs(pApply, SrcPixel);
+
+	if (m_bInput) {
+		Pixel[0] = SrcPixel[0];
+
+		if (m_ApplyCurvePtr) {
+			Pixel[0] = m_ApplyCurvePtr->Apply(Pixel[0]);
+		}
+
+		DstPixel[0] = icFloatNumber(icPerceptualRefWhiteX); 
+		DstPixel[1] = icFloatNumber(icPerceptualRefWhiteY);
+		DstPixel[2] = icFloatNumber(icPerceptualRefWhiteZ);
+
+		icXyzToPcs(DstPixel);
+
+		if (m_pProfile->m_Header.pcs==icSigLabData) {
+			if (UseLegacyPCS()) {
+				CIccPCS::XyzToLab2(DstPixel, DstPixel, true);
+			}
+			else {
+				CIccPCS::XyzToLab(DstPixel, DstPixel, true);
+			}
+		}
+
+		DstPixel[0] *= Pixel[0];
+		DstPixel[1] *= Pixel[0];
+		DstPixel[2] *= Pixel[0];
+	}
+	else {
+		Pixel[0] = icFloatNumber(icPerceptualRefWhiteX); 
+		Pixel[1] = icFloatNumber(icPerceptualRefWhiteY);
+		Pixel[2] = icFloatNumber(icPerceptualRefWhiteZ);
+
+		icXyzToPcs(Pixel);
+
+		if (m_pProfile->m_Header.pcs==icSigLabData) {
+			if (UseLegacyPCS()) {
+				CIccPCS::XyzToLab2(Pixel, Pixel, true);
+			}
+			else {
+				CIccPCS::XyzToLab(Pixel, Pixel, true);
+			}
+			DstPixel[0] = SrcPixel[0]/Pixel[0];
+		}
+		else {
+			DstPixel[0] = SrcPixel[1]/Pixel[1];
+		}
+
+		if (m_ApplyCurvePtr) {
+			DstPixel[0] = m_ApplyCurvePtr->Apply(DstPixel[0]);
+		}
+	}
+
+	CheckDstAbs(DstPixel);
+}
+
+/**
+**************************************************************************
+* Name: CIccXformMonochrome::GetCurve
+* 
+* Purpose: 
+*  Gets the curve having the passed signature, from the profile.
+*  
+* Args:
+*  sig = signature of the curve to be found
+*
+* Return:
+*  Pointer to the curve.
+**************************************************************************
+*/
+CIccCurve *CIccXformMonochrome::GetCurve(icSignature sig) const
+{
+	CIccTag *pTag = m_pProfile->FindTag(sig);
+
+	if (pTag && (pTag->GetType()==icSigCurveType || pTag->GetType()==icSigParametricCurveType)) {
+		return (CIccCurve*)pTag;
+	}
+
+	return NULL;
+}
+
+/**
+**************************************************************************
+* Name: CIccXformMonochrome::GetInvCurve
+* 
+* Purpose: 
+*  Gets the inverted curve having the passed signature, from the profile.
+*  
+* Args:
+*  sig = signature of the curve to be inverted
+*
+* Return:
+*  Pointer to the inverted curve.
+**************************************************************************
+*/
+CIccCurve *CIccXformMonochrome::GetInvCurve(icSignature sig) const
+{
+	CIccCurve *pCurve;
+	CIccTagCurve *pInvCurve;
+
+	if (!(pCurve = GetCurve(sig)))
+		return NULL;
+
+	pCurve->Begin();
+
+	pInvCurve = new CIccTagCurve(2048);
+
+	int i;
+	icFloatNumber x;
+	icFloatNumber *Lut = &(*pInvCurve)[0];
+
+	for (i=0; i<2048; i++) {
+		x=(icFloatNumber)i / 2047;
+
+		Lut[i] = pCurve->Find(x);
+	}
+
+	return pInvCurve;
+}
+
+/**
+**************************************************************************
+* Name: CIccXformMonochrome::ExtractInputCurves
+* 
+* Purpose: 
+*  Gets the input curves. Should be called only after Begin() 
+*  has been called. Once the curves are extracted, they will 
+*  not be used by the Apply() function.
+*  WARNING:  caller owns the curves and must be deleted by the caller.
+*  
+* Return:
+*  Pointer to the input curves.
+**************************************************************************
+*/
+LPIccCurve* CIccXformMonochrome::ExtractInputCurves()
+{
+	if (m_bInput) {
+		if (m_Curve) {
+			LPIccCurve* Curve = new LPIccCurve[1];
+			Curve[0] = (LPIccCurve)(m_Curve->NewCopy());
+			m_ApplyCurvePtr = NULL;
+			return Curve;
+		}
+	}
+
+	return NULL;
+}
+
+/**
+**************************************************************************
+* Name: CIccXformMonochrome::ExtractOutputCurves
+* 
+* Purpose: 
+*  Gets the output curves. Should be called only after Begin() 
+*  has been called. Once the curves are extracted, they will 
+*  not be used by the Apply() function.
+*  WARNING:  caller owns the curves and must be deleted by the caller.
+*  
+* Return:
+*  Pointer to the output curves.
+**************************************************************************
+*/
+LPIccCurve* CIccXformMonochrome::ExtractOutputCurves()
+{
+	if (!m_bInput) {
+		if (m_Curve) {
+			LPIccCurve* Curve = new LPIccCurve[1];
+			Curve[0] = (LPIccCurve)(m_Curve->NewCopy());
+			m_ApplyCurvePtr = NULL;
+			return Curve;
+		}
+	}
+
+	return NULL;
+}
 
 /**
  **************************************************************************
@@ -2521,7 +2942,7 @@ icStatusCMM CIccXformNamedColor::Begin()
  *  
  * Args:
  *  pApply = ApplyXform object containging temporary storage used during Apply
- *  DstPixel = Destination pixel where the result is stored,
+ *  DstColorName = Destination string where the color name result is stored,
  *  SrcPixel = Source pixel which is to be applied.
  **************************************************************************
  */
@@ -2556,6 +2977,20 @@ icStatusCMM CIccXformNamedColor::Apply(CIccApplyXform* pApply, icChar *DstColorN
   return icCmmStatOk;
 }
 
+
+/**
+**************************************************************************
+* Name: CIccXformNamedColor::Apply
+* 
+* Purpose: 
+*  Does the actual application of the Xform.
+*  
+* Args:
+*  pApply = ApplyXform object containging temporary storage used during Apply
+*  DstPixel = Destination pixel where the result is stored,
+*  SrcColorName = Source color name which is to be applied.
+**************************************************************************
+*/
 icStatusCMM CIccXformNamedColor::Apply(CIccApplyXform* pApply, icFloatNumber *DstPixel, const icChar *SrcColorName) const
 {
   const CIccTagNamedColor2 *pTag = m_pTag;
@@ -2688,13 +3123,15 @@ CIccXformMpe::~CIccXformMpe()
 *  nIntent = the rendering intent to apply to the profile,   
 *  nInterp = the interpolation algorithm to use for N-D luts.
 *  nLutType = selection of which transform lut to use
+*  pHintManager = hints for creating the xform
 * 
 * Return: 
 *  A suitable pXform object
 **************************************************************************
 */
-CIccXform *CIccXformMpe::Create(CIccProfile *pProfile, bool bInput, icRenderingIntent nIntent, 
-                                icXformInterp nInterp, icXformLutType nLutType)
+CIccXform *CIccXformMpe::Create(CIccProfile *pProfile, bool bInput/* =true */, icRenderingIntent nIntent/* =icUnknownIntent */,
+																icXformInterp nInterp/* =icInterpLinear */, icXformLutType nLutType/* =icXformLutColor */, 
+																CIccCreateXformHintManager *pHintManager/* =NULL */)
 {
   CIccXform *rv = NULL;
   icRenderingIntent nTagIntent = nIntent;
@@ -2872,7 +3309,7 @@ CIccXform *CIccXformMpe::Create(CIccProfile *pProfile, bool bInput, icRenderingI
   }
 
   if (rv) {
-    rv->SetParams(pProfile, bInput, nIntent, nInterp);
+    rv->SetParams(pProfile, bInput, nIntent, nInterp, pHintManager);
   }
 
   return rv;
@@ -3259,6 +3696,7 @@ CIccCmm::~CIccCmm()
  *  nIntent = rendering intent to be used with the profile,
  *  nInterp = type of interpolation to be used with the profile,
  *  nLutType = selection of which transform lut to use
+ *  pHintManager = hints for creating the xform
  * 
  * Return: 
  *  icCmmStatOk, if the profile was added to the list succesfully
@@ -3269,14 +3707,14 @@ icStatusCMM CIccCmm::AddXform(const icChar *szProfilePath,
                               icXformInterp nInterp /*icXformInterp*/,
                               icXformLutType nLutType /*=icXformLutColor*/,
                               bool bUseMpeTags /*=true*/,
-                              IIccCreateXformHint *pHint /*=NULL*/)
+                              CIccCreateXformHintManager *pHintManager /*=NULL*/)
 {
   CIccProfile *pProfile = OpenIccProfile(szProfilePath);
 
   if (!pProfile) 
     return icCmmStatCantOpenProfile;
 
-  icStatusCMM rv = AddXform(pProfile, nIntent, nInterp, nLutType, bUseMpeTags, pHint);
+  icStatusCMM rv = AddXform(pProfile, nIntent, nInterp, nLutType, bUseMpeTags, pHintManager);
 
   if (rv != icCmmStatOk)
     delete pProfile;
@@ -3300,7 +3738,7 @@ icStatusCMM CIccCmm::AddXform(const icChar *szProfilePath,
 *  nInterp = type of interpolation to be used with the profile,
 *  nLutType = selection of which transform lut to use
 *  bUseMpeTags = flag to indicate the use MPE flags if available
-*  pHint = pointer to object passed to CIccXform creation functionality
+*  pHintManager = hints for creating the xform
 * 
 * Return: 
 *  icCmmStatOk, if the profile was added to the list succesfully
@@ -3312,7 +3750,7 @@ icStatusCMM CIccCmm::AddXform(icUInt8Number *pProfileMem,
                               icXformInterp nInterp /*icXformInterp*/,
                               icXformLutType nLutType /*=icXformLutColor*/,
                               bool bUseMpeTags /*=true*/,
-                              IIccCreateXformHint *pHint /*=NULL*/)
+                              CIccCreateXformHintManager *pHintManager /*=NULL*/)
 {
   CIccMemIO *pFile = new CIccMemIO;
 
@@ -3330,7 +3768,7 @@ icStatusCMM CIccCmm::AddXform(icUInt8Number *pProfileMem,
     return icCmmStatCantOpenProfile;
   }
 
-  icStatusCMM rv = AddXform(pProfile, nIntent, nInterp, nLutType, bUseMpeTags, pHint);
+  icStatusCMM rv = AddXform(pProfile, nIntent, nInterp, nLutType, bUseMpeTags, pHintManager);
 
   if (rv != icCmmStatOk)
     delete pProfile;
@@ -3352,7 +3790,7 @@ icStatusCMM CIccCmm::AddXform(icUInt8Number *pProfileMem,
  *  nInterp = type of interpolation to be used with the profile,
  *  nLutType = selection of which transform lut to use
  *  bUseMpeTags = flag to indicate the use MPE flags if available
- *  pHint = pointer to object passed to CIccXform creation functionality
+ *  pHintManager = hints for creating the xform
  * 
  * Return: 
  *  icCmmStatOk, if the profile was added to the list succesfully
@@ -3363,7 +3801,7 @@ icStatusCMM CIccCmm::AddXform(CIccProfile *pProfile,
                               icXformInterp nInterp /*=icInterpLinear*/,
                               icXformLutType nLutType /*=icXformLutColor*/,
                               bool bUseMpeTags /*=true*/,
-                              IIccCreateXformHint *pHint /*=NULL*/)
+                              CIccCreateXformHintManager *pHintManager /*=NULL*/)
 {
   icColorSpaceSignature nSrcSpace, nDstSpace;
   bool bInput = !m_bLastInput;
@@ -3440,7 +3878,7 @@ icStatusCMM CIccCmm::AddXform(CIccProfile *pProfile,
 
   CIccXformPtr Xform;
   
-  Xform.ptr = CIccXform::Create(pProfile, bInput, nIntent, nInterp, nLutType, bUseMpeTags, pHint);
+  Xform.ptr = CIccXform::Create(pProfile, bInput, nIntent, nInterp, nLutType, bUseMpeTags, pHintManager);
 
   if (!Xform.ptr) {
     return icCmmStatBadXform;
@@ -3469,7 +3907,7 @@ icStatusCMM CIccCmm::AddXform(CIccProfile *pProfile,
  *  nInterp = type of interpolation to be used with the profile,
  *  nLutType = selection of which transform lut to use
  *  bUseMpeTags = flag to indicate the use MPE flags if available
- *  pHint = pointer to object passed to CIccXform creation functionality
+ *  pHintManager = hints for creating the xform
  * 
  * Return: 
  *  icCmmStatOk, if the profile was added to the list succesfully
@@ -3480,14 +3918,14 @@ icStatusCMM CIccCmm::AddXform(CIccProfile &Profile,
                               icXformInterp nInterp /*=icInterpLinear*/,
                               icXformLutType nLutType /*=icXformLutColor*/,
                               bool bUseMpeTags /*=true*/,
-                              IIccCreateXformHint *pHint /*=NULL*/)
+                              CIccCreateXformHintManager *pHintManager /*=NULL*/)
 {
   CIccProfile *pProfile = new CIccProfile(Profile);
 
   if (!pProfile) 
     return icCmmStatAllocErr;
 
- icStatusCMM stat = AddXform(pProfile, nIntent, nInterp, nLutType, bUseMpeTags, pHint);
+ icStatusCMM stat = AddXform(pProfile, nIntent, nInterp, nLutType, bUseMpeTags, pHintManager);
 
   if (stat != icCmmStatOk)
     delete pProfile;
@@ -3840,6 +4278,22 @@ icStatusCMM CIccCmm::ToInternalEncoding(icColorSpaceSignature nSpace, icFloatCol
   return icCmmStatOk;
 }
 
+
+/**
+**************************************************************************
+* Name: CIccCmm::ToInternalEncoding
+* 
+* Purpose: 
+*  Functions for converting to Internal representation of 8 bit pixel colors.
+*  
+* Args:
+*  nSpace = color space signature of the data,
+*  nEncode = icFloatColorEncoding type of the data,
+*  pInternal = converted data is stored here,
+*  pData = the data to be converted
+*  bClip = flag to clip to internal range
+**************************************************************************
+*/
 icStatusCMM CIccCmm::ToInternalEncoding(icColorSpaceSignature nSpace, icFloatNumber *pInternal,
                                         const icUInt8Number *pData)
 {
@@ -3874,6 +4328,22 @@ icStatusCMM CIccCmm::ToInternalEncoding(icColorSpaceSignature nSpace, icFloatNum
 
 }
 
+
+/**
+**************************************************************************
+* Name: CIccCmm::ToInternalEncoding
+* 
+* Purpose: 
+*  Functions for converting to Internal representation of 16 bit pixel colors.
+*  
+* Args:
+*  nSpace = color space signature of the data,
+*  nEncode = icFloatColorEncoding type of the data,
+*  pInternal = converted data is stored here,
+*  pData = the data to be converted
+*  bClip = flag to clip to internal range
+**************************************************************************
+*/
 icStatusCMM CIccCmm::ToInternalEncoding(icColorSpaceSignature nSpace, icFloatNumber *pInternal,
                                         const icUInt16Number *pData)
 {
@@ -3906,6 +4376,7 @@ icStatusCMM CIccCmm::ToInternalEncoding(icColorSpaceSignature nSpace, icFloatNum
     }
   }
 }
+
 
 /**
  **************************************************************************
@@ -4076,6 +4547,22 @@ icStatusCMM CIccCmm::FromInternalEncoding(icColorSpaceSignature nSpace, icFloatC
   return icCmmStatOk;
 }
 
+
+/**
+**************************************************************************
+* Name: CIccCmm::FromInternalEncoding
+* 
+* Purpose: 
+*  Functions for converting from Internal representation of 8 bit pixel colors.
+*  
+* Args:
+*  nSpace = color space signature of the data,
+*  nEncode = icFloatColorEncoding type of the data,
+*  pData = converted data is stored here,
+*  pInternal = the data to be converted
+*  bClip = flag to clip data to internal range
+**************************************************************************
+*/
 icStatusCMM CIccCmm::FromInternalEncoding(icColorSpaceSignature nSpace, icUInt8Number *pData,
                                           const icFloatNumber *pInternal)
 {
@@ -4115,6 +4602,22 @@ icStatusCMM CIccCmm::FromInternalEncoding(icColorSpaceSignature nSpace, icUInt8N
   }
 }
 
+
+/**
+**************************************************************************
+* Name: CIccCmm::FromInternalEncoding
+* 
+* Purpose: 
+*  Functions for converting from Internal representation of 16 bit pixel colors.
+*  
+* Args:
+*  nSpace = color space signature of the data,
+*  nEncode = icFloatColorEncoding type of the data,
+*  pData = converted data is stored here,
+*  pInternal = the data to be converted
+*  bClip = flag to clip data to internal range
+**************************************************************************
+*/
 icStatusCMM CIccCmm::FromInternalEncoding(icColorSpaceSignature nSpace, icUInt16Number *pData,
                                           const icFloatNumber *pInternal)
 {
@@ -4153,6 +4656,7 @@ icStatusCMM CIccCmm::FromInternalEncoding(icColorSpaceSignature nSpace, icUInt16
     }
   }
 }
+
 
 /**
  **************************************************************************
@@ -4931,6 +5435,7 @@ CIccNamedColorCmm::~CIccNamedColorCmm()
  *  szProfilePath = file name of the profile to be added,
  *  nIntent = rendering intent to be used with the profile,
  *  nInterp = type of interpolation to be used with the profile
+ *  pHintManager = hints for creating the xform
  * 
  * Return: 
  *  icCmmStatOk, if the profile was added to the list succesfully
@@ -4941,14 +5446,14 @@ icStatusCMM CIccNamedColorCmm::AddXform(const icChar *szProfilePath,
                                         icXformInterp nInterp /*icXformInterp*/,
                                         icXformLutType nLutType /*=icXformLutColor*/,
                                         bool bUseMpeTags /*=true*/,
-                                        IIccCreateXformHint *pHint /*=NULL*/)
+                                        CIccCreateXformHintManager *pHintManager /*=NULL*/)
 {
   CIccProfile *pProfile = OpenIccProfile(szProfilePath);
 
   if (!pProfile) 
     return icCmmStatCantOpenProfile;
 
-  icStatusCMM rv = AddXform(pProfile, nIntent, nInterp, nLutType, bUseMpeTags, pHint);
+  icStatusCMM rv = AddXform(pProfile, nIntent, nInterp, nLutType, bUseMpeTags, pHintManager);
 
   if (rv != icCmmStatOk)
     delete pProfile;
@@ -4968,6 +5473,7 @@ icStatusCMM CIccNamedColorCmm::AddXform(const icChar *szProfilePath,
  *  nIntent = rendering intent to be used with the profile,
  *  nInterp = type of interpolation to be used with the profile
  *  nLutType = type of lut to use from the profile
+ *  pHintManager = hints for creating the xform
  * 
  * Return: 
  *  icCmmStatOk, if the profile was added to the list succesfully
@@ -4978,7 +5484,7 @@ icStatusCMM CIccNamedColorCmm::AddXform(CIccProfile *pProfile,
                                         icXformInterp nInterp /*=icInterpLinear*/,
                                         icXformLutType nLutType /*=icXformLutColor*/,
                                         bool bUseMpeTags /*=true*/,
-                                        IIccCreateXformHint *pHint /*=NULL*/)
+                                        CIccCreateXformHintManager *pHintManager /*=NULL*/)
 {
   icColorSpaceSignature nSrcSpace, nDstSpace;
   CIccXformPtr Xform;
@@ -5027,7 +5533,7 @@ icStatusCMM CIccNamedColorCmm::AddXform(CIccProfile *pProfile,
           bInput = false;
         }
 
-        Xform.ptr = CIccXform::Create(pProfile, bInput, nIntent, nInterp, icXformLutNamedColor, bUseMpeTags, pHint);
+        Xform.ptr = CIccXform::Create(pProfile, bInput, nIntent, nInterp, icXformLutNamedColor, bUseMpeTags, pHintManager);
         if (!Xform.ptr) {
           return icCmmStatBadXform;
         }
@@ -5107,7 +5613,7 @@ icStatusCMM CIccNamedColorCmm::AddXform(CIccProfile *pProfile,
   }
 
   if (!Xform.ptr)
-    Xform.ptr = CIccXform::Create(pProfile, bInput, nIntent, nInterp, nLutType, bUseMpeTags, pHint);
+    Xform.ptr = CIccXform::Create(pProfile, bInput, nIntent, nInterp, nLutType, bUseMpeTags, pHintManager);
 
   if (!Xform.ptr) {
     return icCmmStatBadXform;
@@ -5302,6 +5808,7 @@ icStatusCMM CIccNamedColorCmm::SetLastXformDest(icColorSpaceSignature nDestSpace
 
   return icCmmStatBadXform;
 }
+
 
 /**
 ****************************************************************************

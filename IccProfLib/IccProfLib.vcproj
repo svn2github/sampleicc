@@ -170,6 +170,10 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
+				RelativePath=".\IccApplyBPC.cpp"
+				>
+			</File>
+			<File
 				RelativePath="IccCmm.cpp"
 				>
 				<FileConfiguration
@@ -406,6 +410,10 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl"
 			>
+			<File
+				RelativePath=".\IccApplyBPC.h"
+				>
+			</File>
 			<File
 				RelativePath="IccCmm.h"
 				>

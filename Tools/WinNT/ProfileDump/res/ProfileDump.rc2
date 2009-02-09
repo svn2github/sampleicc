@@ -16,6 +16,6 @@
 IDR_MANIFEST RT_MANIFEST MOVEABLE PURE "res\\ProfileDump.manifest"
 
 /////////////////////////////////////////////////////////////////////////////
-#define NUM_REVISION 0
+#define NUM_REVISION 1
 #define NUM_BUILD 0
 

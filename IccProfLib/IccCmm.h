@@ -65,6 +65,8 @@
 // HISTORY:
 //
 // -Initial implementation by Max Derhak 5-15-2003
+// -Added support for Monochrome ICC profile apply by Rohit Patil 12-03-2008
+// -Integrate changes for PCS adjustment by George Pawle 12-09-2008
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -121,24 +123,6 @@ typedef enum {
 #define icPerceptualRefWhiteY 1.0000
 #define icPerceptualRefWhiteZ 0.8249
 
-// CMM Xform creation hint information
-class IIccCreateXformHint
-{
-public:
-  virtual const char *GetHintType()=0;
-};
-
-class CIccCreateNamedColorXformHint : public IIccCreateXformHint
-{
-public:
-  virtual const char *GetHintType() {return "CIccCreateNamedColorXformHint";}
-
-  icColorSpaceSignature csPcs;
-  icColorSpaceSignature csDevice;
-  IIccCreateXformHint *pHint;
-};
-
-
 // CMM Xform types
 typedef enum {
   icXformTypeMatrixTRC  = 0,
@@ -147,10 +131,108 @@ typedef enum {
   icXformTypeNDLut      = 3,
   icXformTypeNamedColor = 4,  //Creator uses icNamedColorXformHint
   icXformTypeMpe        = 5,
+	icXformTypeMonochrome = 6,
 
   icXformTypeUnknown    = 0x7ffffff,
 } icXformType;
 
+/**
+**************************************************************************
+* Type: Class
+* 
+* Purpose: 
+*  Interface for creation of a named xform hint
+**************************************************************************
+*/
+class ICCPROFLIB_API IIccCreateXformHint
+{
+public:
+	virtual const char *GetHintType() const=0;
+};
+
+/**
+**************************************************************************
+* Type: Class
+* 
+* Purpose: 
+*  Manages the named xform hints
+**************************************************************************
+*/
+class ICCPROFLIB_API CIccCreateXformHintManager
+{
+public:
+	CIccCreateXformHintManager() { m_pList = NULL; }
+	~CIccCreateXformHintManager();
+
+	/// Adds and owns the passed named hint to it's list
+	bool AddHint(IIccCreateXformHint* pHint);
+
+	/// Deletes the object referenced by the passed named hint pointer and removes it from the list
+	bool DeleteHint(IIccCreateXformHint* pHint);
+
+	/// Finds and returns a pointer to the named hint
+	IIccCreateXformHint* GetHint(const char* hintName);
+
+private:
+	// private hint ptr class
+	class IIccCreateXformHintPtr {
+	public:
+		IIccCreateXformHint* ptr;
+	};
+	typedef std::list<IIccCreateXformHintPtr> IIccCreateXformHintList;
+
+	// private members
+	IIccCreateXformHintList* m_pList;
+};
+
+/**
+**************************************************************************
+* Type: Class
+* 
+* Purpose: 
+*  Hint for creation of a named color xform
+**************************************************************************
+*/
+class ICCPROFLIB_API CIccCreateNamedColorXformHint : public IIccCreateXformHint
+{
+public:
+	virtual const char *GetHintType() const {return "CIccCreateNamedColorXformHint";}
+
+	icColorSpaceSignature csPcs;
+	icColorSpaceSignature csDevice;
+};
+
+/**
+**************************************************************************
+* Type: Class
+* 
+* Purpose: 
+*  Interface for calculating adjust PCS factors
+**************************************************************************
+*/
+class CIccXform;
+class ICCPROFLIB_API IIccAdjustPCSXform
+{
+public:
+	virtual ~IIccAdjustPCSXform() {}
+	virtual bool CalcFactors(const CIccProfile* pProfile, const CIccXform* pXfm, icFloatNumber* Scale, icFloatNumber* Offset) const=0;
+};
+
+/**
+**************************************************************************
+* Type: Class
+* 
+* Purpose: 
+*  Hint for calculating adjust PCS factors
+**************************************************************************
+*/
+class ICCPROFLIB_API CIccCreateAdjustPCSXformHint : public IIccCreateXformHint
+{
+public:
+	virtual const char *GetHintType() const {return "CIccCreateAdjustPCSXformHint";}
+	virtual const char *GetAdjustPCSType() const=0;
+	virtual IIccAdjustPCSXform *GetNewAdjustPCSXform() const=0;
+};
 
 //forward reference to CIccXform used by CIccApplyXform
 class CIccApplyXform;
@@ -177,13 +259,13 @@ public:
   ///Note: The returned CIccXform will own the profile.
   static CIccXform *Create(CIccProfile *pProfile, bool bInput=true, icRenderingIntent nIntent=icUnknownIntent, 
                            icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-                           bool bUseMpeTags=true, IIccCreateXformHint *pHint=NULL);
+                           bool bUseMpeTags=true, CIccCreateXformHintManager *pHintManager=NULL);
 
   ///Note: Provide an interface to work profile references.  The IccProfile is copied, and the copy's ownership
   ///is turned over to the Returned CIccXform object.
   static CIccXform *Create(CIccProfile &pProfile, bool bInput=true, icRenderingIntent nIntent=icUnknownIntent, 
                            icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-                           bool bUseMpeTags=true, IIccCreateXformHint *pHint=NULL);
+                           bool bUseMpeTags=true, CIccCreateXformHintManager *pHintManager=NULL);
 
   virtual icStatusCMM Begin();
 
@@ -208,8 +290,8 @@ public:
   ///Checks if the profile is to be used as input profile
   bool IsInput() const { return m_bInput; }
 
-  /// The following function is for Overriden create function
-  void SetParams(CIccProfile *pProfile, bool bInput, icRenderingIntent nIntent, icXformInterp nInterp);
+  /// The following function is for Overridden create function
+  void SetParams(CIccProfile *pProfile, bool bInput, icRenderingIntent nIntent, icXformInterp nInterp, CIccCreateXformHintManager *pHintManager=NULL);
 
   /// Use these functions to extract the input/output curves from the xform
   virtual LPIccCurve* ExtractInputCurves()=0;
@@ -217,19 +299,30 @@ public:
 
   virtual bool NoClipPCS() const { return false; }
 
+	/// Returns the profile pointer. Profile is still owned by the Xform.
+	const CIccProfile* GetProfile() const { return m_pProfile; }
+
+	/// Returns the rendering intent being used by the Xform
+	icRenderingIntent GetIntent() const { return m_nIntent; }
+
 protected:
   //Called by derived classes to initialize Base
 
   const icFloatNumber *CheckSrcAbs(CIccApplyXform *pApply, const icFloatNumber *Pixel) const;
   void CheckDstAbs(icFloatNumber *Pixel) const;
+	void AdjustPCS(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) const;
 
   CIccProfile *m_pProfile;
   bool m_bInput;
   icRenderingIntent m_nIntent;
-
   icXYZNumber m_MediaXYZ;
-
   icXformInterp m_nInterp;
+
+	// track PCS adjustments
+	IIccAdjustPCSXform* m_pAdjustPCS;
+	bool m_bAdjustPCS;
+	icFloatNumber m_PCSScale[3]; // scale and offset for PCS adjustment in XYZ
+	icFloatNumber m_PCSOffset[3];
 };
 
 /**
@@ -302,6 +395,39 @@ public:
 ************************************************************************** 
 */
 typedef std::list<CIccApplyXformPtr> CIccApplyXformList;
+
+/**
+**************************************************************************
+* Type: Class
+* 
+* Purpose: This is the general Monochrome Xform (uses a grayTRCTag)
+* 
+**************************************************************************
+*/
+class ICCPROFLIB_API CIccXformMonochrome : public CIccXform
+{
+public:
+	CIccXformMonochrome();
+	virtual ~CIccXformMonochrome();
+
+	virtual icXformType GetXformType() const { return icXformTypeMonochrome; }
+
+	virtual icStatusCMM Begin();
+	virtual void Apply(CIccApplyXform *pApplyXform, icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) const;
+
+	virtual LPIccCurve* ExtractInputCurves();
+	virtual LPIccCurve* ExtractOutputCurves();
+
+protected:
+
+	CIccCurve *m_Curve;
+	CIccCurve *GetCurve(icSignature sig) const;
+	CIccCurve *GetInvCurve(icSignature sig) const;
+
+	bool m_bFreeCurve;
+	/// used only when applying the xform
+	LPIccCurve m_ApplyCurvePtr;
+};
 
 /**
  **************************************************************************
@@ -533,7 +659,7 @@ public:
 
   ///Note: The returned CIccXform will own the profile.
   static CIccXform *Create(CIccProfile *pProfile, bool bInput=true, icRenderingIntent nIntent=icUnknownIntent, 
-    icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor);
+    icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor, CIccCreateXformHintManager *pHintManager=NULL);
 
   virtual icStatusCMM Begin();
 
@@ -714,17 +840,17 @@ public:
   ///Must make at least one call to some form of AddXform() before calling Begin()
   virtual icStatusCMM AddXform(const icChar *szProfilePath, icRenderingIntent nIntent=icUnknownIntent,
                                icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-                               bool bUseMpeTags=true, IIccCreateXformHint *pHint=NULL);
+                               bool bUseMpeTags=true, CIccCreateXformHintManager *pHintManager=NULL);
   virtual icStatusCMM AddXform(icUInt8Number *pProfileMem, icUInt32Number nProfileLen,
                                icRenderingIntent nIntent=icUnknownIntent, icXformInterp nInterp=icInterpLinear,
                                icXformLutType nLutType=icXformLutColor, bool bUseMpeTags=true,
-                               IIccCreateXformHint *pHint=NULL);
+                               CIccCreateXformHintManager *pHintManager=NULL);
   virtual icStatusCMM AddXform(CIccProfile *pProfile, icRenderingIntent nIntent=icUnknownIntent,
                                icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-                               bool bUseMpeTags=true, IIccCreateXformHint *pHint=NULL);  //Note: profile will be owned by the CMM
+                               bool bUseMpeTags=true, CIccCreateXformHintManager *pHintManager=NULL);  //Note: profile will be owned by the CMM
   virtual icStatusCMM AddXform(CIccProfile &Profile, icRenderingIntent nIntent=icUnknownIntent,
                                icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-                               bool bUseMpeTags=true, IIccCreateXformHint *pHint=NULL);  //Note the profile will be copied
+                               bool bUseMpeTags=true, CIccCreateXformHintManager *pHintManager=NULL);  //Note the profile will be copied
 
   //The Begin function should be called before Apply or GetNewApplyCmm()
   virtual icStatusCMM Begin(bool bAllocNewApply=true);
@@ -860,10 +986,10 @@ public:
   ///Must make at least one call to some form of AddXform() before calling Begin()
   virtual icStatusCMM AddXform(const icChar *szProfilePath, icRenderingIntent nIntent=icUnknownIntent,
                                icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-                               bool bUseMpeTags=true, IIccCreateXformHint *pHint=NULL);
+                               bool bUseMpeTags=true, CIccCreateXformHintManager *pHintManager=NULL);
   virtual icStatusCMM AddXform(CIccProfile *pProfile, icRenderingIntent nIntent=icUnknownIntent,
                                icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-                               bool buseMpeTags=true, IIccCreateXformHint *pHint=NULL);  //Note: profile will be owned by the CMM
+                               bool buseMpeTags=true, CIccCreateXformHintManager *pHintManager=NULL);  //Note: profile will be owned by the CMM
 
   ///Must be called before calling Apply() or GetNewApply()
   //The Begin function should be called before Apply or GetNewApplyCmm()
@@ -967,16 +1093,16 @@ public:
   //override AddXform/Begin functions to return bad status.
   virtual icStatusCMM AddXform(const icChar *szProfilePath, icRenderingIntent nIntent=icUnknownIntent,
     icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-    bool bUseMpeTags=true, IIccCreateXformHint *pHint=NULL) { return icCmmStatBad; }
+    bool bUseMpeTags=true, CIccCreateXformHintManager *pHintManager=NULL) { return icCmmStatBad; }
   virtual icStatusCMM AddXform(icUInt8Number *pProfileMem, icUInt32Number nProfileLen,
     icRenderingIntent nIntent=icUnknownIntent, icXformInterp nInterp=icInterpLinear,
-    icXformLutType nLutType=icXformLutColor, bool bUseMpeTags=true, IIccCreateXformHint *pHint=NULL)  { return icCmmStatBad; }
+    icXformLutType nLutType=icXformLutColor, bool bUseMpeTags=true, CIccCreateXformHintManager *pHintManager=NULL)  { return icCmmStatBad; }
   virtual icStatusCMM AddXform(CIccProfile *pProfile, icRenderingIntent nIntent=icUnknownIntent,
     icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-    bool bUseMpeTags=true, IIccCreateXformHint *pHint=NULL)  { return icCmmStatBad; }
+    bool bUseMpeTags=true, CIccCreateXformHintManager *pHintManager=NULL)  { return icCmmStatBad; }
   virtual icStatusCMM AddXform(CIccProfile &Profile, icRenderingIntent nIntent=icUnknownIntent,
     icXformInterp nInterp=icInterpLinear, icXformLutType nLutType=icXformLutColor,
-    bool bUseMpeTags=true, IIccCreateXformHint *pHint=NULL) { return icCmmStatBad; }
+    bool bUseMpeTags=true, CIccCreateXformHintManager *pHintManager=NULL) { return icCmmStatBad; }
 
   virtual CIccApplyCmm *GetNewApplyCmm(icStatusCMM &status); 
 
