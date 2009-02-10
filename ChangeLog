@@ -1,3 +1,7 @@
+2009-01-15 Rohit
+ * Added support for Adobe Black Point Compensation
+ * Fixed bug with Absolute intent with D2B3/B2D3 tags.
+
 2008-12-02 Rohit
  * Added support for Monochrome ICC profile apply
 

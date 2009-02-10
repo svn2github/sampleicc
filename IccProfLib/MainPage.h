@@ -59,6 +59,13 @@
  *   the configuration parameters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
+ * - January  2008
+ *  - Added support for Adobe Black Point compensation
+ *  - Fixed bug with D2B3/B2D3 apply (shouldn't apply relative transform)
+ *
+ * - December 2008
+ *  - Added support for Monochrome ICC profile apply
+ *
  * - November 2008
  *  - Cleanup of build files for Linux
  *  - Revised License to version 0.2
