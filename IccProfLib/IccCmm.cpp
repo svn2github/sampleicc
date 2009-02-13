@@ -920,7 +920,7 @@ icStatusCMM CIccXform::Begin()
 				m_PCSOffset[2] = 0.0;
 			}
 	}
-	else if (m_nIntent == icPerceptual && IsVersion2()) {
+	else if (m_nIntent == icPerceptual && (IsVersion2() || !HasPerceptualHandling())) {
 		icColorSpaceSignature Space = m_pProfile->m_Header.pcs;
 
 		if (IsSpacePCS(Space)) {

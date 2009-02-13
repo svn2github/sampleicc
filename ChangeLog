@@ -1,14 +1,17 @@
-2009-01-15 Rohit
+2009-02-12 Max Derhak
+ * Added check for Perceptual Black Mapping conversion with V4 non Lut based xforms.
+
+2009-01-15 Rohit Patil
  * Added support for Adobe Black Point Compensation
  * Fixed bug with Absolute intent with D2B3/B2D3 tags.
 
-2008-12-02 Rohit
+2008-12-02 Rohit Patil
  * Added support for Monochrome ICC profile apply
 
-2008-11-24
+2008-11-24 Max Derhak
  * Cleanup of build files for Linux
 
-2008-10-31
+2008-10-31 Max Derhak
  * Added fix to make CIccCmmMRU work after chages to add CIccApplyCmm architecture
 
 2008-10-15

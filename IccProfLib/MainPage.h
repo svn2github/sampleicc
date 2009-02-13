@@ -59,7 +59,10 @@
  *   the configuration parameters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
- * - January  2008
+ * - February 2009
+ *  - Added check for Perceptual Black mapping for V4 non LUT based xforms
+ *
+ * - January  2009
  *  - Added support for Adobe Black Point compensation
  *  - Fixed bug with D2B3/B2D3 apply (shouldn't apply relative transform)
  *

@@ -312,6 +312,8 @@ protected:
   void CheckDstAbs(icFloatNumber *Pixel) const;
 	void AdjustPCS(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) const;
 
+  virtual bool HasPerceptualHandling() { return true; }
+
   CIccProfile *m_pProfile;
   bool m_bInput;
   icRenderingIntent m_nIntent;
@@ -420,6 +422,8 @@ public:
 
 protected:
 
+  virtual bool HasPerceptualHandling() { return false; }
+
 	CIccCurve *m_Curve;
 	CIccCurve *GetCurve(icSignature sig) const;
 	CIccCurve *GetInvCurve(icSignature sig) const;
@@ -452,6 +456,8 @@ public:
   virtual LPIccCurve* ExtractOutputCurves();
 
 protected:
+
+  virtual bool HasPerceptualHandling() { return false; }
 
   icFloatNumber m_e[9];
   CIccCurve *m_Curve[3];
@@ -634,6 +640,9 @@ public:
   virtual LPIccCurve* ExtractOutputCurves() {return NULL;}
 
 protected:
+
+  virtual bool HasPerceptualHandling() { return false; }
+
   CIccTagNamedColor2 *m_pTag;
   icApplyInterface m_nApplyInterface;
   icColorSpaceSignature m_nSrcSpace;
