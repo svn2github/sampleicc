@@ -5600,6 +5600,9 @@ bool CIccProfileDescText::Read(icUInt32Number size, CIccIO *pIO)
     return false;
   pIO->Seek(nPos, icSeekSet);
 
+  if (sig==icSigTextDescriptionType)
+    m_bNeedsPading = false;
+
   if (!SetType(sig)) {
     //We couldn't find it, but we may be looking in the wrong place
     //Re-Syncronize on a 4 byte boundary
@@ -5642,7 +5645,10 @@ bool CIccProfileDescText::Write(CIccIO *pIO)
     return false;
 
   if (m_pTag->Write(pIO)) {
-    return pIO->Align32();
+    if (m_pTag->GetType() != icSigTextDescriptionType)
+      return pIO->Align32();
+    else
+      return true;
   }
   
   return false;
