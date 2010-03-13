@@ -12,7 +12,7 @@
  * The ICC Software License, Version 0.2
  *
  *
- * Copyright (c) 2003-2008 The International Color Consortium. All rights 
+ * Copyright (c) 2003-2010 The International Color Consortium. All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -366,6 +366,28 @@ bool CIccFileIO::Open(const icChar *szFilename, const icChar *szAttr)
 
   return m_fFile != NULL;
 }
+
+
+#ifdef WIN32
+bool CIccFileIO::Open(const icWChar *szFilename, const icWChar *szAttr)
+{
+  icWChar myAttr[20];
+
+  if (!wcschr(szAttr, 'b')) {
+    myAttr[0] = szAttr[0];
+    myAttr[1] = 'b';
+    wcscpy(myAttr+2, szAttr+1);
+    szAttr = myAttr;
+  }
+
+  if (m_fFile)
+    fclose(m_fFile);
+
+  m_fFile = _wfopen(szFilename, szAttr);
+
+  return m_fFile != NULL;
+}
+#endif
 
 
 void CIccFileIO::Close()

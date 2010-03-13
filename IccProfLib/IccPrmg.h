@@ -90,7 +90,7 @@ public:
 
   icStatusCMM EvaluateProfile(CIccProfile *pProfile, icRenderingIntent nIntent=icUnknownIntent, 
                               icXformInterp nInterp=icInterpLinear, bool buseMpeTags=true);
-  icStatusCMM EvaluateProfile(const char *szProfilePath, icRenderingIntent nIntent=icUnknownIntent, 
+  icStatusCMM EvaluateProfile(const icChar *szProfilePath, icRenderingIntent nIntent=icUnknownIntent, 
                               icXformInterp nInterp=icInterpLinear, bool buseMpeTags=true);
 
   icUInt32Number m_nDE1, m_nDE2, m_nDE3, m_nDE5, m_nDE10, m_nTotal;

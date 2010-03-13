@@ -192,6 +192,7 @@ void Usage()
 	printf("    22 - Preview Saturation\n");
 	printf("    23 - Preview Absolute Colorimetric\n");
 	printf("    30 - Gamut\n");
+  printf("    33 - Gamut Absolute\n");
 	printf("    40 - Perceptual with BPC\n");
 	printf("    41 - Relative Colorimetric with BPC\n");
 	printf("    42 - Saturation with BPC\n");

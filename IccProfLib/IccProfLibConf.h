@@ -12,7 +12,7 @@
  * The ICC Software License, Version 0.2
  *
  *
- * Copyright (c) 2003-2008 The International Color Consortium. All rights 
+ * Copyright (c) 2003-2010 The International Color Consortium. All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -100,6 +100,10 @@ namespace sampleICC {
 
   //Since msvc doesn't support cbrtf use pow instead
   #define ICC_CBRTF(v) pow((double)(v), 1.0/3.0)
+
+  #if (_MSC_VER < 1300)
+    #define ICC_UNSUPPORTED_TAG_DICT
+  #endif
 
 #else // non-PC, perhaps Mac or Linux
 

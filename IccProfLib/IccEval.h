@@ -12,7 +12,7 @@ Copyright:  © see ICC Software License
 * The ICC Software License, Version 0.2
 *
 *
-* Copyright (c) 2003-2008 The International Color Consortium. All rights 
+* Copyright (c) 2003-2010 The International Color Consortium. All rights 
 * reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -87,7 +87,7 @@ public:
                                              icRenderingIntent nIntent=icUnknownIntent, icXformInterp nInterp=icInterpLinear,
                                              bool buseMpeTags=true);
 
-  icStatusCMM ICCPROFLIB_API EvaluateProfile(const char *szProfilePath, icUInt8Number nGran=0, 
+  icStatusCMM ICCPROFLIB_API EvaluateProfile(const icChar *szProfilePath, icUInt8Number nGran=0, 
                                              icRenderingIntent nIntent=icUnknownIntent, icXformInterp nInterp=icInterpLinear,
                                              bool buseMpeTags=true);
 };

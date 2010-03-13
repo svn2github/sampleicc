@@ -12,7 +12,7 @@
  * The ICC Software License, Version 0.2
  *
  *
- * Copyright (c) 2003-2008 The International Color Consortium. All rights 
+ * Copyright (c) 2003-2010 The International Color Consortium. All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -149,6 +149,11 @@ CIccTag* CIccSpecTagFactory::CreateTag(icTagTypeSignature tagSig)
 
     case icSigDateTimeType:
       return new CIccTagDateTime;
+
+#ifndef ICC_UNSUPPORTED_TAG_DICT
+    case icSigDictType:
+      return new CIccTagDict;
+#endif
 
     case icSigColorantOrderType:
       return new CIccTagColorantOrder;
@@ -291,6 +296,9 @@ const icChar* CIccSpecTagFactory::GetTagSigName(icTagSignature tagSig)
   case icSigPreview2Tag:
     return "preview2Tag";
 
+  case icSigPrintConditionTag:
+    return "printConditionTag";
+
   case icSigProfileDescriptionTag:
     return "profileDescriptionTag";
 
@@ -395,7 +403,9 @@ const icChar* CIccSpecTagFactory::GetTagTypeSigName(icTagTypeSignature tagSig)
 
   case icSigDeviceSettingsType:
     return "deviceSettingsType";
-    break;
+
+  case icSigDictType:
+    return "dictType";
 
   case icSigLut16Type:
     return "lut16Type";

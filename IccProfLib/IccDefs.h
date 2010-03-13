@@ -11,7 +11,7 @@
  * The ICC Software License, Version 0.2
  *
  *
- * Copyright (c) 2003-2008 The International Color Consortium. All rights 
+ * Copyright (c) 2003-2010 The International Color Consortium. All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -60,8 +60,7 @@
  * 
  */
 
-
- 
+#include <stddef.h>
 
 /* Header file guard bands */
 #ifndef _ICCDEFS_H
@@ -112,6 +111,9 @@ typedef float              icFloatNumber;
 
 /* For string operations */
 typedef char                icChar;
+#ifdef WIN32
+typedef wchar_t             icWChar;
+#endif
 
 /* Validation Status values */
 typedef enum {

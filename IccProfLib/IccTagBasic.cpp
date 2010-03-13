@@ -12,7 +12,7 @@
  * The ICC Software License, Version 0.2
  *
  *
- * Copyright (c) 2003-2008 The International Color Consortium. All rights 
+ * Copyright (c) 2003-2010 The International Color Consortium. All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -80,6 +80,7 @@
 #include "IccUtil.h"
 #include "IccProfile.h"
 #include "IccTagFactory.h"
+#include "IccConvertUTF.h"
 
 #ifndef __min
 #include <algorithm>
@@ -3728,27 +3729,61 @@ void CIccLocalizedUnicode::SetText(const icChar *szText,
  * Purpose: Allows text data associated with the tag to be set.
  * 
  * Args: 
- *  sszUnicodeText = Unicode text to be set,
+ *  sszUnicode16Text = Unicode16 text to be set,
  *  nLanguageCode = the language code type as defined by icLanguageCode,
  *  nRegionCode = the region code type as defined by icCountryCode
  *****************************************************************************
  */
-void CIccLocalizedUnicode::SetText(const icUInt16Number *sszUnicodeText,
+void CIccLocalizedUnicode::SetText(const icUInt16Number *sszUnicode16Text,
                                    icLanguageCode nLanguageCode/* = icLanguageCodeEnglish*/,
                                    icCountryCode nRegionCode/* = icCountryCodeUSA*/)
 {
-  const icUInt16Number *pBuf=sszUnicodeText;
+  const icUInt16Number *pBuf=sszUnicode16Text;
   int len;
 
   for (len=0; *pBuf; len++, pBuf++);
 
   SetSize(len);
-  memcpy(m_pBuf, sszUnicodeText, (len+1)*sizeof(icUInt16Number));
+  memcpy(m_pBuf, sszUnicode16Text, (len+1)*sizeof(icUInt16Number));
 
   m_nLanguageCode = nLanguageCode;
   m_nCountryCode = nRegionCode;
 }
 
+/**
+****************************************************************************
+* Name: CIccLocalizedUnicode::SetText
+* 
+* Purpose: Allows text data associated with the tag to be set.
+* 
+* Args: 
+*  sszUnicode32Text = Unicode32 text to be set,
+*  nLanguageCode = the language code type as defined by icLanguageCode,
+*  nRegionCode = the region code type as defined by icCountryCode
+*****************************************************************************
+*/
+void CIccLocalizedUnicode::SetText(const icUInt32Number *sszUnicode32Text,
+                                   icLanguageCode nLanguageCode/* = icLanguageCodeEnglish*/,
+                                   icCountryCode nRegionCode/* = icCountryCodeUSA*/)
+{
+  const icUInt32Number *pBuf=sszUnicode32Text;
+  int len;
+
+  for (len=0; *pBuf; len++, pBuf++);
+  if (*pBuf)
+    pBuf--;
+
+  SetSize(len*2);
+  const icUInt32Number *srcStart = sszUnicode32Text;
+  icUInt16Number *dstStart = m_pBuf;
+  icConvertUTF32toUTF16(&srcStart, &srcStart[len], &dstStart, &dstStart[len*2], lenientConversion);
+
+  *dstStart=0;
+  SetSize(dstStart - m_pBuf);
+
+  m_nLanguageCode = nLanguageCode;
+  m_nCountryCode = nRegionCode;
+}
 
 
 /**
@@ -4132,7 +4167,7 @@ void CIccTagMultiLocalizedUnicode::SetText(const icChar *szText,
 *  RegionCode
 *****************************************************************************
 */
-void CIccTagMultiLocalizedUnicode::SetText(const icUInt16Number *sszUnicodeText, 
+void CIccTagMultiLocalizedUnicode::SetText(const icUInt16Number *sszUnicode16Text, 
                                            icLanguageCode nLanguageCode /* = icLanguageCodeEnglish */,
                                            icCountryCode nRegionCode /* = icCountryCodeUSA */)
 {
@@ -4140,11 +4175,39 @@ void CIccTagMultiLocalizedUnicode::SetText(const icUInt16Number *sszUnicodeText,
 
   if (!pText) {
     CIccLocalizedUnicode newText;
-    newText.SetText(sszUnicodeText, nLanguageCode, nRegionCode);
+    newText.SetText(sszUnicode16Text, nLanguageCode, nRegionCode);
     m_Strings->push_back(newText);
   }
   else {
-    pText->SetText(sszUnicodeText, nLanguageCode, nRegionCode);
+    pText->SetText(sszUnicode16Text, nLanguageCode, nRegionCode);
+  }
+}
+
+/**
+****************************************************************************
+* Name: sampleICC::CIccTagMultiLocalizedUnicode::SetText
+* 
+* Purpose: 
+* 
+* Args:
+*  sszUnicodeText
+*  nLanguageCode
+*  RegionCode
+*****************************************************************************
+*/
+void CIccTagMultiLocalizedUnicode::SetText(const icUInt32Number *sszUnicode32Text, 
+                                           icLanguageCode nLanguageCode /* = icLanguageCodeEnglish */,
+                                           icCountryCode nRegionCode /* = icCountryCodeUSA */)
+{
+  CIccLocalizedUnicode *pText = Find(nLanguageCode, nRegionCode);
+
+  if (!pText) {
+    CIccLocalizedUnicode newText;
+    newText.SetText(sszUnicode32Text, nLanguageCode, nRegionCode);
+    m_Strings->push_back(newText);
+  }
+  else {
+    pText->SetText(sszUnicode32Text, nLanguageCode, nRegionCode);
   }
 }
 

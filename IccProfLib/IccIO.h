@@ -12,7 +12,7 @@
  * The ICC Software License, Version 0.2
  *
  *
- * Copyright (c) 2003-2008 The International Color Consortium. All rights 
+ * Copyright (c) 2003-2010 The International Color Consortium. All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -150,6 +150,9 @@ public:
   virtual ~CIccFileIO();
 
   bool Open(const icChar *szFilename, const icChar *szAttr);
+#ifdef WIN32
+  bool Open(const icWChar *szFilename, const icWChar *szAttr);
+#endif
   virtual void Close();
 
   virtual icInt32Number Read8(void *pBuf, icInt32Number nNum=1);

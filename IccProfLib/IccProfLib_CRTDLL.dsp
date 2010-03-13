@@ -95,6 +95,10 @@ SOURCE=.\IccCmm.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\IccConvertUTF.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\IccEval.cpp
 # End Source File
 # Begin Source File
@@ -128,6 +132,10 @@ SOURCE=.\IccTagBasic.cpp
 # Begin Source File
 
 SOURCE=.\IccTagBasic.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\IccTagDict.cpp
 # End Source File
 # Begin Source File
 
@@ -175,6 +183,10 @@ SOURCE=.\IccCmm.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\IccConvertUTF.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\IccDefs.h
 # End Source File
 # Begin Source File
@@ -212,6 +224,10 @@ SOURCE=.\IccProfLib_CRTDLLConf.h
 # Begin Source File
 
 SOURCE=.\IccTag.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\IccTagDict.h
 # End Source File
 # Begin Source File
 

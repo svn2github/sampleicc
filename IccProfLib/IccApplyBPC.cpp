@@ -12,7 +12,7 @@ Copyright:  © see ICC Software License
 * The ICC Software License, Version 0.2
 *
 *
-* Copyright (c) 2003-2008 The International Color Consortium. All rights 
+* Copyright (c) 2003-2010 The International Color Consortium. All rights 
 * reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -167,19 +167,24 @@ icFloatNumber CIccApplyBPC::calcQuadraticVertex(icFloatNumber* x, icFloatNumber*
 		s01 = calcsum(x, y, n, 0, 1);
 		s11 = calcsum(x, y, n, 1, 1);
 		s21 = calcsum(x, y, n, 2, 1);
-		denom = s00*s20*s40 - s10*s10*s40 - s00*s30*s30 + 2.0*s10*s20*s30 - s20*s20*s20;
+		denom = (icFloatNumber)(s00*s20*s40 - s10*s10*s40 - s00*s30*s30 + 2.0*s10*s20*s30 - s20*s20*s20);
 		if (fabs(denom)>0.0) {
 			// t and u are the coefficients of the quadratic equation y = tx^2 + ux + c
+			// the three equations with 3 unknowns can be written as
+			// [s40 s30 s20][t]   [s21]
+			// [s30 s20 s10][u] = [s11]
+			// [s20 s10 s00][c]   [s01]
 			icFloatNumber t = (s01*s10*s30 - s11*s00*s30 - s01*s20*s20 + s11*s10*s20 + s21*s00*s20 - s21*s10*s10)/denom;
 
 			icFloatNumber u = (s11*s00*s40 - s01*s10*s40 + s01*s20*s30 - s21*s00*s30 - s11*s20*s20 + s21*s10*s20)/denom;
 
-			// vertex is -u/2t
-			vert = -1.0 * u / (2.0 * t);
+			icFloatNumber c = (s01*s20*s40 - s11*s10*s40 - s01*s30*s30 + s11*s20*s30 + s21*s10*s30 - s21*s20*s20)/denom;
+
+			// vertex is (-u + sqrt(u^2 - 4tc))/2t
+			vert = (icFloatNumber)((-1.0 * u + sqrt(u*u - 4*t*c)) / (2.0 * t));
 		}
 	}
 
-	printf("Vertex: %.2lf\n", vert);
 	return vert;
 }
 
@@ -463,11 +468,11 @@ bool CIccApplyBPC::calcDstBlackPoint(const CIccProfile* pProfile, const CIccXfor
 
 		// calculate y values
 		icFloatNumber x[101], y[101];
-		icFloatNumber lo=0.03, hi=0.25;
+		icFloatNumber lo=0.03f, hi=0.25f;
 		int i, n;
 		if (nIntent==icRelativeColorimetric) {
-			lo = 0.1;
-			hi = 0.5;
+			lo = 0.1f;
+			hi = 0.5f;
 		}
 
 		for (i=0; i<101; i++) {

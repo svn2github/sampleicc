@@ -12,7 +12,7 @@
  * The ICC Software License, Version 0.2
  *
  *
- * Copyright (c) 2003-2008 The International Color Consortium. All rights 
+ * Copyright (c) 2003-2010 The International Color Consortium. All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -1947,6 +1947,43 @@ CIccProfile* ReadIccProfile(const icChar *szFilename)
 }
 
 
+#ifdef WIN32
+/**
+*****************************************************************************
+* Name: ReadIccProfile
+* 
+* Purpose: Read an ICC profile file.
+* 
+* Args: 
+*  szFilename - zero terminated string with filename of ICC profile to read 
+* 
+* Return: 
+*  Pointer to icc profile object, or NULL on failure
+******************************************************************************
+*/
+CIccProfile* ReadIccProfile(const icWChar *szFilename)
+{
+  CIccFileIO *pFileIO = new CIccFileIO;
+
+  if (!pFileIO->Open(szFilename, L"rb")) {
+    delete pFileIO;
+    return NULL;
+  }
+
+  CIccProfile *pIcc = new CIccProfile;
+
+  if (!pIcc->Read(pFileIO)) {
+    delete pIcc;
+    delete pFileIO;
+    return NULL;
+  }
+  delete pFileIO;
+
+  return pIcc;
+}
+
+#endif
+
 /**
 *****************************************************************************
 * Name: ReadIccProfile
@@ -2018,6 +2055,43 @@ CIccProfile* OpenIccProfile(const icChar *szFilename)
   return pIcc;
 }
 
+#ifdef WIN32
+/**
+******************************************************************************
+* Name: OpenIccProfile
+* 
+* Purpose: Open an ICC profile file.  This will only read the profile header
+*  and tag directory.  Loading of actual tags will be deferred until the
+*  tags are actually referenced by FindTag().
+* 
+* Args: 
+*  szFilename - zero terminated string with filename of ICC profile to read 
+* 
+* Return: 
+*  Pointer to icc profile object, or NULL on failure
+*******************************************************************************
+*/
+CIccProfile* OpenIccProfile(const icWChar *szFilename)
+{
+  CIccFileIO *pFileIO = new CIccFileIO;
+
+  if (!pFileIO->Open(szFilename, L"rb")) {
+    delete pFileIO;
+    return NULL;
+  }
+
+  CIccProfile *pIcc = new CIccProfile;
+
+  if (!pIcc->Attach(pFileIO)) {
+    delete pIcc;
+    delete pFileIO;
+    return NULL;
+  }
+
+  return pIcc;
+}
+#endif
+
 /**
 ******************************************************************************
 * Name: OpenIccProfile
@@ -2063,7 +2137,90 @@ CIccProfile* OpenIccProfile(const icUInt8Number *pMem, icUInt32Number nSize)
 *  tags are actually referenced by FindTag().
 * 
 * Args: 
+*  pIO - Handle to IO access object (Not ValidateIccProfile assumes ownership of this object)
+*  sReport - std::string to put report into
+*  nStatus - return status value
+* 
+* Return: 
+*  Pointer to icc profile object, or NULL on failure
+*******************************************************************************
+*/
+CIccProfile* ValidateIccProfile(CIccIO *pIO, std::string &sReport, icValidateStatus &nStatus)
+{
+  if (!pIO) {
+    sReport = icValidateCriticalErrorMsg;
+    sReport += " - ";
+    sReport += "- Invalid I/O Handle\r\n";
+    delete pIO;
+    return NULL;
+  }
+
+  CIccProfile *pIcc = new CIccProfile;
+
+  if (!pIcc) {
+    delete pIO;
+    return NULL;
+  }
+
+  nStatus = pIcc->ReadValidate(pIO, sReport);
+
+  if (nStatus>=icValidateCriticalError) {
+    delete pIcc;
+    delete pIO;
+    return NULL;
+  }
+
+  delete pIO;
+
+  nStatus = pIcc->Validate(sReport);
+
+  return pIcc;
+}
+
+#ifdef WIN32
+/**
+******************************************************************************
+* Name: ValidateIccProfile
+* 
+* Purpose: Open an ICC profile file.  This will only read the profile header
+*  and tag directory.  Loading of actual tags will be deferred until the
+*  tags are actually referenced by FindTag().
+* 
+* Args: 
 *  szFilename - zero terminated string with filename of ICC profile to read 
+*  sReport - std::string to put report into
+*  nStatus - return status value
+* 
+* Return: 
+*  Pointer to icc profile object, or NULL on failure
+*******************************************************************************
+*/
+CIccProfile* ValidateIccProfile(const icWChar *szFilename, std::string &sReport, icValidateStatus &nStatus)
+{
+  CIccFileIO *pFileIO = new CIccFileIO;
+
+  if (!pFileIO->Open(szFilename, L"rb")) {
+    delete pFileIO;
+    return NULL;
+  }
+
+  return ValidateIccProfile(pFileIO, sReport, nStatus);
+}
+#endif
+
+
+/**
+******************************************************************************
+* Name: ValidateIccProfile
+* 
+* Purpose: Open an ICC profile file.  This will only read the profile header
+*  and tag directory.  Loading of actual tags will be deferred until the
+*  tags are actually referenced by FindTag().
+* 
+* Args: 
+*  szFilename - zero terminated string with filename of ICC profile to read 
+*  sReport - std::string to put report into
+*  nStatus - return status value
 * 
 * Return: 
 *  Pointer to icc profile object, or NULL on failure
@@ -2104,6 +2261,8 @@ CIccProfile* ValidateIccProfile(const icChar *szFilename, std::string &sReport, 
   return pIcc;
 }
 
+
+
 /**
  ******************************************************************************
  * Name: SaveIccProfile
@@ -2134,6 +2293,39 @@ bool SaveIccProfile(const icChar *szFilename, CIccProfile *pIcc)
 
   return true;
 }
+
+#ifdef WIN32
+/**
+******************************************************************************
+* Name: SaveIccProfile
+* 
+* Purpose: Save an ICC profile file.  
+* 
+* Args: 
+*  szFilename - zero terminated string with filename of ICC profile to create
+* 
+* Return: 
+*  true = success, false = failure
+*******************************************************************************
+*/
+bool SaveIccProfile(const icWChar *szFilename, CIccProfile *pIcc)
+{
+  CIccFileIO FileIO;
+
+  if (!pIcc)
+    return false;
+
+  if (!FileIO.Open(szFilename, L"w+b")) {
+    return false;
+  }
+
+  if (!pIcc->Write(&FileIO)) {
+    return false;
+  }
+
+  return true;
+}
+#endif
 
 /**
  ****************************************************************************
@@ -2204,6 +2396,31 @@ bool CalcProfileID(const icChar *szFilename, icProfileID *pProfileID)
   return true;
 }
 
+#ifdef WIN32
+/**
+****************************************************************************
+* Name: CalcProfileID
+* 
+* Purpose: Calculate the Profile ID using MD5 Fingerprinting method. 
+* 
+* Args: 
+*  szFileName = name of the file whose profile ID has to be calculated,
+*  pProfileID = array where the profileID will be stored
+*****************************************************************************
+*/
+bool CalcProfileID(const icWChar *szFilename, icProfileID *pProfileID)
+{
+  CIccFileIO FileIO;
+
+  if (!FileIO.Open(szFilename, L"rb")) {
+    memset(pProfileID, 0, sizeof(icProfileID));
+    return false;
+  }
+
+  CalcProfileID(&FileIO, pProfileID);
+  return true;
+}
+#endif
 
 
 #ifdef USESAMPLEICCNAMESPACE

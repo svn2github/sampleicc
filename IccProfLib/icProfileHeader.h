@@ -77,7 +77,7 @@ bgCurve->curve[i] = 255 - (icUInt16Number)i;
 /*
  *
  *
-* Copyright (c) 2003-2008 The International Color Consortium. 
+* Copyright (c) 2003-2010 The International Color Consortium. 
  *
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -300,6 +300,9 @@ typedef double icFloat64Number;
 #define icMaxFloat32Number  3.402823466e+38F
 #define icMinFloat32Number -3.402823466e+38F
 
+/** 16-bit unicode characters **/
+typedef icUInt16Number icUnicodeChar;
+
 /*------------------------------------------------------------------------*/
 
 /**
@@ -356,6 +359,7 @@ typedef enum {
     icSigPreview0Tag                       = 0x70726530,  /* 'pre0' */
     icSigPreview1Tag                       = 0x70726531,  /* 'pre1' */
     icSigPreview2Tag                       = 0x70726532,  /* 'pre2' */
+    icSigPrintConditionTag                 = 0x7074636e,  /* 'ptcn' */
     icSigProfileDescriptionTag             = 0x64657363,  /* 'desc' */
     icSigProfileSequenceDescTag            = 0x70736571,  /* 'pseq' */
     icSigProfileSequceIdTag                = 0x70736964,  /* 'psid' */
@@ -428,6 +432,7 @@ typedef enum {
     icSigCrdInfoType                    = 0x63726469,  /* 'crdi' Removed in V4 */
     icSigCurveType                      = 0x63757276,  /* 'curv' */
     icSigDataType                       = 0x64617461,  /* 'data' */
+    icSigDictType                       = 0x64696374,  /* 'dict' */
     icSigDateTimeType                   = 0x6474696D,  /* 'dtim' */
     icSigDeviceSettingsType             = 0x64657673,  /* 'devs' Removed in V4 */
     icSigLut16Type                      = 0x6d667432,  /* 'mft2' */

@@ -12,7 +12,7 @@
  * The ICC Software License, Version 0.2
  *
  *
- * Copyright (c) 2003-2008 The International Color Consortium. All rights 
+ * Copyright (c) 2003-2010 The International Color Consortium. All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -195,12 +195,22 @@ CIccProfile ICCPROFLIB_API *ReadIccProfile(const icChar *szFilename);
 CIccProfile ICCPROFLIB_API *ReadIccProfile(const icUInt8Number *pMem, icUInt32Number nSize);
 CIccProfile ICCPROFLIB_API *OpenIccProfile(const icChar *szFilename);
 CIccProfile ICCPROFLIB_API *OpenIccProfile(const icUInt8Number *pMem, icUInt32Number nSize);  //pMem must be available for entire life of returned CIccProfile Object
+
+CIccProfile ICCPROFLIB_API *ValidateIccProfile(CIccIO *pIO, std::string &sReport, icValidateStatus &nStatus);
 CIccProfile ICCPROFLIB_API *ValidateIccProfile(const icChar *szFilename, std::string &sReport, icValidateStatus &nStatus);
 
 bool ICCPROFLIB_API SaveIccProfile(const icChar *szFilename, CIccProfile *pIcc);
 
 void ICCPROFLIB_API CalcProfileID(CIccIO *pIO, icProfileID *profileID);
 bool ICCPROFLIB_API CalcProfileID(const icChar *szFilename, icProfileID *profileID);
+
+#ifdef WIN32
+CIccProfile ICCPROFLIB_API *ReadIccProfile(const icWChar *szFilename);
+CIccProfile ICCPROFLIB_API *OpenIccProfile(const icWChar *szFilename);
+CIccProfile ICCPROFLIB_API *ValidateIccProfile(const icWChar *szFilename, std::string &sReport, icValidateStatus &nStatus);
+bool ICCPROFLIB_API SaveIccProfile(const icWChar *szFilename, CIccProfile *pIcc);
+bool ICCPROFLIB_API CalcProfileID(const icWChar *szFilename, icProfileID *profileID);
+#endif
 
 #ifdef USESAMPLEICCNAMESPACE
 } //namespace sampleICC

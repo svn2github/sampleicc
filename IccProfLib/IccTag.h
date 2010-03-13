@@ -89,5 +89,6 @@
 #include "IccTagLut.h"
 #include "IccTagMPE.h"
 #include "IccTagProfSeqId.h"
+#include "IccTagDict.h"
 
 #endif //_ICCTAG_H

@@ -139,6 +139,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\IccConvertUTF.cpp">
+			</File>
+			<File
 				RelativePath=".\IccEval.cpp">
 			</File>
 			<File
@@ -212,6 +215,9 @@
 						PreprocessorDefinitions=""
 						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\IccTagDict.cpp">
 			</File>
 			<File
 				RelativePath="IccTagFactory.cpp">
@@ -313,6 +319,9 @@
 				RelativePath="IccCmm.h">
 			</File>
 			<File
+				RelativePath=".\IccConvertUTF.h">
+			</File>
+			<File
 				RelativePath="IccDefs.h">
 			</File>
 			<File
@@ -344,6 +353,9 @@
 			</File>
 			<File
 				RelativePath="IccTagBasic.h">
+			</File>
+			<File
+				RelativePath=".\IccTagDict.h">
 			</File>
 			<File
 				RelativePath=".\IccTagFactory.h">

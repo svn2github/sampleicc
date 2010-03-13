@@ -13,7 +13,7 @@
  * The ICC Software License, Version 0.2
  *
  *
- * Copyright (c) 2003-2008 The International Color Consortium. All rights 
+ * Copyright (c) 2003-2010 The International Color Consortium. All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -719,12 +719,16 @@ public: //member functions
   void SetText(const icChar *szText,
                icLanguageCode nLanguageCode = icLanguageCodeEnglish,
                icCountryCode nRegionCode = icCountryCodeUSA);
-  void SetText(const icUInt16Number *sszUnicodeText,
+  void SetText(const icUInt16Number *sszUnicode16Text,
+               icLanguageCode nLanguageCode = icLanguageCodeEnglish,
+               icCountryCode nRegionCode = icCountryCodeUSA);
+  void SetText(const icUInt32Number *sszUnicode32Text,
                icLanguageCode nLanguageCode = icLanguageCodeEnglish,
                icCountryCode nRegionCode = icCountryCodeUSA);
 
   const icChar *operator=(const icChar *szText) { SetText(szText); return szText; }
   const icUInt16Number *operator=(const icUInt16Number *sszText) { SetText(sszText); return sszText; }
+  const icUInt32Number *operator=(const icUInt32Number *sszText) { SetText(sszText); return sszText; }
 
   //Data
   icLanguageCode m_nLanguageCode;
@@ -778,7 +782,10 @@ public:
   void SetText(const icChar *szText,
                icLanguageCode nLanguageCode = icLanguageCodeEnglish,
                icCountryCode nRegionCode = icCountryCodeUSA);
-  void SetText(const icUInt16Number *sszUnicodeText,
+  void SetText(const icUInt16Number *sszUnicode16Text,
+               icLanguageCode nLanguageCode = icLanguageCodeEnglish,
+               icCountryCode nRegionCode = icCountryCodeUSA);
+  void SetText(const icUInt32Number *sszUnicode32Text,
                icLanguageCode nLanguageCode = icLanguageCodeEnglish,
                icCountryCode nRegionCode = icCountryCodeUSA);
 
