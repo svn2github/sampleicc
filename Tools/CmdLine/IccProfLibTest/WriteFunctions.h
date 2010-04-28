@@ -11,6 +11,6 @@
 // Function Declarations
 //----------------------------------------------------
 
-bool WriteData(CIccProfile *pIcc, CIccIO *pIO);
+bool AddTextTag(const icChar* ptext, CIccProfile *pIcc, icTagSignature sig);
 bool WriteTag(CIccProfile *pIcc, icSignature sig);
 

@@ -1,23 +1,48 @@
-2009-02-12 Max Derhak
- * Added check for Perceptual Black Mapping conversion with V4 non Lut based xforms.
+2010-04-28 Rohit Patil
+ * Modified IccProfLibTest to allow modification of ProfileDescription and Copyright tags
 
-2009-01-15 Rohit Patil
- * Added support for Adobe Black Point Compensation
- * Fixed bug with Absolute intent with D2B3/B2D3 tags.
+2010-03-12 Max Derhak
+ * Added support for PrintConditions tag implemented using Dictionary tag type
 
+2009-01-22 Rohit Patil/Max Derhak
+ * Added CIccCreateXformHintManager to allow for a list of hint object to be passed
+   in at the time of CIccXform creation.
+ * Modified PCS adjustment to use a scale and offset in new function CIccXform::AdjustPCS().
+   CIccXform::CheckSrcAbs and CIccXform::CheckDestAbs now use CIccXform::AdjustPCS()
+ * Hint mechanism can now be used to set up scale and offset values.
+ * Added CIccApplyBPCHint and CIccApplyBPC classes in IccApplyBPC.cpp and IccApplyBPC.h
+   to provide optional support for Adobe Black Point Compensation
+   - Since BPC is outside the scope of the ICC specifiction, users of CIccXform::Create
+     must define and use a CIccApplyBPCHint object to enable BPC processing.
+   - CIccApplyBPC temporarily instantiates a CIccCmm for the purpose of finding the black point
+     of a profile.
+   - Black point processing between two profiles is performed in two steps.  The first profile's
+     black point is mapped to the V4 perceptual black point.  The second profile maps from the
+	 V4 perceptual black point to the second profile's black point.  This allows BPC processing
+	 to be performed on a single profile.
+ * iccApplyNamedCMM.cpp modified to support BPC using CIccApplyBPC
+ * Added CIccProfile::ReadTags() to force all tags to be loaded into memory. (Used by CIccApplyBPC)
+ * CIccTagMultiLocalizedUnicode::Read() now seeks to the end of the last record at end of the function
+ * Added ICC_CBRTF macro that can allow for substitution of cbrtf() function if it is available
+ * Commented several additional functions in IccCmm.cpp
+ * Modified WinNT\ApplyProfiles to allow for applying an output profile to a Lab image file
+ * Fixed header in cmyk8bit.txt and cmyk16bit.txt files
+ 
 2008-12-02 Rohit Patil
  * Added support for Monochrome ICC profile apply
 
-2008-11-24 Max Derhak
+2008-11-24
  * Cleanup of build files for Linux
+ * Revised License to version 0.2
 
-2008-10-31 Max Derhak
+2008-10-31
  * Added fix to make CIccCmmMRU work after chages to add CIccApplyCmm architecture
 
 2008-10-15
  * Added support for External extension of CIccTags and CIccMPE objects
  * Make CIccMultiProcessElement::m_nReserved public
- * Added CIccMpeUnknown:SetType() and CIccMpeUnknown::SetChannels() to allow unknown elements to be externally created
+ * Added CIccMpeUnknown:SetType() and CIccMpeUnknown::SetChannels() to allow unknown elements
+   to be externally created
  * CIccCLUT::Init() now returns bool to indicate allocation failure
  * Added icDeltaE() funciton to IccUtil.cpp
  * Modified MPE Sampled Curve to conform to specification.  First point is NOT stored in file.

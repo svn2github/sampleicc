@@ -52,7 +52,9 @@ void ShowMenu()
 std::string GetUserInput()
 {
   std::string Option;
-  std::cin >> Option;
+	char str[256];
+	std::cin.getline(str, 255);
+	Option = str;
   return Option;
 }
 
@@ -235,15 +237,30 @@ void IsValidProfile(CIccIO *pIO, CIccProfile *pIcc)
 
 void AddTag(CIccIO *pIO, CIccProfile *pIcc)
 {
-  std::string tagtype;
+  std::string textIn;
 
   printf("Enter tag signature to be added [ex- cprt] : ");
-  tagtype = GetUserInput();
+  textIn = GetUserInput();
 
-  if(!WriteTag(pIcc, (icTagSignature)icGetSigVal(tagtype.c_str())))
-    printf("Write operation failed.\n");
-  else
-    printf("Tag added successfully.\n");  
+	icTagSignature tagSig = (icTagSignature)icGetSigVal(textIn.c_str());
+
+	switch (tagSig) {
+		case icSigProfileDescriptionTag:
+		case icSigCopyrightTag:
+			printf("Enter the text to be saved in the tag : ");
+			textIn = GetUserInput();
+			if(!AddTextTag(textIn.c_str(), pIcc, tagSig))
+				printf("Write operation failed.\n");
+			else
+				printf("Tag added successfully.\n");  
+			break;
+		default:
+			if(!WriteTag(pIcc, tagSig))
+				printf("Write operation failed.\n");
+			else
+				printf("Tag added successfully.\n");  
+	}
+
 }
 
 //===================================================

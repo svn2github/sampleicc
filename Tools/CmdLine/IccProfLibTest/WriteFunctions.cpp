@@ -6,9 +6,86 @@
 //----------------------------------------------------
 
 
-bool WriteData(CIccProfile *pIcc, CIccIO *pIO)
+bool AddTextTag(const icChar* ptext, CIccProfile *pIcc, icTagSignature sig)
 {
-  return true;
+	icChar buf[64];
+	if (!pIcc) {
+		return false;
+	}
+
+	if(pIcc->FindTag(sig)) {
+		printf("Tag of signature %s already present.\n", icGetSig(buf, sig, false));
+		return false;
+	}
+
+	switch(sig) {
+
+		case icSigProfileDescriptionTag:
+			{
+				CIccTag* pTag=NULL;
+				if(pIcc->m_Header.version<icVersionNumberV4) {
+					pTag = CIccTag::Create(icSigTextDescriptionType);
+					if(!pTag)
+						return false;
+
+					CIccTagTextDescription *pProfDescTag = (CIccTagTextDescription*)pTag;
+					pProfDescTag->SetText(ptext);
+				}
+				else {
+					pTag = CIccTag::Create(icSigMultiLocalizedUnicodeType);
+					if(!pTag)
+						return false;
+
+					CIccTagMultiLocalizedUnicode *pProfDescTag = (CIccTagMultiLocalizedUnicode*)pTag;
+					CIccLocalizedUnicode localized;
+					localized.SetText(ptext);
+					pProfDescTag->m_Strings->push_back(localized);
+				}
+
+				if(!pIcc->AttachTag(sig,pTag)) {
+					delete pTag;
+					return false;
+				}
+
+				break;
+			}
+
+		case icSigCopyrightTag:
+			{
+				CIccTag* pTag=NULL;
+				if(pIcc->m_Header.version<icVersionNumberV4) {
+					pTag = CIccTag::Create(icSigTextType);
+					if(!pTag)
+						return false;
+
+					CIccTagText *pCopyTag = (CIccTagText*)pTag;
+					pCopyTag->SetText(ptext);
+				}
+				else {
+					pTag = CIccTag::Create(icSigMultiLocalizedUnicodeType);
+					if(!pTag)
+						return false;
+
+					CIccTagMultiLocalizedUnicode *pCopyTag = (CIccTagMultiLocalizedUnicode*)pTag;
+					CIccLocalizedUnicode localized;
+					localized.SetText(ptext);
+					pCopyTag->m_Strings->push_back(localized);
+				}
+
+				if(!pIcc->AttachTag(sig,pTag))
+				{
+					delete pTag;
+					return false;
+				}
+
+				break;
+			}
+
+		default:
+			return false;
+	}
+
+	return true;
 }
 
 

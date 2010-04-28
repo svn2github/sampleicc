@@ -59,12 +59,35 @@
  *   the configuration parameters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
- * - February 2009
- *  - Added check for Perceptual Black mapping for V4 non LUT based xforms
+ * - April 2010
+ *  - Modified IccProfLibTest to allow modification of ProfileDescription and Copyright tags
+
+ * - March 2010
+ *  - Added support for PrintConditions tag implemented using Dictionary tag type
  *
- * - January  2009
- *  - Added support for Adobe Black Point compensation
- *  - Fixed bug with D2B3/B2D3 apply (shouldn't apply relative transform)
+ * - January 2009
+ *  - Added CIccCreateXformHintManager to allow for a list of hint object to be passed
+ *    in at the time of CIccXform creation.
+ *  - Modified PCS adjustment to use a scale and offset in new function CIccXform::AdjustPCS().
+ *    CIccXform::CheckSrcAbs and CIccXform::CheckDestAbs now use CIccXform::AdjustPCS()/
+ *  - Hint mechanism can now be used to set up scale and offset values.
+ *  - Added CIccApplyBPCHint and CIccApplyBPC classes in IccApplyBPC.cpp and IccApplyBPC.h
+ *    to provide optional support for Adobe Black Point Compensation
+ *   - Since BPC is outside the scope of the ICC specifiction, users of CIccXform::Create
+ *     must define and use a CIccApplyBPCHint object to enable BPC processing.
+ *   - CIccApplyBPC temporarily instantiates a CIccCmm for the purpose of finding the black point
+ *     of a profile.
+ *   - Black point processing between two profiles is performed in two steps.  The first profile's
+ *     black point is mapped to the V4 perceptual black point.  The second profile maps from the
+ *     V4 perceptual black point to the second profile's black point.  This allows BPC processing
+ *     to be performed on a single profile.
+ *  - iccApplyNamedCMM.cpp modified to support BPC using CIccApplyBPC
+ *  - Added CIccProfile::ReadTags() to force all tags to be loaded into memory. (Used by CIccApplyBPC)
+ *  - CIccTagMultiLocalizedUnicode::Read() now seeks to the end of the last record at end of the function
+ *  - Added ICC_CBRTF macro that can allow for substitution of cbrtf() function if it is available
+ *  - Commented several additional functions in IccCmm.cpp
+ *  - Modified WinNT\ApplyProfiles to allow for applying an output profile to a Lab image file
+ *  - Fixed header in cmyk8bit.txt and cmyk16bit.txt files
  *
  * - December 2008
  *  - Added support for Monochrome ICC profile apply
