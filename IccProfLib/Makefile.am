@@ -3,7 +3,9 @@
 lib_LTLIBRARIES = libSampleICC.la
 
 libSampleICC_la_SOURCES = \
+	IccApplyBPC.cpp \
 	IccCmm.cpp \
+	IccConvertUTF.cpp \
 	IccEval.cpp \
 	IccXformFactory.cpp \
 	IccIO.cpp \
@@ -13,6 +15,7 @@ libSampleICC_la_SOURCES = \
 	IccPrmg.cpp \
 	IccProfile.cpp \
 	IccTagBasic.cpp \
+	IccTagDict.cpp \
 	IccTagFactory.cpp \
 	IccTagLut.cpp \
 	IccTagMPE.cpp \
@@ -25,7 +28,9 @@ libSampleICC_la_LDFLAGS = -version-info @LIBTOOL_VERSION@
 libSampleICCincludedir = $(includedir)/SampleICC
 
 libSampleICCinclude_HEADERS = \
+	IccApplyBPC.h \
 	IccCmm.h \
+	IccConvertUTF.h \
 	IccEval.h \
 	IccXformFactory.h \
 	IccDefs.h \
@@ -38,6 +43,7 @@ libSampleICCinclude_HEADERS = \
 	IccProfile.h \
 	IccTag.h \
 	IccTagBasic.h \
+	IccTagDict.h \
 	IccTagFactory.h \
 	IccTagLut.h \
 	IccTagMPE.h \
