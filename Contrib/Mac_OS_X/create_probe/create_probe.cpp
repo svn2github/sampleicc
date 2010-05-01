@@ -118,7 +118,7 @@ createRGBBitmapContext(size_t width, size_t height, bool deep)
 {
   CGContextRef context;
   
-  float black[4] = { 0.0, 0.0, 0.0, 1.0 };
+  CGFloat black[4] = { 0.0, 0.0, 0.0, 1.0 };
   size_t bitsPerComponent = deep ? 32 : 8;
   // somewhat problematic: will fail for "thousands of colors" but who uses
   // that setting, these days?
