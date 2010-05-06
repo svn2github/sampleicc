@@ -83,6 +83,7 @@ Fixes & updates, Sept 2001.
 July 2009 
 - Modified names to avoid possible conflicts - Max Derhak
 - Added IccProfLibConf.h include to use ICCPROFLIB_API with functions
+- Changed typedef of UTF32 to use ICCUINT32
 ------------------------------------------------------------------------ */
 
 #include "IccProfLibConf.h"
@@ -95,8 +96,8 @@ All should be unsigned values to avoid sign extension during
 bit mask & shift operations.
 ------------------------------------------------------------------------ */
 
-typedef unsigned long	UTF32;	/* at least 32 bits */
-typedef unsigned short	UTF16;	/* at least 16 bits */
+typedef ICCUINT32	UTF32;	/* at least 32 bits */
+typedef unsigned short UTF16;	/* at least 16 bits */
 typedef unsigned char	UTF8;	/* typically 8 bits */
 typedef unsigned char	Boolean; /* 0 or 1 */
 

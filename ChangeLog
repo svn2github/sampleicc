@@ -1,3 +1,8 @@
+2010-05-06 Max Derhak
+ * Modified IccProfLibConf.h and IccConvertUTF.h to properly define 32 bit types for 64 bit
+   compilers
+ * Added IccProfLibVer.h to define macro that has version for IccProfLib
+
 2010-04-28 Rohit Patil
  * Modified IccProfLibTest to allow modification of ProfileDescription and Copyright tags
 

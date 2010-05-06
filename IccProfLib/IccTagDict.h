@@ -93,7 +93,7 @@ namespace sampleICC {
 * name and value
 *****************************************************************************
 */
-class CIccDictEntry
+class ICCPROFLIB_API CIccDictEntry
 {
 public: //member functions
   CIccDictEntry();
@@ -156,7 +156,7 @@ typedef std::list<CIccDictEntryPtr> CIccNameValueDict;
 * Purpose: A name-value dictionary tag with optional localization 
 *****************************************************************************
 */
-class CIccTagDict : public CIccTag
+class ICCPROFLIB_API CIccTagDict : public CIccTag
 {
 public:
   CIccTagDict();

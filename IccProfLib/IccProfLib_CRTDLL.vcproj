@@ -469,6 +469,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IccProfLibVer.h"
+				>
+			</File>
+			<File
 				RelativePath="IccTag.h"
 				>
 			</File>

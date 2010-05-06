@@ -59,9 +59,13 @@
  *   the configuration parameters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
+ * - May 2010
+ *  - Modifications for better support for compiling with 64 bit compilers
+ *  - Added IccProfLibVer.h to provide a macro for defining the library version
+ *
  * - April 2010
  *  - Modified IccProfLibTest to allow modification of ProfileDescription and Copyright tags
-
+ *
  * - March 2010
  *  - Added support for PrintConditions tag implemented using Dictionary tag type
  *

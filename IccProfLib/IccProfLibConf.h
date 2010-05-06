@@ -81,6 +81,11 @@ namespace sampleICC {
   #define ICUINT64TYPE unsigned __int64
   #define ICINT64TYPE __int64
 
+  #define ICCUINT32 unsigned long
+  #define ICCINT32  long
+  #define ICUINT32TYPE unsigned long
+  #define ICINT32TYPE  long
+
   #define USE_WINDOWS_MB_SUPPORT
   #define WIN32_LEAN_AND_MEAN    // Exclude rarely-used stuff from Windows headers
   //#include <windows.h> //For Multibyte Translation Support
@@ -112,12 +117,21 @@ namespace sampleICC {
   #define ICUINT64TYPE unsigned long long
   #define ICINT64TYPE long long
 
+  #include <stdint.h>
+
+  //Make sure that 32 bit values are set correctly
+  #define ICCUINT32 uint32_t
+  #define ICCINT32  int32_t
+  #define ICUINT32TYPE uint32_t
+  #define ICINT32TYPE  int32_t
+
   #if defined(__APPLE__)
     #if  defined(__LITTLE_ENDIAN__)
       #define ICC_BYTE_ORDER_LITTLE_ENDIAN
     #else
       #define ICC_BYTE_ORDER_BIG_ENDIAN
     #endif
+
   #else
     #define ICC_BYTE_ORDER_LITTLE_ENDIAN
   #endif
