@@ -6,8 +6,8 @@ bin_PROGRAMS = \
 INCLUDES = -I$(top_builddir) -I$(top_srcdir)/IccProfLib \
 	-I$(top_srcdir)/Contrib/ICC_utils
 
-LDADD = -L$(top_builddir)/IccProfLib -lSampleICC \
-	-L$(top_builddir)/Contrib/ICC_utils -lICC_utils
+LDADD = -L$(top_builddir)/Contrib/ICC_utils -lICC_utils \
+	-L$(top_builddir)/IccProfLib -lSampleICC
 
 create_pretransform_curve_SOURCES = \
 	create_pretransform_curve.cpp
