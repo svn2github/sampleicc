@@ -277,7 +277,8 @@ public:
   bool Write(CIccIO *pIO);
 
   void DumpLut(std::string  &sDescription, const icChar *szName,
-               icColorSpaceSignature csInput, icColorSpaceSignature csOutput);
+               icColorSpaceSignature csInput, icColorSpaceSignature csOutput,
+               bool bUseLegacy=false);
 
   icFloatNumber& operator[](int index) { return m_pData[index]; }
   icFloatNumber* GetData(int index) { return &m_pData[index]; }
@@ -311,7 +312,7 @@ public:
   icUInt8Number GetPrecision() { return m_nPrecision; }
 
 protected:
-  void Iterate(std::string &sDescription, icUInt8Number nIndex, icUInt32Number nPos);
+  void Iterate(std::string &sDescription, icUInt8Number nIndex, icUInt32Number nPos, bool bUseLegacy=false);
   void SubIterate(IIccCLUTExec* pExec, icUInt8Number nIndex, icUInt32Number nPos);
 
   icCLUTCLIPFUNC UnitClip;

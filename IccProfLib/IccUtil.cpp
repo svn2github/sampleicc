@@ -192,13 +192,22 @@ void icColorIndexName(icChar *szName, icColorSpaceSignature csSig,
 }
 
 void icColorValue(icChar *szValue, icFloatNumber nValue,
-                  icColorSpaceSignature csSig, int nIndex)
+                  icColorSpaceSignature csSig, int nIndex,
+                  bool bUseLegacy)
 {
   if (csSig==icSigLabData) {
-    if (!nIndex || nIndex>2)
-      sprintf(szValue, "%7.3lf", nValue * 100.0);
-    else
-      sprintf(szValue, "%8.3lf", nValue * 255.0 - 128.0);
+    if (!bUseLegacy) {
+      if (!nIndex || nIndex>2)
+        sprintf(szValue, "%7.3lf", nValue * 100.0);
+      else
+        sprintf(szValue, "%8.3lf", nValue * 255.0 - 128.0);
+    }
+    else {
+      if (!nIndex || nIndex>2)
+        sprintf(szValue, "%7.3lf", nValue * 100.0 * 65535.0 / 65280.0);
+      else
+        sprintf(szValue, "%8.3lf", nValue * 255.0 * 65535.0 / 65280.0 - 128.0);
+    }
   }
   else if (csSig==icSigUnknownData) {
     sprintf(szValue, "%8.5lf", nValue);

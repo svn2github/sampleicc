@@ -87,7 +87,7 @@ bool ICCPROFLIB_API icIsSpaceCLR(icColorSpaceSignature sig);
 void ICCPROFLIB_API icColorIndexName(icChar *szName, icColorSpaceSignature csSig,
                       int nIndex, int nColors, const icChar *szUnknown);
 void ICCPROFLIB_API icColorValue(icChar *szValue, icFloatNumber nValue,
-                  icColorSpaceSignature csSig, int nIndex);
+                  icColorSpaceSignature csSig, int nIndex, bool bUseLegacy=false);
 
 bool ICCPROFLIB_API icMatrixInvert3x3(icFloatNumber *matrix);
 void ICCPROFLIB_API icMatrixMultiply3x3(icFloatNumber *result,

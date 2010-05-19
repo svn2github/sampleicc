@@ -1736,13 +1736,13 @@ bool CIccCLUT::Write(CIccIO *pIO)
  * 
  *****************************************************************************
  */
-void CIccCLUT::Iterate(std::string &sDescription, icUInt8Number nIndex, icUInt32Number nPos)
+void CIccCLUT::Iterate(std::string &sDescription, icUInt8Number nIndex, icUInt32Number nPos, bool bUseLegacy)
 {
   if (nIndex < m_nInput) {
     int i;
     for (i=0; i<m_GridPoints[nIndex]; i++) {
       m_GridAdr[nIndex] = i;
-      Iterate(sDescription, nIndex+1, nPos);
+      Iterate(sDescription, nIndex+1, nPos, bUseLegacy);
       nPos += m_DimSize[nIndex];
     }
   }
@@ -1752,7 +1752,7 @@ void CIccCLUT::Iterate(std::string &sDescription, icUInt8Number nIndex, icUInt32
     int i;
 
     for (i=0; i<m_nInput; i++) {
-      icColorValue(m_pVal, (icFloatNumber)m_GridAdr[i] / (m_GridPoints[i]-1) , m_csInput, i);
+      icColorValue(m_pVal, (icFloatNumber)m_GridAdr[i] / (m_GridPoints[i]-1) , m_csInput, i, bUseLegacy);
 
       ptr += sprintf(ptr, " %s", m_pVal);
     }
@@ -1760,7 +1760,7 @@ void CIccCLUT::Iterate(std::string &sDescription, icUInt8Number nIndex, icUInt32
     ptr += 2;
 
     for (i=0; i<m_nOutput; i++) {
-      icColorValue(m_pVal, pData[i], m_csOutput, i);
+      icColorValue(m_pVal, pData[i], m_csOutput, i, bUseLegacy);
 
       ptr += sprintf(ptr, " %s", m_pVal);
     }
@@ -1871,7 +1871,8 @@ void CIccCLUT::SubIterate(IIccCLUTExec* pExec, icUInt8Number nIndex, icUInt32Num
  *****************************************************************************
  */
 void CIccCLUT::DumpLut(std::string  &sDescription, const icChar *szName,
-                       icColorSpaceSignature csInput, icColorSpaceSignature csOutput)
+                       icColorSpaceSignature csInput, icColorSpaceSignature csOutput,
+                       bool bUseLegacy)
 {
   icChar szOutText[2048], szColor[40];
   int i, len;
@@ -1897,11 +1898,11 @@ void CIccCLUT::DumpLut(std::string  &sDescription, const icChar *szName,
 
   len = 0;
   for (i=0; i<m_nInput; i++) {
-    icColorValue(szColor, 1.0, csInput, i);
+    icColorValue(szColor, 1.0, csInput, i, bUseLegacy);
     len+= strlen(szColor);
   }
   for (i=0; i<m_nOutput; i++) {
-    icColorValue(szColor, 1.0, csOutput, i);
+    icColorValue(szColor, 1.0, csOutput, i, bUseLegacy);
     len+= strlen(szColor);
   }
   len += m_nInput + m_nOutput + 6;
@@ -1915,7 +1916,7 @@ void CIccCLUT::DumpLut(std::string  &sDescription, const icChar *szName,
   m_pVal = szColor;
   memset(m_GridAdr, 0, 16);
 
-  Iterate(sDescription, 0, 0);
+  Iterate(sDescription, 0, 0, bUseLegacy);
   
   sDescription += "\r\n";
 }
@@ -3063,7 +3064,7 @@ void CIccMBB::Describe(std::string &sDescription)
     }
 
     if (m_CLUT)
-      m_CLUT->DumpLut(sDescription, "CLUT", m_csInput, m_csOutput);
+      m_CLUT->DumpLut(sDescription, "CLUT", m_csInput, m_csOutput, GetType()==icSigLut16Type);
 
     if (m_CurvesA) {
       for (i=0; i<m_nOutput; i++) {
@@ -4173,7 +4174,9 @@ void CIccTagLut8::SetColorSpaces(icColorSpaceSignature csInput, icColorSpaceSign
     if (!m_CurvesM && !m_Matrix) {
       int i;
 
+      //Transfer ownership of B curves to M
       m_CurvesM = m_CurvesB;
+      m_CurvesB = NULL;
 
       CIccMatrix *pMatrix = NewMatrix();
       for (i=0; i<9; i++) {

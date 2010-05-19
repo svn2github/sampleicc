@@ -1,3 +1,7 @@
+2010-05-19 Max Derhak
+ * Fixed crashing bug with gamut tags with XYZ PCS
+ * Modified CLUT::dump to use reflect legacy encoding of when lut16 tags are used
+
 2010-05-06 Max Derhak
  * Modified IccProfLibConf.h and IccConvertUTF.h to properly define 32 bit types for 64 bit
    compilers

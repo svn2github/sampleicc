@@ -62,6 +62,8 @@
  * - May 2010
  *  - Modifications for better support for compiling with 64 bit compilers
  *  - Added IccProfLibVer.h to provide a macro for defining the library version
+ *  - Fixed crashing bug with gamut tags with XYZ PCS
+ *  - Modified CLUT::dump to use reflect legacy encoding of when lut16 tags are used
  *
  * - April 2010
  *  - Modified IccProfLibTest to allow modification of ProfileDescription and Copyright tags
