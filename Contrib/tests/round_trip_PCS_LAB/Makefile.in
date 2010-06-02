@@ -221,9 +221,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign Contrib/tests/round_trip_PCS_LAB/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu Contrib/tests/round_trip_PCS_LAB/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign Contrib/tests/round_trip_PCS_LAB/Makefile
+	  $(AUTOMAKE) --gnu Contrib/tests/round_trip_PCS_LAB/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

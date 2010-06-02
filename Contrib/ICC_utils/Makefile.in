@@ -260,9 +260,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign Contrib/ICC_utils/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu Contrib/ICC_utils/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign Contrib/ICC_utils/Makefile
+	  $(AUTOMAKE) --gnu Contrib/ICC_utils/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

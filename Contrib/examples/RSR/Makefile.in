@@ -204,8 +204,8 @@ top_srcdir = @top_srcdir@
 INCLUDES = -I$(top_builddir) -I$(top_srcdir)/IccProfLib \
 	-I$(top_srcdir)/Contrib/ICC_utils
 
-LDADD = -L$(top_builddir)/IccProfLib -lSampleICC \
-	-L$(top_builddir)/Contrib/ICC_utils -lICC_utils
+LDADD = -L$(top_builddir)/Contrib/ICC_utils -lICC_utils \
+	-L$(top_builddir)/IccProfLib -lSampleICC
 
 create_pretransform_curve_SOURCES = \
 	create_pretransform_curve.cpp
@@ -230,9 +230,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign Contrib/examples/RSR/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu Contrib/examples/RSR/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign Contrib/examples/RSR/Makefile
+	  $(AUTOMAKE) --gnu Contrib/examples/RSR/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

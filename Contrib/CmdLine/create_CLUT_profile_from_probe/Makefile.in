@@ -223,9 +223,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign Contrib/CmdLine/create_CLUT_profile_from_probe/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu Contrib/CmdLine/create_CLUT_profile_from_probe/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign Contrib/CmdLine/create_CLUT_profile_from_probe/Makefile
+	  $(AUTOMAKE) --gnu Contrib/CmdLine/create_CLUT_profile_from_probe/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
