@@ -193,7 +193,7 @@ bool CIccMpeAcs::Read(icUInt32Number size, CIccIO *pIO)
     return false;
 
   if (dataSize) {
-    if (pIO->Read8(m_pData, dataSize)!=dataSize)
+    if (pIO->Read8(m_pData, dataSize)!=(icInt32Number)dataSize)
       return false;
   }
 

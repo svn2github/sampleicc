@@ -139,6 +139,9 @@ CIccProfileIdDesc::CIccProfileIdDesc(CIccProfile &profile)
         m_desc.SetText(pText->GetText());
       }
       break;
+
+      default:
+        break;
     }
   }
 }
@@ -229,7 +232,7 @@ void CIccProfileIdDesc::Describe(std::string &sDescription)
 
   sDescription += "ProfileID:\r\n";
 
-  int i;
+  size_t i;
   char buf[20];
   for (i=0; i<sizeof(icProfileID); i++) {
     if (i && i%4==0)
@@ -551,7 +554,7 @@ bool CIccTagProfileSequenceId::Write(CIccIO *pIO)
   if (!pIO->Write32(&m_nReserved))
     return false;
 
-  icUInt32Number i, count = m_list->size();
+  icUInt32Number i, count = (icUInt32Number)m_list->size();
 
   pIO->Write32(&count);
 

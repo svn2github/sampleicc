@@ -155,7 +155,7 @@ void CIccXformCreator::DoPushFactory(IIccXformFactory *pFactory)
 
 IIccXformFactory* CIccXformCreator::DoPopFactory(bool bAll /*=false*/)
 {
-  int nNum = (bAll ? 0 : 1);
+  //int nNum = (bAll ? 0 : 1);
 
   if (factoryStack.size()>0) {
     CIccXformFactoryList::iterator i=factoryStack.begin();

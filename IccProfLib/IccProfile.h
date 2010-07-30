@@ -128,6 +128,12 @@ typedef struct {CIccTag *ptr;} IccTagPtr;
  */
 typedef std::list<IccTagPtr> TagPtrList;
 
+typedef enum {
+  icVersionBasedID,
+  icAlwaysWriteID,
+  icNeverWriteID,
+}icProfileIDSaveMethod;
+
 /**
  **************************************************************************
  * Type: Class
@@ -159,7 +165,7 @@ public:
   bool Detach();
   bool Read(CIccIO *pIO);
   icValidateStatus ReadValidate(CIccIO *pIO, std::string &sReport);
-  bool Write(CIccIO *pIO);
+  bool Write(CIccIO *pIO, icProfileIDSaveMethod nWriteId=icVersionBasedID);
 
   void InitHeader();
   icValidateStatus Validate(std::string &sReport) const;
@@ -199,7 +205,7 @@ CIccProfile ICCPROFLIB_API *OpenIccProfile(const icUInt8Number *pMem, icUInt32Nu
 CIccProfile ICCPROFLIB_API *ValidateIccProfile(CIccIO *pIO, std::string &sReport, icValidateStatus &nStatus);
 CIccProfile ICCPROFLIB_API *ValidateIccProfile(const icChar *szFilename, std::string &sReport, icValidateStatus &nStatus);
 
-bool ICCPROFLIB_API SaveIccProfile(const icChar *szFilename, CIccProfile *pIcc);
+bool ICCPROFLIB_API SaveIccProfile(const icChar *szFilename, CIccProfile *pIcc, icProfileIDSaveMethod nWriteId=icVersionBasedID);
 
 void ICCPROFLIB_API CalcProfileID(CIccIO *pIO, icProfileID *profileID);
 bool ICCPROFLIB_API CalcProfileID(const icChar *szFilename, icProfileID *profileID);
@@ -208,7 +214,7 @@ bool ICCPROFLIB_API CalcProfileID(const icChar *szFilename, icProfileID *profile
 CIccProfile ICCPROFLIB_API *ReadIccProfile(const icWChar *szFilename);
 CIccProfile ICCPROFLIB_API *OpenIccProfile(const icWChar *szFilename);
 CIccProfile ICCPROFLIB_API *ValidateIccProfile(const icWChar *szFilename, std::string &sReport, icValidateStatus &nStatus);
-bool ICCPROFLIB_API SaveIccProfile(const icWChar *szFilename, CIccProfile *pIcc);
+bool ICCPROFLIB_API SaveIccProfile(const icWChar *szFilename, CIccProfile *pIcc, icProfileIDSaveMethod nWriteId=icVersionBasedID);
 bool ICCPROFLIB_API CalcProfileID(const icWChar *szFilename, icProfileID *profileID);
 #endif
 

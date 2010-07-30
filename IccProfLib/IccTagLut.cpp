@@ -254,7 +254,7 @@ bool CIccTagCurve::Read(icUInt32Number size, CIccIO *pIO)
   SetSize(nSize, icInitNone);
 
   if (m_nSize) {
-    if (pIO->Read16Float(m_Curve, m_nSize)!=m_nSize)
+    if (pIO->Read16Float(m_Curve, m_nSize)!=(icInt32Number)m_nSize)
       return false;
   }
 
@@ -292,7 +292,7 @@ bool CIccTagCurve::Write(CIccIO *pIO)
     return false;
 
   if (m_nSize)
-    if (pIO->Write16Float(m_Curve, m_nSize)!=m_nSize)
+    if (pIO->Write16Float(m_Curve, m_nSize)!=(icInt32Number)m_nSize)
       return false;
 
   pIO->Align32();
@@ -1622,11 +1622,11 @@ bool CIccCLUT::ReadData(icUInt32Number size, CIccIO *pIO, icUInt8Number nPrecisi
     return false;
 
   if (nPrecision==1) {
-    if (pIO->Read8Float(m_pData, nNum)!=nNum)
+    if (pIO->Read8Float(m_pData, nNum)!=(icInt32Number)nNum)
       return false;
   }
   else if (nPrecision==2) {
-    if (pIO->Read16Float(m_pData, nNum)!=nNum)
+    if (pIO->Read16Float(m_pData, nNum)!=(icInt32Number)nNum)
       return false;
   }
   else
@@ -1656,11 +1656,11 @@ bool CIccCLUT::WriteData(CIccIO *pIO, icUInt8Number nPrecision)
   icUInt32Number nNum=NumPoints() * m_nOutput;
 
   if (nPrecision==1) {
-    if (pIO->Write8Float(m_pData, nNum)!=nNum)
+    if (pIO->Write8Float(m_pData, nNum)!=(icInt32Number)nNum)
       return false;
   }
   else if (nPrecision==2) {
-    if (pIO->Write16Float(m_pData, nNum)!=nNum)
+    if (pIO->Write16Float(m_pData, nNum)!=(icInt32Number)nNum)
       return false;
   }
   else
@@ -1899,11 +1899,11 @@ void CIccCLUT::DumpLut(std::string  &sDescription, const icChar *szName,
   len = 0;
   for (i=0; i<m_nInput; i++) {
     icColorValue(szColor, 1.0, csInput, i, bUseLegacy);
-    len+= strlen(szColor);
+    len+= (int)strlen(szColor);
   }
   for (i=0; i<m_nOutput; i++) {
     icColorValue(szColor, 1.0, csOutput, i, bUseLegacy);
-    len+= strlen(szColor);
+    len+= (int)strlen(szColor);
   }
   len += m_nInput + m_nOutput + 6;
 

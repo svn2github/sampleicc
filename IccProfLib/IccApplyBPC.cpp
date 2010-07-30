@@ -105,6 +105,9 @@ void CIccApplyBPC::lab2pcs(icFloatNumber* pixel, const CIccProfile* pProfile) co
 		icLabtoXYZ(pixel);
 		icXyzToPcs(pixel);
 		break;
+
+  default:
+    break;
 	}
 }
 
@@ -121,6 +124,9 @@ void CIccApplyBPC::pcs2lab(icFloatNumber* pixel, const CIccProfile* pProfile) co
 		icXyzFromPcs(pixel);
 		icXYZtoLab(pixel);
 		break;
+
+  default:
+    break;
 	}
 }
 
@@ -220,6 +226,8 @@ bool CIccApplyBPC::CalcFactors(const CIccProfile* pProfile, const CIccXform* pXf
 		//case icSigColorSpaceClass:
 		case icSigNamedColorClass:
 			return false;
+    default:
+      break;
 	}
 
 	icFloatNumber XYZbp[3]; // storage for black point XYZ

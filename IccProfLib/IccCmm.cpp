@@ -3416,6 +3416,9 @@ void CIccXformMpe::Apply(CIccApplyXform* pApply, icFloatNumber *DstPixel, const 
         icLabFromPcs(temp);
         SrcPixel = &temp[0];
         break;
+
+      default:
+        break;
     }
   }
 
@@ -3532,7 +3535,7 @@ icStatusCMM CIccApplyCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber *Sr
   const icFloatNumber *pSrc;
   CIccApplyXformList::iterator i;
   const CIccXform *pLastXform;
-  int j, n = m_Xforms->size();
+  int j, n = (int)m_Xforms->size();
   bool bNoClip;
 
   if (!n)
@@ -3584,7 +3587,7 @@ icStatusCMM CIccApplyCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber *Sr
   icFloatNumber Pixel[16], *pDst;
   const icFloatNumber *pSrc;
   CIccApplyXformList::iterator i;
-  int j, n = m_Xforms->size();
+  int j, n = (int)m_Xforms->size();
   icUInt32Number k;
 
   if (!n)
@@ -4746,7 +4749,7 @@ icFloatColorEncoding CIccCmm::GetFloatColorEncoding(const icChar* val)
  */
 icUInt32Number CIccCmm::GetNumXforms() const
 {
-  return m_Xforms->size();
+  return (icUInt32Number)m_Xforms->size();
 }
 
 
@@ -4834,7 +4837,7 @@ icStatusCMM CIccApplyNamedColorCmm::Apply(icFloatNumber *DstPixel, const icFloat
   icFloatNumber Pixel[16], *pDst;
   const icFloatNumber *pSrc;
   CIccApplyXformList::iterator i;
-  int j, n = m_Xforms->size();
+  int j, n = (int)m_Xforms->size();
   CIccApplyXform *pApply;
   const CIccXform *pApplyXform;
   CIccXformNamedColor *pXform;
@@ -4951,7 +4954,7 @@ icStatusCMM CIccApplyNamedColorCmm::Apply(icFloatNumber *DstPixel, const icFloat
   icFloatNumber Pixel[16], *pDst;
   const icFloatNumber *pSrc;
   CIccApplyXformList::iterator i;
-  int j, n = m_Xforms->size();
+  int j, n = (int)m_Xforms->size();
   CIccApplyXform *pApply;
   const CIccXform *pApplyXform;
   CIccXformNamedColor *pXform;
@@ -5074,7 +5077,7 @@ icStatusCMM CIccApplyNamedColorCmm::Apply(icChar* DstColorName, const icFloatNum
   icFloatNumber Pixel[16], *pDst;
   const icFloatNumber *pSrc;
   CIccApplyXformList::iterator i;
-  int j, n = m_Xforms->size();
+  int j, n = (int)m_Xforms->size();
   CIccApplyXform *pApply;
   const CIccXform *pApplyXform;
   CIccXformNamedColor *pXform;
@@ -5180,7 +5183,7 @@ icStatusCMM CIccApplyNamedColorCmm::Apply(icFloatNumber *DstPixel, const icChar 
   icFloatNumber Pixel[16], *pDst;
   const icFloatNumber *pSrc;
   CIccApplyXformList::iterator i;
-  int j, n = m_Xforms->size();
+  int j, n = (int)m_Xforms->size();
   CIccApplyXform *pApply;
   const CIccXform *pApplyXform;
   CIccXformNamedColor *pXform;
@@ -5300,7 +5303,7 @@ icStatusCMM CIccApplyNamedColorCmm::Apply(icChar *DstColorName, const icChar *Sr
   icFloatNumber Pixel[16], *pDst;
   const icFloatNumber *pSrc;
   CIccApplyXformList::iterator i;
-  int j, n = m_Xforms->size();
+  int j, n = (int)m_Xforms->size();
   icChar NamedColor[256];
   icStatusCMM rv;
   CIccApplyXform *pApply;
@@ -5783,7 +5786,7 @@ icStatusCMM CIccNamedColorCmm::Apply(icChar* DstColorName, const icChar *SrcColo
  */
 icStatusCMM CIccNamedColorCmm::SetLastXformDest(icColorSpaceSignature nDestSpace)
 {
-  int n = m_Xforms->size();
+  int n = (int)m_Xforms->size();
   CIccXformPtr *pLastXform;
 
   if (!n)

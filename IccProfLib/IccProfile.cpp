@@ -726,7 +726,7 @@ icValidateStatus CIccProfile::ReadValidate(CIccIO *pIO, std::string &sReport)
  *  true - success, false - failure
  *******************************************************************************
  */
-bool CIccProfile::Write(CIccIO *pIO)
+bool CIccProfile::Write(CIccIO *pIO, icProfileIDSaveMethod nWriteId)
 {
   //Write Header
   pIO->Seek(0, icSeekSet);
@@ -819,8 +819,22 @@ bool CIccProfile::Write(CIccIO *pIO)
   pIO->Seek(0, icSeekSet);
   pIO->Write32(&m_Header.size);
 
+  bool bWriteId;
+
+  switch (nWriteId) {
+    case icVersionBasedID:
+    default:
+      bWriteId = (m_Header.version>=icVersionNumberV4);
+      break;
+    case icAlwaysWriteID:
+      bWriteId = true;
+      break;
+    case icNeverWriteID:
+      bWriteId = false;
+  }
+
   //Write the profile ID if version 4 profile
-  if(m_Header.version>=icVersionNumberV4) {
+  if(bWriteId) {
     CalcProfileID(pIO, &m_Header.profileID);
     pIO->Seek(84, icSeekSet);
     pIO->Write8(&m_Header.profileID, sizeof(m_Header.profileID));
@@ -980,7 +994,7 @@ bool CIccProfile::LoadTag(IccTagEntry *pTagEntry, CIccIO *pIO)
   icTagTypeSignature sigType;
 
   //First we need to get the tag type to create the right kind of tag
-  if (pIO->Seek(pTagEntry->TagInfo.offset, icSeekSet)!=pTagEntry->TagInfo.offset)
+  if (pIO->Seek(pTagEntry->TagInfo.offset, icSeekSet)!=(icInt32Number)pTagEntry->TagInfo.offset)
     return false;
 
   if (!pIO->Read32(&sigType))
@@ -994,7 +1008,7 @@ bool CIccProfile::LoadTag(IccTagEntry *pTagEntry, CIccIO *pIO)
   //Now seek back to where the tag starts so the created tag object can read
   //in its data.
   //First we need to get the tag type to create the right kind of tag
-  if (pIO->Seek(pTagEntry->TagInfo.offset, icSeekSet)!=pTagEntry->TagInfo.offset) {
+  if (pIO->Seek(pTagEntry->TagInfo.offset, icSeekSet)!=(icInt32Number)pTagEntry->TagInfo.offset) {
     delete pTag;
     return false;
   }
@@ -1026,6 +1040,9 @@ bool CIccProfile::LoadTag(IccTagEntry *pTagEntry, CIccIO *pIO)
 
   case icSigNamedColor2Tag:
     ((CIccTagNamedColor2*)pTag)->SetColorSpaces(m_Header.pcs, m_Header.colorSpace);
+
+  default:
+    break;
   }
 
   pTagEntry->pTag = pTag;
@@ -2276,7 +2293,7 @@ CIccProfile* ValidateIccProfile(const icChar *szFilename, std::string &sReport, 
  *  true = success, false = failure
  *******************************************************************************
  */
-bool SaveIccProfile(const icChar *szFilename, CIccProfile *pIcc)
+bool SaveIccProfile(const icChar *szFilename, CIccProfile *pIcc, icProfileIDSaveMethod nWriteId)
 {
   CIccFileIO FileIO;
 
@@ -2287,7 +2304,7 @@ bool SaveIccProfile(const icChar *szFilename, CIccProfile *pIcc)
     return false;
   }
 
-  if (!pIcc->Write(&FileIO)) {
+  if (!pIcc->Write(&FileIO, nWriteId)) {
     return false;
   }
 
@@ -2308,7 +2325,7 @@ bool SaveIccProfile(const icChar *szFilename, CIccProfile *pIcc)
 *  true = success, false = failure
 *******************************************************************************
 */
-bool SaveIccProfile(const icWChar *szFilename, CIccProfile *pIcc)
+bool SaveIccProfile(const icWChar *szFilename, CIccProfile *pIcc, icProfileIDSaveMethod nWriteId)
 {
   CIccFileIO FileIO;
 
@@ -2319,7 +2336,7 @@ bool SaveIccProfile(const icWChar *szFilename, CIccProfile *pIcc)
     return false;
   }
 
-  if (!pIcc->Write(&FileIO)) {
+  if (!pIcc->Write(&FileIO, nWriteId)) {
     return false;
   }
 

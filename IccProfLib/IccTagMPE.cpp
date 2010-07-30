@@ -366,7 +366,7 @@ bool CIccMpeUnknown::Read(icUInt32Number nSize, CIccIO *pIO)
     if (!SetDataSize(nDataSize, false))
       return false;
 
-    if (pIO->Read8(m_pData, nDataSize)!=nDataSize)
+    if (pIO->Read8(m_pData, nDataSize)!=(icInt32Number)nDataSize)
       return false;
   }
 
@@ -388,7 +388,7 @@ bool CIccMpeUnknown::Write(CIccIO *pIO)
   if (!pIO)
     return false;
 
-  icUInt32Number elemStart = pIO->Tell();
+  //icUInt32Number elemStart = pIO->Tell();
 
   if (!pIO->Write32(&m_sig))
     return false;
@@ -403,7 +403,7 @@ bool CIccMpeUnknown::Write(CIccIO *pIO)
     return false;
 
   if (m_nSize) {
-    if (pIO->Write8(m_pData, m_nSize)!=m_nSize)
+    if (pIO->Write8(m_pData, m_nSize)!=(icInt32Number)m_nSize)
       return false;
   }
 
@@ -998,7 +998,7 @@ bool CIccTagMultiProcessElement::Read(icUInt32Number size, CIccIO *pIO)
     if (!element) {
       icUInt32Number pos = tagStart + m_position[i].offset;
 
-      if (pIO->Seek(pos, icSeekSet)!=pos) {
+      if (pIO->Seek(pos, icSeekSet)!=(icInt32Number)pos) {
         return false;
       }
 
@@ -1006,7 +1006,7 @@ bool CIccTagMultiProcessElement::Read(icUInt32Number size, CIccIO *pIO)
         return false;
       }
       
-      if (pIO->Seek(pos, icSeekSet)!=pos) {
+      if (pIO->Seek(pos, icSeekSet)!=(icInt32Number)pos) {
         return false;
       }
 
@@ -1062,7 +1062,7 @@ bool CIccTagMultiProcessElement::Write(CIccIO *pIO)
     return false;
 
   if (m_list) {
-    m_nProcElements = m_list->size();
+    m_nProcElements = (icUInt32Number)m_list->size();
   }
   else {
     m_nProcElements = 0;

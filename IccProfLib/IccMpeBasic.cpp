@@ -799,7 +799,7 @@ bool CIccSampledCurveSegment::Read(icUInt32Number size, CIccIO *pIO)
     return false;
 
   if (m_nCount) {
-    if (pIO->ReadFloat32Float(m_pSamples+1, m_nCount-1)!=m_nCount-1)
+    if (pIO->ReadFloat32Float(m_pSamples+1, m_nCount-1)!=(icInt32Number)(m_nCount-1))
       return false;
   }
 
@@ -844,7 +844,7 @@ bool CIccSampledCurveSegment::Write(CIccIO *pIO)
 
   //First point in samples is ONLY for interpolation (not saved)
   if (nCount) {
-    if (pIO->WriteFloat32Float(m_pSamples+1, nCount)!=nCount)
+    if (pIO->WriteFloat32Float(m_pSamples+1, nCount)!=(icInt32Number)nCount)
       return false;
   }
 
@@ -1161,7 +1161,7 @@ bool CIccSegmentedCurve::Read(icUInt32Number size, CIccIO *pIO)
         free(breakpoints);
         return false;
       }
-      if (pIO->Seek(pos, icSeekSet)!=pos)
+      if (pIO->Seek(pos, icSeekSet)!=(icInt32Number)pos)
         return false;;
 
       if (!i)
@@ -1215,7 +1215,7 @@ bool CIccSegmentedCurve::Write(CIccIO *pIO)
   if (!pIO->Write32(&m_nReserved1))
     return false;
 
-  icUInt16Number nSegments = m_list->size();
+  icUInt16Number nSegments = (icUInt16Number)m_list->size();
 
   if (!pIO->Write16(&nSegments))
     return false;
@@ -1706,7 +1706,7 @@ bool CIccMpeCurveSet::Read(icUInt32Number size, CIccIO *pIO)
         }
 
         pos = startPos + m_position[i].offset;
-        if (pIO->Seek(pos, icSeekSet)!=pos) {
+        if (pIO->Seek(pos, icSeekSet)!=(icInt32Number)pos) {
           return false;
         }
         
@@ -1719,7 +1719,7 @@ bool CIccMpeCurveSet::Read(icUInt32Number size, CIccIO *pIO)
           return false;
         }
 
-        if (pIO->Seek(pos, icSeekSet)!=pos) {
+        if (pIO->Seek(pos, icSeekSet)!=(icInt32Number)pos) {
           return false;
         }
       
@@ -2127,7 +2127,7 @@ bool CIccMpeMatrix::Read(icUInt32Number size, CIccIO *pIO)
     return false;
   
   //Read Matrix data
-  if (pIO->ReadFloat32Float(m_pMatrix, m_size)!=m_size)
+  if (pIO->ReadFloat32Float(m_pMatrix, m_size)!=(icInt32Number)m_size)
     return false;
 
   //Read Constant data
@@ -2167,7 +2167,7 @@ bool CIccMpeMatrix::Write(CIccIO *pIO)
     return false;
 
   if (m_pMatrix) {
-    if (pIO->WriteFloat32Float(m_pMatrix, m_size)!=m_size)
+    if (pIO->WriteFloat32Float(m_pMatrix, m_size)!=(icInt32Number)m_size)
       return false;
   }
 
@@ -2488,7 +2488,7 @@ bool CIccMpeCLUT::Read(icUInt32Number size, CIccIO *pIO)
   if (!pData)
     return false;
 
-  icUInt32Number nPoints = m_pCLUT->NumPoints()*m_nOutputChannels;
+  icInt32Number nPoints = m_pCLUT->NumPoints()*m_nOutputChannels;
 
   if (pIO->ReadFloat32Float(pData,nPoints)!= nPoints)
     return false;
@@ -2536,7 +2536,7 @@ bool CIccMpeCLUT::Write(CIccIO *pIO)
       return false;
 
     icFloatNumber *pData = m_pCLUT->GetData(0);
-    icUInt32Number nPoints = m_pCLUT->NumPoints()*m_nOutputChannels;
+    icInt32Number nPoints = m_pCLUT->NumPoints()*m_nOutputChannels;
 
     if (pIO->WriteFloat32Float(pData, nPoints) != nPoints) 
       return false;

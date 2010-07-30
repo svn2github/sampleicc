@@ -176,7 +176,7 @@ void icColorIndexName(icChar *szName, icColorSpaceSignature csSig,
     if (nColors==1) {
       strcpy(szName, szSig);
     }
-    else if (nColors == strlen(szSig)) {
+    else if ((size_t)nColors == strlen(szSig)) {
       sprintf(szName, "%s_%c", szSig, szSig[nIndex]);
     }
     else {
@@ -912,7 +912,7 @@ const icChar *CIccInfo::GetDeviceAttrName(icUInt64Number val)
   else
     strcpy(m_szStr, "Reflective");
 
-  int l=strlen(m_szStr);
+  int l=(int)strlen(m_szStr);
 
   if (val & icMatte)
     strcpy(m_szStr+l, " | Matte");
@@ -929,7 +929,7 @@ const icChar *CIccInfo::GetProfileFlagsName(icUInt32Number val)
   else
     strcpy(m_szStr, "EmbeddedProfileFalse");
 
-  int l=strlen(m_szStr);
+  int l=(int)strlen(m_szStr);
 
   if (val & icUseWithEmbeddedDataOnly)
     strcpy(m_szStr+l, " | UseWithEmbeddedDataOnly");

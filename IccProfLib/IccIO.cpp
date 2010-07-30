@@ -404,7 +404,7 @@ icInt32Number CIccFileIO::Read8(void *pBuf, icInt32Number nNum)
   if (!m_fFile)
     return 0;
 
-  return fread(pBuf, 1, nNum, m_fFile);
+  return (icInt32Number)fread(pBuf, 1, nNum, m_fFile);
 }
 
 
@@ -413,7 +413,7 @@ icInt32Number CIccFileIO::Write8(void *pBuf, icInt32Number nNum)
   if (!m_fFile)
     return 0;
 
-  return fwrite(pBuf, 1, nNum, m_fFile);
+  return (icInt32Number)fwrite(pBuf, 1, nNum, m_fFile);
 }
 
 
@@ -581,6 +581,9 @@ icInt32Number CIccMemIO::Seek(icInt32Number nOffset, icSeekVal pos)
     break;
   case icSeekEnd:
     nPos = (icInt32Number)m_nSize + nOffset;
+    break;
+  default:
+    nPos = 0;
     break;
   }
 

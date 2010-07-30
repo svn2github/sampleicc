@@ -86,7 +86,7 @@
 
 /*=============================================================================
 * CLASS CIccDictEntry
-*=============================================================================/
+*=============================================================================*/
 
 /**
 ******************************************************************************
@@ -307,7 +307,7 @@ bool CIccDictEntry::SetValueLocalized(CIccTagMultiLocalizedUnicode *pValueLocali
 
 /*=============================================================================
  * CLASS CIccTagDict
- *=============================================================================/
+ *============================================================================*/
 
 /**
  ******************************************************************************
@@ -593,7 +593,7 @@ bool CIccTagDict::Read(icUInt32Number size, CIccIO *pIO)
         }
 
         num = pos[i].posName.size / sizeof(icUnicodeChar);
-        if (pIO->Read16(buf, num)!=num) {
+        if (pIO->Read16(buf, num)!=(icInt32Number)num) {
           free(pos);
           free(buf);
           delete ptr.ptr;
@@ -638,7 +638,7 @@ bool CIccTagDict::Read(icUInt32Number size, CIccIO *pIO)
         }
 
         num = pos[i].posValue.size / sizeof(icUnicodeChar);
-        if (pIO->Read16(buf, num)!=num) {
+        if (pIO->Read16(buf, num)!=(icInt32Number)num) {
           free(pos);
           free(buf);
           delete ptr.ptr;
