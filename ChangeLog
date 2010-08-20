@@ -1,6 +1,19 @@
-2010-07-31 KaiUwe Behrmann
- * [conf]: bump version to 1.6.0
-
+2010-08-20 Max Derhak
+ * 1.6.1 release
+ * Modifications to CIccTagLut16 and CIccTagLut8 to correctly track curve mapping when table
+   is used as an output table and PCS is XYZ.  In this case M and B curves are swapped since
+   the legacy Lut16 and Lut8 tags do not have M curves.
+ * Removed check in CIccXform::Create() for BtoD0/DtoB0 tags if BtoDx/DtoBx tag for rendering
+   intent not found (as this never made it into the approved specification).
+ 
+2010-07-28 Max Derhak
+ * 1.6.0 release
+ * Moved main Build for Windows systems to Build\MSVC folder with intent to add builds for
+   other systems to Build folder
+ * Incorporated changes from Joseph Goldstone that eliminate various compiler warnings
+ * Modified CIccProfile::Write() to allow for options in how ProfileIDs are created 
+   (Example: ByProfileVersion/Always/Never)
+ 
 2010-05-19 Max Derhak
  * Fixed crashing bug with gamut tags with XYZ PCS
  * Modified CLUT::dump to use reflect legacy encoding of when lut16 tags are used

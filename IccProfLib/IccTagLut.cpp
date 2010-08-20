@@ -2749,6 +2749,7 @@ CIccMBB::CIccMBB()
   m_csOutput = icSigUnknownData;
 
   m_bInputMatrix = true;
+  m_bUseMCurvesAsBCurves = false;
 }
 
 
@@ -2768,6 +2769,7 @@ CIccMBB::CIccMBB(const CIccMBB &IMBB)
  int i;
  
   m_bInputMatrix = IMBB.m_bInputMatrix;
+  m_bUseMCurvesAsBCurves = IMBB.m_bUseMCurvesAsBCurves;
   m_nInput = IMBB.m_nInput;
   m_nOutput = IMBB.m_nOutput;
   m_csInput = IMBB.m_csInput;
@@ -2842,6 +2844,7 @@ CIccMBB &CIccMBB::operator=(const CIccMBB &IMBB)
   int i;
 
   m_bInputMatrix = IMBB.m_bInputMatrix;
+  m_bUseMCurvesAsBCurves = IMBB.m_bUseMCurvesAsBCurves;
   m_nInput = IMBB.m_nInput;
   m_nOutput = IMBB.m_nOutput;
   m_csInput = IMBB.m_csInput;
@@ -3044,7 +3047,7 @@ void CIccMBB::Describe(std::string &sDescription)
 
 
   if (IsInputMatrix()) {
-    if (m_CurvesB) {
+    if (m_CurvesB && !m_bUseMCurvesAsBCurves) {
       for (i=0; i<m_nInput; i++) {
         icColorIndexName(color, m_csInput, i, m_nInput, "");
         sprintf(buf, "B_Curve_%s", color);
@@ -3058,7 +3061,10 @@ void CIccMBB::Describe(std::string &sDescription)
     if (m_CurvesM) {
       for (i=0; i<m_nInput; i++) {
         icColorIndexName(color, m_csInput, i, m_nInput, "");
-        sprintf(buf, "M_Curve_%s", color);
+        if (!m_bUseMCurvesAsBCurves)
+          sprintf(buf, "M_Curve_%s", color);
+        else 
+          sprintf(buf, "B_Curve_%s", color);
         m_CurvesM[i]->DumpLut(sDescription, buf, m_csInput, i);
       }
     }
@@ -3086,7 +3092,7 @@ void CIccMBB::Describe(std::string &sDescription)
     if (m_CLUT)
       m_CLUT->DumpLut(sDescription, "CLUT", m_csInput, m_csOutput);
 
-    if (m_CurvesM) {
+    if (m_CurvesM && this->GetType()!=icSigLut8Type) {
       for (i=0; i<m_nOutput; i++) {
         icColorIndexName(color, m_csOutput, i, m_nOutput, "");
         sprintf(buf, "M_Curve_%s", color);
@@ -4018,6 +4024,7 @@ icValidateStatus CIccTagLutBtoA::Validate(icTagSignature sig, std::string &sRepo
 CIccTagLut8::CIccTagLut8()
 {
   memset(m_XYZMatrix, 0, sizeof(m_XYZMatrix));
+  m_XYZMatrix[0] = m_XYZMatrix[4] = m_XYZMatrix[8] = icDtoF(1.0);
   m_nReservedByte = 0;
 }
 
@@ -4171,26 +4178,29 @@ bool CIccTagLut8::Read(icUInt32Number size, CIccIO *pIO)
 void CIccTagLut8::SetColorSpaces(icColorSpaceSignature csInput, icColorSpaceSignature csOutput)
 {
   if (csInput==icSigXYZData) {
-    if (!m_CurvesM && !m_Matrix) {
-      int i;
+    int i;
 
-      //Transfer ownership of B curves to M
+    if (!m_CurvesM && IsInputMatrix()) { //Transfer ownership of curves
       m_CurvesM = m_CurvesB;
       m_CurvesB = NULL;
 
+      LPIccCurve *pCurves = NewCurvesB();
+      CIccTagCurve *pCurve;
+      for (i=0; i<m_nInput; i++) {
+        pCurves[i] = pCurve = (CIccTagCurve*)CIccTag::Create(icSigCurveType);
+        pCurve->SetSize(0);
+      }
+
+      m_bUseMCurvesAsBCurves = true;
+    }
+  
+    if (!m_Matrix) {
       CIccMatrix *pMatrix = NewMatrix();
       for (i=0; i<9; i++) {
         pMatrix->m_e[i] = icFtoD(m_XYZMatrix[i]);
       }
  
       pMatrix->m_bUseConstants=false;
-
-      LPIccCurve *pCurves = NewCurvesB();
-      CIccTagCurve *pCurve;
-      for (i=0; i<m_nInput; i++) {
-        pCurves[i] = pCurve = new CIccTagCurve();
-        pCurve->SetSize(0);
-      }
     }
   }
   else {
@@ -4224,6 +4234,7 @@ bool CIccTagLut8::Write(CIccIO *pIO)
   icUInt16Number nInputEntries, nOutputEntries;
   LPIccCurve *pCurves;
   CIccTagCurve *pCurve;
+  icFloat32Number v;
 
   if (m_Matrix) {
     for (i=0; i<9; i++)
@@ -4233,7 +4244,13 @@ bool CIccTagLut8::Write(CIccIO *pIO)
     memset(XYZMatrix, 0, 9*sizeof(icS15Fixed16Number));
     XYZMatrix[0] = XYZMatrix[4] = XYZMatrix[8] = icDtoF(1.0);
   }
-  pCurves = m_CurvesB;
+
+  if (m_bUseMCurvesAsBCurves) {
+    pCurves = m_CurvesM;
+  }
+  else {
+    pCurves = m_CurvesB;
+  }
 
   if (!pCurves || !m_CurvesA || !m_CLUT)
     return false;
@@ -4261,11 +4278,19 @@ bool CIccTagLut8::Write(CIccIO *pIO)
     if (!pCurve)
       return false;
 
-    if (pCurve->GetSize()!=256)
-      return false;
+    if (pCurve->GetSize()!=256) {
+      icUInt32Number j;
 
-    if (pIO->Write8Float(&(*pCurve)[0], 256) != 256)
-      return false;                                                                       
+      for (j=0; j<256; j++) {
+        v = pCurve->Apply((icFloat32Number)j / 255.0F);
+        if (!pIO->Write8Float(&v, 1))
+          return false;
+      }
+    }
+    else {
+      if (pIO->Write8Float(&(*pCurve)[0], 256)!=256)
+        return false;
+    }
   }
 
   //CLUT
@@ -4284,11 +4309,19 @@ bool CIccTagLut8::Write(CIccIO *pIO)
     if (!pCurve)
       return false;
 
-    if (pCurve->GetSize()!=256)
-      return false;
+    if (pCurve->GetSize()!=256) {
+      icUInt32Number j;
 
-    if (pIO->Write8Float(&(*pCurve)[0], 256) != 256)
-      return false;                                                                       
+      for (j=0; j<256; j++) {
+        v = pCurve->Apply((icFloat32Number)j / 255.0F);
+        if (!pIO->Write8Float(&v, 1))
+          return false;
+      }
+    }
+    else {
+      if (pIO->Write8Float(&(*pCurve)[0], 256)!=256)
+        return false;
+    }
   }
   return true;
 }
@@ -4430,6 +4463,7 @@ icValidateStatus CIccTagLut8::Validate(icTagSignature sig, std::string &sReport,
 CIccTagLut16::CIccTagLut16()
 {
   memset(m_XYZMatrix, 0, sizeof(m_XYZMatrix));
+  m_XYZMatrix[0] = m_XYZMatrix[4] = m_XYZMatrix[8] = icDtoF(1.0);
   m_nReservedByte = 0;
 }
 
@@ -4587,25 +4621,29 @@ bool CIccTagLut16::Read(icUInt32Number size, CIccIO *pIO)
 void CIccTagLut16::SetColorSpaces(icColorSpaceSignature csInput, icColorSpaceSignature csOutput)
 {
   if (csInput==icSigXYZData) {
-    if (!m_CurvesM && !m_Matrix) {
-      int i;
+    int i;
 
+    if (!m_CurvesM && IsInputMatrix()) { //Transfer ownership of curves
       m_CurvesM = m_CurvesB;
       m_CurvesB = NULL;
-
-      CIccMatrix *pMatrix = NewMatrix();
-    for (i=0; i<9; i++) {
-      pMatrix->m_e[i] = icFtoD(m_XYZMatrix[i]);
-    }
-
-      pMatrix->m_bUseConstants=false;
 
       LPIccCurve *pCurves = NewCurvesB();
       CIccTagCurve *pCurve;
       for (i=0; i<m_nInput; i++) {
-        pCurves[i] = pCurve = new CIccTagCurve();
+        pCurves[i] = pCurve = (CIccTagCurve*)CIccTag::Create(icSigCurveType);
         pCurve->SetSize(0);
       }
+
+      m_bUseMCurvesAsBCurves = true;
+    }
+
+    if (!m_Matrix) {
+      CIccMatrix *pMatrix = NewMatrix();
+      for (i=0; i<9; i++) {
+        pMatrix->m_e[i] = icFtoD(m_XYZMatrix[i]);
+      }
+
+      pMatrix->m_bUseConstants=false;
     }
   }
   else {
@@ -4649,7 +4687,13 @@ bool CIccTagLut16::Write(CIccIO *pIO)
     memset(XYZMatrix, 0, 9*sizeof(icS15Fixed16Number));
     XYZMatrix[0] = XYZMatrix[4] = XYZMatrix[8] = icDtoF(1.0);
   }
-  pCurves = m_CurvesB;
+
+  if (m_bUseMCurvesAsBCurves) {
+    pCurves = m_CurvesM;
+  }
+  else {
+    pCurves = m_CurvesB;
+  }
 
   if (!pCurves || !m_CurvesA || !m_CLUT)
     return false;

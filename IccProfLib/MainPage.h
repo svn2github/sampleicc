@@ -59,6 +59,20 @@
  *   the configuration parameters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
+ * - August 2010 - 1.6.1 release
+ *  - Modifications to CIccTagLut16 and CIccTagLut8 to correctly track curve mapping when table
+ *    is used as an output table and PCS is XYZ.  In this case M and B curves are swapped since
+ *    the legacy Lut16 and Lut8 tags do not have M curves.
+ *  - Removed check in CIccXform::Create() for BtoD0/DtoB0 tags if BtoDx/DtoBx tag for rendering
+ *    intent not found (as this never made it into the approved specification).
+ *
+ * - July 2010 - 1.6.0 release
+ *  - Moved main Build for Windows systems to Build\MSVC folder with intent to add builds for
+ *    other systems to Build folder
+ *  - Incorporated changes from Joseph Goldstone that eliminate various compiler warnings
+ *  - Modified CIccProfile::Write() to allow for options in how ProfileIDs are created 
+ *    (Example: ByProfileVersion/Always/Never)
+ *
  * - May 2010
  *  - Modifications for better support for compiling with 64 bit compilers
  *  - Added IccProfLibVer.h to provide a macro for defining the library version

@@ -375,6 +375,7 @@ public:
   virtual bool UseLegacyPCS() const { return false; } //Treat Lab Encoding differently?
 
   bool IsInputB() { return IsInputMatrix(); }
+  bool SwapMBCurves() { return m_bUseMCurvesAsBCurves; }
 
   void Cleanup();
   void Init(icUInt8Number nInputChannels, icUInt8Number nOutputChannels);
@@ -404,6 +405,7 @@ public:
 
 protected:
   bool m_bInputMatrix;
+  bool m_bUseMCurvesAsBCurves;
 
   icUInt8Number m_nInput;
   icUInt8Number m_nOutput;

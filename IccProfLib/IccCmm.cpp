@@ -613,9 +613,10 @@ CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput/* =true */, icRe
               nTagIntent = icRelativeColorimetric;
           }
 
-          if (!pTag) {
-            pTag = pProfile->FindTag(icSigDToB0Tag);
-          }
+          //Apparently Using DtoB0 is not prescribed here by the ICC Specification
+          //if (!pTag) {
+          //  pTag = pProfile->FindTag(icSigDToB0Tag);
+          //}
 
           //Unsupported elements cause fall back behavior
           if (pTag && !pTag->IsSupported())
@@ -683,9 +684,10 @@ CIccXform *CIccXform::Create(CIccProfile *pProfile, bool bInput/* =true */, icRe
               nTagIntent = icRelativeColorimetric;
           }
 
-          if (!pTag) {
-            pTag = pProfile->FindTag(icSigBToD0Tag);
-          }
+          //Apparently Using BtoD0 is not prescribed here by the ICC Specification
+          //if (!pTag) {
+          //  pTag = pProfile->FindTag(icSigBToD0Tag);
+          //}
 
           //Unsupported elements cause fall back behavior
           if (pTag && !pTag->IsSupported())
