@@ -155,7 +155,7 @@ CIccMultiProcessElement *ConvertCurves(LPIccCurve *pCurves, int nCurves, bool bS
           pFormula->SetFunction(0, 4, params);
           pCurve->Insert(pFormula);
 
-          pFormula = new CIccFormulaCurveSegment(-b / a, endPos);
+          pFormula = new CIccFormulaCurveSegment(d, endPos);
           params[0] = icFtoD(parParams[0]);
           params[1] = icFtoD(parParams[1]);
           params[2] = icFtoD(parParams[2]);

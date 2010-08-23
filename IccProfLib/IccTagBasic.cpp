@@ -1871,7 +1871,7 @@ bool CIccTagNamedColor2::InitFindCachedPCSColor()
  */
 icInt32Number CIccTagNamedColor2::FindCachedPCSColor(icFloatNumber *pPCS, icFloatNumber dMinDE/*=1000.0*/) const
 {
-  icFloatNumber dCalcDE, dLeastDE;
+  icFloatNumber dCalcDE, dLeastDE=0.0;
   icFloatNumber pLabIn[3];
   icFloatNumber *pXYZ, *pLab;
   icInt32Number leastDEindex = -1;
@@ -1977,7 +1977,7 @@ icInt32Number CIccTagNamedColor2::FindColor(const icChar *szColor) const
 
 /**
  ****************************************************************************
- * Name: CIccTagNamedColor2::FindColor
+ * Name: CIccTagNamedColor2::FindDeviceColor
  * 
  * Purpose: Find the device color
  * 
@@ -1993,7 +1993,7 @@ icInt32Number CIccTagNamedColor2::FindDeviceColor(icFloatNumber *pDevColor) cons
   if (!m_nDeviceCoords)
     return -1;
   
-  icFloatNumber dCalcDiff=0.0, dLeastDiff;
+  icFloatNumber dCalcDiff=0.0, dLeastDiff=0.0;
   icFloatNumber *pDevOut;
   icInt32Number leastDiffindex = -1;
 

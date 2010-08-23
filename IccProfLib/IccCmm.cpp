@@ -3566,6 +3566,9 @@ icStatusCMM CIccApplyCmm::Apply(icFloatNumber *DstPixel, const icFloatNumber *Sr
     i->ptr->Apply(DstPixel, m_pPCS->Check(SrcPixel, pLastXform));
     bNoClip = pLastXform->NoClipPCS();
   }
+  else {
+    bNoClip = true;
+  }
 
   m_pPCS->CheckLast(DstPixel, m_pCmm->m_nDestSpace, bNoClip);
 
@@ -4887,7 +4890,7 @@ icStatusCMM CIccApplyNamedColorCmm::Apply(icFloatNumber *DstPixel, const icFloat
         }
       }
       else {
-        pXform->Apply(pApply, pDst, m_pPCS->Check(pSrc, pXform));
+        pApplyXform->Apply(pApply, pDst, m_pPCS->Check(pSrc, pApplyXform));
       }
       pSrc = pDst;
     }
@@ -5006,7 +5009,7 @@ icStatusCMM CIccApplyNamedColorCmm::Apply(icFloatNumber *DstPixel, const icFloat
           }
         }
         else {
-          pXform->Apply(pApply, pDst, m_pPCS->Check(pSrc, pXform));
+          pApplyXform->Apply(pApply, pDst, m_pPCS->Check(pSrc, pApplyXform));
         }
         pSrc = pDst;
       }
@@ -5240,8 +5243,6 @@ icStatusCMM CIccApplyNamedColorCmm::Apply(icFloatNumber *DstPixel, const icChar 
         }
       }
       else {
-        pApply = i->ptr;
-        pApplyXform = pApply->GetXform();
         pApplyXform->Apply(pApply, pDst, m_pPCS->Check(pSrc, pApplyXform));
       }
       pSrc = pDst;

@@ -65,6 +65,7 @@
  *    the legacy Lut16 and Lut8 tags do not have M curves.
  *  - Removed check in CIccXform::Create() for BtoD0/DtoB0 tags if BtoDx/DtoBx tag for rendering
  *    intent not found (as this never made it into the approved specification).
+ *  - Further changes from Joseph Goldstone that eliminate various compiler warnings
  *
  * - July 2010 - 1.6.0 release
  *  - Moved main Build for Windows systems to Build\MSVC folder with intent to add builds for

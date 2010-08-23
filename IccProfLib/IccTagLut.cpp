@@ -2082,6 +2082,7 @@ void CIccCLUT::Begin()
     m_nOffset[0] = 0;
     int count, nFlag;
     icUInt32Number nPower[2];
+    nPower[0] = 0;
     nPower[1] = 1;
 
     for (count=0; count<m_nInput; count++) {
