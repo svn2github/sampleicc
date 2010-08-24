@@ -40,6 +40,7 @@ libSampleICCinclude_HEADERS = \
 	IccMpeFactory.h \
 	IccPrmg.h \
 	IccProfLibConf.h \
+	IccProfLibVer.h \
 	IccProfile.h \
 	IccTag.h \
 	IccTagBasic.h \
