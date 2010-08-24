@@ -5,6 +5,9 @@ SUBDIRS = \
 	Tools \
 	Contrib
 
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = sampleicc.pc
+
 EXTRA_DIST = bootstrap \
 	README.OSX \
 	ICC_utils-Info.plist \
