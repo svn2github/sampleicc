@@ -75,7 +75,11 @@
 using namespace std;
 
 #ifndef WIN32
-#include <sys/errno.h>
+  #ifdef __sun__
+  #include <errno.h>
+  #else
+  #include <sys/errno.h>
+  #endif
 #else
 #include <string.h>
 int strerror_r(int errnum, char *str, int strsize)

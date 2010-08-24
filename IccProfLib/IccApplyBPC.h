@@ -132,3 +132,4 @@ private:
 #endif
 
 #endif // _ICCAPPLYBPC_H
+

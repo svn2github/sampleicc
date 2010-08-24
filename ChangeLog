@@ -6,6 +6,8 @@
  * Removed check in CIccXform::Create() for BtoD0/DtoB0 tags if BtoDx/DtoBx tag for rendering
    intent not found (as this never made it into the approved specification).
  * Further changes from Joseph Goldstone to eliminate various compiiler warnings
+ * Added XCode project to Build Folder
+ * Added changes to get build working on Sun/Solaris
  
 2010-07-28 Max Derhak
  * 1.6.0 release

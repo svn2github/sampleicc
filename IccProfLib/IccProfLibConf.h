@@ -110,7 +110,7 @@ namespace sampleICC {
     #define ICC_UNSUPPORTED_TAG_DICT
   #endif
 
-#else // non-PC, perhaps Mac or Linux
+#else // non-PC, perhaps Mac, Linux, or Solaris
 
   #define ICCUINT64 unsigned long long
   #define ICCINT64  long long
@@ -132,8 +132,12 @@ namespace sampleICC {
       #define ICC_BYTE_ORDER_BIG_ENDIAN
     #endif
 
-  #else
-    #define ICC_BYTE_ORDER_LITTLE_ENDIAN
+  #else // Sun Solaris or Linux
+    #if defined(__sun__)
+      #define ICC_BYTE_ORDER_BIG_ENDIAN
+    #else
+      #define ICC_BYTE_ORDER_LITTLE_ENDIAN
+    #endif
   #endif
 
   #define ICCPROFLIB_API

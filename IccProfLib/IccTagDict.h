@@ -228,3 +228,4 @@ protected:
 #endif
 
 #endif //_ICCTAGDICTTAG_H
+
