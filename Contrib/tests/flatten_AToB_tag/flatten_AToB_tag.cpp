@@ -186,7 +186,7 @@ main(const int argc, const char* argv[])
         resultTuples[i * sampling * sampling + j * sampling + k] = resultTuple;
       }
 
-  if (flattened_contents_path == "-")
+  if (strcmp(flattened_contents_path,"-") == 0)
     printTuples(cout, resultTuples);
   else
   {

@@ -2600,6 +2600,9 @@ void CIccMpeCLUT::Apply(CIccApplyMpe *pApply, icFloatNumber *dstPixel, const icF
   const CIccCLUT *pCLUT = m_pCLUT;
 
   switch(m_interpType) {
+  case ic3dInterpTetra:
+    pCLUT->Interp3dTetra(dstPixel, srcPixel);
+    break;
   case ic3dInterp:
     pCLUT->Interp3d(dstPixel, srcPixel);
     break;

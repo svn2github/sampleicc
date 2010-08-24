@@ -2109,15 +2109,6 @@ void CIccCLUT::Begin()
 
 
 
-static icInt32Number Scale3d(icInt32Number t,
-                                     icInt32Number u,
-                                     icInt32Number v)
-{
-  return (icInt32Number)(((icInt64Number)t * u * v)>>16);
-}
-
-
-
 /**
  ******************************************************************************
  * Name: CIccCLUT::Interp3dTetra

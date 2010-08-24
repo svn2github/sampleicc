@@ -197,9 +197,9 @@ void
 drawContents(CGContextRef context, CGRect contentRect, size_t edgeSize)
 {
   CGContextSetFillColorSpace(context, getDeviceRGBColorSpace());
-  int r = 0;
-  int g = 0;
-  int b = 0;
+  size_t r = 0;
+  size_t g = 0;
+  size_t b = 0;
   CGRect pixelRect;
   pixelRect.origin.x = contentRect.origin.x;
   pixelRect.origin.y = contentRect.origin.y + contentRect.size.height - 1;

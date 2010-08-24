@@ -136,7 +136,7 @@ print_usage:
       printf("Profile ID:        %s\n", Fmt.GetProfileID(&pHdr->profileID));
     else
       printf("Profile ID:       Profile ID not calculated.\n");
-    printf("Size:             %ld(0x%lx) bytes\n", pHdr->size, pHdr->size);
+    printf("Size:             %d(0x%x) bytes\n", pHdr->size, pHdr->size);
 
     printf("\nHeader\n");
     printf(  "------\n");
@@ -168,7 +168,7 @@ print_usage:
     TagEntryList::iterator i;
 
     for (n=0, i=pIcc->m_Tags->begin(); i!=pIcc->m_Tags->end(); i++, n++) {
-      printf("%25s  %s  %8ld\t%8ld\n", Fmt.GetTagSigName(i->TagInfo.sig),
+      printf("%25s  %s  %8d\t%8d\n", Fmt.GetTagSigName(i->TagInfo.sig),
                                    icGetSig(buf, i->TagInfo.sig, false), 
                                    i->TagInfo.offset, i->TagInfo.size);
     }

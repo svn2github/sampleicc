@@ -3440,6 +3440,9 @@ void CIccXformMpe::Apply(CIccApplyXform* pApply, icFloatNumber *DstPixel, const 
       case icSigLabData:
         icLabToPcs(DstPixel);
         break;
+
+      default:
+        break;
     }
 
     if (m_nIntent != icAbsoluteColorimetric) { //D2B3 tags don't need abs conversion
@@ -4887,6 +4890,8 @@ icStatusCMM CIccApplyNamedColorCmm::Apply(icFloatNumber *DstPixel, const icFloat
           }
           break;
 
+        default:
+          break;
         }
       }
       else {
@@ -5006,6 +5011,8 @@ icStatusCMM CIccApplyNamedColorCmm::Apply(icFloatNumber *DstPixel, const icFloat
             }
             break;
 
+          default:
+            break;
           }
         }
         else {
@@ -5124,6 +5131,8 @@ icStatusCMM CIccApplyNamedColorCmm::Apply(icChar* DstColorName, const icFloatNum
           }
           break;
 
+        default:
+          break;
         }
       }
       else {
@@ -5147,7 +5156,6 @@ icStatusCMM CIccApplyNamedColorCmm::Apply(icChar* DstColorName, const icFloatNum
       default:
         return icCmmStatIncorrectApply;
         break;
-
       }
     }
     else {
@@ -5240,6 +5248,8 @@ icStatusCMM CIccApplyNamedColorCmm::Apply(icFloatNumber *DstPixel, const icChar 
           }
           break;
 
+        default:
+          break;
         }
       }
       else {
@@ -5361,6 +5371,8 @@ icStatusCMM CIccApplyNamedColorCmm::Apply(icChar *DstColorName, const icChar *Sr
           }
           break;
 
+        default:
+          break;
         }
       }
       else {
@@ -5383,7 +5395,6 @@ icStatusCMM CIccApplyNamedColorCmm::Apply(icChar *DstColorName, const icChar *Sr
       default:
         return icCmmStatIncorrectApply;
         break;
-
       }
     }
     else {

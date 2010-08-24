@@ -3293,6 +3293,28 @@ void CIccTagNum<T, Tsig>::Describe(std::string &sDescription)
   }
 }
 
+// template function specialization to handle need for %llu and %llx for 64-bit ints
+template <>
+void CIccTagNum<icUInt64Number, icSigUInt64ArrayType>::Describe(std::string &sDescription)
+{
+  icChar buf[128];
+
+  if (m_nSize == 1 ) {
+    sprintf(buf, "Value = %llu (0x016%llx)\r\n", m_Num[0], m_Num[0]);
+    sDescription += buf;
+  }
+  else {
+    icUInt32Number i;
+    sDescription.reserve(sDescription.size() + m_nSize*79);
+
+    for (i=0; i<m_nSize; i++) {
+      sprintf(buf, "Value = %llu (0x016%llx)\r\n", m_Num[i], m_Num[i]);
+      sDescription += buf;
+    }
+  }
+}
+
+
 /**
  ****************************************************************************
  * Name: CIccTagNum::SetSize

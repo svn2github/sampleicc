@@ -114,7 +114,7 @@ getTheDisplayColorSpace()
     if (err || displayProfile == NULL)
     {
       fprintf(stderr, "Got error %d when getting profile for main display!\n",
-              err);
+              static_cast<int>(err));
       return NULL;
     }
     
@@ -156,7 +156,7 @@ isHorizontalBorderRow(const unsigned char* const data, size_t fullImageWidth,
                       size_t y)
 {
   unsigned char pixel[3];
-  for (int x = 0; x < fullImageWidth; ++x)
+  for (size_t x = 0; x < fullImageWidth; ++x)
   {
     getPixel(data, fullImageWidth, fullImageHeight, bytesPerRow, bytesPerPixel,
              x, y, pixel);
@@ -173,7 +173,7 @@ isVerticalBorderRow(const unsigned char* const data, size_t fullImageWidth,
                     size_t x)
 {
   unsigned char pixel[3];
-  for (int y = 0; y < fullImageHeight; ++y)
+  for (size_t y = 0; y < fullImageHeight; ++y)
   {
     getPixel(data, fullImageWidth, fullImageHeight, bytesPerRow,
              bytesPerPixel, x, y, pixel);
@@ -351,6 +351,7 @@ main(int argc, const char * argv[]) {
     default:
       fprintf(stderr, "Unknown bitmap info - unable to figure out optimal bytes"
               " per full row.\n");
+			return EXIT_FAILURE;
   }
     
   double maxValue = (1 << bitsPerComponent) - 1.0;
@@ -390,7 +391,7 @@ main(int argc, const char * argv[]) {
   if (! (lastContentRow - firstContentRow > 0 &&
          lastContentColumn - firstContentColumn > 0))
   {
-    fprintf(stderr, "%s: error: could not find borders of probe content\n");
+    fprintf(stderr, "error: could not find borders of probe content\n");
     return EXIT_FAILURE;
   }
   
@@ -405,11 +406,11 @@ main(int argc, const char * argv[]) {
     return EXIT_FAILURE;
   }
   
-  int x = firstContentColumn;
-  int y = firstContentRow;
-  int r;
-  int g;
-  int b;
+  size_t x = firstContentColumn;
+  size_t y = firstContentRow;
+  size_t r;
+  size_t g;
+  size_t b;
   for (r = 0; r < N; ++r)
     for (g = 0; g < N; ++g)
       for (b = 0; b < N; ++b)

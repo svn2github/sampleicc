@@ -282,7 +282,7 @@ IccTagEntry* CIccProfile::GetTag(icSignature sig) const
   TagEntryList::const_iterator i;
 
   for (i=m_Tags->begin(); i!=m_Tags->end(); i++) {
-    if (i->TagInfo.sig==sig)
+    if (i->TagInfo.sig==(icTagSignature)sig)
       return (IccTagEntry*)&(i->TagInfo);
   }
 
@@ -486,7 +486,7 @@ bool CIccProfile::DeleteTag(icSignature sig)
   TagEntryList::iterator i;
 
   for (i=m_Tags->begin(); i!=m_Tags->end(); i++) {
-    if (i->TagInfo.sig==sig)
+    if (i->TagInfo.sig==(icTagSignature)sig)
       break;
   }
   if (i!=m_Tags->end()) {
@@ -1270,7 +1270,7 @@ bool CIccProfile::CheckTagExclusion(std::string &sReport) const
 
   CIccInfo Info;
   icChar buf[128];
-  sprintf(buf, Info.GetSigName(m_Header.deviceClass));
+  sprintf(buf, "%s", Info.GetSigName(m_Header.deviceClass));
   if (m_Header.deviceClass!=icSigInputClass && m_Header.deviceClass!=icSigDisplayClass) {
     if (GetTag(icSigGrayTRCTag) || GetTag(icSigRedTRCTag) || GetTag(icSigGreenTRCTag) ||
        GetTag(icSigBlueTRCTag) || GetTag(icSigRedColorantTag) || GetTag(icSigGreenColorantTag) ||
@@ -1345,7 +1345,7 @@ icValidateStatus CIccProfile::CheckTagTypes(std::string &sReport) const
   for (i=m_Tags->begin(); i!=m_Tags->end(); i++) {
     tagsig = i->TagInfo.sig;
     typesig = i->pTag->GetType();
-    sprintf(buf, Info.GetSigName(tagsig));
+    sprintf(buf, "%s", Info.GetSigName(tagsig));
     if (!IsTypeValid(tagsig, typesig)) {
       sReport += icValidateNonCompliantMsg;
       sReport += buf;

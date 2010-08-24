@@ -320,7 +320,7 @@ main(int argc, char* argv[])
     const char* const edge_size_string = argv[1];
     vet_as_int(edge_size_string, "N", "the length of the sides of the"
       " flattened probe cube");
-    int N = atoi(edge_size_string);
+    size_t N = atoi(edge_size_string);
     if (N < 1)
       throw ICC_tool_exception("length of the sides of the flattened probe must"
                                " be positive (and really should be at least 11,"

@@ -79,7 +79,7 @@ void ShowHeader(CIccProfile *pIcc)
 
   printf("\nHeader\n");
   printf(  "------\n");
-  printf("Profile Size:     %ld(0x%lx) bytes\n", pHdr->size, pHdr->size);
+  printf("Profile Size:     %d(0x%x) bytes\n", pHdr->size, pHdr->size);
   
   if(Fmt.IsProfileIDCalculated(&pHdr->profileID))
     printf("Profile ID:        %s\n", Fmt.GetProfileID(&pHdr->profileID));
@@ -112,7 +112,7 @@ void ShowHeader(CIccProfile *pIcc)
   TagEntryList::iterator i;
 
   for (i=pIcc->m_Tags->begin(); i!=pIcc->m_Tags->end(); i++) {
-    printf("%25s  %s  %8ld\t%8ld\n", Fmt.GetTagSigName(i->TagInfo.sig),
+    printf("%25s  %s  %8d\t%8d\n", Fmt.GetTagSigName(i->TagInfo.sig),
                                      icGetSig(buf, i->TagInfo.sig, false), 
                                      i->TagInfo.offset, i->TagInfo.size);
   }
@@ -135,7 +135,7 @@ void ReadTag(CIccProfile *pIcc)
   TagEntryList::iterator i;
 
   for (i=pIcc->m_Tags->begin(); i!=pIcc->m_Tags->end(); i++) {
-    printf("%25s  %s  %8ld\t%8ld\n", Fmt.GetTagSigName(i->TagInfo.sig),
+    printf("%25s  %s  %8d\t%8d\n", Fmt.GetTagSigName(i->TagInfo.sig),
                                      icGetSig(buf, i->TagInfo.sig, false), 
                                      i->TagInfo.offset, i->TagInfo.size);
   }

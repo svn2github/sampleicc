@@ -130,7 +130,7 @@ bool ParseNumbers(icFloatNumber* pData, icChar* pString, icUInt32Number nSamples
     }
 
   default:
-    printf("\n%lu Color Samples not supported.\n", nSamples);
+    printf("\n%u Color Samples not supported.\n", nSamples);
     return false;
   }
 
