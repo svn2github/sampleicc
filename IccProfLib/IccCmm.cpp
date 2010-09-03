@@ -374,14 +374,14 @@ void CIccPCS::XyzToLab2(icFloatNumber *Dst, const icFloatNumber *Src, bool bNoCl
 void CIccPCS::Lab2ToLab4(icFloatNumber *Dst, const icFloatNumber *Src, bool bNoClip)
 {
   if (bNoClip) {
-    Dst[0] = (icFloatNumber)(Src[0] * 65535.0 / 65280.0);
-    Dst[1] = (icFloatNumber)(Src[1] * 65535.0 / 65280.0);
-    Dst[2] = (icFloatNumber)(Src[2] * 65535.0 / 65280.0);
+    Dst[0] = (icFloatNumber)(Src[0] * 65535.0f / 65280.0f);
+    Dst[1] = (icFloatNumber)(Src[1] * 65535.0f / 65280.0f);
+    Dst[2] = (icFloatNumber)(Src[2] * 65535.0f / 65280.0f);
   }
   else {
-    Dst[0] = UnitClip((icFloatNumber)(Src[0] * 65535.0 / 65280.0));
-    Dst[1] = UnitClip((icFloatNumber)(Src[1] * 65535.0 / 65280.0));
-    Dst[2] = UnitClip((icFloatNumber)(Src[2] * 65535.0 / 65280.0));
+    Dst[0] = UnitClip((icFloatNumber)(Src[0] * 65535.0f / 65280.0f));
+    Dst[1] = UnitClip((icFloatNumber)(Src[1] * 65535.0f / 65280.0f));
+    Dst[2] = UnitClip((icFloatNumber)(Src[2] * 65535.0f / 65280.0f));
   }
 }
 
@@ -395,9 +395,9 @@ void CIccPCS::Lab2ToLab4(icFloatNumber *Dst, const icFloatNumber *Src, bool bNoC
  */
 void CIccPCS::Lab4ToLab2(icFloatNumber *Dst, const icFloatNumber *Src)
 {
-  Dst[0] = (icFloatNumber)(Src[0] * 65280.0 / 65535.0);
-  Dst[1] = (icFloatNumber)(Src[1] * 65280.0 / 65535.0);
-  Dst[2] = (icFloatNumber)(Src[2] * 65280.0 / 65535.0);
+  Dst[0] = (icFloatNumber)(Src[0] * 65280.0f / 65535.0f);
+  Dst[1] = (icFloatNumber)(Src[1] * 65280.0f / 65535.0f);
+  Dst[2] = (icFloatNumber)(Src[2] * 65280.0f / 65535.0f);
 }
 
 /**
@@ -4159,9 +4159,11 @@ icStatusCMM CIccCmm::ToInternalEncoding(icColorSpaceSignature nSpace, icFloatCol
           }
         case icEncode8Bit:
           {
-            pInput[0] = icU8toF((icUInt8Number)pInput[0]);
-            pInput[1] = icU8toF((icUInt8Number)pInput[1]);
-            pInput[2] = icU8toF((icUInt8Number)pInput[2]);
+            pInput[0] = icU8toF((icUInt8Number)pInput[0])*100.0f;
+            pInput[1] = icU8toAB((icUInt8Number)pInput[1]);
+            pInput[2] = icU8toAB((icUInt8Number)pInput[2]);
+
+            icLabToPcs(pInput);
             break;
           }
         case icEncode16Bit:
@@ -4169,6 +4171,15 @@ icStatusCMM CIccCmm::ToInternalEncoding(icColorSpaceSignature nSpace, icFloatCol
             pInput[0] = icU16toF((icUInt16Number)pInput[0]);
             pInput[1] = icU16toF((icUInt16Number)pInput[1]);
             pInput[2] = icU16toF((icUInt16Number)pInput[2]);
+            break;
+          }
+        case icEncode16BitV2:
+          {
+            pInput[0] = icU16toF((icUInt16Number)pInput[0]);
+            pInput[1] = icU16toF((icUInt16Number)pInput[1]);
+            pInput[2] = icU16toF((icUInt16Number)pInput[2]);
+
+            CIccPCS::Lab2ToLab4(pInput, pInput);
             break;
           }
         default:
@@ -4204,6 +4215,7 @@ icStatusCMM CIccCmm::ToInternalEncoding(icColorSpaceSignature nSpace, icFloatCol
           }
           
         case icEncode16Bit:
+        case icEncode16BitV2:
           {
             pInput[0] = icUSFtoD((icU1Fixed15Number)pInput[0]);
             pInput[1] = icUSFtoD((icU1Fixed15Number)pInput[1]);
@@ -4270,6 +4282,7 @@ icStatusCMM CIccCmm::ToInternalEncoding(icColorSpaceSignature nSpace, icFloatCol
           }
           
         case icEncode16Bit:
+        case icEncode16BitV2:
           {
             for(i=0; i<nSamples; i++) {
               pInput[i] = icU16toF((icUInt16Number)pInput[i]);
@@ -4432,13 +4445,24 @@ icStatusCMM CIccCmm::FromInternalEncoding(icColorSpaceSignature nSpace, icFloatC
           }
         case icEncode8Bit:
           {
-            pInput[0] = icFtoU8(pInput[0]);
-            pInput[1] = icFtoU8(pInput[1]);
-            pInput[2] = icFtoU8(pInput[2]);
+            icLabFromPcs(pInput);
+
+            pInput[0] = (icUInt8Number)(pInput[0]/100.0 * 255.0 + 0.5);
+            pInput[1] = icABtoU8(pInput[1]);
+            pInput[2] = icABtoU8(pInput[2]);
             break;
           }
         case icEncode16Bit:
           {
+            pInput[0] = icFtoU16(pInput[0]);
+            pInput[1] = icFtoU16(pInput[1]);
+            pInput[2] = icFtoU16(pInput[2]);
+            break;
+          }
+        case icEncode16BitV2:
+          {
+            CIccPCS::Lab4ToLab2(pInput, pInput);
+
             pInput[0] = icFtoU16(pInput[0]);
             pInput[1] = icFtoU16(pInput[1]);
             pInput[2] = icFtoU16(pInput[2]);
@@ -4474,6 +4498,7 @@ icStatusCMM CIccCmm::FromInternalEncoding(icColorSpaceSignature nSpace, icFloatC
           }
           
         case icEncode16Bit:
+        case icEncode16BitV2:
           {
             pInput[0] = icDtoUSF(pInput[0]);
             pInput[1] = icDtoUSF(pInput[1]);
@@ -4539,6 +4564,7 @@ icStatusCMM CIccCmm::FromInternalEncoding(icColorSpaceSignature nSpace, icFloatC
           }
           
         case icEncode16Bit:
+        case icEncode16BitV2:
           {
             for(i=0; i<nSamples; i++) {
               pInput[i] = icFtoU16(pInput[i]);
@@ -4702,6 +4728,9 @@ const icChar* CIccCmm::GetFloatColorEncoding(icFloatColorEncoding val)
     case icEncode16Bit:
       return "icEncode16Bit";
 
+    case icEncode16BitV2:
+      return "icEncode16BitV2";
+
     default:
       return "icEncodeUnknown";
   }
@@ -4734,6 +4763,9 @@ icFloatColorEncoding CIccCmm::GetFloatColorEncoding(const icChar* val)
   }
   else if (!stricmp(val, "icEncode16Bit")) {
     return icEncode16Bit;
+  }
+  else if (!stricmp(val, "icEncode16BitV2")) {
+    return icEncode16BitV2;
   }
   else if (!stricmp(val, "icEncodeValue")) {
     return icEncodeValue;

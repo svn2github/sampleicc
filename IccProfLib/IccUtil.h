@@ -121,10 +121,6 @@ icFloatNumber ICCPROFLIB_API icU16toF(icUInt16Number num);
 icUInt8Number ICCPROFLIB_API icABtoU8(icFloatNumber num);
 icFloatNumber ICCPROFLIB_API icU8toAB(icUInt8Number num);
 
-/*0 to 65535 <-> -128.0 to 127.0*/
-icUInt16Number ICCPROFLIB_API icABtoU16(icFloatNumber num);
-icFloatNumber ICCPROFLIB_API icU16toAB(icUInt16Number num);
-
 extern ICCPROFLIB_API icFloatNumber icD50XYZ[3];
 extern ICCPROFLIB_API icFloatNumber icD50XYZxx[3];
 

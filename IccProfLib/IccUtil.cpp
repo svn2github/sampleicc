@@ -504,6 +504,21 @@ icFloatNumber icU16toF(icUInt16Number num)
   return rv;
 }
 
+icUInt8Number icABtoU8(icFloatNumber num)
+{
+  icFloatNumber v = num + 128.0f;
+  if (v<0)
+    v=0;
+  else if (v>255)
+    v=255;
+
+  return (icUInt8Number)(v + 0.5);
+}
+
+icFloatNumber icU8toAB(icUInt8Number num)
+{
+  return (icFloatNumber)num - 128.0f;
+}
 
 icFloatNumber icD50XYZ[3] = { 0.9642f, 1.0000f, 0.8249f };
 icFloatNumber icD50XYZxx[3] = { 96.42f, 100.00f, 82.49f };

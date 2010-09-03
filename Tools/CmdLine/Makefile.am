@@ -3,6 +3,7 @@
 SUBDIRS = IccApplyNamedCmm \
 	@SICC_ICC_APPLY_PROFILES@ \
 	IccDumpProfile \
+	IccGamutMapGirdle \
 	IccRoundTrip \
 	IccProfLibTest \
 	IccStripUnknownTags \
@@ -11,6 +12,7 @@ SUBDIRS = IccApplyNamedCmm \
 DIST_SUBDIRS = IccApplyNamedCmm \
 	IccApplyProfiles \
 	IccDumpProfile \
+	IccGamutMapGirdle \
 	IccRoundTrip \
 	IccProfLibTest \
 	IccStripUnknownTags \

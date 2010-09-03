@@ -172,7 +172,8 @@ void Usage()
 	printf("    1 - icEncodePercent\n");
 	printf("    2 - icEncodeFloat\n");
 	printf("    3 - icEncode8Bit\n");
-	printf("    4 - icEncode16Bit\n\n");
+	printf("    4 - icEncode16Bit\n");
+  printf("    5 - icEncode16BitV2\n\n");
 
 	printf("  For interpolation:\n");
 	printf("    0 - Linear\n");

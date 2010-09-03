@@ -22,7 +22,7 @@
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="2">
 			<Tool
-				Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\..\..\IccProfLib,..\..\..\libtiff\libtiff"
@@ -36,7 +36,8 @@
 				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
-				CompileAs="0"/>
+				CompileAs="0"
+				DisableSpecificWarnings="4996"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -81,7 +82,7 @@
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="2">
 			<Tool
-				Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\IccProfLib,..\..\..\libtiff\libtiff"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
@@ -94,7 +95,8 @@
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="4"
-				CompileAs="0"/>
+				CompileAs="0"
+				DisableSpecificWarnings="4996"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -143,19 +145,21 @@
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="2"
 						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""/>
+						PreprocessorDefinitions=""
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="0"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+						BasicRuntimeChecks="3"
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -163,19 +167,21 @@
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="2"
 						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""/>
+						PreprocessorDefinitions=""
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
-						Name="VCCLCompilerTool" DisableSpecificWarnings="4996"
+						Name="VCCLCompilerTool"
 						Optimization="0"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+						BasicRuntimeChecks="3"
+						DisableSpecificWarnings="4996"/>
 				</FileConfiguration>
 			</File>
 		</Filter>
@@ -190,16 +196,7 @@
 			Name="Library Files"
 			Filter="lib">
 			<File
-				RelativePath="..\..\Winnt\BuildLibTiff\Debug\dlibtiff.lib">
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCCustomBuildTool"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\IccProfLib\Debug\IccProfLib.lib">
+				RelativePath="..\..\..\Build\MSVC\BuildLibTiff\Debug\dlibtiff.lib">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">
@@ -217,7 +214,16 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Winnt\BuildLibTiff\Release\libtiff.lib">
+				RelativePath="..\..\..\IccProfLib\Debug\IccProfLib.lib">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCustomBuildTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\Build\MSVC\BuildLibTiff\Release\libtiff.lib">
 				<FileConfiguration
 					Name="Debug|Win32"
 					ExcludedFromBuild="TRUE">

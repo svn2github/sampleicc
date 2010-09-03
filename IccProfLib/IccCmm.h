@@ -757,6 +757,7 @@ protected:
     icEncodeFloat: 0.0 <= value <= 1.0
     icEncode8Bit: 0.0 <= value <= 255
     icEncode16Bit: 0.0 <= value <= 65535
+    icEncode16BitV2: 0.0 <= value <= 65535
 
   'XCLR'
     icEncodeValue: (if X>=3) 0.0 <= L <= 100.0; -128.0 <= a,b <= 127.0 others 0.0 <= value <= 1.0
@@ -764,18 +765,21 @@ protected:
     icEncodeFloat: 0.0 <= value <= 1.0
     icEncode8Bit: 0.0 <= value <= 255
     icEncode16Bit: 0.0 <= value <= 65535
+    icEncode16BitV2: 0.0 <= value <= 65535
 
   'Lab '
     icEncodeValue: 0.0 <= L <= 100.0; -128.0 <= a,b <= 127.0
     icEncodeFloat: 0.0 <= L,a,b <= 1.0 - ICC PCS encoding (See ICC Specification)
     icEncode8BIt: ICC 8 bit Lab Encoding - See ICC Specification
-    icEncode16Bit: ICC 16 bit Lab Encoding - See ICC Specification
+    icEncode16Bit: ICC 16 bit V4 Lab Encoding - See ICC Specification
+    icEncode16BitV2: ICC 16 bit V2 Lab Encoding - See ICC Specification
 
   'XYZ '
     icEncodeValue: 0.0 <= X,Y,Z < 1.999969482421875
     icEncodePercent: 0.0 <= X,Y,Z < 199.9969482421875
     icEncodeFloat: 0.0 <= L,a,b <= 1.0 - ICC PCS encoding (See ICC Specification
     icEncode16Bit: ICC 16 bit XYZ Encoding - (icU1Fixed15) See ICC Specification
+    icEncode16BitV2: ICC 16 bit XYZ Encoding - (icU1Fixed15) See ICC Specification
  **************************************************************************
 */
 
@@ -786,6 +790,7 @@ typedef enum
   icEncodeFloat,
   icEncode8Bit,
   icEncode16Bit,
+  icEncode16BitV2,
   icEncodeUnknown,
 } icFloatColorEncoding;
 

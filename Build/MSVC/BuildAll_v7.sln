@@ -4,6 +4,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "All", "BuildAll_v7.vcproj",
 		{1B936E04-B2CF-4C11-9781-7F03AA020039} = {1B936E04-B2CF-4C11-9781-7F03AA020039}
 		{8A0DC808-518D-4E2D-BD57-D7619D1CB7C3} = {8A0DC808-518D-4E2D-BD57-D7619D1CB7C3}
 		{5880D40A-E2B0-4656-820C-7F497081FD72} = {5880D40A-E2B0-4656-820C-7F497081FD72}
+		{68E35014-5151-4EF0-AF76-1767A566923A} = {68E35014-5151-4EF0-AF76-1767A566923A}
 		{62025065-8784-4EBD-A380-57763DDBD26D} = {62025065-8784-4EBD-A380-57763DDBD26D}
 		{3C5B2B77-8E72-4D77-A0BF-CAEED8B86800} = {3C5B2B77-8E72-4D77-A0BF-CAEED8B86800}
 		{6D790B79-352D-4710-B6F9-D227A5E9899E} = {6D790B79-352D-4710-B6F9-D227A5E9899E}
@@ -18,7 +19,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iccApplyNamedCmm", "..\..\T
 		{FED492F2-ADC9-45A8-A638-53A613D5AE61} = {FED492F2-ADC9-45A8-A638-53A613D5AE61}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ApplyProfiles", "..\..\Tools\ApplyProfiles\ApplyProfiles_v7.vcproj", "{1B936E04-B2CF-4C11-9781-7F03AA020039}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ApplyProfiles", "..\..\Tools\Winnt\ApplyProfiles\ApplyProfiles_v7.vcproj", "{1B936E04-B2CF-4C11-9781-7F03AA020039}"
 	ProjectSection(ProjectDependencies) = postProject
 		{70E8663F-B686-4CA2-BE14-B69921240600} = {70E8663F-B686-4CA2-BE14-B69921240600}
 		{FED492F2-ADC9-45A8-A638-53A613D5AE61} = {FED492F2-ADC9-45A8-A638-53A613D5AE61}
@@ -60,7 +61,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iccStripUnknownTags", "..\.
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleIccCmm", "..\..\Tools\SampleIccCmm\SampleIccCmm_v7.vcproj", "{62025065-8784-4EBD-A380-57763DDBD26D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleIccCmm", "..\..\Tools\Winnt\SampleIccCmm\SampleIccCmm_v7.vcproj", "{62025065-8784-4EBD-A380-57763DDBD26D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{FED492F2-ADC9-45A8-A638-53A613D5AE61} = {FED492F2-ADC9-45A8-A638-53A613D5AE61}
 	EndProjectSection
@@ -71,6 +72,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IccV4ToMPE", "..\..\Tools\C
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iccRoundTrip", "..\..\Tools\CmdLine\IccRoundTrip\iccRoundTrip_v7.vcproj", "{B68874B6-1547-4B30-87A8-2313F74FCB36}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FED492F2-ADC9-45A8-A638-53A613D5AE61} = {FED492F2-ADC9-45A8-A638-53A613D5AE61}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iccGamutMapGirdle", "..\..\Tools\CmdLine\IccGamutMapGirdle\iccGamutMapGirdle_v7.vcproj", "{68E35014-5151-4EF0-AF76-1767A566923A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{FED492F2-ADC9-45A8-A638-53A613D5AE61} = {FED492F2-ADC9-45A8-A638-53A613D5AE61}
 	EndProjectSection
@@ -93,6 +99,8 @@ Global
 		Universal Release = Universal Release
 		Universal Unicode Debug = Universal Unicode Debug
 		Universal Unicode Release = Universal Unicode Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{E462C77A-D300-4DB0-B318-0497ECD358A7}.Debug.ActiveCfg = Debug|Win32
@@ -543,6 +551,38 @@ Global
 		{B68874B6-1547-4B30-87A8-2313F74FCB36}.Universal Unicode Debug.Build.0 = Debug|Win32
 		{B68874B6-1547-4B30-87A8-2313F74FCB36}.Universal Unicode Release.ActiveCfg = Release|Win32
 		{B68874B6-1547-4B30-87A8-2313F74FCB36}.Universal Unicode Release.Build.0 = Release|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.Debug.ActiveCfg = Debug|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.Debug.Build.0 = Debug|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.DLL Debug.ActiveCfg = Debug|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.DLL Debug.Build.0 = Debug|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.DLL Release.ActiveCfg = Release|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.DLL Release.Build.0 = Release|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.DLL Unicode Debug.ActiveCfg = Debug|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.DLL Unicode Debug.Build.0 = Debug|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.DLL Unicode Release.ActiveCfg = Release|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.DLL Unicode Release.Build.0 = Release|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.DLL Universal Debug.ActiveCfg = Debug|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.DLL Universal Debug.Build.0 = Debug|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.DLL Universal Release.ActiveCfg = Release|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.DLL Universal Release.Build.0 = Release|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.DLL Universal Unicode Debug.ActiveCfg = Debug|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.DLL Universal Unicode Debug.Build.0 = Debug|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.DLL Universal Unicode Release.ActiveCfg = Release|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.DLL Universal Unicode Release.Build.0 = Release|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.Release.ActiveCfg = Release|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.Release.Build.0 = Release|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.Unicode Debug.ActiveCfg = Debug|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.Unicode Debug.Build.0 = Debug|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.Unicode Release.ActiveCfg = Release|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.Unicode Release.Build.0 = Release|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.Universal Debug.ActiveCfg = Debug|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.Universal Debug.Build.0 = Debug|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.Universal Release.ActiveCfg = Release|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.Universal Release.Build.0 = Release|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.Universal Unicode Debug.ActiveCfg = Debug|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.Universal Unicode Debug.Build.0 = Debug|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.Universal Unicode Release.ActiveCfg = Release|Win32
+		{68E35014-5151-4EF0-AF76-1767A566923A}.Universal Unicode Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
