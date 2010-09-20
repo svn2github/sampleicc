@@ -1,3 +1,7 @@
+2010-09-20 Max Derhak
+ * 1.6.2 release
+ * Fix bugs with reading and displaying metaDataTags using the dictTagType
+
 2010-08-23 Max Derhak
  * 1.6.1 release
  * Modifications to CIccTagLut16 and CIccTagLut8 to correctly track curve mapping when table
