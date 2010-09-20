@@ -350,6 +350,7 @@ typedef enum {
     icSigMeasurementTag                    = 0x6D656173,  /* 'meas' */
     icSigMediaBlackPointTag                = 0x626B7074,  /* 'bkpt' */
     icSigMediaWhitePointTag                = 0x77747074,  /* 'wtpt' */
+    icSigMetaDataTag                       = 0x6D657461,  /* 'meta' */
 #if 0
     icSigNamedColorTag                     = 0x6E636f6C,  /* 'ncol' OBSOLETE, use ncl2 */
 #endif

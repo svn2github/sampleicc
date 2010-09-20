@@ -202,10 +202,10 @@ void CIccDictEntry::Describe(std::string &sDescription)
   std::string s;
 
   sDescription += "BEGIN DICT_ENTRY\r\nName=";
-  s.assign(m_sName.begin(), m_sName.end()-1);
+  s.assign(m_sName.begin(), m_sName.end());
   sDescription += s;
   sDescription += "\r\nValue=";
-  s.assign(m_sValue.begin(), m_sValue.end()-1);
+  s.assign(m_sValue.begin(), m_sValue.end());
   sDescription += s;
   sDescription += "\r\n";
 
@@ -527,7 +527,7 @@ bool CIccTagDict::Read(icUInt32Number size, CIccIO *pIO)
       return false;
     }
 
-    if (reclen==24) {
+    if (reclen>=24) {
       if (!pIO->Read32(&pos[i].posNameLocalized.offset) ||
           !pIO->Read32(&pos[i].posNameLocalized.size)) {
         free(pos);
@@ -599,7 +599,7 @@ bool CIccTagDict::Read(icUInt32Number size, CIccIO *pIO)
           delete ptr.ptr;
           return false;
         }
-        str.assign(&buf[0], &buf[num+1]);
+        str.assign(&buf[0], &buf[num]);
         ptr.ptr->m_sName = str;
       }
     }
@@ -644,7 +644,7 @@ bool CIccTagDict::Read(icUInt32Number size, CIccIO *pIO)
           delete ptr.ptr;
           return false;
         }
-        str.assign(&buf[0], &buf[num+1]);
+        str.assign(&buf[0], &buf[num]);
         ptr.ptr->SetValue(str);
       }
     }
@@ -675,6 +675,13 @@ bool CIccTagDict::Read(icUInt32Number size, CIccIO *pIO)
       }
 
       if (textSig != icSigMultiLocalizedUnicodeType) {
+        free(pos);
+        free(buf);
+        delete ptr.ptr;
+        return false;
+      }
+
+      if (pIO->Seek(m_tagStart+pos[i].posNameLocalized.offset, icSeekSet)<0) {
         free(pos);
         free(buf);
         delete ptr.ptr;
@@ -719,6 +726,13 @@ bool CIccTagDict::Read(icUInt32Number size, CIccIO *pIO)
       }
 
       if (textSig != icSigMultiLocalizedUnicodeType) {
+        free(pos);
+        free(buf);
+        delete ptr.ptr;
+        return false;
+      }
+
+      if (pIO->Seek(m_tagStart+pos[i].posValueLocalized.offset, icSeekSet)<0) {
         free(pos);
         free(buf);
         delete ptr.ptr;

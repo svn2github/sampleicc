@@ -248,6 +248,9 @@ const icChar* CIccSpecTagFactory::GetTagSigName(icTagSignature tagSig)
   case icSigDeviceModelDescTag:
     return "deviceModelDescTag";
 
+  case icSigMetaDataTag:
+    return "metaDataTag";
+
   case icSigDToB0Tag:
     return "DToB0Tag";
 
