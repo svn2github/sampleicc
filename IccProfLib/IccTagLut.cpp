@@ -1411,7 +1411,7 @@ static icFloatNumber ClutUnitClip(icFloatNumber v)
  * 
  *****************************************************************************
  */
-CIccCLUT::CIccCLUT(icUInt8Number nInputChannels, icUInt8Number nOutputChannels, icUInt8Number nPrecision/*=2*/)
+CIccCLUT::CIccCLUT(icUInt8Number nInputChannels, icUInt16Number nOutputChannels, icUInt8Number nPrecision/*=2*/)
 {
   m_nInput = nInputChannels;
   m_nOutput = nOutputChannels;

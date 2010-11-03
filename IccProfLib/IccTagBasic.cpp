@@ -674,6 +674,8 @@ CIccTagTextDescription::CIccTagTextDescription()
   m_nScriptSize = 0;
   m_nScriptCode = 0;
   memset(m_szScriptText, 0, sizeof(m_szScriptText));
+
+  m_bInvalidScript = false;
 }
 
 /**
@@ -715,6 +717,8 @@ CIccTagTextDescription::CIccTagTextDescription(const CIccTagTextDescription &ITT
   }
 
   memcpy(m_szScriptText, ITTD.m_szScriptText, sizeof(m_szScriptText));
+
+  m_bInvalidScript = ITTD.m_bInvalidScript;
 }
 
 
@@ -764,6 +768,8 @@ CIccTagTextDescription &CIccTagTextDescription::operator=(const CIccTagTextDescr
   }
 
   memcpy(m_szScriptText, TextDescTag.m_szScriptText, sizeof(m_szScriptText));
+
+  m_bInvalidScript = TextDescTag.m_bInvalidScript;
 
   return *this;  
 }
@@ -860,8 +866,15 @@ bool CIccTagTextDescription::Read(icUInt32Number size, CIccIO *pIO)
       m_nScriptSize > sizeof(m_szScriptText))
     return false;
 
-  if (pIO->Read8(m_szScriptText, 67)!= 67)
+  int nScriptLen = pIO->Read8(m_szScriptText, 67);
+
+  if (!nScriptLen)
     return false;
+
+  if (nScriptLen<67) {
+    memset(&m_szScriptText[0], 0, 67-nScriptLen);
+    m_bInvalidScript = true;
+  }
 
   return true;
 }
@@ -915,6 +928,8 @@ bool CIccTagTextDescription::Write(CIccIO *pIO)
       pIO->Write8(m_szScriptText, 67)!= 67)
     return false;
 
+  m_bInvalidScript = false;
+
   return true;
 }
 
@@ -950,6 +965,8 @@ void CIccTagTextDescription::Describe(std::string &sDescription)
  */
 void CIccTagTextDescription::SetText(const icChar *szText)
 {
+  m_bInvalidScript = false;
+
   if (!szText) 
     SetText("");
 
@@ -1095,6 +1112,14 @@ icValidateStatus CIccTagTextDescription::Validate(icTagSignature sig, std::strin
     sReport += icValidateNonCompliantMsg;
     sReport += sSigName;
     sReport += " - ScriptCode count must not be greater than 67.\r\n";
+
+    rv =icMaxStatus(rv, icValidateNonCompliant);
+  }
+
+  if (m_bInvalidScript) {
+    sReport += icValidateNonCompliantMsg;
+    sReport += sSigName;
+    sReport += " - ScriptCode must contain 67 bytes.\r\n";
 
     rv =icMaxStatus(rv, icValidateNonCompliant);
   }

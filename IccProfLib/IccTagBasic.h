@@ -213,7 +213,7 @@ public:
   virtual CIccTag* NewCopy() const {return new CIccTagUnknown(*this);}
   virtual ~CIccTagUnknown();
 
-  virtual bool IsSuppoted() { return false; }
+  virtual bool IsSupported() { return false; }
 
   virtual icTagTypeSignature GetType() { return m_nType; }
   virtual const icChar *GetClassName() { return "CIccTagUnknown"; }
@@ -317,6 +317,8 @@ protected:
   icUInt8Number m_szScriptText[67];
   icUInt8Number m_nScriptSize;
   icUInt16Number m_nScriptCode;
+
+  bool m_bInvalidScript;
 };
 
 

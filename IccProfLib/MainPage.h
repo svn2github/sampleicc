@@ -59,6 +59,11 @@
  *   the configuration parameters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
+ * - November 2010 - 1.6.3 release
+ *  - Modification of type for CIccCLUT::m_nOutput to icUInt16Nubmer to better support MPE
+ *    CLUT elements
+ *  - Fixed typo in CIccTagUnknown::IsSupported()
+ *
  * - August 2010 - 1.6.1 release
  *  - Fix bugs with reading and displaying metaDataTags using the dictTagType
  *

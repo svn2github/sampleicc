@@ -262,7 +262,7 @@ typedef icFloatNumber (*icCLUTCLIPFUNC)(icFloatNumber v);
 class ICCPROFLIB_API CIccCLUT
 {
 public:
-  CIccCLUT(icUInt8Number nInputChannels, icUInt8Number nOutputChannels, icUInt8Number nPrecision=2);
+  CIccCLUT(icUInt8Number nInputChannels, icUInt16Number nOutputChannels, icUInt8Number nPrecision=2);
   CIccCLUT(const CIccCLUT &ICLUT);
   CIccCLUT &operator=(const CIccCLUT &CLUTClass);
   virtual ~CIccCLUT();
@@ -290,7 +290,7 @@ public:
   icUInt32Number GetDimSize(icUInt8Number nIndex) const { return m_DimSize[nIndex]; }
 
   icUInt8Number GetInputDim() const { return m_nInput; }
-  icUInt8Number GetOutputChannels() const { return m_nOutput; }
+  icUInt16Number GetOutputChannels() const { return m_nOutput; }
 
   icUInt32Number GetNumOffset() const { return m_nNodes; }
   icUInt32Number GetOffset(int index) const { return m_nOffset ? m_nOffset[index] : 0; }
@@ -320,7 +320,7 @@ protected:
   icUInt8Number m_nReserved2[3];
   
   icUInt8Number m_nInput;
-  icUInt8Number m_nOutput;
+  icUInt16Number m_nOutput; //16 bit to support MPE CLUT elements
   icUInt8Number m_nPrecision;
 
   icUInt8Number m_GridPoints[16];

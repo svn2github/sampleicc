@@ -1299,6 +1299,19 @@ bool CIccProfile::CheckTagExclusion(std::string &sReport) const
     }
 
   case icSigAbstractClass:
+    {
+      if (GetTag(icSigNamedColor2Tag) ||
+        GetTag(icSigAToB1Tag) || GetTag(icSigAToB2Tag) ||
+        GetTag(icSigBToA1Tag) || GetTag(icSigBToA2Tag) || GetTag(icSigGamutTag))
+      {
+        sReport += icValidateWarningMsg;
+        sReport += buf;
+        sReport += " - Tag exclusion test failed.\r\n";
+        rv = false;
+      }
+      break;
+    }
+
   case icSigLinkClass:
     {
       if (GetTag(icSigMediaWhitePointTag) || GetTag(icSigNamedColor2Tag) ||
