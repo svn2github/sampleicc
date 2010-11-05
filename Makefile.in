@@ -268,9 +268,9 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = sampleicc.pc
 EXTRA_DIST = bootstrap \
 	README.OSX \
-	ICC_utils-Info.plist \
-	SampleICC-Info.plist \
-	SampleICC.xcodeproj
+	Build/XCode/ICC_utils-Info.plist \
+	Build/XCode/SampleICC-Info.plist \
+	Build/XCode/SampleICC.xcodeproj/project.pbxproj
 
 all: all-recursive
 

@@ -10,9 +10,9 @@ pkgconfig_DATA = sampleicc.pc
 
 EXTRA_DIST = bootstrap \
 	README.OSX \
-	ICC_utils-Info.plist \
-	SampleICC-Info.plist \
-	SampleICC.xcodeproj
+	Build/XCode/ICC_utils-Info.plist \
+	Build/XCode/SampleICC-Info.plist \
+	Build/XCode/SampleICC.xcodeproj/project.pbxproj
 
 dist-hook:
 	rm -fr `find $(distdir) -name .DS_Store -or -name .svn`
