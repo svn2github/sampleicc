@@ -6,7 +6,7 @@ AC_CANONICAL_TARGET
 
 SAMPLEICC_MAJOR_VERSION=1
 SAMPLEICC_MINOR_VERSION=6
-SAMPLEICC_MICRO_VERSION=2
+SAMPLEICC_MICRO_VERSION=3
 
 SAMPLEICC_VERSION=$SAMPLEICC_MAJOR_VERSION.$SAMPLEICC_MINOR_VERSION.${SAMPLEICC_MICRO_VERSION}
 AC_SUBST(SAMPLEICC_VERSION)
@@ -190,6 +190,7 @@ Tools/CmdLine/Makefile
 Tools/CmdLine/IccApplyNamedCmm/Makefile
 Tools/CmdLine/IccApplyProfiles/Makefile
 Tools/CmdLine/IccDumpProfile/Makefile
+Tools/CmdLine/IccGamutMapGirdle/Makefile
 Tools/CmdLine/IccProfLibTest/Makefile
 Tools/CmdLine/IccRoundTrip/Makefile
 Tools/CmdLine/IccStripUnknownTags/Makefile

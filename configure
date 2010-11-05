@@ -2204,7 +2204,7 @@ test -n "$target_alias" &&
 
 SAMPLEICC_MAJOR_VERSION=1
 SAMPLEICC_MINOR_VERSION=6
-SAMPLEICC_MICRO_VERSION=1
+SAMPLEICC_MICRO_VERSION=3
 
 SAMPLEICC_VERSION=$SAMPLEICC_MAJOR_VERSION.$SAMPLEICC_MINOR_VERSION.${SAMPLEICC_MICRO_VERSION}
 
@@ -16544,7 +16544,7 @@ AM_CXXFLAGS="$EXTRA_OPT_CFLAGS $EXTRA_CPU_CFLAGS"
 
 
 
-ac_config_files="$ac_config_files Makefile sampleicc.pc IccProfLib/Makefile Tools/Makefile Tools/CmdLine/Makefile Tools/CmdLine/IccApplyNamedCmm/Makefile Tools/CmdLine/IccApplyProfiles/Makefile Tools/CmdLine/IccDumpProfile/Makefile Tools/CmdLine/IccProfLibTest/Makefile Tools/CmdLine/IccRoundTrip/Makefile Tools/CmdLine/IccStripUnknownTags/Makefile Tools/CmdLine/IccV4ToMPE/Makefile Contrib/Makefile Contrib/CmdLine/Makefile Contrib/CmdLine/create_CLUT_profile/Makefile Contrib/CmdLine/create_CLUT_profile_from_probe/Makefile Contrib/CmdLine/create_display_profile/Makefile Contrib/ICC_utils/Makefile Contrib/Mac_OS_X/Makefile Contrib/Mac_OS_X/create_probe/Makefile Contrib/Mac_OS_X/extract_probe_data/Makefile Contrib/examples/Makefile Contrib/examples/RSR/Makefile Contrib/tests/Makefile Contrib/tests/flatten_AToB_tag/Makefile Contrib/tests/generate_device_codes/Makefile Contrib/tests/reconstruct_measurements/Makefile Contrib/tests/round_trip_PCS_LAB/Makefile"
+ac_config_files="$ac_config_files Makefile sampleicc.pc IccProfLib/Makefile Tools/Makefile Tools/CmdLine/Makefile Tools/CmdLine/IccApplyNamedCmm/Makefile Tools/CmdLine/IccApplyProfiles/Makefile Tools/CmdLine/IccDumpProfile/Makefile Tools/CmdLine/IccGamutMapGirdle/Makefile Tools/CmdLine/IccProfLibTest/Makefile Tools/CmdLine/IccRoundTrip/Makefile Tools/CmdLine/IccStripUnknownTags/Makefile Tools/CmdLine/IccV4ToMPE/Makefile Contrib/Makefile Contrib/CmdLine/Makefile Contrib/CmdLine/create_CLUT_profile/Makefile Contrib/CmdLine/create_CLUT_profile_from_probe/Makefile Contrib/CmdLine/create_display_profile/Makefile Contrib/ICC_utils/Makefile Contrib/Mac_OS_X/Makefile Contrib/Mac_OS_X/create_probe/Makefile Contrib/Mac_OS_X/extract_probe_data/Makefile Contrib/examples/Makefile Contrib/examples/RSR/Makefile Contrib/tests/Makefile Contrib/tests/flatten_AToB_tag/Makefile Contrib/tests/generate_device_codes/Makefile Contrib/tests/reconstruct_measurements/Makefile Contrib/tests/round_trip_PCS_LAB/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -17570,6 +17570,7 @@ do
     "Tools/CmdLine/IccApplyNamedCmm/Makefile") CONFIG_FILES="$CONFIG_FILES Tools/CmdLine/IccApplyNamedCmm/Makefile" ;;
     "Tools/CmdLine/IccApplyProfiles/Makefile") CONFIG_FILES="$CONFIG_FILES Tools/CmdLine/IccApplyProfiles/Makefile" ;;
     "Tools/CmdLine/IccDumpProfile/Makefile") CONFIG_FILES="$CONFIG_FILES Tools/CmdLine/IccDumpProfile/Makefile" ;;
+    "Tools/CmdLine/IccGamutMapGirdle/Makefile") CONFIG_FILES="$CONFIG_FILES Tools/CmdLine/IccGamutMapGirdle/Makefile" ;;
     "Tools/CmdLine/IccProfLibTest/Makefile") CONFIG_FILES="$CONFIG_FILES Tools/CmdLine/IccProfLibTest/Makefile" ;;
     "Tools/CmdLine/IccRoundTrip/Makefile") CONFIG_FILES="$CONFIG_FILES Tools/CmdLine/IccRoundTrip/Makefile" ;;
     "Tools/CmdLine/IccStripUnknownTags/Makefile") CONFIG_FILES="$CONFIG_FILES Tools/CmdLine/IccStripUnknownTags/Makefile" ;;
