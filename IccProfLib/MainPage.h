@@ -59,6 +59,12 @@
  *   the configuration parameters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
+ * - January 2010 - 1.6.4 release
+ *  - Modified CLUT interpolation in IccTagLut.cpp to perform clipping on input and no clipping
+ *    on output (as opposed to the other way around).  Fixes crashing bug found with absolute
+ *    intent processing of colors that are whiter than media point.  Also supports floating point range
+ *    of output for MPE CLUT elements.
+ * 
  * - November 2010 - 1.6.3 release
  *  - Modification of type for CIccCLUT::m_nOutput to icUInt16Nubmer to better support MPE
  *    CLUT elements

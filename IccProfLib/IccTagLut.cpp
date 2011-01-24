@@ -2125,9 +2125,9 @@ void CIccCLUT::Interp3dTetra(icFloatNumber *destPixel, const icFloatNumber *srcP
   icUInt8Number my = m_MaxGridPoint[1];
   icUInt8Number mz = m_MaxGridPoint[2];
 
-  icFloatNumber x = srcPixel[0] * mx;
-  icFloatNumber y = srcPixel[1] * my;
-  icFloatNumber z = srcPixel[2] * mz;
+  icFloatNumber x = UnitClip(srcPixel[0]) * mx;
+  icFloatNumber y = UnitClip(srcPixel[1]) * my;
+  icFloatNumber z = UnitClip(srcPixel[2]) * mz;
 
   icUInt32Number ix = (icUInt32Number)x;
   icUInt32Number iy = (icUInt32Number)y;
@@ -2158,34 +2158,34 @@ void CIccCLUT::Interp3dTetra(icFloatNumber *destPixel, const icFloatNumber *srcP
   for (i=0; i<m_nOutput; i++, p++) {
     if (t<u) {
       if (t>v) {
-        destPixel[i] = UnitClip(p[n000] + t*(p[n110]-p[n010]) +
+        destPixel[i] = (p[n000] + t*(p[n110]-p[n010]) +
                                       u*(p[n010]-p[n000]) +
                                       v*(p[n111]-p[n110]));
       }
       else if (u<v) {
-        destPixel[i] = UnitClip(p[n000] + t*(p[n111]-p[n011]) + 
+        destPixel[i] = (p[n000] + t*(p[n111]-p[n011]) + 
                                       u*(p[n011]-p[n001]) +
                                       v*(p[n001]-p[n000]));
       }
       else {
-        destPixel[i] = UnitClip(p[n000] + t*(p[n111]-p[n011]) +
+        destPixel[i] = (p[n000] + t*(p[n111]-p[n011]) +
                                       u*(p[n010]-p[n000]) +
                                       v*(p[n011]-p[n010]));
       }
     }
     else { 
       if (t<v) {
-        destPixel[i] = UnitClip(p[n000] + t*(p[n101]-p[n001]) + 
+        destPixel[i] = (p[n000] + t*(p[n101]-p[n001]) + 
                                       u*(p[n111]-p[n101]) + 
                                       v*(p[n001]-p[n000]));
       }
       else if (u<v) {
-        destPixel[i] = UnitClip(p[n000] + t*(p[n100]-p[n000]) + 
+        destPixel[i] = (p[n000] + t*(p[n100]-p[n000]) + 
                                       u*(p[n111]-p[n101]) + 
                                       v*(p[n101]-p[n100]));
       }
       else {
-        destPixel[i] = UnitClip(p[n000] + t*(p[n100]-p[n000]) + 
+        destPixel[i] = (p[n000] + t*(p[n100]-p[n000]) + 
                                       u*(p[n110]-p[n100]) + 
                                       v*(p[n111]-p[n110]));
       }
@@ -2211,9 +2211,9 @@ void CIccCLUT::Interp3d(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
   icUInt8Number my = m_MaxGridPoint[1];
   icUInt8Number mz = m_MaxGridPoint[2];
 
-  icFloatNumber x = srcPixel[0] * mx;
-  icFloatNumber y = srcPixel[1] * my;
-  icFloatNumber z = srcPixel[2] * mz;
+  icFloatNumber x = UnitClip(srcPixel[0]) * mx;
+  icFloatNumber y = UnitClip(srcPixel[1]) * my;
+  icFloatNumber z = UnitClip(srcPixel[2]) * mz;
 
   icUInt32Number ix = (icUInt32Number)x;
   icUInt32Number iy = (icUInt32Number)y;
@@ -2259,7 +2259,7 @@ void CIccCLUT::Interp3d(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
     pv = p[n000]*dF0 + p[n001]*dF1 + p[n010]*dF2 + p[n011]*dF3 +
          p[n100]*dF4 + p[n101]*dF5 + p[n110]*dF6 + p[n111]*dF7;
 
-    destPixel[i] = UnitClip(pv);
+    destPixel[i] = pv;
   }
 }
 
@@ -2282,10 +2282,10 @@ void CIccCLUT::Interp4d(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
   icUInt8Number my = m_MaxGridPoint[2];
   icUInt8Number mz = m_MaxGridPoint[3];
 
-  icFloatNumber w = srcPixel[0] * mw;
-  icFloatNumber x = srcPixel[1] * mx;
-  icFloatNumber y = srcPixel[2] * my;
-  icFloatNumber z = srcPixel[3] * mz;
+  icFloatNumber w = UnitClip(srcPixel[0]) * mw;
+  icFloatNumber x = UnitClip(srcPixel[1]) * mx;
+  icFloatNumber y = UnitClip(srcPixel[2]) * my;
+  icFloatNumber z = UnitClip(srcPixel[3]) * mz;
 
   icUInt32Number iw = (icUInt32Number)w;
   icUInt32Number ix = (icUInt32Number)x;
@@ -2346,7 +2346,7 @@ void CIccCLUT::Interp4d(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
     for (pv=0, j=0; j<16; j++)
       pv += p[m_nOffset[j]] * dF[j];
 
-    destPixel[i] = UnitClip(pv);
+    destPixel[i] = pv;
   }
 }
 
@@ -2370,11 +2370,11 @@ void CIccCLUT::Interp5d(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
   icUInt8Number m3 = m_MaxGridPoint[3];
   icUInt8Number m4 = m_MaxGridPoint[4];
 
-  icFloatNumber g0 = srcPixel[0] * m0;
-  icFloatNumber g1 = srcPixel[1] * m1;
-  icFloatNumber g2 = srcPixel[2] * m2;
-  icFloatNumber g3 = srcPixel[3] * m3;
-  icFloatNumber g4 = srcPixel[4] * m4;
+  icFloatNumber g0 = UnitClip(srcPixel[0]) * m0;
+  icFloatNumber g1 = UnitClip(srcPixel[1]) * m1;
+  icFloatNumber g2 = UnitClip(srcPixel[2]) * m2;
+  icFloatNumber g3 = UnitClip(srcPixel[3]) * m3;
+  icFloatNumber g4 = UnitClip(srcPixel[4]) * m4;
 
   icUInt32Number ig0 = (icUInt32Number)g0;
   icUInt32Number ig1 = (icUInt32Number)g1;
@@ -2458,7 +2458,7 @@ void CIccCLUT::Interp5d(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
     for (pv=0.0, j=0; j<32; j++)
       pv += p[m_nOffset[j]] * dF[j];
 
-    destPixel[i] = UnitClip(pv);
+    destPixel[i] = pv;
   }
 }
 
@@ -2483,12 +2483,12 @@ void CIccCLUT::Interp6d(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
   icUInt8Number m4 = m_MaxGridPoint[4];
   icUInt8Number m5 = m_MaxGridPoint[5];
 
-  icFloatNumber g0 = srcPixel[0] * m0;
-  icFloatNumber g1 = srcPixel[1] * m1;
-  icFloatNumber g2 = srcPixel[2] * m2;
-  icFloatNumber g3 = srcPixel[3] * m3;
-  icFloatNumber g4 = srcPixel[4] * m4;
-  icFloatNumber g5 = srcPixel[5] * m5;
+  icFloatNumber g0 = UnitClip(srcPixel[0]) * m0;
+  icFloatNumber g1 = UnitClip(srcPixel[1]) * m1;
+  icFloatNumber g2 = UnitClip(srcPixel[2]) * m2;
+  icFloatNumber g3 = UnitClip(srcPixel[3]) * m3;
+  icFloatNumber g4 = UnitClip(srcPixel[4]) * m4;
+  icFloatNumber g5 = UnitClip(srcPixel[5]) * m5;
 
   icUInt32Number ig0 = (icUInt32Number)g0;
   icUInt32Number ig1 = (icUInt32Number)g1;
@@ -2611,7 +2611,7 @@ void CIccCLUT::Interp6d(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
     for (pv=0, j=0; j<64; j++)
       pv += p[m_nOffset[j]] * dF[j];
 
-    destPixel[i] = UnitClip(pv);
+    destPixel[i] = pv;
   }
 }
 
@@ -2631,7 +2631,7 @@ void CIccCLUT::InterpND(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
   icUInt32Number i,j, index = 0;
 
   for (i=0; i<m_nInput; i++) {
-    m_g[i] = srcPixel[i] * m_MaxGridPoint[i];
+    m_g[i] = UnitClip(srcPixel[i]) * m_MaxGridPoint[i];
     m_ig[i] = (icUInt32Number)m_g[i];
     m_s[m_nInput-1-i] = m_g[i] - m_ig[i];
     if (m_ig[i]==m_MaxGridPoint[i]) {
@@ -2667,7 +2667,7 @@ void CIccCLUT::InterpND(icFloatNumber *destPixel, const icFloatNumber *srcPixel)
     for (pv=0, j=0; j<m_nNodes; j++)
       pv += p[m_nOffset[j]] * m_df[j];
 
-    destPixel[i] = UnitClip(pv);
+    destPixel[i] = pv;
   }
 
 }
