@@ -64,6 +64,7 @@
  *    on output (as opposed to the other way around).  Fixes crashing bug found with absolute
  *    intent processing of colors that are whiter than media point.  Also supports floating point range
  *    of output for MPE CLUT elements.
+ *  - Renaming of MD5 calculation functions to avoid conflicts with other libraries
  * 
  * - November 2010 - 1.6.3 release
  *  - Modification of type for CIccCLUT::m_nOutput to icUInt16Nubmer to better support MPE

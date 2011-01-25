@@ -4,6 +4,7 @@
    on output (as opposed to the other way around).  Fixes crashing bug found with absolute
    intent processing of colors whiter than media point.  Also supports floating point range
    of output for MPE CLUT elements.
+ * Renaming of MD5 calculation function names to avoid conflicts with other libraries
 
 2010-10-20 Max Derhak
  * 1.6.3 release

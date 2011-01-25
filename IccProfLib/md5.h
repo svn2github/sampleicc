@@ -25,6 +25,15 @@ These notices must be retained in any copies of any part of this
 documentation and/or software.
  */
 
+/* ---------------------------------------------------------------------
+January 2011 
+- Modified names to avoid possible conflicts - Max Derhak
+- Added IccProfLibConf.h include to use ICCPROFLIB_API with functions
+- Changed typedef of UINT4 to use ICCUINT64
+------------------------------------------------------------------------ */
+
+#include "IccProfLibConf.h"
+
 
 /** POINTER defines a generic pointer type */
 typedef unsigned char *POINTER;
@@ -33,7 +42,7 @@ typedef unsigned char *POINTER;
 typedef unsigned short int UINT2;
 
 /** UINT4 defines a four byte word */
-typedef unsigned long int UINT4;
+typedef ICCUINT64 UINT4;
 
 
 /** MD5 context. */
@@ -43,7 +52,7 @@ typedef struct {
   unsigned char buffer[64];                         /* input buffer */
 } MD5_CTX;
 
-void MD5Init  (MD5_CTX *);
-void MD5Update  (MD5_CTX *, unsigned char *, unsigned int);
-void MD5Final  (unsigned char* , MD5_CTX *);
+void ICCPROFLIB_API icMD5Init  (MD5_CTX *);
+void ICCPROFLIB_API icMD5Update  (MD5_CTX *, unsigned char *, unsigned int);
+void ICCPROFLIB_API icMD5Final  (unsigned char* , MD5_CTX *);
 

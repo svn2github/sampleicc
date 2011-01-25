@@ -95,7 +95,7 @@ Rotation is separate from addition to prevent recomputation.
 
 /** MD5 initialization. Begins an MD5 operation, writing a new context.
  */
-void MD5Init (MD5_CTX *context)
+void ICCPROFLIB_API icMD5Init (MD5_CTX *context)
 {
   context->count[0] = context->count[1] = 0;
   /* Load magic initialization constants.
@@ -110,7 +110,7 @@ void MD5Init (MD5_CTX *context)
   operation, processing another message block, and updating the
   context.
  */
-void MD5Update (MD5_CTX *context, unsigned char *input, unsigned int inputLen)
+void ICCPROFLIB_API icMD5Update (MD5_CTX *context, unsigned char *input, unsigned int inputLen)
 {
   unsigned int i, index, partLen;
 
@@ -146,7 +146,7 @@ void MD5Update (MD5_CTX *context, unsigned char *input, unsigned int inputLen)
 /** MD5 finalization. Ends an MD5 message-digest operation, writing the
   the message digest and zeroizing the context.
  */
-void MD5Final (unsigned char* digest, MD5_CTX *context)
+void ICCPROFLIB_API icMD5Final (unsigned char* digest, MD5_CTX *context)
 {
   unsigned char bits[8];
   unsigned int index, padLen;
@@ -158,10 +158,10 @@ void MD5Final (unsigned char* digest, MD5_CTX *context)
 */
   index = (unsigned int)((context->count[0] >> 3) & 0x3f);
   padLen = (index < 56) ? (56 - index) : (120 - index);
-  MD5Update (context, PADDING, padLen);
+  icMD5Update (context, PADDING, padLen);
 
   /* Append length (before padding) */
-  MD5Update (context, bits, 8);
+  icMD5Update (context, bits, 8);
 
 
   /* Store state in digest */

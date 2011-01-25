@@ -2383,7 +2383,7 @@ void CalcProfileID(CIccIO *pIO, icProfileID *pProfileID)
   pIO->Seek(0, icSeekSet);
 
   //read file updating checksum as we go
-  MD5Init(&context);
+  icMD5Init(&context);
   nBlock = 0;
   while(len) {
     num = pIO->Read8(&buffer[0],1024);
@@ -2392,11 +2392,11 @@ void CalcProfileID(CIccIO *pIO, icProfileID *pProfileID)
       memset(buffer+64, 0, 4);  //Rendering Intent
       memset(buffer+84, 0, 16); //Profile Id
     }
-    MD5Update(&context,buffer,num);
+    icMD5Update(&context,buffer,num);
     nBlock++;
     len -=num;
   }
-  MD5Final(&pProfileID->ID8[0],&context);
+  icMD5Final(&pProfileID->ID8[0],&context);
 
   //go back where we were
   pIO->Seek(pos, icSeekSet);
