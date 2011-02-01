@@ -410,7 +410,7 @@ CIccTagDict::~CIccTagDict()
 icUInt32Number CIccTagDict::MaxPosRecSize()
 {
 
-  icUInt32Number rv = 0;
+  icUInt32Number rv = 16;
 
   CIccNameValueDict::iterator i;
   CIccDictEntry ptr;
@@ -1443,7 +1443,7 @@ bool CIccTagDict::SetNameLocalized(const icUnicodeChar *szName, CIccTagMultiLoca
 {
   std::wstring sName;
   while(*szName)
-    sName += *szName;
+    sName += *szName++;
 
   return SetNameLocalized(sName, pTag);
 }
@@ -1452,7 +1452,7 @@ bool CIccTagDict::SetNameLocalized(const char *szName, CIccTagMultiLocalizedUnic
 {
   std::wstring sName;
   while(*szName)
-    sName += *szName;
+    sName += *szName++;
 
   return SetNameLocalized(sName, pTag);
 }
@@ -1470,23 +1470,23 @@ bool CIccTagDict::SetValueLocalized(std::wstring sName, CIccTagMultiLocalizedUni
     m_Dict->push_back(ptr);
   }
 
-  return de->SetNameLocalized(pTag);
+  return de->SetValueLocalized(pTag);
 }
 
 bool CIccTagDict::SetValueLocalized(const icUnicodeChar *szName, CIccTagMultiLocalizedUnicode *pTag)
 {
   std::wstring sName;
   while(*szName)
-    sName += *szName;
+    sName += *szName++;
 
-  return SetNameLocalized(sName, pTag);
+  return SetValueLocalized(sName, pTag);
 }
 
 bool CIccTagDict::SetValueLocalized(const char *szName, CIccTagMultiLocalizedUnicode *pTag)
 {
   std::wstring sName(szName, szName+strlen(szName));
 
-  return SetNameLocalized(sName, pTag);
+  return SetValueLocalized(sName, pTag);
 }
 
 #endif //ICC_UNSUPPORTED_TAG_DICT

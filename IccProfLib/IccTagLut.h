@@ -484,6 +484,7 @@ public:
   virtual ~CIccTagLut8();
 
   virtual icTagTypeSignature GetType() { return icSigLut8Type; }
+  virtual icUInt8Number GetPrecision() { return 1; }
 
   bool Read(icUInt32Number size, CIccIO *pIO);
   bool Write(CIccIO *pIO);

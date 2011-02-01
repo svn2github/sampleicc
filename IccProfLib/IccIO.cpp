@@ -613,6 +613,100 @@ icInt32Number CIccMemIO::Tell()
   return (icInt32Number)m_nPos;
 }
 
+///////////////////////////////
+
+//////////////////////////////////////////////////////////////////////
+// Class CIccNullIO
+//////////////////////////////////////////////////////////////////////
+
+CIccNullIO::CIccNullIO() : CIccIO()
+{
+  m_nSize = 0;
+  m_nPos = 0;
+}
+
+CIccNullIO::~CIccNullIO()
+{
+  Close();
+}
+
+
+void CIccNullIO::Open()
+{
+  m_nPos = 0;
+  m_nSize = 0;
+}
+
+
+void CIccNullIO::Close()
+{
+}
+
+
+icInt32Number CIccNullIO::Read8(void *pBuf, icInt32Number nNum)
+{
+  icInt32Number nLeft = m_nSize - m_nPos;
+  icInt32Number nRead = (nNum <= (icInt32Number)nLeft) ? nNum : nLeft;
+
+  memset(pBuf, 0, nRead);
+  m_nPos += nRead;
+
+  return nRead;
+}
+
+
+icInt32Number CIccNullIO::Write8(void *pBuf, icInt32Number nNum)
+{
+  m_nPos += nNum;
+  if (m_nPos > m_nSize)
+    m_nSize = m_nPos;
+  
+  return nNum;
+}
+
+
+icInt32Number CIccNullIO::GetLength()
+{
+  return m_nSize;
+}
+
+
+icInt32Number CIccNullIO::Seek(icInt32Number nOffset, icSeekVal pos)
+{
+  icInt32Number nPos;
+  switch(pos) {
+  case icSeekSet:
+    nPos = nOffset;
+    break;
+  case icSeekCur:
+    nPos = (icInt32Number)m_nPos + nOffset;
+    break;
+  case icSeekEnd:
+    nPos = (icInt32Number)m_nSize + nOffset;
+    break;
+  default:
+    nPos = 0;
+    break;
+  }
+
+  if (nPos < 0)
+    return -1;
+
+  m_nPos = (icUInt32Number)nPos;
+
+  if (m_nPos>m_nSize)
+    m_nSize = m_nPos;
+
+  return nPos;
+}
+
+
+icInt32Number CIccNullIO::Tell()
+{
+  return (icInt32Number)m_nPos;
+}
+
+
 #ifdef USESAMPLEICCNAMESPACE
 } //namespace sampleICC
 #endif

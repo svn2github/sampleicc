@@ -635,9 +635,10 @@ icValidateStatus CIccTagText::Validate(icTagSignature sig, std::string &sReport,
     int i;
     for (i=0; m_szText[i] && i<(int)m_nBufSize; i++) {
       if (m_szText[i]&0x80) {
-        sReport += icValidateWarning;
+        sReport += icValidateWarningMsg;
         sReport += sSigName;
         sReport += " - Text do not contain 7bit data.\r\n";
+        rv = icMaxStatus(rv, icValidateWarning);
       }
     }
   }
@@ -1398,6 +1399,7 @@ icValidateStatus CIccTagSignature::Validate(icTagSignature sig, std::string &sRe
 CIccTagNamedColor2::CIccTagNamedColor2(int nSize/*=1*/, int nDeviceCoords/*=0*/)
 {
   m_nSize = nSize;
+  m_nVendorFlags = 0;
   m_nDeviceCoords = nDeviceCoords;
   if (m_nSize <1)
     m_nSize = 1;
@@ -1543,7 +1545,7 @@ void CIccTagNamedColor2::SetSize(icUInt32Number nSize, icInt32Number nDeviceCoor
       pTo->pcsCoords[j] = pFrom->pcsCoords[j];
 
     for (j=0; j<nCoords; j++) {
-      pTo->deviceCoords[j] = pFrom->pcsCoords[j];
+      pTo->deviceCoords[j] = pFrom->deviceCoords[j];
     }
   }
   free(m_NamedColor);
@@ -4021,7 +4023,7 @@ bool CIccTagMultiLocalizedUnicode::Read(icUInt32Number size, CIccIO *pIO)
 
   //Now seek past the last named record
   if (nLastPos > 0)
-    pIO->Seek(nTagPos+nOffset, icSeekSet);
+    pIO->Seek(nTagPos+nLastPos, icSeekSet);
 
   return true;
 }
@@ -5354,6 +5356,15 @@ icValidateStatus CIccTagColorantTable::Validate(icTagSignature sig, std::string 
  */
 CIccTagViewingConditions::CIccTagViewingConditions()
 {
+  m_XYZIllum.X = 0;
+  m_XYZIllum.Y = 0;
+  m_XYZIllum.Z = 0;
+
+  m_XYZSurround.X = 0;
+  m_XYZSurround.Y = 0;
+  m_XYZSurround.Z = 0;
+
+  m_illumType = icIlluminantUnknown;
 }
 
 

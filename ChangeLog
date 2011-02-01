@@ -1,5 +1,16 @@
+2011-01-31 Based on submission by Jason Walp
+ * 1.6.4 release 
+ * Added CIccNullIO class that can be used by a caller to "write" the profile thus updating
+   tag directory entries
+ * Fixed various bugs related to setting text in CIccTagDict tags
+ * Added CIccTagLut8::GetPrecision() function
+ * Fixed bug in validation of CIccTextDescription class
+ * Initialize m_nVendorflags in CIccTagNamedColor2 constructor
+ * Fixed bug in CIccTagNamedColor2::SetSize() that was copying wrong thing
+ * Fixed bug in CIccTagMultiLocalizedUnicode::Read() that was using wrong seek value at end
+ * Defined initial values in CIccTagViewingCondions constructor
+
 2011-01-24 Rohit Patil
- * 1.6.4 release
  * Modified CLUT interpolation in IccTagLut.cpp to perform clipping on input and no clipping
    on output (as opposed to the other way around).  Fixes crashing bug found with absolute
    intent processing of colors whiter than media point.  Also supports floating point range
@@ -8,13 +19,13 @@
 
 2010-10-20 Max Derhak
  * 1.6.3 release
- * Fix typo in CIccTagUnknown::IsSupported()
+ * Fixed typo in CIccTagUnknown::IsSupported()
  * Modified CIccCLUT constructor to support 16bit OutputChannels to support MPE requirements
    for CLUT elements
 
 2010-09-20 Max Derhak
  * 1.6.2 release
- * Fix bugs with reading and displaying metaDataTags using the dictTagType
+ * Fixed bugs with reading and displaying metaDataTags using the dictTagType
 
 2010-08-23 Max Derhak
  * 1.6.1 release

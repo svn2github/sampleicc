@@ -204,6 +204,38 @@ protected:
   bool m_bFreeData;
 };
 
+/**
+ **************************************************************************
+ * Type: Class
+ * 
+ * Purpose: Handles simulated File IO 
+ **************************************************************************
+ */
+class ICCPROFLIB_API CIccNullIO : public CIccIO
+{
+public:
+  CIccNullIO();
+  virtual ~CIccNullIO();
+
+  //Open resets the file to being zero size
+  void Open();
+  virtual void Close();
+
+
+  virtual icInt32Number Read8(void *pBuf, icInt32Number nNum=1);   //Read zero's into buf
+  virtual icInt32Number Write8(void *pBuf, icInt32Number nNum=1);
+
+  virtual icInt32Number GetLength();
+
+  virtual icInt32Number Seek(icInt32Number nOffset, icSeekVal pos);
+  virtual icInt32Number Tell();
+
+protected:
+  icUInt32Number m_nSize;
+  icUInt32Number m_nPos;
+};
+
+
 #ifdef USESAMPLEICCNAMESPACE
 } //namespace sampleICC
 #endif
