@@ -1,6 +1,6 @@
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "All", "BuildAll.vcproj", "{F70F064E-0377-484E-8F86-BEC03F35F950}"
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "All", "BuildAll_v8.vcproj", "{F70F064E-0377-484E-8F86-BEC03F35F950}"
 	ProjectSection(ProjectDependencies) = postProject
 		{99BC53FE-9742-4C38-B12E-5A74F62B64FA} = {99BC53FE-9742-4C38-B12E-5A74F62B64FA}
 		{2507C0EF-C534-4056-A532-5C50002E3652} = {2507C0EF-C534-4056-A532-5C50002E3652}
@@ -14,65 +14,65 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "All", "BuildAll.vcproj", "{
 		{8A0DC808-518D-4E2D-BD57-D7619D1CB7C3} = {8A0DC808-518D-4E2D-BD57-D7619D1CB7C3}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iccApplyNamedCmm", "..\..\Tools\CmdLine\IccApplyNamedCmm\iccApplyNamedCmm.vcproj", "{BAEA1593-F6A4-48A1-95AA-8FA09E1ECACE}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iccApplyNamedCmm", "..\..\Tools\CmdLine\IccApplyNamedCmm\iccApplyNamedCmm_v8.vcproj", "{BAEA1593-F6A4-48A1-95AA-8FA09E1ECACE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ApplyProfiles", "..\..\Tools\Winnt\ApplyProfiles\ApplyProfiles.vcproj", "{305952DC-02BA-4D8C-AB9D-BD38F5291955}"
-	ProjectSection(ProjectDependencies) = postProject
-		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
-		{89DB7595-5325-45B1-9414-2CAF18A9C57C} = {89DB7595-5325-45B1-9414-2CAF18A9C57C}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iccApplyProfiles", "..\..\Tools\CmdLine\IccApplyProfiles\iccApplyProfiles.vcproj", "{2507C0EF-C534-4056-A532-5C50002E3652}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ApplyProfiles", "..\..\Tools\Winnt\ApplyProfiles\ApplyProfiles_v8.vcproj", "{305952DC-02BA-4D8C-AB9D-BD38F5291955}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
 		{89DB7595-5325-45B1-9414-2CAF18A9C57C} = {89DB7595-5325-45B1-9414-2CAF18A9C57C}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iccDumpProfile", "..\..\Tools\CmdLine\IccDumpProfile\iccDumpProfile.vcproj", "{E67361CF-39C3-45E6-9C5F-BAE15B8528DB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iccApplyProfiles", "..\..\Tools\CmdLine\IccApplyProfiles\iccApplyProfiles_v8.vcproj", "{2507C0EF-C534-4056-A532-5C50002E3652}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
+		{89DB7595-5325-45B1-9414-2CAF18A9C57C} = {89DB7595-5325-45B1-9414-2CAF18A9C57C}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iccDumpProfile", "..\..\Tools\CmdLine\IccDumpProfile\iccDumpProfile_v8.vcproj", "{E67361CF-39C3-45E6-9C5F-BAE15B8528DB}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iccProflibTest", "..\..\Tools\CmdLine\IccProfLibTest\iccProfLibTest.vcproj", "{7724D29C-7725-4306-9276-7C77082B4D83}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iccProflibTest", "..\..\Tools\CmdLine\IccProfLibTest\iccProfLibTest_v8.vcproj", "{7724D29C-7725-4306-9276-7C77082B4D83}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IccProfLib", "..\..\IccProfLib\IccProfLib.vcproj", "{A6480823-31F6-41FE-AA64-D11B1AF8B3FF}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IccProfLib", "..\..\IccProfLib\IccProfLib_v8.vcproj", "{A6480823-31F6-41FE-AA64-D11B1AF8B3FF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libtiff", "BuildLibTiff\libtiff.vcproj", "{89DB7595-5325-45B1-9414-2CAF18A9C57C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libtiff", "BuildLibTiff\libtiff_v8.vcproj", "{89DB7595-5325-45B1-9414-2CAF18A9C57C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IccProfLib_CRTDLL", "..\..\IccProfLib\IccProfLib_CRTDLL.vcproj", "{AA703D3A-6A76-40EF-B4F2-2E3C57AF3E71}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IccProfLib_CRTDLL", "..\..\IccProfLib\IccProfLib_CRTDLL_v8.vcproj", "{AA703D3A-6A76-40EF-B4F2-2E3C57AF3E71}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wxProfileDump", "..\..\Tools\wxWidget\wxProfileDump\wxProfileDump.vcproj", "{8A0DC808-518D-4E2D-BD57-D7619D1CB7C3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wxProfileDump", "..\..\Tools\wxWidget\wxProfileDump\wxProfileDump_v8.vcproj", "{8A0DC808-518D-4E2D-BD57-D7619D1CB7C3}"
 	ProjectSection(ProjectDependencies) = postProject
 		{AA703D3A-6A76-40EF-B4F2-2E3C57AF3E71} = {AA703D3A-6A76-40EF-B4F2-2E3C57AF3E71}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iccStripUnknownTags", "..\..\Tools\CmdLine\IccStripUnknownTags\iccStripUnknownTags.vcproj", "{99BC53FE-9742-4C38-B12E-5A74F62B64FA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iccStripUnknownTags", "..\..\Tools\CmdLine\IccStripUnknownTags\iccStripUnknownTags_v8.vcproj", "{99BC53FE-9742-4C38-B12E-5A74F62B64FA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleIccCmm", "..\..\Tools\Winnt\SampleIccCmm\SampleIccCmm.vcproj", "{62025065-8784-4EBD-A380-57763DDBD26D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleIccCmm", "..\..\Tools\Winnt\SampleIccCmm\SampleIccCmm_v8.vcproj", "{62025065-8784-4EBD-A380-57763DDBD26D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IccV4ToMPE", "..\..\Tools\CmdLine\IccV4ToMPE\iccV4ToMPE.vcproj", "{BDD00ECF-8547-4802-B486-0EC05E6F5F7F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IccV4ToMPE", "..\..\Tools\CmdLine\IccV4ToMPE\iccV4ToMPE_v8.vcproj", "{BDD00ECF-8547-4802-B486-0EC05E6F5F7F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iccRoundTrip", "..\..\Tools\CmdLine\IccRoundTrip\iccRoundTrip.vcproj", "{3349D1F0-1BF2-49B6-A43C-27165F5618D8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iccRoundTrip", "..\..\Tools\CmdLine\IccRoundTrip\iccRoundTrip_v8.vcproj", "{3349D1F0-1BF2-49B6-A43C-27165F5618D8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iccGamutMapGirdle", "..\..\Tools\CmdLine\IccGamutMapGirdle\iccGamutMapGirdle.vcproj", "{661B9001-23CE-46EF-AE6E-DE5086C4748B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iccGamutMapGirdle", "..\..\Tools\CmdLine\IccGamutMapGirdle\iccGamutMapGirdle_v8.vcproj", "{661B9001-23CE-46EF-AE6E-DE5086C4748B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A6480823-31F6-41FE-AA64-D11B1AF8B3FF} = {A6480823-31F6-41FE-AA64-D11B1AF8B3FF}
 	EndProjectSection

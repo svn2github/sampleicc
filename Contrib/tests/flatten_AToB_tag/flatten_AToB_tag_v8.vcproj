@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
-	Name="IccV4ToMPE"
-	ProjectGUID="{BDD00ECF-8547-4802-B486-0EC05E6F5F7F}"
-	TargetFrameworkVersion="131072"
+	Version="8.00"
+	Name="flatten_AToB_tag"
+	ProjectGUID="{EDC0A2BE-50FE-4DE2-ADD6-DC87F4FBCDCC}"
 	>
 	<Platforms>
 		<Platform
@@ -38,20 +37,20 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Release/IccV4ToMpe.tlb"
+				TypeLibraryName=".\Release/flatten_AToB_tag.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\IccProfLib"
+				AdditionalIncludeDirectories="winGetOpt,..\..\..\IccProfLib,..\..\ICC_utils"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Release/IccV4ToMpe.pch"
+				PrecompiledHeaderFile=".\Release/flatten_AToB_tag.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -73,13 +72,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\Release/IccV4ToMpe.exe"
+				OutputFile=".\Release/flatten_AToB_tag.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\Release/IccV4ToMpe.pdb"
+				ProgramDatabaseFile=".\Release/flatten_AToB_tag.pdb"
 				SubSystem="1"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -99,6 +96,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -128,18 +128,18 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Debug/IccV4ToMpe.tlb"
+				TypeLibraryName=".\Debug/flatten_AToB_tag.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\IccProfLib"
+				AdditionalIncludeDirectories="winGetOpt,..\..\..\IccProfLib,..\..\ICC_utils"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Debug/IccV4ToMpe.pch"
+				PrecompiledHeaderFile=".\Debug/flatten_AToB_tag.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
@@ -162,14 +162,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\Debug/IccV4ToMpe.exe"
+				OutputFile=".\Debug/flatten_AToB_tag.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug/IccV4ToMpe.pdb"
+				ProgramDatabaseFile=".\Debug/flatten_AToB_tag.pdb"
 				SubSystem="1"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -191,6 +189,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -203,7 +204,7 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="IccV4ToMpe.cpp"
+				RelativePath="flatten_AToB_tag.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -231,9 +232,26 @@
 			</File>
 		</Filter>
 		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl"
+			>
+		</Filter>
+		<Filter
 			Name="Library Files"
 			Filter="lib"
 			>
+			<File
+				RelativePath="..\..\..\IccProfLib\Release\IccProfLib.lib"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
 			<File
 				RelativePath="..\..\..\IccProfLib\Debug\IccProfLib.lib"
 				>
@@ -247,7 +265,19 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\IccProfLib\Release\IccProfLib.lib"
+				RelativePath="..\..\ICC_utils\debug\IccUtilsLib.lib"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ICC_utils\release\IccUtilsLib.lib"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -258,11 +288,6 @@
 					/>
 				</FileConfiguration>
 			</File>
-		</Filter>
-		<Filter
-			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl"
-			>
 		</Filter>
 		<Filter
 			Name="Resource Files"

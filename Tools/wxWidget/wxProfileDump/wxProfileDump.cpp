@@ -73,6 +73,7 @@ Copyright:  © see ICC Software License
 #include "IccUtil.h"
 #include "IccEval.h"
 #include "IccPrmg.h"
+#include "IccProfLibVer.h"
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
@@ -288,7 +289,8 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
     (void)wxMessageBox(_T("wxProfileDump\n")
-                       _T("Copyright (C) 20005\n"),
+                       _T("Copyright (C) 2005-2011\n\n")
+                       _T("Using ICCProflib version ") ICCPROFLIBVER _T("\n"),
 											 _T("About wxProfileDump"));
 }
 

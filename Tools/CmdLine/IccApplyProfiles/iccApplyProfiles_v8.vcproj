@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
-	Name="IccV4ToMPE"
-	ProjectGUID="{BDD00ECF-8547-4802-B486-0EC05E6F5F7F}"
-	TargetFrameworkVersion="131072"
+	Version="8.00"
+	Name="iccApplyProfiles"
+	ProjectGUID="{2507C0EF-C534-4056-A532-5C50002E3652}"
 	>
 	<Platforms>
 		<Platform
@@ -38,20 +37,19 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Release/IccV4ToMpe.tlb"
+				TypeLibraryName=".\Release/iccApplyProfiles.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\IccProfLib"
+				AdditionalIncludeDirectories="..\..\..\IccProfLib,..\..\..\libtiff\libtiff"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Release/IccV4ToMpe.pch"
+				PrecompiledHeaderFile=".\Release/iccApplyProfiles.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -73,13 +71,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\Release/IccV4ToMpe.exe"
+				OutputFile=".\Release/iccApplyProfiles.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\Release/IccV4ToMpe.pdb"
+				ProgramDatabaseFile=".\Release/iccApplyProfiles.pdb"
 				SubSystem="1"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -99,6 +95,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -128,18 +127,17 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Debug/IccV4ToMpe.tlb"
+				TypeLibraryName=".\Debug/iccApplyProfiles.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\IccProfLib"
+				AdditionalIncludeDirectories="..\..\..\IccProfLib,..\..\..\libtiff\libtiff"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Debug/IccV4ToMpe.pch"
+				PrecompiledHeaderFile=".\Debug/iccApplyProfiles.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
@@ -162,14 +160,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\Debug/IccV4ToMpe.exe"
+				OutputFile=".\Debug/iccApplyProfiles.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug/IccV4ToMpe.pdb"
+				ProgramDatabaseFile=".\Debug/iccApplyProfiles.pdb"
 				SubSystem="1"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -191,6 +187,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -203,7 +202,34 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="IccV4ToMpe.cpp"
+				RelativePath="iccApplyProfiles.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						DisableSpecificWarnings="4996"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"
+						DisableSpecificWarnings="4996"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="TiffImg.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -231,9 +257,30 @@
 			</File>
 		</Filter>
 		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl"
+			>
+			<File
+				RelativePath="TiffImg.h"
+				>
+			</File>
+		</Filter>
+		<Filter
 			Name="Library Files"
 			Filter="lib"
 			>
+			<File
+				RelativePath="..\..\Winnt\BuildLibTiff\Debug\dlibtiff.lib"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
 			<File
 				RelativePath="..\..\..\IccProfLib\Debug\IccProfLib.lib"
 				>
@@ -258,17 +305,28 @@
 					/>
 				</FileConfiguration>
 			</File>
-		</Filter>
-		<Filter
-			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl"
-			>
+			<File
+				RelativePath="..\..\Winnt\BuildLibTiff\Release\libtiff.lib"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 		</Filter>
+		<File
+			RelativePath="ReadMe.txt"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

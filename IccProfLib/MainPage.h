@@ -59,7 +59,12 @@
  *   the configuration parameters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
- * - January 2010 - 1.6.4 release
+ * - April  2011 - 1.6.5 release
+ *  - Modified .sln and .vcproj files to work with Visual Studio 2008
+ *  - Added _v8.sln and _v8.vcproj files to work with Visual Studio 2005
+ *  - Fixed bugs in CIccInfo::GetProfileID() and CIccInfo::IsProfileIDCalculated()
+ *
+ * - January 2011 - 1.6.4 release
  *  - Added CIccNullIO class that can be used by a caller to "write" the profile thus updating
  *    tag directory entries
  *  - Fixed various bugs related to setting text in CIccTagDict tags

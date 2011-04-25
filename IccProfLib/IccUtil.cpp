@@ -1522,29 +1522,26 @@ const icChar *CIccInfo::GetMeasurementUnit(icSignature sig)
 
 const icChar *CIccInfo::GetProfileID(icProfileID *profileID)
 {
-  icChar buf[16];
-  icChar temp[16];
+  char *ptr = m_szStr;
+  int i;
 
-  for (int i=0; i<16; i++) {
-    sprintf(temp, "%02x", profileID->ID8[i]);
-    buf[i] = temp[0];
+  for (i=0; i<16; i++, ptr+=2) {
+    sprintf(ptr, "%02x", profileID->ID8[i]);
   }
 
-  sprintf(m_szStr,"%.16s",buf);
   return m_szStr;
 }
 
 bool CIccInfo::IsProfileIDCalculated(icProfileID *profileID)
 {
-  icChar temp[16];
-  bool bFlag = false;
+  int i;
 
-  for (int i=0; i<16; i++) {
-    sprintf(temp, "%02x", profileID->ID8[i]);
-    if (temp[0] != '0') bFlag = true;
+  for (i=0; i<16; i++) {
+    if (profileID->ID8[i])
+      break;
   }
 
-  return bFlag;
+  return i<16;
 }
 
 const icChar *CIccInfo::GetColorantEncoding(icColorantEncoding colorant)

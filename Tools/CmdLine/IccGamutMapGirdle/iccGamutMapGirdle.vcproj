@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="iccGamutMapGirdle"
 	ProjectGUID="{661B9001-23CE-46EF-AE6E-DE5086C4748B}"
 	RootNamespace="iccGamutMapGirdle"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -77,6 +78,8 @@
 				SuppressStartupBanner="true"
 				ProgramDatabaseFile=".\Release/iccGamutMapGirdle.pdb"
 				SubSystem="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -96,9 +99,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -167,6 +167,8 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/iccGamutMapGirdle.pdb"
 				SubSystem="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -186,9 +188,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -235,10 +234,10 @@
 			Filter="lib"
 			>
 			<File
-				RelativePath="..\..\..\IccProfLib\Debug\IccProfLib.lib"
+				RelativePath="..\..\..\IccProfLib\Release\IccProfLib.lib"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -247,10 +246,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\IccProfLib\Release\IccProfLib.lib"
+				RelativePath="..\..\..\IccProfLib\Debug\IccProfLib.lib"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
