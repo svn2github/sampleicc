@@ -196,7 +196,7 @@ icFloatNumber CIccApplyBPC::calcQuadraticVertex(icFloatNumber* x, icFloatNumber*
 
 /**
 **************************************************************************
-* Name: CIccApplyBPC::CalculateFactors
+* Name: CIccApplyBPC::CalcFactors
 * 
 * Purpose:
 *  This function does the suitable calculations to setup black point
@@ -299,7 +299,7 @@ bool CIccApplyBPC::calcSrcBlackPoint(const CIccProfile* pProfile, const CIccXfor
 		lab2pcs(XYZb, pProfile);
 
 		//convert the PCS value to CMYK
-		if (!pixelXfm(Pixel, XYZb, pProfile->m_Header.pcs, icPerceptual, pProfile)) {
+		if (!pixelXfm(Pixel, XYZb, pProfile->m_Header.pcs, icPerceptual, pXform->GetInterp(), pProfile)) {
 			return false;
 		}
 	}
@@ -345,7 +345,7 @@ bool CIccApplyBPC::calcSrcBlackPoint(const CIccProfile* pProfile, const CIccXfor
 	}
 
 	// convert the device value to PCS
-	if (!pixelXfm(XYZb, Pixel, pProfile->m_Header.colorSpace, pXform->GetIntent(), pProfile)) {
+	if (!pixelXfm(XYZb, Pixel, pProfile->m_Header.colorSpace, pXform->GetIntent(), pXform->GetInterp(), pProfile)) {
 		return false;
 	}
 
@@ -379,6 +379,7 @@ bool CIccApplyBPC::calcSrcBlackPoint(const CIccProfile* pProfile, const CIccXfor
 bool CIccApplyBPC::calcDstBlackPoint(const CIccProfile* pProfile, const CIccXform* pXform, icFloatNumber* XYZb) const
 {
 	icRenderingIntent nIntent = pXform->GetIntent();
+  icXformInterp nInterp = pXform->GetInterp();
 	icFloatNumber Pixel[3];
 	icFloatNumber pcsPixel[3];
 
@@ -388,7 +389,7 @@ bool CIccApplyBPC::calcDstBlackPoint(const CIccProfile* pProfile, const CIccXfor
 	{ // do the complicated and lengthy black point estimation
 
 		// get the black transform
-		CIccCmm* pCmm = getBlackXfm(nIntent, pProfile);
+		CIccCmm* pCmm = getBlackXfm(nIntent, nInterp, pProfile);
 		if (!pCmm) {
 			return false;
 		}
@@ -540,7 +541,7 @@ bool CIccApplyBPC::calcDstBlackPoint(const CIccProfile* pProfile, const CIccXfor
 **************************************************************************
 */
 bool CIccApplyBPC::pixelXfm(icFloatNumber *DstPixel, icFloatNumber *SrcPixel, icColorSpaceSignature SrcSpace, 
-														icRenderingIntent nIntent, const CIccProfile *pProfile) const
+														icRenderingIntent nIntent, icXformInterp nInterp, const CIccProfile *pProfile) const
 {
 	// create the cmm object
 	CIccCmm cmm(SrcSpace, icSigUnknownData, !IsSpacePCS(SrcSpace));
@@ -550,7 +551,7 @@ bool CIccApplyBPC::pixelXfm(icFloatNumber *DstPixel, icFloatNumber *SrcPixel, ic
 	if (!pICC) return false;
 
 	// add the xform
-	if (cmm.AddXform(pICC, nIntent, icInterpTetrahedral)!=icCmmStatOk) {
+	if (cmm.AddXform(pICC, nIntent, nInterp)!=icCmmStatOk) {
 		delete pICC;
 		return false;
 	}
@@ -577,7 +578,7 @@ bool CIccApplyBPC::pixelXfm(icFloatNumber *DstPixel, icFloatNumber *SrcPixel, ic
 * 
 **************************************************************************
 */
-CIccCmm* CIccApplyBPC::getBlackXfm(icRenderingIntent nIntent, const CIccProfile *pProfile) const
+CIccCmm* CIccApplyBPC::getBlackXfm(icRenderingIntent nIntent, icXformInterp nInterp, const CIccProfile *pProfile) const
 {
 	// create the cmm object
 	CIccCmm* pCmm = new CIccCmm(pProfile->m_Header.pcs, icSigUnknownData, false);
@@ -591,7 +592,7 @@ CIccCmm* CIccApplyBPC::getBlackXfm(icRenderingIntent nIntent, const CIccProfile 
 	}
 
 	// add the xform
-	if (pCmm->AddXform(pICC1, nIntent, icInterpTetrahedral)!=icCmmStatOk) {
+	if (pCmm->AddXform(pICC1, nIntent, nInterp)!=icCmmStatOk) {
 		delete pICC1;
 		delete pCmm;
 		return NULL;
@@ -605,7 +606,7 @@ CIccCmm* CIccApplyBPC::getBlackXfm(icRenderingIntent nIntent, const CIccProfile 
 	}
 
 	// add the xform
-	if (pCmm->AddXform(pICC2, icRelativeColorimetric, icInterpTetrahedral)!=icCmmStatOk) { // uses the relative intent on the device to Lab side
+	if (pCmm->AddXform(pICC2, icRelativeColorimetric, nInterp)!=icCmmStatOk) { // uses the relative intent on the device to Lab side
 		delete pICC2;
 		delete pCmm;
 		return NULL;

@@ -5,7 +5,7 @@
 
     Version:    V1
 
-    Copyright:  © see ICC Software License
+    Copyright:  ï¿½ see ICC Software License
 */
 
 /*
@@ -925,7 +925,7 @@ icStatusCMM CIccXform::Begin()
 	else if (m_nIntent == icPerceptual && (IsVersion2() || !HasPerceptualHandling())) {
 		icColorSpaceSignature Space = m_pProfile->m_Header.pcs;
 
-		if (IsSpacePCS(Space)) {
+		if (IsSpacePCS(Space) && m_pProfile->m_Header.deviceClass!=icSigAbstractClass) {
 			m_bAdjustPCS = true;				// turn ON PCS adjustment
 
 			// set up for input transform, which needs version 2 black point to version 4

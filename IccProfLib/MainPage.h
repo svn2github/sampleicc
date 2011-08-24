@@ -80,7 +80,33 @@
  *    of output for MPE CLUT elements.
  *  - Renaming of MD5 calculation functions to avoid conflicts with other libraries
  * 
- * - November 2010 - 1.6.3 release
+ * - August 2011 - 1.6.6 release
+ *  - Added iccGetBPCInfo command line tool to retrieve information about BPC connection
+ *  - Changed CIccApplyBPC private members to protected members to allow object overridden
+ *    and made CIccApplyBPC:calcBlackPoint virtual to support override in iccGetBPCInfo
+ *
+ * - April 2011 - 1.6.5 release
+ *  - Modified .sln and .vcproj files to work with Visual Studio 2008
+ *  - Added _v8.sln and _v8.vcproj files to work with Visual Studio 2005
+ *  - Fixed bugs in CIccInfo::GetProfileID() and CIccInfo::IsProfileIDCalculated()
+ *
+ * - January 2011 - 1.6.4 release (Based on submission by Jason Walp)
+ *  - Added CIccNullIO class that can be used by a caller to "write" the profile thus updating
+ *    tag directory entries
+ *  - Fixed various bugs related to setting text in CIccTagDict tags
+ *  - Added CIccTagLut8::GetPrecision() function
+ *  - Fixed bug in validation of CIccTextDescription class
+ *  - Initialize m_nVendorflags in CIccTagNamedColor2 constructor
+ *  - Fixed bug in CIccTagNamedColor2::SetSize() that was copying wrong thing
+ *  - Fixed bug in CIccTagMultiLocalizedUnicode::Read() that was using wrong seek value at end
+ *  - Defined initial values in CIccTagViewingCondions constructor
+ *  - Modified CLUT interpolation in IccTagLut.cpp to perform clipping on input and no clipping
+ *    on output (as opposed to the other way around).  Fixes crashing bug found with absolute
+ *    intent processing of colors whiter than media point.  Also supports floating point range
+ *    of output for MPE CLUT elements.
+ *  - Renaming of MD5 calculation function names to avoid conflicts with other libraries
+ *
+  * - November 2010 - 1.6.3 release
  *  - Modification of type for CIccCLUT::m_nOutput to icUInt16Nubmer to better support MPE
  *    CLUT elements
  *  - Fixed typo in CIccTagUnknown::IsSupported()
@@ -364,7 +390,7 @@
  *
  * <b>The ICC Software License, Version 0.2</b>
  *
- * Copyright © 2003-2007 The International Color Consortium. All rights 
+ * Copyright ï¿½ 2003-2007 The International Color Consortium. All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without

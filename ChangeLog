@@ -1,4 +1,10 @@
-2011-04-22 Max Derhak
+2011-08-24 Max Derhak
+ * 1.6.6 release
+ * Added iccGetBPCInfo command line tool to retrieve information about BPC connection
+ * Changed CIccApplyBPC private members to protected members to allow object overridden
+   and made CIccApplyBPC:calcBlackPoint virtual to support override in iccGetBPCInfo
+
+ 2011-04-22 Max Derhak
  * 1.6.5 release
  * Modified .sln and .vcproj files to work with Visual Studio 2008
  * Added _v8.sln and _v8.vcproj files to work with Visual Studio 2005
@@ -68,7 +74,7 @@
  * Added support for PrintConditions tag implemented using Dictionary tag type
 
 2009-01-22 Rohit Patil/Max Derhak
- * Added CIccCreateXformHintManager to allow for a list of hint object to be passed
+ * Added CIccCreateXformHintManager to allow for a list of hint objects to be passed
    in at the time of CIccXform creation.
  * Modified PCS adjustment to use a scale and offset in new function CIccXform::AdjustPCS().
    CIccXform::CheckSrcAbs and CIccXform::CheckDestAbs now use CIccXform::AdjustPCS()

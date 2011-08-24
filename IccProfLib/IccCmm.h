@@ -305,6 +305,9 @@ public:
 	/// Returns the rendering intent being used by the Xform
 	icRenderingIntent GetIntent() const { return m_nIntent; }
 
+  /// Returns the interpolation being used by the Xform
+  icXformInterp GetInterp() const { return m_nInterp; }
+
 protected:
   //Called by derived classes to initialize Base
 

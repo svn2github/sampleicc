@@ -5,7 +5,7 @@
 
     Version:    V1
 
-    Copyright:  © see ICC Software License
+    Copyright:  ï¿½ see ICC Software License
 */
 
 /*

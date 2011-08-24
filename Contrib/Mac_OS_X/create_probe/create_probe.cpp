@@ -29,7 +29,7 @@
  
   Version:    V1
  
-  Copyright:  © see below
+  Copyright:  ï¿½ see below
 */
 
 /*

@@ -62,11 +62,14 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name iccRoundTrip
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name iccGetBPCInfo
+    End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "ApplyProfiles"="..\..\Tools\ApplyProfiles\ApplyProfiles.dsp" - Package Owner=<4>
+Project: "ApplyProfiles"="I:\pshop-dev-eng\Color\SampleICC\Tools\Winnt\ApplyProfiles\ApplyProfiles.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -154,6 +157,21 @@ Package=<4>
 ###############################################################################
 
 Project: "iccDumpProfile"="..\..\Tools\CmdLine\IccDumpProfile\iccDumpProfile.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name IccProfLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "iccGetBPCInfo"="..\..\Tools\CmdLine\IccGetBPCInfo\iccGetBPCInfo.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
