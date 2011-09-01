@@ -1,4 +1,8 @@
-2011-08-24 Max Derhak
+2011-09-2 Max Derhak
+ * Part of 1.6.6 release
+ * Fixed bug in md5.h introduced with 1.6.4 release UINT4 is now defined as a ICCUINT32
+
+ 2011-08-24 Max Derhak
  * 1.6.6 release
  * Added iccGetBPCInfo command line tool to retrieve information about BPC connection
  * Changed CIccApplyBPC private members to protected members to allow object overridden

@@ -30,6 +30,9 @@ January 2011
 - Modified names to avoid possible conflicts - Max Derhak
 - Added IccProfLibConf.h include to use ICCPROFLIB_API with functions
 - Changed typedef of UINT4 to use ICCUINT64
+
+September 2011
+- Fixed change of typedef of UINT4 to use ICCUINT32 (a four byte integer)
 ------------------------------------------------------------------------ */
 
 #include "IccProfLibConf.h"
@@ -42,7 +45,7 @@ typedef unsigned char *POINTER;
 typedef unsigned short int UINT2;
 
 /** UINT4 defines a four byte word */
-typedef ICCUINT64 UINT4;
+typedef ICCUINT32 UINT4;
 
 
 /** MD5 context. */

@@ -59,27 +59,9 @@
  *   the configuration parameters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
- * - April  2011 - 1.6.5 release
- *  - Modified .sln and .vcproj files to work with Visual Studio 2008
- *  - Added _v8.sln and _v8.vcproj files to work with Visual Studio 2005
- *  - Fixed bugs in CIccInfo::GetProfileID() and CIccInfo::IsProfileIDCalculated()
+ * - Septeber 2011 - 1.6.6 release
+ *  - Fixed bug introduced in md5.h in 1.6.4 (UINT4 is now a ICCUINT32)
  *
- * - January 2011 - 1.6.4 release
- *  - Added CIccNullIO class that can be used by a caller to "write" the profile thus updating
- *    tag directory entries
- *  - Fixed various bugs related to setting text in CIccTagDict tags
- *  - Added CIccTagLut8::GetPrecision() function
- *  - Fixed bug in validation of CIccTextDescription class
- *  - Initialize m_nVendorflags in CIccTagNamedColor2 constructor
- *  - Fixed bug in CIccTagNamedColor2::SetSize() that was copying wrong thing
- *  - Fixed bug in CIccTagMultiLocalizedUnicode::Read() that was using wrong seek value at end
- *  - Defined initial values in CIccTagViewingCondions constructor
- *  - Modified CLUT interpolation in IccTagLut.cpp to perform clipping on input and no clipping
- *    on output (as opposed to the other way around).  Fixes crashing bug found with absolute
- *    intent processing of colors that are whiter than media point.  Also supports floating point range
- *    of output for MPE CLUT elements.
- *  - Renaming of MD5 calculation functions to avoid conflicts with other libraries
- * 
  * - August 2011 - 1.6.6 release
  *  - Added iccGetBPCInfo command line tool to retrieve information about BPC connection
  *  - Changed CIccApplyBPC private members to protected members to allow object overridden
