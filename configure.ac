@@ -191,6 +191,7 @@ Tools/CmdLine/IccApplyNamedCmm/Makefile
 Tools/CmdLine/IccApplyProfiles/Makefile
 Tools/CmdLine/IccDumpProfile/Makefile
 Tools/CmdLine/IccGamutMapGirdle/Makefile
+Tools/CmdLine/IccGetBPCInfo/Makefile
 Tools/CmdLine/IccProfLibTest/Makefile
 Tools/CmdLine/IccRoundTrip/Makefile
 Tools/CmdLine/IccStripUnknownTags/Makefile
