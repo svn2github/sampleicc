@@ -167,7 +167,7 @@ bool CMyIccApplyBPC::CalcFactors(const CIccProfile* pProfile, const CIccXform* p
 
 bool CMyIccApplyBPC::calcBlackPoint(const CIccProfile* pProfile, const CIccXform* pXform, icFloatNumber* XYZb) const
 {
-  bool rv = CIccApplyBPC::calcBlackPoint(pProfile, pXform, XYZb);
+  bool rv = calcBlackPoint(pProfile, pXform, XYZb);
   
   if (rv)
     memcpy(m_pBPCInfo->blackPoint, XYZb, 3*sizeof(icFloatNumber));
