@@ -1008,35 +1008,42 @@ CIccApplyXform *CIccXform::GetNewApply(icStatusCMM &status)
  */
 void CIccXform::AdjustPCS(icFloatNumber *DstPixel, const icFloatNumber *SrcPixel) const
 {
-      icColorSpaceSignature Space = m_pProfile->m_Header.pcs;
+	icColorSpaceSignature Space = m_pProfile->m_Header.pcs;
 
-        if (Space==icSigLabData) {
-          if (UseLegacyPCS()) {
+	if (Space==icSigLabData) {
+		if (UseLegacyPCS()) {
 			CIccPCS::Lab2ToXyz(DstPixel, SrcPixel, true);
-          }
+		}
 		else {
 			CIccPCS::LabToXyz(DstPixel, SrcPixel, true);
-        }
-          }
-          else {
+		}
+	}
+	else {
 		DstPixel[0] = SrcPixel[0];
 		DstPixel[1] = SrcPixel[1];
 		DstPixel[2] = SrcPixel[2];
-        }
+	}
 
-	DstPixel[0] = CIccPCS::NegClip((icFloatNumber)(DstPixel[0] * m_PCSScale[0] + m_PCSOffset[0]));
-	DstPixel[1] = CIccPCS::NegClip((icFloatNumber)(DstPixel[1] * m_PCSScale[1] + m_PCSOffset[1]));
-	DstPixel[2] = CIccPCS::NegClip((icFloatNumber)(DstPixel[2] * m_PCSScale[2] + m_PCSOffset[2]));
+	DstPixel[0] = (icFloatNumber)(DstPixel[0] * m_PCSScale[0] + m_PCSOffset[0]);
+	DstPixel[1] = (icFloatNumber)(DstPixel[1] * m_PCSScale[1] + m_PCSOffset[1]);
+	DstPixel[2] = (icFloatNumber)(DstPixel[2] * m_PCSScale[2] + m_PCSOffset[2]);
 
-        if (Space==icSigLabData) {
-          if (UseLegacyPCS()) {
+	if (Space==icSigLabData) {
+		if (UseLegacyPCS()) {
 			CIccPCS::XyzToLab2(DstPixel, DstPixel, true);
-          }
+		}
 		else {
 			CIccPCS::XyzToLab(DstPixel, DstPixel, true);
-          }
-          }
-        }
+		}
+	}
+#ifndef SAMPLEICC_NOCLIPLABTOXYZ
+	else {
+		DstPixel[0] = CIccPCS::NegClip(DstPixel[0]);
+		DstPixel[1] = CIccPCS::NegClip(DstPixel[1]);
+		DstPixel[2] = CIccPCS::NegClip(DstPixel[2]);
+	}
+#endif
+}
 
 /**
  **************************************************************************

@@ -130,7 +130,7 @@ typedef CIccApplyMpeList::iterator CIccApplyMpeIter;
 class IIccExtensionMpe
 {
 public:
-  virtual const char *GetExtClassName()=0;
+  virtual const char *GetExtClassName() const=0;
 };
 
 /**
@@ -356,8 +356,8 @@ public:
 
   virtual bool IsSupported();
 
-  virtual icTagTypeSignature GetType() { return icSigMultiProcessElementType; }
-  virtual const icChar *GetClassName() { return "CIccTagMultiProcessElement"; }
+  virtual icTagTypeSignature GetType() const { return icSigMultiProcessElementType; }
+  virtual const icChar *GetClassName() const { return "CIccTagMultiProcessElement"; }
 
   virtual void Describe(std::string &sDescription);
 

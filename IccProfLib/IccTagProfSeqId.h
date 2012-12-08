@@ -122,8 +122,8 @@ public:
 
   static CIccTagProfileSequenceId *ParseMem(icUInt8Number *pMem, icUInt32Number size);
 
-  virtual icTagTypeSignature GetType() { return icSigProfileSequceIdType; }
-  virtual const icChar *GetClassName() { return "CIccTagProfileSequenceId"; }
+  virtual icTagTypeSignature GetType() const { return icSigProfileSequceIdType; }
+  virtual const icChar *GetClassName() const { return "CIccTagProfileSequenceId"; }
 
   virtual void Describe(std::string &sDescription);
 

@@ -86,8 +86,8 @@ class ICCPROFLIB_API CIccProfile;
 class IIccExtensionTag
 {
 public:
-  virtual const char *GetExtClassName()=0;
-  virtual const char *GetExtDerivedClassName()=0;
+  virtual const char *GetExtClassName() const=0;
+  virtual const char *GetExtDerivedClassName() const=0;
 };
 
 /**
@@ -125,11 +125,11 @@ public:
   * Purpose: Get Tag Type.
   *  Each derived tag will implement it's own GetType() function.
   */
-  virtual icTagTypeSignature GetType() { return icMaxEnumType; }
+  virtual icTagTypeSignature GetType() const { return icMaxEnumType; }
   virtual bool IsArrayType() { return false; }
   virtual bool IsMBBType() { return false; }
 
-  virtual const icChar *GetClassName() { return "CIccTag"; }
+  virtual const icChar *GetClassName() const { return "CIccTag"; }
 
   static CIccTag* Create(icTagTypeSignature sig);
 
@@ -215,8 +215,8 @@ public:
 
   virtual bool IsSupported() { return false; }
 
-  virtual icTagTypeSignature GetType() { return m_nType; }
-  virtual const icChar *GetClassName() { return "CIccTagUnknown"; }
+  virtual icTagTypeSignature GetType() const { return m_nType; }
+  virtual const icChar *GetClassName() const { return "CIccTagUnknown"; }
 
   virtual bool Read(icUInt32Number size, CIccIO *pIO);
   virtual bool Write(CIccIO *pIO);
@@ -247,8 +247,8 @@ public:
   virtual CIccTag* NewCopy() const {return new CIccTagText(*this);}
   virtual ~CIccTagText();
 
-  virtual icTagTypeSignature GetType() { return icSigTextType; }
-  virtual const icChar *GetClassName() { return "CIccTagText"; }
+  virtual icTagTypeSignature GetType() const { return icSigTextType; }
+  virtual const icChar *GetClassName() const { return "CIccTagText"; }
 
   virtual bool Read(icUInt32Number size, CIccIO *pIO);
   virtual bool Write(CIccIO *pIO);
@@ -285,8 +285,8 @@ public:
   virtual CIccTag* NewCopy() const {return new CIccTagTextDescription(*this);}
   virtual ~CIccTagTextDescription();
 
-  virtual icTagTypeSignature GetType() { return icSigTextDescriptionType; }
-  virtual const icChar *GetClassName() { return "CIccTagTextDescription"; }
+  virtual icTagTypeSignature GetType() const { return icSigTextDescriptionType; }
+  virtual const icChar *GetClassName() const { return "CIccTagTextDescription"; }
 
   virtual bool Read(icUInt32Number size, CIccIO *pIO);
   virtual bool Write(CIccIO *pIO);
@@ -338,8 +338,8 @@ public:
   virtual CIccTag* NewCopy() const {return new CIccTagSignature(*this);}
   virtual ~CIccTagSignature();
 
-  virtual icTagTypeSignature GetType() { return icSigSignatureType; }
-  virtual const icChar *GetClassName() { return "CIccTagSignature"; }
+  virtual icTagTypeSignature GetType() const { return icSigSignatureType; }
+  virtual const icChar *GetClassName() const { return "CIccTagSignature"; }
 
   virtual void Describe(std::string &sDescription);
 
@@ -382,8 +382,8 @@ public:
   virtual CIccTag* NewCopy() const {return new CIccTagNamedColor2(*this);}
   virtual ~CIccTagNamedColor2();
 
-  virtual icTagTypeSignature GetType() { return icSigNamedColor2Type; }
-  virtual const icChar *GetClassName() { return "CIccTagNamedColor2"; }
+  virtual icTagTypeSignature GetType() const { return icSigNamedColor2Type; }
+  virtual const icChar *GetClassName() const { return "CIccTagNamedColor2"; }
 
   virtual bool UseLegacyPCS() const { return true; } //Treat Lab Encoding differently?
 
@@ -470,8 +470,8 @@ public:
 
   virtual bool IsArrayType() { return m_nSize > 1; }
 
-  virtual icTagTypeSignature GetType() { return icSigXYZType; }
-  virtual const icChar *GetClassName() { return "CIccTagXYZ"; }
+  virtual icTagTypeSignature GetType() const { return icSigXYZType; }
+  virtual const icChar *GetClassName() const { return "CIccTagXYZ"; }
 
   virtual void Describe(std::string &sDescription);
 
@@ -507,8 +507,8 @@ public:
 
   virtual bool IsArrayType() { return m_nChannels > 1; }
 
-  virtual icTagTypeSignature GetType() { return icSigChromaticityType; }
-  virtual const icChar *GetClassName() { return "CIccTagChromaticity"; }
+  virtual icTagTypeSignature GetType() const { return icSigChromaticityType; }
+  virtual const icChar *GetClassName() const { return "CIccTagChromaticity"; }
 
   virtual void Describe(std::string &sDescription);
 
@@ -545,13 +545,13 @@ public:
   CIccTagFixedNum(int nSize=1);
   CIccTagFixedNum(const CIccTagFixedNum &ITFN);
   CIccTagFixedNum &operator=(const CIccTagFixedNum &FixedNumTag);
-  virtual CIccTag* NewCopy() { return new CIccTagFixedNum(*this); }
+  virtual CIccTag* NewCopy() const { return new CIccTagFixedNum(*this); }
   virtual ~CIccTagFixedNum();
 
   virtual bool IsArrayType() { return m_nSize > 1; }
 
-  virtual icTagTypeSignature GetType() { return Tsig; }
-  virtual const icChar *GetClassName();
+  virtual icTagTypeSignature GetType() const { return Tsig; }
+  virtual const icChar *GetClassName() const;
 
   virtual void Describe(std::string &sDescription);
 
@@ -603,13 +603,13 @@ public:
   CIccTagNum(int nSize=1);
   CIccTagNum(const CIccTagNum &ITNum);
   CIccTagNum &operator=(const CIccTagNum &NumTag);
-  virtual CIccTag* NewCopy() { return new CIccTagNum(*this); }
+  virtual CIccTag* NewCopy() const { return new CIccTagNum(*this); }
   virtual ~CIccTagNum();
 
   virtual bool IsArrayType() { return m_nSize > 1; }
 
-  virtual icTagTypeSignature GetType() { return Tsig; }
-  virtual const icChar *GetClassName();
+  virtual icTagTypeSignature GetType() const { return Tsig; }
+  virtual const icChar *GetClassName() const;
 
   virtual void Describe(std::string &sDescription);
 
@@ -682,8 +682,8 @@ public:
   virtual CIccTag* NewCopy() const {return new CIccTagMeasurement(*this);}
   virtual ~CIccTagMeasurement();
 
-  virtual icTagTypeSignature GetType() { return icSigMeasurementType; }
-  virtual const icChar *GetClassName() { return "CIccTagMeasurement"; }
+  virtual icTagTypeSignature GetType() const { return icSigMeasurementType; }
+  virtual const icChar *GetClassName() const { return "CIccTagMeasurement"; }
 
   virtual void Describe(std::string &sDescription);
 
@@ -770,8 +770,8 @@ public:
   virtual CIccTag* NewCopy() const {return new CIccTagMultiLocalizedUnicode(*this);}
   virtual ~CIccTagMultiLocalizedUnicode();
 
-  virtual icTagTypeSignature GetType() { return icSigMultiLocalizedUnicodeType; }
-  virtual const icChar *GetClassName() { return "CIcciSigMultiLocalizedUnicode"; }
+  virtual icTagTypeSignature GetType() const { return icSigMultiLocalizedUnicodeType; }
+  virtual const icChar *GetClassName() const { return "CIcciSigMultiLocalizedUnicode"; }
 
   virtual void Describe(std::string &sDescription);
 
@@ -817,8 +817,8 @@ public:
   virtual CIccTag* NewCopy() const {return new CIccTagData(*this);}
   virtual ~CIccTagData();
 
-  virtual icTagTypeSignature GetType() { return icSigDataType; }
-  virtual const icChar *GetClassName() { return "CIccTagData"; }
+  virtual icTagTypeSignature GetType() const { return icSigDataType; }
+  virtual const icChar *GetClassName() const { return "CIccTagData"; }
 
   virtual bool IsArrayType() { return m_nSize > 1; }
 
@@ -858,8 +858,8 @@ public:
   virtual CIccTag* NewCopy() const {return new CIccTagDateTime(*this);}
   virtual ~CIccTagDateTime();
 
-  virtual icTagTypeSignature GetType() { return icSigDateTimeType; }
-  virtual const icChar *GetClassName() { return "CIccTagDateTime"; }
+  virtual icTagTypeSignature GetType() const { return icSigDateTimeType; }
+  virtual const icChar *GetClassName() const { return "CIccTagDateTime"; }
 
   virtual bool Read(icUInt32Number size, CIccIO *pIO);
   virtual bool Write(CIccIO *pIO);
@@ -889,8 +889,8 @@ public:
   virtual CIccTag* NewCopy() const {return new CIccTagColorantOrder(*this);}
   virtual ~CIccTagColorantOrder();
 
-  virtual icTagTypeSignature GetType() { return icSigColorantOrderType; }
-  virtual const icChar *GetClassName() { return "CIccTagColorantOrder"; }
+  virtual icTagTypeSignature GetType() const { return icSigColorantOrderType; }
+  virtual const icChar *GetClassName() const { return "CIccTagColorantOrder"; }
 
   virtual bool Read(icUInt32Number size, CIccIO *pIO);
   virtual bool Write(CIccIO *pIO);
@@ -923,8 +923,8 @@ public:
   virtual CIccTag* NewCopy() const {return new CIccTagColorantTable(*this);}
   virtual ~CIccTagColorantTable();
 
-  virtual icTagTypeSignature GetType() { return icSigColorantTableType; }
-  virtual const icChar *GetClassName() { return "CIccTagColorantTable"; }
+  virtual icTagTypeSignature GetType() const { return icSigColorantTableType; }
+  virtual const icChar *GetClassName() const { return "CIccTagColorantTable"; }
 
   virtual void Describe(std::string &sDescription);
 
@@ -962,8 +962,8 @@ public:
   virtual CIccTag* NewCopy() const {return new CIccTagViewingConditions(*this);}
   virtual ~CIccTagViewingConditions();
 
-  virtual icTagTypeSignature GetType() { return icSigViewingConditionsType; }
-  virtual const icChar *GetClassName() { return "CIccTagViewingConditions"; }
+  virtual icTagTypeSignature GetType() const { return icSigViewingConditionsType; }
+  virtual const icChar *GetClassName() const { return "CIccTagViewingConditions"; }
 
   virtual void Describe(std::string &sDescription);
 
@@ -1060,8 +1060,8 @@ public:
   virtual CIccTag* NewCopy() const {return new CIccTagProfileSeqDesc(*this);}
   virtual ~CIccTagProfileSeqDesc();
 
-  virtual icTagTypeSignature GetType() { return icSigProfileSequenceDescType; }
-  virtual const icChar *GetClassName() { return "CIccTagProfileSeqDesc"; }
+  virtual icTagTypeSignature GetType() const { return icSigProfileSequenceDescType; }
+  virtual const icChar *GetClassName() const { return "CIccTagProfileSeqDesc"; }
 
   virtual void Describe(std::string &sDescription);
 
@@ -1110,7 +1110,7 @@ public: //member functions
   icXYZNumber *GetXYZ(icUInt32Number index) {return &m_maxColorantXYZ[index];}
   CIccResponse16List *GetResponseList(icUInt16Number nChannel) {return &m_Response16ListArray[nChannel];}
   CIccResponseCurveStruct* GetThis() {return this;}
-  icValidateStatus Validate(std::string &sReport);
+  icValidateStatus Validate(std::string &sReport) const;
 
 protected:
   icUInt16Number m_nChannels;
@@ -1154,8 +1154,8 @@ public:
   virtual CIccTag* NewCopy() const {return new CIccTagResponseCurveSet16(*this);}
   virtual ~CIccTagResponseCurveSet16();
 
-  virtual icTagTypeSignature GetType() { return icSigResponseCurveSet16Type; }
-  virtual const icChar *GetClassName() { return "CIccTagResponseCurveSet16"; }
+  virtual icTagTypeSignature GetType() const { return icSigResponseCurveSet16Type; }
+  virtual const icChar *GetClassName() const { return "CIccTagResponseCurveSet16"; }
 
   virtual bool Read(icUInt32Number size, CIccIO *pIO);
   virtual bool Write(CIccIO *pIO);

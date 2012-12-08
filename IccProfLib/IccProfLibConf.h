@@ -147,10 +147,14 @@ namespace sampleICC {
   //Define ICC_CBRTF as a call to cbrtf (replace with pow if system doesn't support cbrtf)
   #define ICC_CBRTF(v) cbrtf(v)
 
+  #define ICC_WCHAR_32BIT
+
+  #define ICC_ENUM_CONVENIENCE
+
 #endif
 
 // remove comment below if you want LAB to XYZ conversions to not clip negative XYZ values
-//#define SAMPLEICC_NOCLIPLABTOXYZ
+#define SAMPLEICC_NOCLIPLABTOXYZ
 
 #ifdef SAMPLEICCCMM_EXPORTS
 #define MAKE_A_DLL

@@ -71,6 +71,7 @@
 #include "IccIO.h"
 #include "IccUtil.h"
 #include "IccTagFactory.h"
+#include "IccConvertUTF.h"
 #include <stdlib.h>
 #include <memory.h>
 #include <ctype.h>
@@ -1722,6 +1723,281 @@ bool CIccInfo::IsValidSpace(icColorSpaceSignature sig)
 
   return rv;
 }
+
+CIccUTF16String::CIccUTF16String()
+{
+  m_alloc=64;
+  m_len = 0;
+  m_str = (icUInt16Number*)calloc(m_alloc, sizeof(icUInt16Number));
+}
+
+CIccUTF16String::CIccUTF16String(const icUInt16Number *uzStr)
+{
+  m_len = WStrlen(uzStr);
+  m_alloc = AllocSize(m_len+1);
+
+  m_str = (icUInt16Number *)malloc(m_alloc*sizeof(icUInt16Number));
+  memcpy(m_str, uzStr, (m_len+1)*sizeof(icUInt16Number));
+}
+
+CIccUTF16String::CIccUTF16String(const char *szStr)
+{
+  size_t sizeSrc = strlen(szStr);
+
+  if (sizeSrc) {
+    m_alloc = AllocSize(sizeSrc*2+2);
+    m_str = (UTF16 *)calloc(m_alloc, sizeof(icUInt16Number)); //overallocate to allow for up to 4 bytes per character
+    UTF16 *szDest = m_str;
+    icConvertUTF8toUTF16((const UTF8 **)&szStr, (const UTF8 *)&szStr[sizeSrc], &szDest, &szDest[m_alloc], lenientConversion);
+    if (m_str[0]==0xfeff) {
+      size_t i;
+      for (i=1; m_str[i]; i++)
+        m_str[i-1] = m_str[i];
+      m_str[i-1] = 0;
+    }
+    m_len = WStrlen(m_str);
+  }
+  else {
+    m_alloc = 64;
+    m_len = 0;
+    m_str = (icUInt16Number*)calloc(m_alloc, sizeof(icUInt16Number));
+  }
+}
+
+CIccUTF16String::CIccUTF16String(const CIccUTF16String &str)
+{
+  m_alloc = str.m_alloc;
+  m_len = str.m_len;
+  m_str = (icUInt16Number*)malloc(m_alloc*sizeof(icUInt16Number));
+
+  memcpy(m_str, str.m_str, (m_alloc)*sizeof(icUInt16Number));
+}
+
+CIccUTF16String::~CIccUTF16String()
+{
+  free(m_str);
+}
+
+void CIccUTF16String::Clear()
+{
+  m_len = 0;
+  m_str[0] = 0;
+}
+
+void CIccUTF16String::Resize(size_t len)
+{
+  if (len>m_alloc) {
+    size_t nAlloc = AllocSize(len+1);
+
+    m_str = (icUInt16Number*)realloc(m_str, nAlloc*sizeof(icUInt16Number));
+    m_alloc = nAlloc;
+  }
+
+  if (len>m_len) {
+    memset(&m_str[m_len], 0x0020, (len-m_len)*sizeof(icUInt16Number));
+  }
+  m_len = len;
+  m_str[m_len] = 0;
+}
+
+size_t CIccUTF16String::WStrlen(const icUInt16Number *uzStr)
+{
+  size_t n=0;
+  while(uzStr[n]) n++;
+
+  return n;
+}
+
+CIccUTF16String& CIccUTF16String::operator=(const CIccUTF16String &wstr)
+{
+  if (m_alloc<=wstr.m_alloc) {
+    m_str = (icUInt16Number*)realloc(m_str, wstr.m_alloc*sizeof(icUInt16Number));
+    m_alloc = wstr.m_alloc;
+  }
+  m_len = wstr.m_len;
+
+  memcpy(m_str, wstr.m_str, (m_len+1)*sizeof(icUInt16Number));
+
+  return *this;
+}
+
+CIccUTF16String& CIccUTF16String::operator=(const char *szStr)
+{
+  FromUtf8(szStr, 0);
+
+  return *this;
+}
+
+CIccUTF16String& CIccUTF16String::operator=(const icUInt16Number *uzStr)
+{
+  size_t n = WStrlen(uzStr);
+  size_t nAlloc = AllocSize(n+1);
+
+  if (m_alloc<=nAlloc) {
+    m_str = (icUInt16Number*)realloc(m_str, nAlloc*sizeof(icUInt16Number));
+    m_alloc =nAlloc;
+  }
+  m_len = n;
+
+  memcpy(m_str, uzStr, (m_len+1)*sizeof(icUInt16Number));
+
+  return *this;
+}
+
+bool CIccUTF16String::operator==(const CIccUTF16String &str) const
+{
+  if (str.m_len != m_len)
+    return false;
+
+  size_t i;
+
+  for (i=0; i<m_len; i++)
+    if (str.m_str[i] != m_str[i])
+      return false;
+
+  return true;
+}
+
+
+void CIccUTF16String::FromUtf8(const char *szStr, size_t sizeSrc)
+{
+  if (!sizeSrc)
+    sizeSrc = strlen(szStr);
+
+  if (sizeSrc) {
+    size_t nAlloc = AllocSize(sizeSrc*2+2);
+    if (m_alloc<=nAlloc) {
+      m_str = (icUInt16Number*)realloc(m_str, nAlloc*sizeof(icUInt16Number));
+      m_alloc = nAlloc;
+    }
+    UTF16 *szDest = m_str;
+    icConvertUTF8toUTF16((const UTF8 **)&szStr, (const UTF8 *)&szStr[sizeSrc], &szDest, &szDest[m_alloc], lenientConversion);
+    *szDest = 0;
+    if (m_str[0]==0xfeff) {
+      size_t i;
+      for (i=1; m_str[i]; i++)
+        m_str[i-1] = m_str[i];
+      m_str[i-1] = 0;
+    }
+    m_len = WStrlen(m_str);
+  }
+  else {
+    m_len = 0;
+    m_str[0] = 0;
+  }
+}
+
+const char *CIccUTF16String::ToUtf8(std::string &buf) const
+{
+  return icUtf16ToUtf8(buf, m_str, (int)m_len);
+}
+
+void CIccUTF16String::FromWString(const std::wstring &buf)
+{
+#ifdef ICC_WCHAR_32BIT
+  size_t sizeSrc = buf.size();
+  wchar_t *szStr = buf.c_str();
+
+  if (sizeSrc) {
+    size_t nAlloc = AllocSize(sizeSrc*2);
+    if (m_alloc<=nAlloc) {
+      m_str = (icUInt16Number*)realloc(m_str, nAlloc*sizeof(icUInt16Number));
+      m_alloc = nAlloc;
+    }
+    UTF16 *szDest = m_str;
+    icConvertUTF32toUTF16((const UTF32 **)szStr, (const UTF32 *)&szStr[sizeSrc], &szDest, &szDest[m_alloc], lenientConversion);
+    if (m_str[0]==0xfeff) {
+      size_t i;
+      for (i=1; m_str[i]; i++)
+        m_str[i-1] = m_str[i];
+      m_str[i-1] = 0;
+    }
+    m_len = WStrlen(m_str);
+  }
+  else {
+    m_len = 0;
+    m_str[0] = 0;
+  }
+#else
+  size_t sizeSrc = buf.size()+1;
+
+  if (sizeSrc) {
+    size_t nAlloc = AllocSize(sizeSrc);
+    if (m_alloc<=nAlloc) {
+      m_str = (icUInt16Number*)realloc(m_str, m_alloc*sizeof(icUInt16Number));
+      m_alloc = nAlloc;
+    }
+    memcpy(m_str, buf.c_str(), sizeSrc*sizeof(icUInt16Number));
+    m_len = sizeSrc-1;
+  }
+  else {
+    m_len = 0;
+    m_str[0] = 0;
+  }
+#endif
+}
+
+
+
+const wchar_t *CIccUTF16String::ToWString(std::wstring &buf) const
+{
+#ifdef ICC_WCHAR_32BIT
+  size_t i;
+
+  buf.clear();
+
+  for (i=0; i<m_len; i++) {
+    buf += (wchar_t)0x20;
+  }
+  icUInt16Number *srcStr = m_str;
+  UTF32 *dstStr = buf.c_str();
+
+  icConvertUTF16toUTF32((UTF16**)&srcStr, &strStr[m_len], &dstStr, &dstStr[buf.size()], lenientConversion);
+#else
+  size_t i;
+
+  buf.clear();
+
+  for (i=0; i<m_len; i++) {
+    buf += (wchar_t)m_str[i];
+  }
+#endif
+
+  return buf.c_str();
+}
+
+const char *icUtf16ToUtf8(std::string &buf, const icUInt16Number *szSrc, int sizeSrc/*=0*/) 
+{
+  if (!sizeSrc) {
+    sizeSrc = (int)CIccUTF16String::WStrlen(szSrc);
+  }
+
+  int n = sizeSrc*4;
+
+  if (n) {
+    char *szBuf = (char *)malloc(n+1);
+    char *szDest = szBuf;
+    icConvertUTF16toUTF8(&szSrc, &szSrc[sizeSrc], (UTF8**)&szDest, (UTF8*)&szDest[n+1], lenientConversion);
+    *szDest= '\0';
+
+    buf = szBuf;
+    free(szBuf);
+  }
+  else {
+    buf.clear();
+  }
+
+  return buf.c_str();
+}
+
+const unsigned short *icUtf8ToUtf16(CIccUTF16String &buf, const char *szSrc, int sizeSrc/*=0*/) 
+{ 
+  buf.FromUtf8(szSrc, sizeSrc);
+
+  return buf.c_str();
+}
+
+
 
 #ifdef USESAMPLEICCNAMESPACE
 } //namespace sampleICC

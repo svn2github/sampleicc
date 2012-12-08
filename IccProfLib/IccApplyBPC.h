@@ -106,9 +106,9 @@ class ICCPROFLIB_API CIccApplyBPC : public IIccAdjustPCSXform
 public: 
 	// virtual IIccAdjustPCSXform functions
 	// does all the calculations for BPC and returns the scale and offset in the arguments passed
-  virtual bool CalcFactors(const CIccProfile* pProfile, const CIccXform* pXfm, icFloatNumber* Scale, icFloatNumber* Offset) const;
+	virtual bool CalcFactors(const CIccProfile* pProfile, const CIccXform* pXfm, icFloatNumber* Scale, icFloatNumber* Offset) const;
 
-protected:
+private:
 	// utility functions
 	void lab2pcs(icFloatNumber* pixel, const CIccProfile* pProfile) const;
 	void pcs2lab(icFloatNumber* pixel, const CIccProfile* pProfile) const;
@@ -116,15 +116,15 @@ protected:
 	icFloatNumber calcQuadraticVertex(icFloatNumber* x, icFloatNumber* y, int n) const;
 
 	// worker functions
-	virtual bool calcBlackPoint(const CIccProfile* pProfile, const CIccXform* pXform, icFloatNumber* XYZb) const;
+	bool calcBlackPoint(const CIccProfile* pProfile, const CIccXform* pXform, icFloatNumber* XYZb) const;
 	bool calcSrcBlackPoint(const CIccProfile* pProfile, const CIccXform* pXform, icFloatNumber* XYZb) const;
 	bool calcDstBlackPoint(const CIccProfile* pProfile, const CIccXform* pXform, icFloatNumber* XYZb) const;
 
 	bool pixelXfm(icFloatNumber *DstPixel, icFloatNumber *SrcPixel, icColorSpaceSignature SrcSpace, 
-								icRenderingIntent nIntent, icXformInterp nInterp, const CIccProfile *pProfile) const;
+								icRenderingIntent nIntent, const CIccProfile *pProfile) const;
 
 	// PCS -> PCS round trip transform, always uses relative intent on the device -> pcs transform
-	CIccCmm* getBlackXfm(icRenderingIntent nIntent, icXformInterp nInterp, const CIccProfile *pProfile) const;
+	CIccCmm* getBlackXfm(icRenderingIntent nIntent, const CIccProfile *pProfile) const;
 };
 
 #ifdef USESAMPLEICCNAMESPACE

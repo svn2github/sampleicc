@@ -665,12 +665,19 @@ typedef icSignature icAcsSignature;
 typedef enum {
     icFlare0                            = 0x00000000,  /* 0% flare */
     icFlare100                          = 0x00000001,  /* 100% flare */
+
+#ifdef ICC_ENUM_CONVENIENCE
+    /** Convenience Enum Definition - Not defined in ICC specification*/
+    icMaxEnumFlare                      = 0xFFFFFFFF,
+    icMaxFlare                          = 0xFFFFFFFF, /* as defined by earlier versions */
+#endif
 } icMeasurementFlare;
 
+#ifndef ICC_ENUM_CONVENIENCE
 /** Convenience Enum Definition - Not defined in ICC specification*/
 #define icMaxEnumFlare ((icMeasurementFlare) 0xFFFFFFFF)
 #define icMaxFlare     ((icMeasurementFlare) 0xFFFFFFFF) /* as defined by earlier versions */
-
+#endif
 
 
 /** Measurement Geometry, used in the measurmentType tag */
@@ -678,12 +685,19 @@ typedef enum {
     icGeometryUnknown                   = 0x00000000,  /* Unknown geometry */
     icGeometry045or450                  = 0x00000001,  /* 0/45, 45/0 */
     icGeometry0dord0                    = 0x00000002,  /* 0/d or d/0 */
+
+#ifdef ICC_ENUM_CONVENIENCE
+    /** Convenience Enum Definition - Not defined in ICC specification*/
+    icMaxEnumGeometry                   = 0xFFFFFFFF,
+    icMaxGeometry                       = 0xFFFFFFFF,
+#endif
 } icMeasurementGeometry;
 
+#ifndef ICC_ENUM_CONVENIENCE
 /** Convenience Enum Definition - Not defined in ICC specification*/
 #define icMaxEnumGeometry ((icMeasurementGeometry) 0xFFFFFFFF)
 #define icMaxGeometry     ((icMeasurementGeometry) 0xFFFFFFFF)
-
+#endif
 
 
 /** Rendering Intents, used in the profile header */
@@ -692,11 +706,19 @@ typedef enum {
     icRelativeColorimetric              = 1,
     icSaturation                        = 2,
     icAbsoluteColorimetric              = 3,
+
+#ifdef ICC_ENUM_CONVENIENCE
+    /** Convenience Enum Definitions - Not defined in ICC specification*/
+    icUnknownIntent                     = 0x3f3f3f3f,  /* '????' */
+    icMaxEnumIntent                     = 0xFFFFFFFF,
+#endif
 } icRenderingIntent;
 
+#ifndef ICC_ENUM_CONVENIENCE
 /** Convenience Enum Definitions - Not defined in ICC specification*/
 #define icUnknownIntent ((icRenderingIntent) 0x3f3f3f3f)  /* '????' */
 #define icMaxEnumIntent ((icRenderingIntent) 0xFFFFFFFF)
+#endif
 
 
 
@@ -710,10 +732,17 @@ typedef enum {
     icSpotShapeLine                     = 5,
     icSpotShapeSquare                   = 6,
     icSpotShapeCross                    = 7,
+
+#ifdef ICC_ENUM_CONVENIENCE
+    /** Convenience Enum Definition - Not defined in ICC specification*/
+    icMaxEnumSpot                       = 0xFFFFFFFF,
+#endif
 } icSpotShape;
 
+#ifndef ICC_ENUM_CONVENIENCE
 /** Convenience Enum Definition - Not defined in ICC specification*/
 #define icMaxEnumSpot ((icSpotShape)  0xFFFFFFFF)
+#endif
 
 
 
@@ -722,11 +751,19 @@ typedef enum {
     icStdObsUnknown                     = 0x00000000,  /* Unknown observer */
     icStdObs1931TwoDegrees              = 0x00000001,  /* 1931 two degrees */
     icStdObs1964TenDegrees              = 0x00000002,  /* 1961 ten degrees */
+
+#ifdef ICC_ENUM_CONVENIENCE
+    /** Convenience Enum Definitions - Not defined in ICC specification*/
+    icMaxEnumStdObs                     = 0xFFFFFFFF,
+    icMaxStdObs                         = 0xFFFFFFFF,
+#endif
 } icStandardObserver;
 
+#ifndef ICC_ENUM_CONVENIENCE
 /** Convenience Enum Definition - Not defined in ICC specification*/
 #define icMaxEnumStdObs ((icStandardObserver) 0xFFFFFFFF)
 #define icMaxStdObs     ((icStandardObserver) 0xFFFFFFFF) /* as defined by earlier versions */
+#endif
 
 
 
@@ -741,11 +778,19 @@ typedef enum {
     icIlluminantA                       = 0x00000006,
     icIlluminantEquiPowerE              = 0x00000007,  /* Equi-Power (E) */
     icIlluminantF8                      = 0x00000008,      
+
+#ifdef ICC_ENUM_CONVENIENCE
+    /** Convenience Enum Definitions - Not defined in ICC specification*/
+    icMaxEnumIlluminant                 = 0xFFFFFFFF,
+    icMaxEnumIluminant                  = 0xFFFFFFFF,   /* as defined by earlier versions */
+#endif
 } icIlluminant;
 
+#ifndef ICC_ENUM_CONVENIENCE
 /** Convenience Enum Definitions - Not defined in ICC specification*/
 #define icMaxEnumIlluminant ((icIlluminant) 0xFFFFFFFF)
 #define icMaxEnumIluminant  ((icIlluminant) 0xFFFFFFFF)   /* as defined by earlier versions */
+#endif
 
 
 
@@ -765,11 +810,18 @@ typedef enum {
   icLanguageCodeKorean                 = 0x6B6F, /* 'ko' */
   icLanguageCodeChinese                = 0x7A68, /* 'zh' */
   icLanguageCodeFrench                 = 0x6672, /* 'fr' */
+
+#ifdef ICC_ENUM_CONVENIENCE
+  /** Convenience Enum Definition - Not defined in ICC specification*/
+  icMaxEnumLanguageCode                = 0xFFFF,
+#endif
 } icEnumLanguageCode;
 typedef icUInt16Number icLanguageCode;
 
+#ifndef ICC_ENUM_CONVENIENCE
 /** Convenience Enum Definition - Not defined in ICC specification*/
 #define icMaxEnumLanguageCode ((icEnumLanguageCode) 0xFFFF)
+#endif
 
 
 
@@ -792,11 +844,18 @@ typedef enum {
   icCountryCodeChina                    = 0x434E, /* 'CN' */
   icCountryCodeTaiwan                   = 0x5457, /* 'TW' */
   icCountryCodeFrance                   = 0x4652, /* 'FR' */
+
+#ifdef ICC_ENUM_CONVENIENCE
+  /** Convenience Enum Definition - Not defined in ICC specification*/
+  icMaxEnumCountryCode                  = 0xFFFF,
+#endif
 } icEnumCountryCode;
 typedef icUInt16Number icCountryCode;
 
+#ifndef ICC_ENUM_CONVENIENCE
 /** Convenience Enum Definition - Not defined in ICC specification*/
 #define icMaxEnumCountryCode ((icEnumCountryCode) 0xFFFF)
+#endif
 
 
 
@@ -811,10 +870,17 @@ typedef enum {
   icSigDNP                             = 0x444E2050, /* 'DN P' */
   icSigDNN                             = 0x444E4E20, /* 'DNN ' */
   icSigDNNP                            = 0x444E4E50, /* 'DNNP' */
+
+#ifdef ICC_ENUM_CONVENIENCE
+  /** Convenience Enum Definition - Not defined in ICC specification*/
+  icMaxEnumMeasurmentUnitSig           = 0xffffffff,
+#endif
 } icMeasurementUnitSig;
 
+#ifndef ICC_ENUM_CONVENIENCE
 /** Convenience Enum Definition - Not defined in ICC specification*/
 #define icMaxEnumMeasurmentUnitSig ((icMeasurementUnitSig) 0xffffffff)
+#endif
 
 
 
@@ -825,10 +891,17 @@ typedef enum {
   icColorantSMPTE                       = 0x0002, /* SMPTE RP145-1994 */
   icColorantEBU                         = 0x0003, /* EBU Tech.3213-E */
   icColorantP22                         = 0x0004, /* P22 */
+
+#ifdef ICC_ENUM_CONVENIENCE
+  /** Convenience Enum Definition - Not defined in ICC specification*/
+  icMaxEnumColorant                     = 0xFFFF,
+#endif
 } icColorantEncoding;
 
+#ifndef ICC_ENUM_CONVENIENCE
 /** Convenience Enum Definition - Not defined in ICC specification*/
 #define icMaxEnumColorant ((icColorantEncoding) 0xFFFF)
+#endif
 
 
 /**
@@ -841,6 +914,7 @@ typedef enum {
   icMSFTDevSetResolution             = 0x72736C6E, /* 'rsln' */
   icMSFTDevSetMediaType              = 0x6D747970, /* 'mtyp' */
   icMSFTDevSetMediaHalftone          = 0x6866746E, /* 'hftn' */
+
 } icMSFTDevSetSig;
 
 /** DeviceSettingsType media encodings for Microsoft 'msft' platform */

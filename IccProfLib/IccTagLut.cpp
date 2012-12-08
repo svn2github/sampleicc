@@ -1021,7 +1021,7 @@ bool CIccTagParametricCurve::IsIdentity()
 
 /**
 ****************************************************************************
-* Name: CIccTagParametricCurve::Apply
+* Name: CIccTagParametricCurve::DoApply
 * 
 * Purpose: Applies the curve to the value passed.
 * 
@@ -1032,7 +1032,7 @@ bool CIccTagParametricCurve::IsIdentity()
 *  
 *****************************************************************************
 */
-icFloatNumber CIccTagParametricCurve::Apply(icFloatNumber X)
+icFloatNumber CIccTagParametricCurve::DoApply(icFloatNumber X) const
 {
   double a, b;
 
@@ -1098,7 +1098,7 @@ icFloatNumber CIccTagParametricCurve::Apply(icFloatNumber X)
 *  icValidateStatusOK if valid, or other error status.
 ******************************************************************************
 */
-icValidateStatus CIccTagParametricCurve::Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile/*=NULL*/)
+icValidateStatus CIccTagParametricCurve::Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile/*=NULL*/) const
 {
   icValidateStatus rv = CIccTag::Validate(sig, sReport, pProfile);
 
@@ -1167,8 +1167,8 @@ default:
   }
 
   if (sig==icSigBlueTRCTag || sig==icSigRedTRCTag || sig==icSigGreenTRCTag || sig==icSigGrayTRCTag) {
-    icFloatNumber lval = Apply(0.0);
-    icFloatNumber uval = Apply(1.0);
+    icFloatNumber lval = DoApply(0.0);
+    icFloatNumber uval = DoApply(1.0);
     if (lval>0.0 || uval<1.0) {
       sReport += icValidateWarningMsg;
       sReport += sSigName;
@@ -3120,7 +3120,7 @@ void CIccMBB::Describe(std::string &sDescription)
 *  icValidateStatusOK if valid, or other error status.
 ******************************************************************************
 */
-icValidateStatus CIccMBB::Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile/*=NULL*/)
+icValidateStatus CIccMBB::Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile/*=NULL*/) const
 {
   icValidateStatus rv = CIccTag::Validate(sig, sReport, pProfile);
 
@@ -3756,7 +3756,7 @@ bool CIccTagLutAtoB::Write(CIccIO *pIO)
 *  icValidateStatusOK if valid, or other error status.
 ******************************************************************************
 */
-icValidateStatus CIccTagLutAtoB::Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile/*=NULL*/)
+icValidateStatus CIccTagLutAtoB::Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile/*=NULL*/) const
 {
   icValidateStatus rv = CIccMBB::Validate(sig, sReport, pProfile);
 
@@ -3903,7 +3903,7 @@ CIccTagLutBtoA &CIccTagLutBtoA::operator=(const CIccTagLutBtoA &ITLB2A)
 *  icValidateStatusOK if valid, or other error status.
 ******************************************************************************
 */
-icValidateStatus CIccTagLutBtoA::Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile/*=NULL*/)
+icValidateStatus CIccTagLutBtoA::Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile/*=NULL*/) const
 {
   icValidateStatus rv = CIccMBB::Validate(sig, sReport, pProfile);
 
@@ -4333,7 +4333,7 @@ bool CIccTagLut8::Write(CIccIO *pIO)
 *  icValidateStatusOK if valid, or other error status.
 ******************************************************************************
 */
-icValidateStatus CIccTagLut8::Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile/*=NULL*/)
+icValidateStatus CIccTagLut8::Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile/*=NULL*/) const
 {
   icValidateStatus rv = CIccMBB::Validate(sig, sReport, pProfile);
 
@@ -4753,7 +4753,7 @@ bool CIccTagLut16::Write(CIccIO *pIO)
 *  icValidateStatusOK if valid, or other error status.
 ******************************************************************************
 */
-icValidateStatus CIccTagLut16::Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile/*=NULL*/)
+icValidateStatus CIccTagLut16::Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile/*=NULL*/) const
 {
   icValidateStatus rv = CIccMBB::Validate(sig, sReport, pProfile);
 

@@ -76,6 +76,7 @@ Copyright:  © see ICC Software License
 #include "IccProfile.h"
 #include "IccTag.h"
 #include "IccTagFactory.h"
+#include "IccUtil.h"
 #include <memory>
 #include <list>
 #include <string>
@@ -106,20 +107,17 @@ public: //member functions
   icUInt32Number PosRecSize();
 
   //Data
-  std::wstring m_sName;
+  CIccUTF16String m_sName;
 
-  std::wstring::const_iterator ValueBegin() {return m_sValue.begin();}
-  std::wstring::const_iterator ValueEnd() {return m_sValue.end();}
-
-  std::wstring GetValue() { return m_sValue; }
+  const CIccUTF16String &GetValue() { return m_sValue; }
   bool IsValueSet() { return m_bValueSet; }
 
   //GetNameLocalized and GetValueLocalized both give direct access to objects owned by the CIccDirEntry object
   CIccTagMultiLocalizedUnicode* GetNameLocalized() { return m_pNameLocalized; }
   CIccTagMultiLocalizedUnicode* GetValueLocalized() { return m_pValueLocalized; }
 
-  void UnsetValue() { m_sValue.empty(); m_bValueSet = false; }
-  bool SetValue(std::wstring sValue);
+  void UnsetValue() { m_sValue.Clear(); m_bValueSet = false; }
+  bool SetValue(const CIccUTF16String &sValue);
 
   //SetNameLocalized and SetValueLocalized both transfer ownership of the argument to the CIccDirEntry object
   //deleting access to previous object
@@ -127,7 +125,7 @@ public: //member functions
   bool SetValueLocalized(CIccTagMultiLocalizedUnicode *pValueLocalized);
 
 protected:
-  std::wstring m_sValue; 
+  CIccUTF16String m_sValue; 
   bool m_bValueSet;
 
   CIccTagMultiLocalizedUnicode *m_pNameLocalized;
@@ -165,8 +163,8 @@ public:
   virtual CIccTag *NewCopy() const { return new CIccTagDict(*this);}
   virtual ~CIccTagDict();
 
-  virtual icTagTypeSignature GetType() { return icSigDictType; }
-  virtual const icChar *GetClassName() { return "CIccTagDict"; }
+  virtual icTagTypeSignature GetType() const { return icSigDictType; }
+  virtual const icChar *GetClassName() const { return "CIccTagDict"; }
 
   virtual void Describe(std::string &sDescription);
 
@@ -180,35 +178,35 @@ public:
 
   CIccDictEntry *Get(const char *szName) const;
   CIccDictEntry *Get(const icUInt16Number *szName) const;
-  CIccDictEntry *Get(std::wstring sName) const;
+  CIccDictEntry *Get(const CIccUTF16String &sName) const;
 
-  std::wstring GetValue(const char *szName, bool *bIsSet=NULL) const;
-  std::wstring GetValue(const icUnicodeChar *szName, bool *bIsSet=NULL) const;
-  std::wstring GetValue(std::wstring sName, bool *bIsSet=NULL) const;
+  CIccUTF16String GetValue(const char *szName, bool *bIsSet=NULL) const;
+  CIccUTF16String GetValue(const icUnicodeChar *szName, bool *bIsSet=NULL) const;
+  CIccUTF16String GetValue(const CIccUTF16String &sName, bool *bIsSet=NULL) const;
 
-  CIccTagMultiLocalizedUnicode* GetNameLocalized(std::wstring sName) const;
+  CIccTagMultiLocalizedUnicode* GetNameLocalized(const CIccUTF16String &sName) const;
   CIccTagMultiLocalizedUnicode* GetNameLocalized(const icUnicodeChar *szName) const;
   CIccTagMultiLocalizedUnicode* GetNameLocalized(const char *szName) const;
 
-  CIccTagMultiLocalizedUnicode* GetValueLocalized(std::wstring sName) const;
+  CIccTagMultiLocalizedUnicode* GetValueLocalized(const CIccUTF16String &sName) const;
   CIccTagMultiLocalizedUnicode* GetValueLocalized(const icUnicodeChar *szName) const;
   CIccTagMultiLocalizedUnicode* GetValueLocalized(const char *szName) const;
 
-  bool Remove(std::wstring sName);
+  bool Remove(const CIccUTF16String &sName);
   bool Remove(const icUnicodeChar *szName);
   bool Remove(const char *szName);
 
   bool Set(const char *szName, const char *szValue=NULL);
   bool Set(const icUnicodeChar *szName, const icUnicodeChar *szValue=NULL);
-  bool Set(std::wstring sName, std::wstring sValue, bool bUnSet=false);
+  bool Set(const CIccUTF16String &sName, const CIccUTF16String &sValue, bool bUnSet=false);
 
   bool SetNameLocalized(const char *szName, CIccTagMultiLocalizedUnicode *pTag);
   bool SetNameLocalized(const icUnicodeChar *szName, CIccTagMultiLocalizedUnicode *pTag);
-  bool SetNameLocalized(std::wstring sName, CIccTagMultiLocalizedUnicode *pTag);
+  bool SetNameLocalized(const CIccUTF16String &sName, CIccTagMultiLocalizedUnicode *pTag);
 
   bool SetValueLocalized(const char *szName, CIccTagMultiLocalizedUnicode *pTag);
   bool SetValueLocalized(const icUnicodeChar *szName, CIccTagMultiLocalizedUnicode *pTag);
-  bool SetValueLocalized(std::wstring sName, CIccTagMultiLocalizedUnicode *pTag);
+  bool SetValueLocalized(const CIccUTF16String &sName, CIccTagMultiLocalizedUnicode *pTag);
 
   CIccNameValueDict *m_Dict;
 

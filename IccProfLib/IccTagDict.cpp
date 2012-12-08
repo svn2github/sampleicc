@@ -202,10 +202,10 @@ void CIccDictEntry::Describe(std::string &sDescription)
   std::string s;
 
   sDescription += "BEGIN DICT_ENTRY\r\nName=";
-  s.assign(m_sName.begin(), m_sName.end());
+  m_sName.ToUtf8(s);
   sDescription += s;
   sDescription += "\r\nValue=";
-  s.assign(m_sValue.begin(), m_sValue.end());
+  m_sValue.ToUtf8(s);
   sDescription += s;
   sDescription += "\r\n";
 
@@ -243,9 +243,9 @@ icUInt32Number CIccDictEntry::PosRecSize()
 }
 
 
-bool CIccDictEntry::SetValue(std::wstring sValue)
+bool CIccDictEntry::SetValue(const CIccUTF16String &sValue)
 {
-  bool rv = m_bValueSet && !m_sValue.empty();
+  bool rv = m_bValueSet && !m_sValue.Empty();
 
   m_sValue = sValue;
   m_bValueSet = true;
@@ -552,7 +552,7 @@ bool CIccTagDict::Read(icUInt32Number size, CIccIO *pIO)
   icUInt32Number bufsize = 128, num;
   icUnicodeChar *buf = (icUnicodeChar*)malloc(bufsize);
   CIccDictEntryPtr ptr;
-  std::wstring str;
+  CIccUTF16String str;
 
   for (i=0; i<count; i++) {
     ptr.ptr = new CIccDictEntry();
@@ -562,7 +562,7 @@ bool CIccTagDict::Read(icUInt32Number size, CIccIO *pIO)
     //GetName
     if (pos[i].posName.offset) {
       if (!pos[i].posName.size) {
-        str.clear();
+        str.Clear();
         ptr.ptr->SetValue(str);
       }
       else {
@@ -577,7 +577,7 @@ bool CIccTagDict::Read(icUInt32Number size, CIccIO *pIO)
         //Make sure we have buf large enough for the string
         if (bufsize < pos[i].posName.size) {
           bufsize = pos[i].posName.size;
-          buf = (icUnicodeChar*)realloc(buf, bufsize);
+          buf = (icUnicodeChar*)realloc(buf, bufsize+1*sizeof(icUnicodeChar));
           if (!buf) {
             free(pos);
             delete ptr.ptr;
@@ -599,15 +599,15 @@ bool CIccTagDict::Read(icUInt32Number size, CIccIO *pIO)
           delete ptr.ptr;
           return false;
         }
-        str.assign(&buf[0], &buf[num]);
-        ptr.ptr->m_sName = str;
+        buf[num] = 0;
+        ptr.ptr->m_sName = buf;
       }
     }
 
     //GetValue
     if (pos[i].posValue.offset) {
       if (!pos[i].posValue.size) {
-        str.clear();
+        str.Clear();
         ptr.ptr->SetValue(str);
       }
       else {
@@ -622,7 +622,7 @@ bool CIccTagDict::Read(icUInt32Number size, CIccIO *pIO)
         //Make sure we have buf large enough for the string
         if (bufsize < pos[i].posValue.size) {
           bufsize = pos[i].posValue.size;
-          buf = (icUnicodeChar*)realloc(buf, bufsize);
+          buf = (icUnicodeChar*)realloc(buf, bufsize+1*sizeof(icUnicodeChar));
           if (!buf) {
             free(pos);
             delete ptr.ptr;
@@ -644,8 +644,8 @@ bool CIccTagDict::Read(icUInt32Number size, CIccIO *pIO)
           delete ptr.ptr;
           return false;
         }
-        str.assign(&buf[0], &buf[num]);
-        ptr.ptr->SetValue(str);
+        buf[num]=0;
+        ptr.ptr->SetValue(buf);
       }
     }
 
@@ -814,26 +814,20 @@ bool CIccTagDict::Write(CIccIO *pIO)
     }
   }
 
-  icUnicodeChar c;
-  std::wstring::const_iterator chrptr;
   //Write Dict records
   for (n=0, i=m_Dict->begin(); i!= m_Dict->end(); i++) {
     if (i->ptr) {
       pos[n].posName.offset = pIO->Tell()-m_tagStart;
 
-      for(chrptr = i->ptr->m_sName.begin(); chrptr!=i->ptr->m_sName.end(); chrptr++) {
-        c=(icUnicodeChar)*chrptr;
-        pIO->Write16(&c, 1);
-      }
+      pIO->Write16((void*)i->ptr->m_sName.c_str(), i->ptr->m_sName.Size());
       pos[n].posName.size = pIO->Tell()-m_tagStart - pos[n].posName.offset;
       pIO->Align32();
 
       if (i->ptr->IsValueSet()) {
+        const CIccUTF16String &str = i->ptr->GetValue();
         pos[n].posValue.offset = pIO->Tell()-m_tagStart;
-        for(chrptr = i->ptr->ValueBegin(); chrptr!=i->ptr->ValueEnd(); chrptr++) {
-          c=(icUnicodeChar)*chrptr;
-          pIO->Write16(&c, 1);
-        }
+        pIO->Write16((void*)str.c_str(), str.Size());
+
         pos[n].posValue.size = pIO->Tell()-m_tagStart - pos[n].posValue.offset;
         pIO->Align32();
       }
@@ -992,7 +986,7 @@ bool CIccTagDict::AreNamesNonzero() const
   CIccNameValueDict::const_iterator i, j;
 
   for (i=m_Dict->begin(); i!=m_Dict->end(); i++) {
-    if (i->ptr->m_sName.empty())
+    if (i->ptr->m_sName.Empty())
       return false;
   }
 
@@ -1013,7 +1007,7 @@ return true;
  *  Pointer to desired dictionary entry, or NULL if not found.
  *****************************************************************************
  */
-CIccDictEntry* CIccTagDict::Get(std::wstring sName) const
+CIccDictEntry* CIccTagDict::Get(const CIccUTF16String &sName) const
 {
   CIccNameValueDict::const_iterator i;
 
@@ -1040,9 +1034,7 @@ CIccDictEntry* CIccTagDict::Get(std::wstring sName) const
 */
 CIccDictEntry* CIccTagDict::Get(const icUnicodeChar *szName) const
 {
-  std::wstring sName;
-  while(*szName)
-    sName += *szName;
+  CIccUTF16String sName(szName);
 
   return Get(sName);
 }
@@ -1063,7 +1055,7 @@ CIccDictEntry* CIccTagDict::Get(const icUnicodeChar *szName) const
 */
 CIccDictEntry* CIccTagDict::Get(const char *szName) const
 {
-  std::wstring sName(szName, szName+strlen(szName));
+  CIccUTF16String sName(szName);
 
   return Get(sName);
 }
@@ -1081,7 +1073,7 @@ CIccDictEntry* CIccTagDict::Get(const char *szName) const
 *  Pointer to desired dictionary entry, or NULL if not found.
 *****************************************************************************
 */
-std::wstring CIccTagDict::GetValue(std::wstring sName, bool *bIsSet) const
+CIccUTF16String CIccTagDict::GetValue(const CIccUTF16String &sName, bool *bIsSet) const
 {
   CIccDictEntry *de = Get(sName);
 
@@ -1096,7 +1088,7 @@ std::wstring CIccTagDict::GetValue(std::wstring sName, bool *bIsSet) const
   if (bIsSet)
     *bIsSet = false;
 
-  std::wstring str;
+  CIccUTF16String str;
   return str;
 }
 
@@ -1113,11 +1105,9 @@ std::wstring CIccTagDict::GetValue(std::wstring sName, bool *bIsSet) const
 *  Pointer to desired dictionary entry, or NULL if not found.
 *****************************************************************************
 */
-std::wstring CIccTagDict::GetValue(const icUnicodeChar *szName, bool *bIsSet) const
+CIccUTF16String CIccTagDict::GetValue(const icUnicodeChar *szName, bool *bIsSet) const
 {
-  std::wstring sName;
-  while(*szName)
-    sName += *szName;
+  CIccUTF16String sName(szName);
 
   return GetValue(sName, bIsSet);
 }
@@ -1135,9 +1125,9 @@ std::wstring CIccTagDict::GetValue(const icUnicodeChar *szName, bool *bIsSet) co
 *  Pointer to desired dictionary entry, or NULL if not found.
 *****************************************************************************
 */
-std::wstring CIccTagDict::GetValue(const char *szName, bool *bIsSet) const
+CIccUTF16String CIccTagDict::GetValue(const char *szName, bool *bIsSet) const
 {
-  std::wstring sName(szName, szName+strlen(szName));
+  CIccUTF16String sName(szName);
 
   return GetValue(sName, bIsSet);
 }
@@ -1155,7 +1145,7 @@ std::wstring CIccTagDict::GetValue(const char *szName, bool *bIsSet) const
 *  localized information for name
 *****************************************************************************
 */
-CIccTagMultiLocalizedUnicode* CIccTagDict::GetNameLocalized(std::wstring sName) const
+CIccTagMultiLocalizedUnicode* CIccTagDict::GetNameLocalized(const CIccUTF16String &sName) const
 {
   CIccDictEntry *de = Get(sName);
 
@@ -1180,9 +1170,7 @@ CIccTagMultiLocalizedUnicode* CIccTagDict::GetNameLocalized(std::wstring sName) 
 */
 CIccTagMultiLocalizedUnicode* CIccTagDict::GetNameLocalized(const icUnicodeChar *szName) const
 {
-  std::wstring sName;
-  while(*szName)
-    sName += *szName;
+  CIccUTF16String sName(szName);
 
   return GetNameLocalized(sName);
 }
@@ -1203,7 +1191,7 @@ CIccTagMultiLocalizedUnicode* CIccTagDict::GetNameLocalized(const icUnicodeChar 
 
 CIccTagMultiLocalizedUnicode* CIccTagDict::GetNameLocalized(const char *szName) const
 {
-  std::wstring sName(szName, szName+strlen(szName));
+  CIccUTF16String sName(szName);
 
   return GetNameLocalized(sName);
 }
@@ -1222,7 +1210,7 @@ CIccTagMultiLocalizedUnicode* CIccTagDict::GetNameLocalized(const char *szName) 
 *  localized information for name's value
 *****************************************************************************
 */
-CIccTagMultiLocalizedUnicode* CIccTagDict::GetValueLocalized(std::wstring sName) const
+CIccTagMultiLocalizedUnicode* CIccTagDict::GetValueLocalized(const CIccUTF16String &sName) const
 {
   CIccDictEntry *de = Get(sName);
 
@@ -1247,9 +1235,7 @@ CIccTagMultiLocalizedUnicode* CIccTagDict::GetValueLocalized(std::wstring sName)
 */
 CIccTagMultiLocalizedUnicode* CIccTagDict::GetValueLocalized(const icUnicodeChar *szName) const
 {
-  std::wstring sName;
-  while(*szName)
-    sName += *szName;
+  CIccUTF16String sName(szName);
 
   return GetValueLocalized(sName);
 }
@@ -1270,7 +1256,7 @@ CIccTagMultiLocalizedUnicode* CIccTagDict::GetValueLocalized(const icUnicodeChar
 
 CIccTagMultiLocalizedUnicode* CIccTagDict::GetValueLocalized(const char *szName) const
 {
-  std::wstring sName(szName, szName+strlen(szName));
+  CIccUTF16String sName(szName);
 
   return GetValueLocalized(sName);
 }
@@ -1289,7 +1275,7 @@ CIccTagMultiLocalizedUnicode* CIccTagDict::GetValueLocalized(const char *szName)
 *  true if sName exists and was removed, or false otherwise
 *******************************************************************************
 */
-bool CIccTagDict::Remove(std::wstring sName)
+bool CIccTagDict::Remove(const CIccUTF16String &sName)
 {
   CIccNameValueDict::iterator i;
 
@@ -1321,9 +1307,7 @@ bool CIccTagDict::Remove(std::wstring sName)
 */
 bool CIccTagDict::Remove(const icUnicodeChar *szName)
 {
-  std::wstring sName;
-  while(*szName)
-    sName += *szName;
+  CIccUTF16String sName(szName);
 
   return Remove(sName);
 
@@ -1345,7 +1329,7 @@ bool CIccTagDict::Remove(const icUnicodeChar *szName)
 */
 bool CIccTagDict::Remove(const char *szName)
 {
-  std::wstring sName(szName, szName+strlen(szName));
+  CIccUTF16String sName(szName);
 
   return Remove(sName);
 }
@@ -1366,7 +1350,7 @@ bool CIccTagDict::Remove(const char *szName)
 *  true if value associate with sName was changed, or false if no change
 *******************************************************************************
 */
-bool CIccTagDict::Set(std::wstring sName, std::wstring sValue, bool bUnSet)
+bool CIccTagDict::Set(const CIccUTF16String &sName, const CIccUTF16String &sValue, bool bUnSet)
 {
   CIccDictEntry *de = Get(sName);
 
@@ -1383,7 +1367,7 @@ bool CIccTagDict::Set(std::wstring sName, std::wstring sValue, bool bUnSet)
     m_Dict->push_back(ptr);
   }
 
-  if (sValue.empty() && bUnSet)
+  if (sValue.Empty() && bUnSet)
     de->UnsetValue();
   else
     de->SetValue(sValue);
@@ -1393,15 +1377,12 @@ bool CIccTagDict::Set(std::wstring sName, std::wstring sValue, bool bUnSet)
 
 bool CIccTagDict::Set(const icUnicodeChar *szName, const icUnicodeChar *szValue)
 {
-  std::wstring sName;
-  while(*szName)
-    sName += *szName;
+  CIccUTF16String sName(szName);
 
-  std::wstring sValue;
+  CIccUTF16String sValue;
 
   if (szValue) {
-    while(*szValue)
-      sValue += *szValue;
+    sValue = szValue;
 
     return Set(sName, sValue, false);
   }
@@ -1411,11 +1392,11 @@ bool CIccTagDict::Set(const icUnicodeChar *szName, const icUnicodeChar *szValue)
 
 bool CIccTagDict::Set(const char *szName, const char *szValue)
 {
-  std::wstring sName(szName, szName+strlen(szName));
-  std::wstring sValue;
+  CIccUTF16String sName(szName);
+  CIccUTF16String sValue;
 
   if (szValue) {
-    sValue.assign(szValue, szValue+strlen(szValue));
+    sValue = szValue;
 
     return Set(sName, sValue, false);
   }
@@ -1423,7 +1404,7 @@ bool CIccTagDict::Set(const char *szName, const char *szValue)
   return Set(sName, sValue, true);
 }
 
-bool CIccTagDict::SetNameLocalized(std::wstring sName, CIccTagMultiLocalizedUnicode *pTag)
+bool CIccTagDict::SetNameLocalized(const CIccUTF16String &sName, CIccTagMultiLocalizedUnicode *pTag)
 {
   CIccDictEntry *de = Get(sName);
 
@@ -1441,23 +1422,19 @@ bool CIccTagDict::SetNameLocalized(std::wstring sName, CIccTagMultiLocalizedUnic
 
 bool CIccTagDict::SetNameLocalized(const icUnicodeChar *szName, CIccTagMultiLocalizedUnicode *pTag)
 {
-  std::wstring sName;
-  while(*szName)
-    sName += *szName++;
+  CIccUTF16String sName(szName);
 
   return SetNameLocalized(sName, pTag);
 }
 
 bool CIccTagDict::SetNameLocalized(const char *szName, CIccTagMultiLocalizedUnicode *pTag)
 {
-  std::wstring sName;
-  while(*szName)
-    sName += *szName++;
+  CIccUTF16String sName(szName);
 
   return SetNameLocalized(sName, pTag);
 }
 
-bool CIccTagDict::SetValueLocalized(std::wstring sName, CIccTagMultiLocalizedUnicode *pTag)
+bool CIccTagDict::SetValueLocalized(const CIccUTF16String &sName, CIccTagMultiLocalizedUnicode *pTag)
 {
   CIccDictEntry *de = Get(sName);
 
@@ -1475,16 +1452,14 @@ bool CIccTagDict::SetValueLocalized(std::wstring sName, CIccTagMultiLocalizedUni
 
 bool CIccTagDict::SetValueLocalized(const icUnicodeChar *szName, CIccTagMultiLocalizedUnicode *pTag)
 {
-  std::wstring sName;
-  while(*szName)
-    sName += *szName++;
+  CIccUTF16String sName(szName);
 
   return SetValueLocalized(sName, pTag);
 }
 
 bool CIccTagDict::SetValueLocalized(const char *szName, CIccTagMultiLocalizedUnicode *pTag)
 {
-  std::wstring sName(szName, szName+strlen(szName));
+  CIccUTF16String sName(szName);
 
   return SetValueLocalized(sName, pTag);
 }

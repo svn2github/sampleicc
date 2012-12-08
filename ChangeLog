@@ -1,14 +1,15 @@
-2011-09-2 Max Derhak
- * Part of 1.6.6 release
- * Fixed bug in md5.h introduced with 1.6.4 release UINT4 is now defined as a ICCUINT32
-
- 2011-08-24 Max Derhak
+2012-08-31
+ * 1.6.7 release
+ * Made const functions more consistent
+ * Moved CIccUTF16String class from IccXML
+ * Replace use of std::wstring in CIccTagDict with CIccUTF16String
+ * Added ICC_ENUM_CONVENIENCE define that makes convenience enums part of the enum type
+ 
+2011-08-24
  * 1.6.6 release
- * Added iccGetBPCInfo command line tool to retrieve information about BPC connection
- * Changed CIccApplyBPC private members to protected members to allow object overridden
-   and made CIccApplyBPC:calcBlackPoint virtual to support override in iccGetBPCInfo
+ * Various bug fixes
 
- 2011-04-22 Max Derhak
+2011-04-22 Max Derhak
  * 1.6.5 release
  * Modified .sln and .vcproj files to work with Visual Studio 2008
  * Added _v8.sln and _v8.vcproj files to work with Visual Studio 2005
@@ -78,7 +79,7 @@
  * Added support for PrintConditions tag implemented using Dictionary tag type
 
 2009-01-22 Rohit Patil/Max Derhak
- * Added CIccCreateXformHintManager to allow for a list of hint objects to be passed
+ * Added CIccCreateXformHintManager to allow for a list of hint object to be passed
    in at the time of CIccXform creation.
  * Modified PCS adjustment to use a scale and offset in new function CIccXform::AdjustPCS().
    CIccXform::CheckSrcAbs and CIccXform::CheckDestAbs now use CIccXform::AdjustPCS()
@@ -104,11 +105,11 @@
 2008-12-02 Rohit Patil
  * Added support for Monochrome ICC profile apply
 
-2008-11-24
+2008-11-24 Max Derhak
  * Cleanup of build files for Linux
  * Revised License to version 0.2
 
-2008-10-31
+2008-10-31 Max Derhak
  * Added fix to make CIccCmmMRU work after chages to add CIccApplyCmm architecture
 
 2008-10-15

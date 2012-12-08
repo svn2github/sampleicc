@@ -59,20 +59,24 @@
  *   the configuration parameters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
- * - Septeber 2011 - 1.6.6 release
- *  - Fixed bug introduced in md5.h in 1.6.4 (UINT4 is now a ICCUINT32)
+ * - August 2012 - 1.6.7 release
+ *   - 1.6.7 release
+ *   - Made const functions more consistent
+ *   - Moved CIccUTF16String class from IccXML
+ *   - Replace use of std::wstring in CIccTagDict with CIccUTF16String
+ *   - Added ICC_ENUM_CONVENIENCE define that makes convenience enums part of the enum type
  *
  * - August 2011 - 1.6.6 release
  *  - Added iccGetBPCInfo command line tool to retrieve information about BPC connection
  *  - Changed CIccApplyBPC private members to protected members to allow object overridden
  *    and made CIccApplyBPC:calcBlackPoint virtual to support override in iccGetBPCInfo
  *
- * - April 2011 - 1.6.5 release
+ * - April  2011 - 1.6.5 release
  *  - Modified .sln and .vcproj files to work with Visual Studio 2008
  *  - Added _v8.sln and _v8.vcproj files to work with Visual Studio 2005
  *  - Fixed bugs in CIccInfo::GetProfileID() and CIccInfo::IsProfileIDCalculated()
  *
- * - January 2011 - 1.6.4 release (Based on submission by Jason Walp)
+ * - January 2011 - 1.6.4 release
  *  - Added CIccNullIO class that can be used by a caller to "write" the profile thus updating
  *    tag directory entries
  *  - Fixed various bugs related to setting text in CIccTagDict tags
@@ -84,11 +88,11 @@
  *  - Defined initial values in CIccTagViewingCondions constructor
  *  - Modified CLUT interpolation in IccTagLut.cpp to perform clipping on input and no clipping
  *    on output (as opposed to the other way around).  Fixes crashing bug found with absolute
- *    intent processing of colors whiter than media point.  Also supports floating point range
+ *    intent processing of colors that are whiter than media point.  Also supports floating point range
  *    of output for MPE CLUT elements.
- *  - Renaming of MD5 calculation function names to avoid conflicts with other libraries
- *
-  * - November 2010 - 1.6.3 release
+ *  - Renaming of MD5 calculation functions to avoid conflicts with other libraries
+ * 
+ * - November 2010 - 1.6.3 release
  *  - Modification of type for CIccCLUT::m_nOutput to icUInt16Nubmer to better support MPE
  *    CLUT elements
  *  - Fixed typo in CIccTagUnknown::IsSupported()

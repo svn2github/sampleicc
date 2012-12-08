@@ -133,8 +133,8 @@ public:
   virtual CIccTag *NewCopy() const { return new CIccTagCurve(*this);}
   virtual ~CIccTagCurve();
 
-  virtual icTagTypeSignature GetType() { return icSigCurveType; }
-  virtual const icChar *GetClassName() { return "CIccTagCurve"; }
+  virtual icTagTypeSignature GetType() const { return icSigCurveType; }
+  virtual const icChar *GetClassName() const { return "CIccTagCurve"; }
 
   virtual void Describe(std::string &sDescription);
   virtual void DumpLut(std::string &sDescription, const icChar *szName, 
@@ -176,8 +176,8 @@ public:
   virtual CIccTag *NewCopy() const { return new CIccTagParametricCurve(*this);}
   virtual ~CIccTagParametricCurve();
 
-  virtual icTagTypeSignature GetType() { return icSigParametricCurveType; }
-  virtual const icChar *GetClassName() { return "CIccTagParametricCurve"; }
+  virtual icTagTypeSignature GetType() const { return icSigParametricCurveType; }
+  virtual const icChar *GetClassName() const { return "CIccTagParametricCurve"; }
 
   virtual void Describe(std::string &sDescription);
   virtual void DumpLut(std::string &sDescription, const icChar *szName,
@@ -196,12 +196,13 @@ public:
   icS15Fixed16Number& operator[](int index) { return m_Param[index]; }
 
   virtual void Begin();
-  virtual icFloatNumber Apply(icFloatNumber v);
-  virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL);
+  virtual icFloatNumber Apply(icFloatNumber v) { return DoApply(v); }
+  virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL) const;
   virtual bool IsIdentity();
 
   icUInt16Number      m_nReserved2;
 protected:
+  icFloatNumber DoApply(icFloatNumber v) const;
   icUInt16Number      m_nFunctionType;
   icS15Fixed16Number *m_Param;
   icUInt16Number      m_nNumParam;
@@ -386,7 +387,7 @@ public:
   virtual void Describe(std::string &sDescription);
 
   virtual void SetColorSpaces(icColorSpaceSignature csInput, icColorSpaceSignature csOutput);
-  virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL);
+  virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL) const;
 
   LPIccCurve* NewCurvesA();
   CIccCLUT*   NewCLUT(icUInt8Number nGridPoints, icUInt8Number nPrecision=2);
@@ -437,11 +438,11 @@ public:
   virtual CIccTag* NewCopy() const { return new CIccTagLutAtoB(*this); }
   virtual ~CIccTagLutAtoB();
 
-  virtual icTagTypeSignature GetType() { return icSigLutAtoBType; }
+  virtual icTagTypeSignature GetType() const { return icSigLutAtoBType; }
 
   bool Read(icUInt32Number size, CIccIO *pIO);
   bool Write(CIccIO *pIO);
-  virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL);
+  virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL) const;
 
 protected:
   icUInt16Number m_nReservedWord;
@@ -460,10 +461,10 @@ public:
   CIccTagLutBtoA();
   CIccTagLutBtoA(const CIccTagLutBtoA &ITLB2A);
   CIccTagLutBtoA &operator=(const CIccTagLutBtoA &ITLB2A);
-  virtual CIccTag* NewCopy() { return new CIccTagLutBtoA(*this); }
+  virtual CIccTag* NewCopy() const { return new CIccTagLutBtoA(*this); }
 
-  virtual icTagTypeSignature GetType() { return icSigLutBtoAType; }
-  virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL);
+  virtual icTagTypeSignature GetType() const { return icSigLutBtoAType; }
+  virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL) const;
 };
 
 
@@ -483,14 +484,14 @@ public:
   virtual CIccTag* NewCopy() const {return new CIccTagLut8(*this);}
   virtual ~CIccTagLut8();
 
-  virtual icTagTypeSignature GetType() { return icSigLut8Type; }
+  virtual icTagTypeSignature GetType() const { return icSigLut8Type; }
   virtual icUInt8Number GetPrecision() { return 1; }
 
   bool Read(icUInt32Number size, CIccIO *pIO);
   bool Write(CIccIO *pIO);
 
   virtual void SetColorSpaces(icColorSpaceSignature csInput, icColorSpaceSignature csOutput);
-  virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL);
+  virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL) const;
 
 protected:
   icUInt8Number m_nReservedByte;
@@ -513,14 +514,14 @@ public:
   virtual CIccTag* NewCopy() const {return new CIccTagLut16(*this);}
   virtual ~CIccTagLut16();
   
-  virtual icTagTypeSignature GetType() { return icSigLut16Type; }
+  virtual icTagTypeSignature GetType() const { return icSigLut16Type; }
   virtual bool UseLegacyPCS() const { return true; } //Treat Lab Encoding differently?
 
   bool Read(icUInt32Number size, CIccIO *pIO);
   bool Write(CIccIO *pIO);
 
   virtual void SetColorSpaces(icColorSpaceSignature csInput, icColorSpaceSignature csOutput);
-  virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL);
+  virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL) const;
 
 protected:
   icUInt8Number m_nReservedByte;

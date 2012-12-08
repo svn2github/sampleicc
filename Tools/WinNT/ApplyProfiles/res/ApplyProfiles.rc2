@@ -11,6 +11,6 @@
 // Add manually edited resources here...
 
 /////////////////////////////////////////////////////////////////////////////
-#define NUM_REVISION 1
+#define NUM_REVISION 5
 #define NUM_BUILD 0
 

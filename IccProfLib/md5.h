@@ -31,8 +31,8 @@ January 2011
 - Added IccProfLibConf.h include to use ICCPROFLIB_API with functions
 - Changed typedef of UINT4 to use ICCUINT64
 
-September 2011
-- Fixed change of typedef of UINT4 to use ICCUINT32 (a four byte integer)
+August 2012
+- Change typedef of UINT4 to use ICCUINT32 (oops!)
 ------------------------------------------------------------------------ */
 
 #include "IccProfLibConf.h"

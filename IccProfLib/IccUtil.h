@@ -304,6 +304,58 @@ protected:
 
 extern ICCPROFLIB_API CIccInfo icInfo;
 
+
+/**
+ **************************************************************************
+ * Type: Class
+ * 
+ * Purpose: 
+ *  This is a UTF16 string class that provides conversions 
+ **************************************************************************
+ */
+class ICCPROFLIB_API CIccUTF16String
+{
+public:
+  CIccUTF16String();
+  CIccUTF16String(const icUInt16Number *uzStr);
+  CIccUTF16String(const char *szStr);
+  CIccUTF16String(const CIccUTF16String &str);
+  virtual ~CIccUTF16String();
+
+  void Clear();
+  bool Empty() const { return m_len==0; }
+  size_t Size() const { return m_len; }
+  void Resize(size_t len);
+
+  CIccUTF16String& operator=(const CIccUTF16String &wstr);
+  CIccUTF16String& operator=(const char *szStr);
+  CIccUTF16String& operator=(const icUInt16Number *uzStr);
+
+  bool operator==(const CIccUTF16String &str) const;
+
+  icUInt16Number operator[](size_t nIndex) const { return m_str[nIndex]; }
+
+  const icUInt16Number *c_str() const { return m_str; }
+
+  void FromUtf8(const char *szStr, size_t sizeSrc=0);
+  const char *ToUtf8(std::string &buf) const;
+  void FromWString(const std::wstring &buf);
+  const wchar_t *ToWString(std::wstring &buf) const;
+
+  static size_t WStrlen(const icUInt16Number *uzStr);
+
+protected:
+  static size_t AllocSize(size_t n) { return (((n+64)/64)*64); }
+  size_t m_alloc;
+  size_t m_len;
+  icUInt16Number *m_str;
+};
+
+const char * ICCPROFLIB_API icUtf16ToUtf8(std::string &buf, const icUInt16Number *szSrc, int sizeSrc=0);
+const unsigned short * ICCPROFLIB_API icUtf8ToUtf16(CIccUTF16String &buf, const char *szSrc, int sizeSrc=0);
+
+
+
 #ifdef USESAMPLEICCNAMESPACE
 } //namespace sampleICC
 #endif

@@ -2882,7 +2882,7 @@ CIccTagFixedNum<T, Tsig>::~CIccTagFixedNum()
  *****************************************************************************
  */
 template <class T, icTagTypeSignature Tsig>
-const icChar* CIccTagFixedNum<T, Tsig>::GetClassName()
+const icChar* CIccTagFixedNum<T, Tsig>::GetClassName() const
 {
   if (Tsig==icSigS15Fixed16ArrayType)
     return "CIccTagS15Fixed16";
@@ -3132,7 +3132,7 @@ CIccTagNum<T, Tsig>::~CIccTagNum()
  *****************************************************************************
  */
 template <class T, icTagTypeSignature Tsig>
-const icChar *CIccTagNum<T, Tsig>::GetClassName()
+const icChar *CIccTagNum<T, Tsig>::GetClassName() const
 {
   if (sizeof(T)==sizeof(icUInt8Number))
     return "CIccTagUInt8";
@@ -6481,7 +6481,7 @@ void CIccResponseCurveStruct::Describe(std::string &sDescription)
 *  icValidateStatusOK if valid, or other error status.
 ******************************************************************************
 */
-icValidateStatus CIccResponseCurveStruct::Validate(std::string &sReport)
+icValidateStatus CIccResponseCurveStruct::Validate(std::string &sReport) const
 {
   icValidateStatus rv = icValidateOK;
 
